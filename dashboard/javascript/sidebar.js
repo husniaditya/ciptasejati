@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (currentPage === 'tingkatgelar' || currentPage === 'idsertifikat' || currentPage === 'dataterpusat') {
       addInClassToSubmenu('master');
     }
-    if (currentPage === 'lokasipusat' || currentPage === 'lokasicabang') {
+    if (currentPage === 'lokasipusat' || currentPage === 'lokasidaerah' || currentPage === 'lokasicabang') {
       addInClassToSubmenu('master');
       addInClassToSubmenu('lokasi');
     }
