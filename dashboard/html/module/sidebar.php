@@ -32,6 +32,11 @@
                                 <span class="text">Pusat</span>
                             </a>
                         </li>
+                        <li  class="level3" >
+                            <a href="lokasidaerah">
+                                <span class="text">Daerah</span>
+                            </a>
+                        </li>
                         <li class="level3" >
                             <a href="lokasicabang">
                                 <span class="text">Cabang</span>

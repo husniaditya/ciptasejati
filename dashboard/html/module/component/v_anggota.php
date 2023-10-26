@@ -2,7 +2,6 @@
 $USER_ID = $_SESSION["LOGINIDUS_WEDD"];
 
 
-$GetGuest = GetQuery("select * from m_guest where GUEST_STATUS = '0' order by GUEST_NAME");
 ?>
 <h4>Filter Anggota</h4>
 <form method="post" class="form filterGuest" id="filterGuest">

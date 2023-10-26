@@ -38,7 +38,7 @@ if(!isset($_SESSION["LOGINIDUS_WEDD"]))
                 <!-- Page Header -->
                 <div class="page-header page-header-block">
                     <div class="page-header-section">
-                        <h4 class="title semibold">Data Lokasi Cabang</h4>
+                        <h4 class="title semibold">Lokasi Daerah</h4>
                     </div>
                     <div class="page-header-section">
                         <!-- Toolbar -->
@@ -46,7 +46,7 @@ if(!isset($_SESSION["LOGINIDUS_WEDD"]))
                             <ol class="breadcrumb breadcrumb-transparent nm">
                                 <li><a href="javascript:void(0);">Master</a></li>
                                 <li class="active">Lokasi Institut</li>
-                                <li class="active">Lokasi Cabang</li>
+                                <li class="active">Lokasi Daerah</li>
                             </ol>
                         </div>
                         <!--/ Toolbar -->
@@ -54,7 +54,7 @@ if(!isset($_SESSION["LOGINIDUS_WEDD"]))
                 </div>
                 <!-- Page Header -->
 
-                <?php include 'module/component/v_lokasicabang.php';?>
+                <?php include 'module/component/v_lokasidaerah.php';?>
             </div>
         </section>
             <!--/ END Template Container -->
@@ -71,7 +71,7 @@ if(!isset($_SESSION["LOGINIDUS_WEDD"]))
 
         <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
         <?php include 'module/js.php';?>
-        <script type="text/javascript" src="../javascript/component/lokasicabang.js"></script>
+        <script type="text/javascript" src="../javascript/component/lokasidaerah.js"></script>
         <!--/ END JAVASCRIPT SECTION -->
     </body>
     <!--/ END Body -->

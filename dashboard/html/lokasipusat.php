@@ -45,6 +45,7 @@ if(!isset($_SESSION["LOGINIDUS_WEDD"]))
                         <div class="toolbar">
                             <ol class="breadcrumb breadcrumb-transparent nm">
                                 <li><a href="javascript:void(0);">Master</a></li>
+                                <li class="active">Lokasi Institut</li>
                                 <li class="active">Lokasi Pusat</li>
                             </ol>
                         </div>
