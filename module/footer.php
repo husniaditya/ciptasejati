@@ -18,11 +18,11 @@
         <div class="col-md-6 col-lg-4 mt-4 mt-lg-0">
             <h3 class="mb-3 text-4-5 text-color-light">Halaman</h3>
             <ul class="list list-unstyled columns-lg-2 font-weight-medium">
-                <li><a href="tentang" class="text-color-grey text-color-hover-cipta-white">Tentang Kami</a></li>
-                <li><a href="cabang" class="text-color-grey text-color-hover-cipta-white">Daftar Cabang</a></li>
-                <li><a href="koordinatorcabang" class="text-color-grey text-color-hover-cipta-white">Koordinator Cabang</a></li>
-                <li><a href="blog" class="text-color-grey text-color-hover-cipta-white">Blog</a></li>
-                <li><a href="hubungi" class="text-color-grey text-color-hover-cipta-white">Hubungi Kami</a></li>
+                <li><a href="tentang.php" class="text-color-grey text-color-hover-cipta-white">Tentang Kami</a></li>
+                <li><a href="cabang.php" class="text-color-grey text-color-hover-cipta-white">Daftar Cabang</a></li>
+                <li><a href="koordinatorcabang.php" class="text-color-grey text-color-hover-cipta-white">Koordinator Cabang</a></li>
+                <li><a href="blog.php" class="text-color-grey text-color-hover-cipta-white">Blog</a></li>
+                <li><a href="hubungi.php" class="text-color-grey text-color-hover-cipta-white">Hubungi Kami</a></li>
             </ul>
         </div>
         <div class="col-md-6 col-lg-2 mt-4 mt-lg-0">

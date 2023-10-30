@@ -45,7 +45,7 @@
         <hr><!-- horizontal line -->
 
         <p class="text-center">
-            <span class="text-muted">Sudah terdaftar user? <a class="semibold" href="index">Klik di sini untuk login</a></span>
+            <span class="text-muted">Sudah terdaftar user? <a class="semibold" href="index.php">Klik di sini untuk login</a></span>
         </p>
     </div>
 </div>

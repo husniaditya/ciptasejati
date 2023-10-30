@@ -85,7 +85,7 @@
 								<p class="mb-0 text-color-light ps-lg-5">Membuat generasi muda untuk mencintai budaya pencak silat yang menjadi kebanggaan bangsa indonesia</p>
 							</div>
 							<div class="col-lg-3 mt-3 mt-lg-0 text-lg-end">
-								<a href="hubungi" class="btn btn-modern btn-light text-color-dark font-weight-bold border-0 py-3 px-5 btn-arrow-effect-1 ws-nowrap">DAFTAR SEKARANG <i class="fas fa-arrow-right ms-2"></i></a>
+								<a href="hubungi.php" class="btn btn-modern btn-light text-color-dark font-weight-bold border-0 py-3 px-5 btn-arrow-effect-1 ws-nowrap">DAFTAR SEKARANG <i class="fas fa-arrow-right ms-2"></i></a>
 							</div>
 						</div>
 					</div>

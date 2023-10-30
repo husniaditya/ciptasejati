@@ -27,8 +27,8 @@ $USER_ID = $_SESSION["LOGINIDUS_WEDD"];
                         <th>Daerah ID</th>
                         <th>Lokasi </th>
                         <th>Status </th>
-                        <th>Diinput Oleh </th>
-                        <th>Diinput Tanggal </th>
+                        <th>Input Oleh </th>
+                        <th>Input Tanggal </th>
                     </tr>
                 </thead>
                 <tbody id="guestdata">
@@ -126,20 +126,20 @@ $USER_ID = $_SESSION["LOGINIDUS_WEDD"];
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Tambah Data Anggota</h3>
+                    <h3 class="semibold modal-title text-success">Tambah Lokasi Daerah</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="GUEST_NAME">Daerah ID<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" required id="ViewPusat_NAME" name="GUEST_NAME" value="Banjarmasin" data-parsley-required>
+                                <input type="text" class="form-control" required id="ViewPusat_NAME" name="GUEST_NAME" value="001.001" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="GUEST_PHONE">Lokasi<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="ViewPusat_RELATION" name="GUEST_RELATION" value="" data-parsley-required>
+                                <input type="text" class="form-control" id="ViewPusat_RELATION" name="GUEST_RELATION" value="Kalimantan Selatan" data-parsley-required>
                             </div> 
                         </div>
                     </div>
@@ -155,11 +155,11 @@ $USER_ID = $_SESSION["LOGINIDUS_WEDD"];
 
 <div id="ViewPusat" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form id="ViewPusat-form" method="post" class="form" data-parsley-validate>
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Lihat Data Pusat</h3>
+                    <h3 class="semibold modal-title text-success">Lihat Lokasi Daerah</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -176,6 +176,17 @@ $USER_ID = $_SESSION["LOGINIDUS_WEDD"];
                             </div> 
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="GUEST_PHONE">Status</label>
+                                <select id="selectize-select" name="ANGGOTA_CABANG" class="form-control" placeholder="Pilih Status..." data-parsley-required>
+                                    <option value="2">Aktif</option>
+                                    <option value="3">Tidak Aktif</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Close</button>
@@ -187,11 +198,11 @@ $USER_ID = $_SESSION["LOGINIDUS_WEDD"];
 
 <div id="EditPusat" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form id="EditPusat-form" method="post" class="form" data-parsley-validate>
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Edit Data Anggota</h3>
+                    <h3 class="semibold modal-title text-success">Edit Lokasi Daerah</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -206,6 +217,17 @@ $USER_ID = $_SESSION["LOGINIDUS_WEDD"];
                                 <label for="GUEST_PHONE">Lokasi<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="ViewPusat_RELATION" name="GUEST_RELATION" value="" data-parsley-required>
                             </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="GUEST_PHONE">Status</label>
+                                <select id="selectize-select" name="ANGGOTA_CABANG" class="form-control" placeholder="Pilih Status..." data-parsley-required>
+                                    <option value="2">Aktif</option>
+                                    <option value="3">Tidak Aktif</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>

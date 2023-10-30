@@ -150,7 +150,7 @@
 
 											<div class="row pt-2">
 												<div class="form-group col">
-													<a href="hubungi" class="btn btn-modern btn-cipta text-color-light font-weight-bold border-0 py-3 px-5 btn-arrow-effect-1 ws-nowrap"> Kirim Formulir <i class="fa-solid fa-share-from-square"></i></a>
+													<a href="hubungi.php" class="btn btn-modern btn-cipta text-color-light font-weight-bold border-0 py-3 px-5 btn-arrow-effect-1 ws-nowrap"> Kirim Formulir <i class="fa-solid fa-share-from-square"></i></a>
 												</div>
 											</div>
 										</form>

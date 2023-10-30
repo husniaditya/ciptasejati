@@ -38,14 +38,14 @@ if(!isset($_SESSION["LOGINIDUS_WEDD"]))
                 <!-- Page Header -->
                 <div class="page-header page-header-block">
                     <div class="page-header-section">
-                        <h4 class="title semibold">Data Profil Institut</h4>
+                        <h4 class="title semibold">Media Sosial</h4>
                     </div>
                     <div class="page-header-section">
                         <!-- Toolbar -->
                         <div class="toolbar">
                             <ol class="breadcrumb breadcrumb-transparent nm">
-                                <li><a href="javascript:void(0);">Menu Admin</a></li>
-                                <li class="active">Profil Institut</li>
+                                <li><a href="index.php">Dashboard</a></li>
+                                <li class="active">Media Sosial</li>
                             </ol>
                         </div>
                         <!--/ Toolbar -->
@@ -53,7 +53,7 @@ if(!isset($_SESSION["LOGINIDUS_WEDD"]))
                 </div>
                 <!-- Page Header -->
 
-                <?php include 'module/component/v_profil.php';?>
+                <?php include 'module/component/v_mediasosial.php';?>
             </div>
         </section>
             <!--/ END Template Container -->
@@ -70,7 +70,7 @@ if(!isset($_SESSION["LOGINIDUS_WEDD"]))
 
         <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
         <?php include 'module/js.php';?>
-        <script type="text/javascript" src="../javascript/component/profilinstitut.js"></script>
+        <script type="text/javascript" src="../javascript/component/mediasosial.js"></script>
         <!--/ END JAVASCRIPT SECTION -->
     </body>
     <!--/ END Body -->

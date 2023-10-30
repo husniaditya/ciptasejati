@@ -23,7 +23,7 @@
 							</div>
 							<div class="col-md-4 order-1 order-md-2 align-self-center">
 								<ul class="breadcrumb d-block text-md-end font-weight-medium">
-									<li><a href="index">Home</a></li>
+									<li><a href="index.php">Home</a></li>
 									<li class="active">Tentang Kami</li>
 								</ul>
 							</div>
@@ -48,7 +48,7 @@
 								<li><i class="fas fa-check text-color-danger"></i> Tidak boleh Mabuk .</li>
 							</ul>
 
-							<a href="blog" class="btn btn-modern btn-cipta font-weight-bold border-0 py-3 px-5 btn-arrow-effect-1 ws-nowrap mt-3">Blog Kegiatan Kami <i class="fas fa-arrow-right ms-2"></i></a>
+							<a href="blog.php" class="btn btn-modern btn-cipta font-weight-bold border-0 py-3 px-5 btn-arrow-effect-1 ws-nowrap mt-3">Blog Kegiatan Kami <i class="fas fa-arrow-right ms-2"></i></a>
 						</div>
 						<div class="col-lg-6">
 							<div class="row">

@@ -40,7 +40,7 @@
                         </div>
                     </div>
                     <div class="form-group nm">
-                        <a href="dashboard" class="btn btn-block btn-primary"><span class="semibold">Sign In</span></a>
+                        <a href="dashboard.php" class="btn btn-block btn-primary"><span class="semibold">Sign In</span></a>
                         <!-- <button type="submit" class="btn btn-block btn-primary" name="login"><span class="semibold">Sign In</span></button> -->
                     </div>
                 </div>

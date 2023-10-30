@@ -3,7 +3,7 @@
     <!-- START Template Navigation/Menu -->
     <ul class="topmenu topmenu-responsive" data-toggle="menu">
         <li class="level1">
-            <a href="dashboard" data-target="#dashboard" data-parent=".topmenu">
+            <a href="dashboard.php" data-target="#dashboard" data-parent=".topmenu">
                 <span class="figure"><i class="ico-home2"></i></span>
                 <span class="text">Dashboard</span>
             </a>
@@ -17,7 +17,7 @@
             <!-- START 2nd Level Menu -->
             <ul id="master" class="submenu collapse ">
                 <li  class="level2">
-                    <a href="tingkatgelar">
+                    <a href="tingkatgelar.php">
                         <span class="text">Tingkatan dan Gelar</span>
                     </a>
                 </li>
@@ -28,29 +28,29 @@
                     </a>
                     <ul id="lokasi" class="submenu collapse ">
                         <li  class="level3" >
-                            <a href="lokasipusat">
+                            <a href="lokasipusat.php">
                                 <span class="text">Pusat</span>
                             </a>
                         </li>
                         <li  class="level3" >
-                            <a href="lokasidaerah">
+                            <a href="lokasidaerah.php">
                                 <span class="text">Daerah</span>
                             </a>
                         </li>
                         <li class="level3" >
-                            <a href="lokasicabang">
+                            <a href="lokasicabang.php">
                                 <span class="text">Cabang</span>
                             </a>
                         </li>
                     </ul>
                 </li>
                 <li  class="level2" >
-                    <a href="idsertifikat">
+                    <a href="idsertifikat.php">
                         <span class="text">Kartu ID dan Sertifikat</span>
                     </a>
                 </li>
                 <li  class="level2" >
-                    <a href="dataterpusat">
+                    <a href="dataterpusat.php">
                         <span class="text">Data Terpusat</span>
                     </a>
                 </li>
@@ -67,12 +67,12 @@
             <!-- START 2nd Level Menu -->
             <ul id="transaksi" class="submenu collapse ">
                 <li  class="level2" >
-                    <a href="kepengurusan">
+                    <a href="kepengurusan.php">
                         <span class="text">Kepengurusan</span>
                     </a>
                 </li>
                 <li  class="level2" >
-                    <a href="anggota">
+                    <a href="anggota.php">
                         <span class="text">Anggota</span>
                         <span class="number"><span class="label label-info">1</span></span>
                     </a>
@@ -84,22 +84,22 @@
                     </a>
                     <ul id="aktivitas" class="submenu collapse ">
                         <li class="level3" >
-                            <a href="pusatdaya">
+                            <a href="pusatdaya.php">
                                 <span class="text">Pembukaan Pusat Daya</span>
                             </a>
                         </li>
                         <li class="level3" >
-                            <a href="ujinaiktingkat">
+                            <a href="ujinaiktingkat.php">
                                 <span class="text">Ujian Kenaikan Tingkat</span>
                             </a>
                         </li>
                         <li class="level3" >
-                            <a href="latihangabungan">
+                            <a href="latihangabungan.php">
                                 <span class="text">Latihan Gabungan</span>
                             </a>
                         </li>
                         <li class="level3" >
-                            <a href="pendidikanlatihan">
+                            <a href="pendidikanlatihan.php">
                                 <span class="text">Pendidikan dan Latihan</span>
                             </a>
                         </li>
@@ -117,37 +117,37 @@
             <!-- START 2nd Level Menu -->
             <ul id="laporan" class="submenu collapse ">
                 <li  class="level2" >
-                    <a href="lapdaftarcabang">
+                    <a href="lapdaftarcabang.php">
                         <span class="text">Daftar Cabang</span>
                     </a>
                 </li>
                 <li  class="level2" >
-                    <a href="lapdaftarguru">
+                    <a href="lapdaftarguru.php">
                         <span class="text">Daftar Dewan Guru</span>
                     </a>
                 </li>
                 <li  class="level2" >
-                    <a href="lapdaftarpelatih">
+                    <a href="lapdaftarpelatih.php">
                         <span class="text">Daftar Pelatih</span>
                     </a>
                 </li>
                 <li  class="level2" >
-                    <a href="lapdaftarpengurus">
+                    <a href="lapdaftarpengurus.php">
                         <span class="text">Daftar Pengurus</span>
                     </a>
                 </li>
                 <li  class="level2" >
-                    <a href="lapdaftaranggota">
+                    <a href="lapdaftaranggota.php">
                         <span class="text">Daftar Anggota</span>
                     </a>
                 </li>
                 <li  class="level2" >
-                    <a href="lapidanggota">
+                    <a href="lapidanggota.php">
                         <span class="text">ID Keanggotaan</span>
                     </a>
                 </li>
                 <li  class="level2" >
-                    <a href="lapformatstandar">
+                    <a href="lapformatstandar.php">
                         <span class="text">Format Standar</span>
                     </a>
                 </li>
@@ -164,17 +164,22 @@
             <!-- START 2nd Level Menu -->
             <ul id="admin" class="submenu collapse">
                 <li  class="level2" >
-                    <a href="profil">
+                    <a href="profil.php">
                         <span class="text">Profil Institut</span>
                     </a>
                 </li>
                 <li  class="level2" >
-                    <a href="user">
+                    <a href="mediasosial.php">
+                        <span class="text">Media Sosial</span>
+                    </a>
+                </li>
+                <li  class="level2" >
+                    <a href="user.php">
                         <span class="text">User</span>
                     </a>
                 </li>
                 <li  class="level2" >
-                    <a href="menu">
+                    <a href="menu.php">
                         <span class="text">Menu</span>
                     </a>
                 </li>
@@ -185,12 +190,12 @@
                     </a>
                     <ul id="manajemenkonten" class="submenu collapse ">
                         <li class="level3" >
-                            <a href="kontenheader">
+                            <a href="kontenheader.php">
                                 <span class="text">Header</span>
                             </a>
                         </li>
                         <li class="level3" >
-                            <a href="kontenfooter">
+                            <a href="kontenfooter.php">
                                 <span class="text">Footer</span>
                             </a>
                         </li>
@@ -201,24 +206,24 @@
                             </a>
                             <ul id="beranda" class="submenu collapse ">
                                 <li class="level4">
-                                    <a href="berandaposter">
+                                    <a href="berandaposter.php">
                                         <span class="text">Bagian Poster</span>
                                     </a>
                                 </li>
                                 <li class="level4" >
-                                    <a href="berandakegiatan">
+                                    <a href="berandakegiatan.php">
                                         <span class="text">Bagian Kegiatan</span>
                                     </a>
                                 </li>
                                 <li class="level4" >
-                                    <a href="berandainformasi">
+                                    <a href="berandainformasi.php">
                                         <span class="text">Bagian Informasi</span>
                                     </a>
                                 </li>
                             </ul>
                         </li>
                         <li class="level3" >
-                            <a href="kontententang">
+                            <a href="kontententang.php">
                                 <span class="text">Halaman Tentang Kami</span>
                             </a>
                         </li>
@@ -229,24 +234,24 @@
                             </a>
                             <ul id="cabang" class="submenu collapse ">
                                 <li class="level4" >
-                                    <a href="daftarcabang">
+                                    <a href="daftarcabang.php">
                                         <span class="text">Daftar Cabang</span>
                                     </a>
                                 </li>
                                 <li class="level4" >
-                                    <a href="koordinatorcabang">
+                                    <a href="koordinatorcabang.php">
                                         <span class="text">Koordinator Cabang</span>
                                     </a>
                                 </li>
                             </ul>
                         </li>
                         <li class="level3" >
-                            <a href="kontenblog">
+                            <a href="kontenblog.php">
                                 <span class="text">Halaman Blog</span>
                             </a>
                         </li>
                         <li class="level3" >
-                            <a href="kontenhubungi">
+                            <a href="kontenhubungi.php">
                                 <span class="text">Halaman Hubungi</span>
                             </a>
                         </li>

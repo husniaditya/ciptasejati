@@ -24,7 +24,7 @@
 							</div>
 							<div class="col-md-4 order-1 order-md-2 align-self-center">
 								<ul class="breadcrumb d-block text-md-end font-weight-medium">
-									<li><a href="index">Home</a></li>
+									<li><a href="index.php">Home</a></li>
 									<li class="active">Koordinator Cabang</li>
 								</ul>
 							</div>
@@ -135,7 +135,7 @@
 								<p class="mb-0 text-color-light ps-lg-5">Cras a elit sit amet leo accumsan volutpat. Suspendisse hendreriast ehicula leo, vel efficitur felis ultrices non. Cras a elit sit amet leo acun volutpat.</p>
 							</div>
 							<div class="col-lg-3 mt-3 mt-lg-0 text-lg-end">
-								<a href="hubungi" class="btn btn-modern btn-light text-color-dark font-weight-bold border-0 py-3 px-5 btn-arrow-effect-1 ws-nowrap">DAFTAR SEKARANG <i class="fas fa-arrow-right ms-2"></i></a>
+								<a href="hubungi.php" class="btn btn-modern btn-light text-color-dark font-weight-bold border-0 py-3 px-5 btn-arrow-effect-1 ws-nowrap">DAFTAR SEKARANG <i class="fas fa-arrow-right ms-2"></i></a>
 							</div>
 						</div>
 					</div>

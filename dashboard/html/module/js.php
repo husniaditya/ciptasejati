@@ -37,7 +37,7 @@
 <!-- / Datatable -->
 
 <!-- Google Maps API Key -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjKL8RTKvyTrbjxwjtGMGcoMZbUP6E70s"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjKL8RTKvyTrbjxwjtGMGcoMZbUP6E70s&callback=initMap"></script>
 
 
 <!--/ END JAVASCRIPT SECTION -->

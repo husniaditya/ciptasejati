@@ -17,6 +17,7 @@ $(document).ready(function() {
       ],
       // "pageLength": 7,
       scrollX: true,
+      scrollY: '300px', // Set the desired height here
       buttons: [
           'copy', 'csv', 'excel', 'pdf', 'print'
       ]

@@ -13,37 +13,37 @@ document.addEventListener('DOMContentLoaded', function () {
   
     // Example: Add the "in" class to the "admin" submenu
     // MenuID: Master
-    if (currentPage === 'tingkatgelar' || currentPage === 'idsertifikat' || currentPage === 'dataterpusat') {
+    if (currentPage === 'tingkatgelar.php' || currentPage === 'idsertifikat.php' || currentPage === 'dataterpusat.php') {
       addInClassToSubmenu('master');
     }
-    if (currentPage === 'lokasipusat' || currentPage === 'lokasidaerah' || currentPage === 'lokasicabang') {
+    if (currentPage === 'lokasipusat.php' || currentPage === 'lokasidaerah.php' || currentPage === 'lokasicabang.php') {
       addInClassToSubmenu('master');
       addInClassToSubmenu('lokasi');
     }
   
     // MenuID: Transaksi
-    if (currentPage === 'anggota' || currentPage === 'kepengurusan') {
+    if (currentPage === 'anggota.php' || currentPage === 'kepengurusan.php') {
       addInClassToSubmenu('transaksi');
     }
-    if (currentPage === 'pusatdaya' || currentPage === 'ujinaiktingkat' || currentPage === 'latihangabungan' || currentPage === 'pendidikanlatihan') {
+    if (currentPage === 'pusatdaya.php' || currentPage === 'ujinaiktingkat.php' || currentPage === 'latihangabungan.php' || currentPage === 'pendidikanlatihan.php') {
       addInClassToSubmenu('transaksi');
       addInClassToSubmenu('aktivitas');
     }
   
     // MenuID: Laporan
-    if (currentPage === 'lapdaftarcabang' || currentPage === 'lapdaftarguru' || currentPage === 'lapdaftarpelatih' || currentPage === 'lapdaftarpengurus' || currentPage === 'lapdaftaranggota' || currentPage === 'lapidanggota' || currentPage === 'lapformatstandar') {
+    if (currentPage === 'lapdaftarcabang.php' || currentPage === 'lapdaftarguru.php' || currentPage === 'lapdaftarpelatih.php' || currentPage === 'lapdaftarpengurus.php' || currentPage === 'lapdaftaranggota.php' || currentPage === 'lapidanggota.php' || currentPage === 'lapformatstandar.php') {
       addInClassToSubmenu('laporan');
     }
   
     // MenuID: Admin
-    if (currentPage === 'profil' || currentPage === 'user' || currentPage === 'menu') {
+    if (currentPage === 'profil.php' || currentPage === 'user.php' || currentPage === 'menu.php' || currentPage === 'mediasosial.php') {
       addInClassToSubmenu('admin');
     }
-    if (currentPage === 'kontenheader' || currentPage === 'kontenfooter' || currentPage === 'kontententang' || currentPage === 'kontenblog' || currentPage === 'kontenhubungi') {
+    if (currentPage === 'kontenheader.php' || currentPage === 'kontenfooter.php' || currentPage === 'kontententang.php' || currentPage === 'kontenblog.php' || currentPage === 'kontenhubungi.php') {
       addInClassToSubmenu('admin');
       addInClassToSubmenu('manajemenkonten');
     }
-    if (currentPage === 'berandaposter' || currentPage === 'berandakegiatan' || currentPage === 'berandainformasi') {
+    if (currentPage === 'berandaposter.php' || currentPage === 'berandakegiatan.php' || currentPage === 'berandainformasi.php') {
       addInClassToSubmenu('admin');
       addInClassToSubmenu('manajemenkonten');
       addInClassToSubmenu('beranda');
@@ -72,7 +72,6 @@ document.addEventListener('DOMContentLoaded', function () {
           if (anchor && anchor.getAttribute('href') === currentPage) {
               item.classList.add('active');
           }
-          console.log(level4Items,currentPage,anchor.getAttribute('href'));
       });
     }
   

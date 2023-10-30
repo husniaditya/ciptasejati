@@ -23,7 +23,7 @@
 							</div>
 							<div class="col-md-4 order-1 order-md-2 align-self-center">
 								<ul class="breadcrumb d-block text-md-end font-weight-medium">
-									<li><a href="#">Home</a></li>
+									<li><a href="index.php">Home</a></li>
 									<li class="active">Blog</li>
 								</ul>
 							</div>
@@ -39,7 +39,7 @@
 							<article class="mb-5">
 								<div class="card bg-transparent border-0">
 									<div class="card-body p-0 z-index-1">
-										<a href="post" data-cursor-effect-hover="plus">
+										<a href="post.php" data-cursor-effect-hover="plus">
 											<img class="card-img-top rounded-0 mb-2" src="img/blog/wide/blog-24.jpg" alt="Card Image">
 										</a>
 										<p class="text-uppercase text-color-default text-1 my-2">
@@ -48,9 +48,9 @@
 											John Doe
 										</p>
 										<div class="card-body p-0">
-											<h4 class="card-title text-5 font-weight-bold pb-1 mb-2"><a class="text-color-dark text-color-hover-primary text-decoration-none" href="post">An Interview with John Doe</a></h4>
+											<h4 class="card-title text-5 font-weight-bold pb-1 mb-2"><a class="text-color-dark text-color-hover-primary text-decoration-none" href="post.php">An Interview with John Doe</a></h4>
 											<p class="card-text mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc viverra lorem , consectetur adipiscing elit...</p>
-											<a href="post" class="read-more text-color-read-more font-weight-semibold mt-0 text-2">Tampilkan Lebih Banyak <i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+											<a href="post.php" class="read-more text-color-read-more font-weight-semibold mt-0 text-2">Tampilkan Lebih Banyak <i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
 										</div>
 									</div>
 								</div>
@@ -59,7 +59,7 @@
 							<article class="mb-5">
 								<div class="card bg-transparent border-0">
 									<div class="card-body p-0 z-index-1">
-										<a href="post" data-cursor-effect-hover="plus">
+										<a href="post.php" data-cursor-effect-hover="plus">
 											<img class="card-img-top rounded-0 mb-2" src="img/blog/wide/blog-41.jpg" alt="Card Image">
 										</a>
 										<p class="text-uppercase text-color-default text-1 my-2">
@@ -68,9 +68,9 @@
 											John Doe
 										</p>
 										<div class="card-body p-0">
-											<h4 class="card-title text-5 font-weight-bold pb-1 mb-2"><a class="text-color-dark text-color-hover-primary text-decoration-none" href="post">How to Grow your Business</a></h4>
+											<h4 class="card-title text-5 font-weight-bold pb-1 mb-2"><a class="text-color-dark text-color-hover-primary text-decoration-none" href="post.php">How to Grow your Business</a></h4>
 											<p class="card-text mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc viverra lorem , consectetur adipiscing elit...</p>
-											<a href="post" class="read-more text-color-read-more font-weight-semibold mt-0 text-2">Tampilkan Lebih Banyak <i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+											<a href="post.php" class="read-more text-color-read-more font-weight-semibold mt-0 text-2">Tampilkan Lebih Banyak <i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
 										</div>
 									</div>
 								</div>
@@ -79,7 +79,7 @@
 							<article class="mb-5">
 								<div class="card bg-transparent border-0">
 									<div class="card-body p-0 z-index-1">
-										<a href="post" data-cursor-effect-hover="plus">
+										<a href="post.php" data-cursor-effect-hover="plus">
 											<img class="card-img-top rounded-0 mb-2" src="img/blog/wide/blog-41.jpg" alt="Card Image">
 										</a>
 										<p class="text-uppercase text-color-default text-1 my-2">
@@ -88,9 +88,9 @@
 											John Doe
 										</p>
 										<div class="card-body p-0">
-											<h4 class="card-title text-5 font-weight-bold pb-1 mb-2"><a class="text-color-dark text-color-hover-primary text-decoration-none" href="post">How to Grow your Business</a></h4>
+											<h4 class="card-title text-5 font-weight-bold pb-1 mb-2"><a class="text-color-dark text-color-hover-primary text-decoration-none" href="post.php">How to Grow your Business</a></h4>
 											<p class="card-text mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc viverra lorem , consectetur adipiscing elit...</p>
-											<a href="post" class="read-more text-color-read-more font-weight-semibold mt-0 text-2">Tampilkan Lebih Banyak <i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+											<a href="post.php" class="read-more text-color-read-more font-weight-semibold mt-0 text-2">Tampilkan Lebih Banyak <i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
 										</div>
 									</div>
 								</div>

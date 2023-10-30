@@ -44,7 +44,7 @@ if(!isset($_SESSION["LOGINIDUS_WEDD"]))
                         <!-- Toolbar -->
                         <div class="toolbar">
                             <ol class="breadcrumb breadcrumb-transparent nm">
-                                <li><a href="index">Dashboard</a></li>
+                                <li><a href="index.php">Dashboard</a></li>
                                 <li class="active">Manajemen Konten</li>
                                 <li class="active">Konten Header</li>
                             </ol>

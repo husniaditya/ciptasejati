@@ -44,7 +44,7 @@ if(!isset($_SESSION["LOGINIDUS_WEDD"]))
                         <!-- Toolbar -->
                         <div class="toolbar">
                             <ol class="breadcrumb breadcrumb-transparent nm">
-                                <li><a href="index">Dashboard</a></li>
+                                <li><a href="index.php">Dashboard</a></li>
                                 <li class="active">Manajemen Konten</li>
                                 <li class="active">Konten Header</li>
                             </ol>
@@ -54,7 +54,7 @@ if(!isset($_SESSION["LOGINIDUS_WEDD"]))
                 </div>
                 <!-- Page Header -->
 
-                <?php include 'module/component/v_anggota.php';?>
+                <?php include 'module/component/webcontent/v_kontenheader.php';?>
             </div>
         </section>
             <!--/ END Template Container -->
@@ -71,7 +71,7 @@ if(!isset($_SESSION["LOGINIDUS_WEDD"]))
 
         <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
         <?php include 'module/js.php';?>
-        <script type="text/javascript" src="../javascript/backend/content/anggota.js"></script>
+        <script type="text/javascript" src="../javascript/component/webcontent/kontenheader.js"></script>
         <!--/ END JAVASCRIPT SECTION -->
     </body>
     <!--/ END Body -->

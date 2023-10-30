@@ -53,6 +53,10 @@
 <link rel="stylesheet" href="../stylesheet/themes/layouts/fixed-sidebar.css">
 <!-- Theme stylesheet : optional -->
 
+<!-- Theme stylesheet : Font Awesome -->
+<link rel="stylesheet" href="../stylesheet/fontawesome-free/css/all.min.css">
+<!--/ Theme stylesheet : Font Awesome -->
+
 <!-- modernizr script -->
 <script type="text/javascript" src="../plugins/modernizr/js/modernizr.js"></script>
 <!--/ modernizr script -->

@@ -23,8 +23,8 @@ menuItems.forEach(function (menuItem) {
 
 // Check if the current URL matches any of the target URLs for the dropdown header
 var targetDropdownHeaderUrls = [
-    "/ciptasejati/cabang",
-    "/ciptasejati/koordinatorcabang"
+    "/ciptasejati/cabang.php",
+    "/ciptasejati/koordinatorcabang.php"
 ];
 if (targetDropdownHeaderUrls.includes(currentPath)) {
     // Add the "active" class to the dropdown header item

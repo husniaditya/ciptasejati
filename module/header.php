@@ -5,7 +5,7 @@
                 <div class="header-column">
                     <div class="header-row">
                         <div class="header-logo m-0">
-                            <a href="index">
+                            <a href="index.php">
                                 <img alt="Cipta Sejati Indonesia" width="270" height="41" src="img/demos/renewable-energy/logo.png"></a>
                         </div>
                     </div>
@@ -44,12 +44,12 @@
                                 <nav class="collapse">
                                     <ul class="nav nav-pills" id="mainNav">
                                         <li>
-                                            <a class="nav-link" href="index">
+                                            <a class="nav-link" href="index.php">
                                                 Beranda
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="nav-link" href="tentang">
+                                            <a class="nav-link" href="tentang.php">
                                                 Tentang Kami
                                             </a>
                                         </li>
@@ -59,20 +59,20 @@
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li class="dropdown-submenu">
-                                                    <a class="nav-link" href="cabang">Daftar Cabang</a>
+                                                    <a class="nav-link" href="cabang.php">Daftar Cabang</a>
                                                 </li>
                                                 <li class="dropdown-submenu">
-                                                    <a class="nav-link" href="koordinatorcabang">Koordinator Cabang</a>
+                                                    <a class="nav-link" href="koordinatorcabang.php">Koordinator Cabang</a>
                                                 </li>
                                             </ul>
                                         </li>
                                         <li>
-                                            <a class="nav-link" href="blog">
+                                            <a class="nav-link" href="blog.php">
                                                 Blog
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="nav-link" href="hubungi">
+                                            <a class="nav-link" href="hubungi.php">
                                                 Hubungi Kami
                                             </a>
                                         </li>
