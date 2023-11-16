@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (currentPage === 'kepengurusan.php') {
       addInClassToSubmenu('transaksi');
     }
-    if (currentPage === 'anggota.php' || currentPage === 'kasanggota.php') {
+    if (currentPage === 'anggota.php' || currentPage === 'kasanggota.php' || currentPage === 'mutasianggota.php') {
       addInClassToSubmenu('transaksi');
       addInClassToSubmenu('anggota');
     }

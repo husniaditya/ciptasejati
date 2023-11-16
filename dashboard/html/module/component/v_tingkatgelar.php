@@ -26,6 +26,7 @@ $getTingkatGelar = GetQuery("SELECT t.*,case when t.DELETION_STATUS = 0 then 'Ak
                         <th></th>
                         <th class="hidden">Gelar ID</th>
                         <th>Sabuk Tingkatan</th>
+                        <th>Sebutan</th>
                         <th>Gelar</th>
                         <th>Level</th>
                         <th>Status</th>
@@ -44,8 +45,8 @@ $getTingkatGelar = GetQuery("SELECT t.*,case when t.DELETION_STATUS = 0 then 'Ak
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewTingkatGelar" class="open-ViewTingkatGelar" style="color:forestgreen;" data-nama="<?= $TINGKATAN_NAMA; ?>" data-gelar="<?= $TINGKATAN_GELAR;?>" data-level="<?= $TINGKATAN_LEVEL; ?>" data-status="<?= $TINGKATAN_STATUS; ?>"><span class="ico-check"></span> Lihat</a></li>
-                                            <li><a data-toggle="modal" href="#EditTingkatGelar" class="open-EditTingkatGelar" style="color:cornflowerblue;" data-id="<?= $TINGKATAN_ID; ?>" data-nama="<?= $TINGKATAN_NAMA; ?>" data-gelar="<?= $TINGKATAN_GELAR;?>" data-level="<?= $TINGKATAN_LEVEL; ?>" data-status="<?= $DELETION_STATUS; ?>"><span class="ico-edit"></span> Ubah</a></li>
+                                            <li><a data-toggle="modal" href="#ViewTingkatGelar" class="open-ViewTingkatGelar" style="color:forestgreen;" data-nama="<?= $TINGKATAN_NAMA; ?>" data-sebutan="<?= $TINGKATAN_SEBUTAN; ?>" data-gelar="<?= $TINGKATAN_GELAR;?>" data-level="<?= $TINGKATAN_LEVEL; ?>" data-status="<?= $TINGKATAN_STATUS; ?>"><span class="ico-check"></span> Lihat</a></li>
+                                            <li><a data-toggle="modal" href="#EditTingkatGelar" class="open-EditTingkatGelar" style="color:cornflowerblue;" data-id="<?= $TINGKATAN_ID; ?>" data-nama="<?= $TINGKATAN_NAMA; ?>" data-sebutan="<?= $TINGKATAN_SEBUTAN; ?>" data-gelar="<?= $TINGKATAN_GELAR;?>" data-level="<?= $TINGKATAN_LEVEL; ?>" data-status="<?= $DELETION_STATUS; ?>"><span class="ico-edit"></span> Ubah</a></li>
                                             <li class="divider"></li>
                                             <li><a href="#" onclick="deleteTingkatan('<?= $TINGKATAN_ID;?>','deletetingkatan')" style="color:firebrick;"><span class="ico-trash"></span> Hapus</a></li>
                                         </ul>
@@ -54,9 +55,10 @@ $getTingkatGelar = GetQuery("SELECT t.*,case when t.DELETION_STATUS = 0 then 'Ak
                             </td>
                             <td class="hidden"><?= $TINGKATAN_ID; ?></td>
                             <td><?= $TINGKATAN_NAMA; ?></td>
-                            <td><?= $TINGKATAN_GELAR; ?></td>
-                            <td><?= $TINGKATAN_LEVEL; ?></td>
-                            <td><?= $TINGKATAN_STATUS; ?></td>
+                            <td><?= $TINGKATAN_SEBUTAN; ?></td>
+                            <td align="center"><?= $TINGKATAN_GELAR; ?></td>
+                            <td align="center"><?= $TINGKATAN_LEVEL; ?></td>
+                            <td align="center"><?= $TINGKATAN_STATUS; ?></td>
                             <td><?= $ANGGOTA_NAMA; ?></td>
                             <td><?= $INPUT_DATE; ?></td>
                         </tr>
@@ -89,12 +91,18 @@ $getTingkatGelar = GetQuery("SELECT t.*,case when t.DELETION_STATUS = 0 then 'Ak
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Gelar<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="TINGKATAN_GELAR" name="TINGKATAN_GELAR" value="" required data-parsley-required>
+                                <label for="">Sebutan<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="TINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" required data-parsley-required>
                             </div> 
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Gelar<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="TINGKATAN_GELAR" name="TINGKATAN_GELAR" value="" required data-parsley-required>
+                            </div> 
+                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Tingkatan Level<span class="text-danger">*</span></label>
@@ -130,12 +138,18 @@ $getTingkatGelar = GetQuery("SELECT t.*,case when t.DELETION_STATUS = 0 then 'Ak
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Gelar<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="viewTINGKATAN_GELAR" name="TINGKATAN_GELAR" readonly value="" required data-parsley-required>
+                                <label for="">Sebutan<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="viewTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" required readonly data-parsley-required>
                             </div> 
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Gelar<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="viewTINGKATAN_GELAR" name="TINGKATAN_GELAR" value="" required readonly data-parsley-required>
+                            </div> 
+                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Tingkatan Level<span class="text-danger">*</span></label></label>
@@ -184,18 +198,26 @@ $getTingkatGelar = GetQuery("SELECT t.*,case when t.DELETION_STATUS = 0 then 'Ak
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Gelar<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="editTINGKATAN_GELAR" name="TINGKATAN_GELAR" value="" required data-parsley-required>
+                                <label for="">Sebutan<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" required data-parsley-required>
                             </div> 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label for="">Gelar<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editTINGKATAN_GELAR" name="TINGKATAN_GELAR" value="" required data-parsley-required>
+                            </div> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
                                 <label for="">Tingkatan Level<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="editTINGKATAN_LEVEL" name="TINGKATAN_LEVEL" value="" required data-parsley-required>
                             </div> 
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Status<span class="text-danger">*</span></label>

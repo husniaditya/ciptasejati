@@ -1,6 +1,12 @@
 <?php 
 require_once ("./module/connection/conn.php");
 
+if(!isset($_SESSION["LOGINIDUS_CS"]))
+{
+    ?><script>alert('Silahkan login dahulu');</script><?php
+    ?><script>document.location.href='index';</script><?php
+    die(0);
+}
 ?>
 
 <!DOCTYPE html>

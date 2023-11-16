@@ -23,6 +23,7 @@ while ($rowTingkatan = $GetTingkatan->fetch(PDO::FETCH_ASSOC)) {
         </td>
         <td class="hidden"><?= $TINGKATAN_ID; ?></td>
         <td><?= $TINGKATAN_NAMA; ?></td>
+        <td><?= $TINGKATAN_SEBUTAN; ?></td>
         <td><?= $TINGKATAN_GELAR; ?></td>
         <td><?= $TINGKATAN_LEVEL; ?></td>
         <td><?= $TINGKATAN_STATUS; ?></td>
