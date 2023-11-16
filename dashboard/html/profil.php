@@ -1,7 +1,7 @@
 <?php 
 require_once ("./module/connection/conn.php");
 
-if(!isset($_SESSION["LOGINIDUS_WEDD"]))
+if(!isset($_SESSION["LOGINIDUS_CS"]))
 {
     ?><script>alert('Silahkan login dahulu');</script><?php
     ?><script>document.location.href='index';</script><?php
@@ -46,6 +46,7 @@ if(!isset($_SESSION["LOGINIDUS_WEDD"]))
                             <ol class="breadcrumb breadcrumb-transparent nm">
                                 <li><a href="javascript:void(0);">Menu Admin</a></li>
                                 <li class="active">Profil Institut</li>
+                                <li class="active">Profil & Sejarah</li>
                             </ol>
                         </div>
                         <!--/ Toolbar -->

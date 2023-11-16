@@ -22,8 +22,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   
     // MenuID: Transaksi
-    if (currentPage === 'anggota.php' || currentPage === 'kepengurusan.php') {
+    if (currentPage === 'kepengurusan.php') {
       addInClassToSubmenu('transaksi');
+    }
+    if (currentPage === 'anggota.php' || currentPage === 'kasanggota.php') {
+      addInClassToSubmenu('transaksi');
+      addInClassToSubmenu('anggota');
     }
     if (currentPage === 'pusatdaya.php' || currentPage === 'ujinaiktingkat.php' || currentPage === 'latihangabungan.php' || currentPage === 'pendidikanlatihan.php') {
       addInClassToSubmenu('transaksi');
@@ -31,12 +35,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   
     // MenuID: Laporan
-    if (currentPage === 'lapdaftarcabang.php' || currentPage === 'lapdaftarguru.php' || currentPage === 'lapdaftarpelatih.php' || currentPage === 'lapdaftarpengurus.php' || currentPage === 'lapdaftaranggota.php' || currentPage === 'lapidanggota.php' || currentPage === 'lapformatstandar.php') {
+    if (currentPage === 'lapdaftarcabang.php' || currentPage === 'lapformatstandar.php') {
       addInClassToSubmenu('laporan');
+    }
+    if (currentPage === 'lapdaftarguru.php' || currentPage === 'lapdaftarpelatih.php' || currentPage === 'lapdaftarpengurus.php') {
+      addInClassToSubmenu('laporan');
+      addInClassToSubmenu('lappengurus');
+    }
+    if (currentPage === 'lapdaftaranggota.php' || currentPage === 'lapidanggota.php' || currentPage === 'lapkasanggota.php') {
+      addInClassToSubmenu('laporan');
+      addInClassToSubmenu('lapanggota');
     }
   
     // MenuID: Admin
-    if (currentPage === 'profil.php' || currentPage === 'user.php' || currentPage === 'menu.php' || currentPage === 'mediasosial.php') {
+    if (currentPage === 'profil.php' || currentPage === 'visimisi.php' || currentPage === 'warnalambang.php') {
+      addInClassToSubmenu('admin');
+      addInClassToSubmenu('profil');
+    }
+    if (currentPage === 'user.php' || currentPage === 'menu.php' || currentPage === 'mediasosial.php') {
       addInClassToSubmenu('admin');
     }
     if (currentPage === 'kontenheader.php' || currentPage === 'kontenfooter.php' || currentPage === 'kontententang.php' || currentPage === 'kontenblog.php' || currentPage === 'kontenhubungi.php') {

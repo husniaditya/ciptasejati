@@ -22,7 +22,7 @@
                     </a>
                 </li>
                 <li  class="level2" >
-                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#lokasi" data-parent="#submenu2">
+                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#lokasi" data-parent="#master">
                         <span class="text">Lokasi Institut</span>
                         <span class="arrow"></span>
                     </a>
@@ -72,13 +72,25 @@
                     </a>
                 </li>
                 <li  class="level2" >
-                    <a href="anggota.php">
+                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#anggota" data-parent="#transaksi">
                         <span class="text">Anggota</span>
-                        <span class="number"><span class="label label-info">1</span></span>
+                        <span class="arrow"></span>
                     </a>
+                    <ul id="anggota" class="submenu collapse ">
+                        <li class="level3" >
+                            <a href="anggota.php">
+                                <span class="text">Daftar Anggota</span>
+                            </a>
+                        </li>
+                        <li class="level3" >
+                            <a href="kasanggota.php">
+                                <span class="text">Kas Anggota</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li  class="level2" >
-                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#aktivitas" data-parent="#submenu2">
+                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#aktivitas" data-parent="#transaksi">
                         <span class="text">Aktivitas</span>
                         <span class="arrow"></span>
                     </a>
@@ -122,29 +134,50 @@
                     </a>
                 </li>
                 <li  class="level2" >
-                    <a href="lapdaftarguru.php">
-                        <span class="text">Daftar Dewan Guru</span>
+                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#lappengurus" data-parent="#laporan">
+                        <span class="text">Laporan Kepengurusan</span>
+                        <span class="arrow"></span>
                     </a>
+                    <ul id="lappengurus" class="submenu collapse ">
+                        <li class="level3" >
+                            <a href="lapdaftarguru.php">
+                                <span class="text">Daftar Dewan Guru</span>
+                            </a>
+                        </li>
+                        <li class="level3" >
+                            <a href="lapdaftarpelatih.php">
+                                <span class="text">Daftar Pelatih</span>
+                            </a>
+                        </li>
+                        <li class="level3" >
+                            <a href="lapdaftarpengurus.php">
+                                <span class="text">Daftar Pengurus</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li  class="level2" >
-                    <a href="lapdaftarpelatih.php">
-                        <span class="text">Daftar Pelatih</span>
+                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#lapanggota" data-parent="#laporan">
+                        <span class="text">Laporan Anggota</span>
+                        <span class="arrow"></span>
                     </a>
-                </li>
-                <li  class="level2" >
-                    <a href="lapdaftarpengurus.php">
-                        <span class="text">Daftar Pengurus</span>
-                    </a>
-                </li>
-                <li  class="level2" >
-                    <a href="lapdaftaranggota.php">
-                        <span class="text">Daftar Anggota</span>
-                    </a>
-                </li>
-                <li  class="level2" >
-                    <a href="lapidanggota.php">
-                        <span class="text">ID Keanggotaan</span>
-                    </a>
+                    <ul id="lapanggota" class="submenu collapse ">
+                        <li class="level3" >
+                            <a href="lapdaftaranggota.php">
+                                <span class="text">Daftar Anggota</span>
+                            </a>
+                        </li>
+                        <li class="level3" >
+                            <a href="lapidanggota.php">
+                                <span class="text">ID Anggota</span>
+                            </a>
+                        </li>
+                        <li class="level3" >
+                            <a href="lapkasanggota.php">
+                                <span class="text">Kas Anggota</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li  class="level2" >
                     <a href="lapformatstandar.php">
@@ -163,10 +196,28 @@
             </a>
             <!-- START 2nd Level Menu -->
             <ul id="admin" class="submenu collapse">
-                <li  class="level2" >
-                    <a href="profil.php">
+            <li  class="level2" >
+                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#profil" data-parent="#admin">
                         <span class="text">Profil Institut</span>
+                        <span class="arrow"></span>
                     </a>
+                    <ul id="profil" class="submenu collapse ">
+                        <li class="level3" >
+                            <a href="profil.php">
+                                <span class="text">Profil & Sejarah</span>
+                            </a>
+                        </li>
+                        <li class="level3" >
+                            <a href="visimisi.php">
+                                <span class="text">Visi & Misi</span>
+                            </a>
+                        </li>
+                        <li class="level3" >
+                            <a href="warnalambang.php">
+                                <span class="text">Arti Warna & Lambang</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li  class="level2" >
                     <a href="mediasosial.php">
@@ -184,7 +235,7 @@
                     </a>
                 </li>
                 <li  class="level2" >
-                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#manajemenkonten" data-parent="#submenu">
+                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#manajemenkonten" data-parent="#admin">
                         <span class="text">Manajemen Konten</span>
                         <span class="arrow"></span>
                     </a>

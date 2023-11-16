@@ -1,3 +1,6 @@
+<?php
+include "module/backend/t_login.php";
+?>
 <section class="container">
     <!-- START row -->
     <div class="row">
@@ -40,8 +43,8 @@
                         </div>
                     </div>
                     <div class="form-group nm">
-                        <a href="dashboard.php" class="btn btn-block btn-primary"><span class="semibold">Sign In</span></a>
-                        <!-- <button type="submit" class="btn btn-block btn-primary" name="login"><span class="semibold">Sign In</span></button> -->
+                        <!-- <a href="dashboard.php" class="btn btn-block btn-primary"><span class="semibold">Sign In</span></a> -->
+                        <button type="submit" class="btn btn-block btn-primary" name="login"><span class="semibold">Sign In</span></button>
                     </div>
                 </div>
             </form>

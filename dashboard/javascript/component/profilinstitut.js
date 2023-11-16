@@ -3,11 +3,10 @@
 // Konten Header Table
 $(document).ready(function() {
     $('#profilinstitut-table').DataTable({
-      responsive: true,
       dom: 'Bfrtip',
+      autoWidth: true,
       // "pageLength": 7,
-      scrollX: 'true',
-      scrollY: '350px', // Set the desired height here
+      scrollX: true,
       buttons: [
           'copy', 'csv', 'excel', 'pdf', 'print'
       ]

@@ -19,7 +19,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-4">Password Baru<span class="text-danger">*</span></label>
                             <div class="col-sm-8">
-                                <input name="NEWPASSWORD" id="NEWPASSWORD" type="password" class="form-control" required data-parsley-required>
+                                <input name="NEWPASSWORD" id="NEWPASSWORD" type="password" class="form-control checkpassword" required data-parsley-required>
                             </div>
                         </div>
                         <div class="form-group">

@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../plugins/jquery-ui/js/jquery-ui-touch.js"></script>
 <script type="text/javascript" src="../plugins/inputmask/js/inputmask.js"></script>
 <script type="text/javascript" src="../plugins/parsley/js/parsley.js"></script>
-<script type="text/javascript" src="../javascript/backend/forms/validation.js"></script>
+<!-- <script type="text/javascript" src="../javascript/backend/forms/validation.js"></script> -->
 <script type="text/javascript" src="../plugins/bootbox/js/bootbox.js"></script>
 <script type="text/javascript" src="../plugins/gritter/js/jquery.gritter.js"></script>
 <script type="text/javascript" src="../javascript/backend/components/notification.js"></script>

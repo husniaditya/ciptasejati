@@ -54,8 +54,8 @@
         <li class="dropdown profile">
             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
                 <span class="meta">
-                    <span class="avatar"><img src="<?=$_SESSION["LOGINPP_WEDD"]; ?>" class="img-circle" alt="" /></span>
-                    <span class="text hidden-xs hidden-sm pl5"><?= $_SESSION["LOGINNAME_WEDD"]; ?></span>
+                    <span class="avatar"><img src="<?=$_SESSION["LOGINPP_CS"]; ?>" class="img-circle" alt="" /></span>
+                    <span class="text hidden-xs hidden-sm pl5"><?= $_SESSION["LOGINNAME_CS"]; ?></span>
                 </span>
             </a>
             <ul class="dropdown-menu" role="menu">

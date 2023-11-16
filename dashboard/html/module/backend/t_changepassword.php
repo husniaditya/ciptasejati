@@ -6,8 +6,7 @@ $NEWPASSWORD = "";
 $CONFIRMPASSWORD = "";
 $PASSWORD = "";
 
-$USER_ID = $_SESSION["LOGINUSNAME_WEDD"];
-$PROJECT_OWNER = $_SESSION["LOGINPROJECT_WEDD"];
+$USER_ID = $_SESSION["LOGINIDUS_CS"];
 
 $USERNAME = "";
 $USER_PASSWORD = "";
@@ -26,23 +25,23 @@ if (isset($_POST["changepassword"])) {
         'cost' => 12,
     ];
 
-    $rows = $CheckPassword = GetQuery("call sp_user('GET','CheckPassword','$USER_ID','$USERNAME','$USER_PASSWORD','$NAMA','$USER_STATUS','$PROFILE_PIC','$USER_ID',now(),'$PROJECT_OWNER')");
+    $rows = $CheckPassword = GetQuery("select * from m_user where ANGGOTA_ID = '$USER_ID'");
     while ($rowCheckPassword = $CheckPassword->fetch(PDO::FETCH_ASSOC)) {
         extract($rowCheckPassword);
     }
     if ($NEWPASSWORD != $CONFIRMPASSWORD) {
-        $response="New Password doesn't match with Confirm Password";
+        $response="Inputan password baru dan konfirmasi password tidak sama";
         echo $response;
     }
     elseif (password_verify($OLDPASSWORD, $USER_PASSWORD)) {
         
         $PASSWORD = password_hash($CONFIRMPASSWORD, PASSWORD_BCRYPT, $options);
-        GetQuery("call sp_user('Update','ChangePassword','$USER_ID','$USERNAME','$PASSWORD','$NAMA','$USER_STATUS','$PROFILE_PIC','$USER_ID',now(),'$PROJECT_OWNER')");
+        GetQuery("update m_user set USER_PASSWORD = '$PASSWORD' where ANGGOTA_ID = '$USER_ID'");
 
         $response="Success";
         echo $response;
     } else {
-        $response="Your old password is incorrect";
+        $response="Password lama yang diinputkan tidak sesuai";
         echo $response;
     }
 }

@@ -1,5 +1,5 @@
 <?php
-$USER_ID = $_SESSION["LOGINIDUS_WEDD"];
+$USER_ID = $_SESSION["LOGINIDUS_CS"];
 
 
 ?>
