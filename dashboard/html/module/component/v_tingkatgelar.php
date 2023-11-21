@@ -2,7 +2,7 @@
 
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 
-$getTingkatGelar = GetQuery("SELECT t.*,case when t.DELETION_STATUS = 0 then 'Aktif' ELSE 'Tidak Aktif' END TINGKATAN_STATUS,a.ANGGOTA_NAMA,DATE_FORMAT(t.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE FROM m_tingkatan t LEFT JOIN m_anggota a ON t.INPUT_BY = a.ANGGOTA_ID order by t.TINGKATAN_LEVEL asc");
+$getTingkatGelar = GetQuery("SELECT t.*,case when t.DELETION_STATUS = 0 then 'Aktif' ELSE 'Tidak Aktif' END TINGKATAN_STATUS,a.ANGGOTA_NAMA,DATE_FORMAT(t.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE FROM m_tingkatan t LEFT JOIN m_anggota a ON t.INPUT_BY = a.ANGGOTA_ID where t.DELETION_STATUS = 0 order by t.TINGKATAN_LEVEL asc");
 ?>
 <!-- START row -->
 <div class="row">

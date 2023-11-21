@@ -2,7 +2,7 @@
 require_once ("../../../module/connection/conn.php");
 
 
-$GetTingkatan = GetQuery("SELECT t.*,case when t.DELETION_STATUS = 0 then 'Aktif' ELSE 'Tidak Aktif' END TINGKATAN_STATUS,a.ANGGOTA_NAMA,DATE_FORMAT(t.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE FROM m_tingkatan t LEFT JOIN m_anggota a ON t.INPUT_BY = a.ANGGOTA_ID order by t.TINGKATAN_LEVEL asc");
+$GetTingkatan = GetQuery("SELECT t.*,case when t.DELETION_STATUS = 0 then 'Aktif' ELSE 'Tidak Aktif' END TINGKATAN_STATUS,a.ANGGOTA_NAMA,DATE_FORMAT(t.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE FROM m_tingkatan t LEFT JOIN m_anggota a ON t.INPUT_BY = a.ANGGOTA_ID where t.DELETION_STATUS = 0 order by t.TINGKATAN_LEVEL asc");
 
 while ($rowTingkatan = $GetTingkatan->fetch(PDO::FETCH_ASSOC)) {
     extract($rowTingkatan);

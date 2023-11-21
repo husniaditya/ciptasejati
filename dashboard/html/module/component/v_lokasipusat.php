@@ -1,7 +1,7 @@
 <?php
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 
-
+$getPusat = GetQuery("select * from m_pusat p left join m_anggota a on p.INPUT_BY = a.ANGGOTA_ID");
 ?>
 
 <!-- START row -->
@@ -33,38 +33,36 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
                         <th>Map</th>
                     </tr>
                 </thead>
-                <tbody id="guestdata">
-                    <tr>
-                        <td align="center">
-                            <form id="eventoption-form" method="post" class="form">
-                                <div class="btn-group" style="margin-bottom:5px;">
-                                    <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a data-toggle="modal" href="#ViewPusat" class="open-ViewPusat" style="color:forestgreen;"><span class="ico-check"></span> Lihat</a></li>
-                                        <li><a data-toggle="modal" href="#EditPusat" class="open-EditPusat" style="color:cornflowerblue;"><span class="ico-edit"></span> Ubah</a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="#" onclick="confirmAndPost('<?= $EVENT_ID;?>','deleteevent')" style="color:firebrick;"><span class="ico-trash"></span> Hapus</a></li>
-                                    </ul>
-                                </div>
-                            </form>
-                        </td>
-                        <td hidden>001</td>
-                        <td>Banjarmasin</td>
-                        <td>Jln Pembangunan Ujung Rt 34 No, 30 Banjarmasin, Kalimantan Selatan</td>
-                        <td></td>
-                        <td>-3.3063120100780785</td>
-                        <td>114.56921894055016</td>
-                        <td>
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d497.89721672377954!2d114.56894083663221!3d-3.306165162787288!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2de4224cfc2f6dc7%3A0x6bf4b37319f90a83!2sSekretariat%20Bela%20Diri%20Silat%20CIPTA%20SEJATI!5e0!3m2!1sen!2sus!4v1698379031246!5m2!1sen!2sus" 
-                                width="400" 
-                                height="250" 
-                                style="border:0;" 
-                                allowfullscreen="" 
-                                loading="lazy" 
-                                referrerpolicy="no-referrer-when-downgrade">
-                            </iframe>
-                        </td>
-                    </tr>
+                <tbody id="pusatdata">
+                    <?php
+                    while($rowPusat = $getPusat->fetch(PDO::FETCH_ASSOC)) {
+                        extract($rowPusat);
+                        ?>
+                        <tr>
+                            <td align="center">
+                                <form id="eventoption-form-<?= $PUSAT_ID; ?>" method="post" class="form">
+                                    <div class="btn-group" style="margin-bottom:5px;">
+                                        <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a data-toggle="modal" href="#ViewPusat" class="open-ViewPusat" style="color:forestgreen;" data-id="<?= $PUSAT_ID; ?>" data-desc="<?= $PUSAT_DESKRIPSI; ?>" data-sekre="<?= $PUSAT_SEKRETARIAT; ?>" data-pengurus="<?= $PUSAT_KEPENGURUSAN; ?>" data-map="<?= $PUSAT_MAP; ?>" data-lat="<?= $PUSAT_LAT; ?>" data-long="<?= $PUSAT_LONG; ?>"><span class="ico-check"></span> Lihat</a></li>
+                                            <li><a data-toggle="modal" href="#EditPusat" class="open-EditPusat" style="color:cornflowerblue;" data-id="<?= $PUSAT_ID; ?>" data-desc="<?= $PUSAT_DESKRIPSI; ?>" data-sekre="<?= $PUSAT_SEKRETARIAT; ?>" data-pengurus="<?= $PUSAT_KEPENGURUSAN; ?>" data-map="<?= $PUSAT_MAP; ?>" data-lat="<?= $PUSAT_LAT; ?>" data-long="<?= $PUSAT_LONG; ?>"><span class="ico-edit"></span> Ubah</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="#" onclick="confirmAndPost('<?= $EVENT_ID;?>','deleteevent')" style="color:firebrick;"><span class="ico-trash"></span> Hapus</a></li>
+                                        </ul>
+                                    </div>
+                                </form>
+                            </td>
+                            <td hidden><?= $PUSAT_ID; ?></td>
+                            <td><?= $PUSAT_DESKRIPSI; ?></td>
+                            <td><?= $PUSAT_SEKRETARIAT; ?></td>
+                            <td><?= $PUSAT_KEPENGURUSAN; ?></td>
+                            <td><?= $PUSAT_LAT; ?></td>
+                            <td><?= $PUSAT_LONG; ?></td>
+                            <td><iframe src="<?= $PUSAT_MAP; ?>" width="300" height="175" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></td>
+                        </tr>
+                        <?php
+                    }
+                    ?>
                 </tbody>
             </table>
         </div>
@@ -79,64 +77,63 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Tambah Data Anggota</h3>
+                    <h3 class="semibold modal-title text-success">Tambah Lokasi Pusat</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_NAME">Deskripsi<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" required id="ViewPusat_NAME" name="GUEST_NAME" value="Banjarmasin" data-parsley-required>
+                                <label for="">Deskripsi<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" required id="PUSAT_DESKRIPSI" name="PUSAT_DESKRIPSI" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_PHONE">Kepengurusan<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="ViewPusat_RELATION" name="GUEST_RELATION" value="" data-parsley-required>
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="GUEST_RELATION">Alamat<span class="text-danger">*</span></label>
-                                <textarea type="text" rows="5" class="form-control" id="GUEST_ADDRESS" name="GUEST_ADDRESS" value="" data-parsley-required>Jln Pembangunan Ujung Rt 34 No, 30 Banjarmasin, Kalimantan Selatan</textarea>
-                            </div> 
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="GUEST_ADDRESS">Map Link<span class="text-danger">*</span></label>
-                                <textarea type="text" rows="5" class="form-control" id="ViewPusat_ADDRESS" name="GUEST_ADDRESS" value="" data-parsley-required><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.177112189075!2d114.56663797386034!3d-3.306319941168371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2de4224cfc2f6dc7%3A0x6bf4b37319f90a83!2sSekretariat%20Bela%20Diri%20Silat%20CIPTA%20SEJATI!5e0!3m2!1sen!2sid!4v1698203909709!5m2!1sen!2sid" width="400" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></textarea>
+                                <label for="">Kepengurusan<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="PUSAT_KEPENGURUSAN" name="PUSAT_KEPENGURUSAN" value="" data-parsley-required>
                             </div> 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_NAME">Latitude<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" required id="ViewPusat_NAME" name="GUEST_NAME" value="-3.3063120100780785" data-parsley-required>
+                                <label for="">Alamat<span class="text-danger">*</span></label>
+                                <textarea type="text" rows="5" class="form-control" id="PUSAT_SEKRETARIAT" name="PUSAT_SEKRETARIAT" value="" data-parsley-required></textarea>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_PHONE">Longitude<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="ViewPusat_RELATION" name="GUEST_RELATION" value="114.56921894055016" data-parsley-required>
+                                <label for="">Map Link<span class="text-danger">*</span></label>
+                                <textarea type="text" rows="5" class="form-control" id="PUSAT_MAP" name="PUSAT_MAP" value="" onkeyup="getMapsAdd(this.value)" onClick="getMapsAdd(this.value)" data-parsley-required></textarea>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Latitude<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" required id="PUSAT_LAT" name="PUSAT_LAT" value="" data-parsley-required>
+                            </div> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Longitude<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="PUSAT_LONG" name="PUSAT_LONG" value="" data-parsley-required>
                             </div> 
                         </div>
                     </div>
                     <hr>
-                    <div class="row">
+                    <div class="row" id="addPusatMap">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="GUEST_PHONE">Google Maps</label>
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.177112189075!2d114.56663797386034!3d-3.306319941168371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2de4224cfc2f6dc7%3A0x6bf4b37319f90a83!2sSekretariat%20Bela%20Diri%20Silat%20CIPTA%20SEJATI!5e0!3m2!1sen!2sid!4v1698204837772!5m2!1sen!2sid" width="100%" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                            </div>
+                                <label for="">Google Maps</span></label><br>
+                            </div> 
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Cancel</button>
-                    <button type="submit" name="submit" id="saveguest" class="submit btn btn-primary btn-outline mb5 btn-rounded"><span class="ico-save"></span> Save</button>
+                    <button type="submit" name="submit" id="savepusat" class="submit btn btn-primary btn-outline mb5 btn-rounded"><span class="ico-save"></span> Save</button>
                 </div>
             </div>
         </div>
@@ -155,42 +152,42 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_NAME">Deskripsi<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" readonly required id="ViewPusat_NAME" name="GUEST_NAME" value="Banjarmasin" data-parsley-required>
+                                <label for="">Deskripsi<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" readonly required id="viewPUSAT_DESKRIPSI" name="PUSAT_DESKRIPSI" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_PHONE">Kepengurusan<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="ViewPusat_RELATION" name="GUEST_RELATION" readonly value="">
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="GUEST_RELATION">Alamat<span class="text-danger">*</span></label>
-                                <textarea type="text" rows="5" class="form-control" id="GUEST_ADDRESS" name="GUEST_ADDRESS" value="" data-parsley-required readonly>Jln Pembangunan Ujung Rt 34 No, 30 Banjarmasin, Kalimantan Selatan</textarea>
-                            </div> 
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="GUEST_ADDRESS">Map Link<span class="text-danger">*</span></label>
-                                <textarea type="text" rows="5" class="form-control" id="ViewPusat_ADDRESS" name="GUEST_ADDRESS" readonly value=""><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.177112189075!2d114.56663797386034!3d-3.306319941168371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2de4224cfc2f6dc7%3A0x6bf4b37319f90a83!2sSekretariat%20Bela%20Diri%20Silat%20CIPTA%20SEJATI!5e0!3m2!1sen!2sid!4v1698203909709!5m2!1sen!2sid" width="400" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></textarea>
+                                <label for="">Kepengurusan<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="viewPUSAT_KEPENGURUSAN" name="PUSAT_KEPENGURUSAN" readonly value="">
                             </div> 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_NAME">Latitude<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" readonly required id="ViewPusat_NAME" name="GUEST_NAME" value="-3.3063120100780785" data-parsley-required>
+                                <label for="">Alamat<span class="text-danger">*</span></label>
+                                <textarea type="text" rows="5" class="form-control" id="viewPUSAT_SEKRETARIAT" name="PUSAT_SEKRETARIAT" value="" data-parsley-required readonly></textarea>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_PHONE">Longitude<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="ViewPusat_RELATION" name="GUEST_RELATION" readonly value="114.56921894055016">
+                                <label for="">Map Link<span class="text-danger">*</span></label>
+                                <textarea type="text" rows="5" class="form-control" id="viewPUSAT_MAP" name="PUSAT_MAP" readonly value=""></textarea>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Latitude<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" readonly required id="viewPUSAT_LAT" name="PUSAT_LAT" value="-3.3063120100780785" data-parsley-required>
+                            </div> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Longitude<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="viewPUSAT_LONG" name="PUSAT_LONG" readonly value="114.56921894055016">
                             </div> 
                         </div>
                     </div>
@@ -198,9 +195,9 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="GUEST_PHONE">Google Maps</label>
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.177112189075!2d114.56663797386034!3d-3.306319941168371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2de4224cfc2f6dc7%3A0x6bf4b37319f90a83!2sSekretariat%20Bela%20Diri%20Silat%20CIPTA%20SEJATI!5e0!3m2!1sen!2sid!4v1698204837772!5m2!1sen!2sid" width="100%" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                            </div>
+                                <label for="">Google Maps</label><br>
+                                <iframe id="ViewPusatMap" src="" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </div> 
                         </div>
                     </div>
                 </div>
@@ -218,72 +215,72 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Edit Data Anggota</h3>
+                    <h3 class="semibold modal-title text-success">Edit Lokasi Pusat</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row hidden">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="GUEST_ID">Guest ID<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" required readonly id="editGUEST_ID" name="GUEST_ID" value="" data-parsley-required>
+                                <label for="">Pusat ID<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" required readonly id="editPUSAT_ID" name="PUSAT_ID" value="" data-parsley-required>
                             </div> 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_NAME">Deskripsi<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" required id="ViewPusat_NAME" name="GUEST_NAME" value="Banjarmasin" data-parsley-required>
+                                <label for="">Deskripsi<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" required id="editPUSAT_DESKRIPSI" name="PUSAT_DESKRIPSI" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_PHONE">Kepengurusan<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="ViewPusat_RELATION" name="GUEST_RELATION" value="" data-parsley-required>
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="GUEST_RELATION">Alamat<span class="text-danger">*</span></label>
-                                <textarea type="text" rows="5" class="form-control" id="GUEST_ADDRESS" name="GUEST_ADDRESS" value="" data-parsley-required>Jln Pembangunan Ujung Rt 34 No, 30 Banjarmasin, Kalimantan Selatan</textarea>
-                            </div> 
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="GUEST_ADDRESS">Map Link<span class="text-danger">*</span></label>
-                                <textarea type="text" rows="5" class="form-control" id="ViewPusat_ADDRESS" name="GUEST_ADDRESS" value="" data-parsley-required><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.177112189075!2d114.56663797386034!3d-3.306319941168371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2de4224cfc2f6dc7%3A0x6bf4b37319f90a83!2sSekretariat%20Bela%20Diri%20Silat%20CIPTA%20SEJATI!5e0!3m2!1sen!2sid!4v1698203909709!5m2!1sen!2sid" width="400" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></textarea>
+                                <label for="">Kepengurusan<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editPUSAT_KEPENGURUSAN" name="PUSAT_KEPENGURUSAN" value="" data-parsley-required>
                             </div> 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_NAME">Latitude<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" required id="ViewPusat_NAME" name="GUEST_NAME" value="-3.3063120100780785" data-parsley-required>
+                                <label for="">Alamat<span class="text-danger">*</span></label>
+                                <textarea type="text" rows="5" class="form-control" id="editPUSAT_SEKRETARIAT" name="PUSAT_SEKRETARIAT" value="" data-parsley-required></textarea>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_PHONE">Longitude<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="ViewPusat_RELATION" name="GUEST_RELATION" value="114.56921894055016" data-parsley-required>
+                                <label for="">Map Link<span class="text-danger">*</span></label>
+                                <textarea type="text" rows="5" class="form-control" id="editPUSAT_MAP" name="PUSAT_MAP" value="" onkeyup="getMapsEdit(this.value)" onClick="getMapsEdit(this.value)" data-parsley-required></textarea>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Latitude<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" required id="editPUSAT_LAT" name="PUSAT_LAT" value="" data-parsley-required>
+                            </div> 
+                        </div>
+                        <div class="col-md-6" id="pusatmapedit">
+                            <div class="form-group">
+                                <label for="">Longitude<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editPUSAT_LONG" name="PUSAT_LONG" value="" data-parsley-required>
                             </div> 
                         </div>
                     </div>
                     <hr>
-                    <div class="row">
+                    <div class="row" id="editPusatMap">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="GUEST_PHONE">Google Maps</label>
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.177112189075!2d114.56663797386034!3d-3.306319941168371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2de4224cfc2f6dc7%3A0x6bf4b37319f90a83!2sSekretariat%20Bela%20Diri%20Silat%20CIPTA%20SEJATI!5e0!3m2!1sen!2sid!4v1698204837772!5m2!1sen!2sid" width="100%" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                <label for="">Google Maps</label>
+                                <iframe id="EditPusatMap" src="" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Close</button>
-                    <button type="submit" name="submit" id="EditPusat" class="submit btn btn-primary btn-outline mb5 btn-rounded"><span class="ico-save"></span> Save</button>
+                    <button type="submit" name="submit" id="editpusat" class="submit btn btn-primary btn-outline mb5 btn-rounded"><span class="ico-save"></span> Save</button>
                 </div>
             </div>
         </div>

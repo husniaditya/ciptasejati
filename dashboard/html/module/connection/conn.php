@@ -76,5 +76,24 @@
 		}
 		$angkaAkhir = $angkaAkhir + 1;
 		return $awalan.substr("00000000".$angkaAkhir,-1*$jumlahAngka);
+
+	}
+
+	function autoInc($namaTabel,$namaKolom,$jumlahAngka)
+	{
+		$db1 = new PDO('mysql:host=localhost;dbname=ciptasejati', 'admciptasejati', '**ciptasejati');
+		$angkaAkhir = 0;
+		
+		$stmt = $db1->query("select max(right($namaKolom,$jumlahAngka)) as akhir from $namaTabel");
+		while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+		{
+			if(isset($row["akhir"]))
+			{
+				$angkaAkhir = intval($row["akhir"]);
+			}
+		}
+		$angkaAkhir = $angkaAkhir + 1;
+		return substr("00000000".$angkaAkhir,-1*$jumlahAngka);
+
 	}
 ?>
