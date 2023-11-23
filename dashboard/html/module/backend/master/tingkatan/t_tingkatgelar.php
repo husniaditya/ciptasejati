@@ -1,5 +1,5 @@
 <?php
-require_once ("../../module/connection/conn.php");
+require_once ("../../../../module/connection/conn.php");
 
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 

@@ -49,6 +49,18 @@
             dropdownParent: 'body'
         });
 
+        $(document).ready(function () {
+            // Initialize Selectize for the dropdown inside the modal
+            $('#selectize-dropdown').selectize({
+                create: true,
+                sortField: {
+                    field: 'text',
+                    direction: 'asc'
+                },
+                dropdownParent: '#selectize-wrapper'
+            });
+        });
+
         // multiple select
         // ================================
         $('#selectize-selectmultiple').selectize({

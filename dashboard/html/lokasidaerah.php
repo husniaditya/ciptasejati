@@ -54,7 +54,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
                 </div>
                 <!-- Page Header -->
 
-                <?php include 'module/component/v_lokasidaerah.php';?>
+                <?php include 'module/component/master/lokasi/v_lokasidaerah.php';?>
             </div>
         </section>
             <!--/ END Template Container -->
@@ -71,7 +71,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
 
         <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
         <?php include 'module/js.php';?>
-        <script type="text/javascript" src="../javascript/component/lokasidaerah.js"></script>
+        <script type="text/javascript" src="../javascript/component/master/lokasi/lokasidaerah.js"></script>
         <!--/ END JAVASCRIPT SECTION -->
     </body>
     <!--/ END Body -->

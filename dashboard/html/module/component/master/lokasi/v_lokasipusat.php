@@ -1,7 +1,7 @@
 <?php
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 
-$getPusat = GetQuery("select * from m_pusat p left join m_anggota a on p.INPUT_BY = a.ANGGOTA_ID");
+$getPusat = GetQuery("select * from m_pusat p left join m_anggota a on p.INPUT_BY = a.ANGGOTA_ID where p.DELETION_STATUS = 0");
 ?>
 
 <!-- START row -->
@@ -24,7 +24,7 @@ $getPusat = GetQuery("select * from m_pusat p left join m_anggota a on p.INPUT_B
                 <thead>
                     <tr>
                         <th></th>
-                        <th class="hidden">Pusat ID</th>
+                        <th>Pusat ID</th>
                         <th>Lokasi </th>
                         <th>Alamat </th>
                         <th>Kepengurusan</th>
@@ -47,12 +47,12 @@ $getPusat = GetQuery("select * from m_pusat p left join m_anggota a on p.INPUT_B
                                             <li><a data-toggle="modal" href="#ViewPusat" class="open-ViewPusat" style="color:forestgreen;" data-id="<?= $PUSAT_ID; ?>" data-desc="<?= $PUSAT_DESKRIPSI; ?>" data-sekre="<?= $PUSAT_SEKRETARIAT; ?>" data-pengurus="<?= $PUSAT_KEPENGURUSAN; ?>" data-map="<?= $PUSAT_MAP; ?>" data-lat="<?= $PUSAT_LAT; ?>" data-long="<?= $PUSAT_LONG; ?>"><span class="ico-check"></span> Lihat</a></li>
                                             <li><a data-toggle="modal" href="#EditPusat" class="open-EditPusat" style="color:cornflowerblue;" data-id="<?= $PUSAT_ID; ?>" data-desc="<?= $PUSAT_DESKRIPSI; ?>" data-sekre="<?= $PUSAT_SEKRETARIAT; ?>" data-pengurus="<?= $PUSAT_KEPENGURUSAN; ?>" data-map="<?= $PUSAT_MAP; ?>" data-lat="<?= $PUSAT_LAT; ?>" data-long="<?= $PUSAT_LONG; ?>"><span class="ico-edit"></span> Ubah</a></li>
                                             <li class="divider"></li>
-                                            <li><a href="#" onclick="confirmAndPost('<?= $EVENT_ID;?>','deleteevent')" style="color:firebrick;"><span class="ico-trash"></span> Hapus</a></li>
+                                            <li><a href="#" onclick="deletePusat('<?= $PUSAT_ID;?>','deletepusat')" style="color:firebrick;"><span class="ico-trash"></span> Hapus</a></li>
                                         </ul>
                                     </div>
                                 </form>
                             </td>
-                            <td hidden><?= $PUSAT_ID; ?></td>
+                            <td align="center"><?= $PUSAT_ID; ?></td>
                             <td><?= $PUSAT_DESKRIPSI; ?></td>
                             <td><?= $PUSAT_SEKRETARIAT; ?></td>
                             <td><?= $PUSAT_KEPENGURUSAN; ?></td>

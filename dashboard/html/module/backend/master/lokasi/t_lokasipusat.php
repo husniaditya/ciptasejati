@@ -1,5 +1,5 @@
 <?php
-require_once ("../../module/connection/conn.php");
+require_once ("../../../../module/connection/conn.php");
 
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 
@@ -63,7 +63,7 @@ if (isset($_POST["EVENT_ACTION"])) {
     try {
         $PUSAT_ID = $_POST["PUSAT_ID"];
     
-        GetQuery("update m_pusat set DELETION_STATUS = 1 where PUSAT_ID = '$PUSAT_ID'");
+        GetQuery("delete from m_pusat where PUSAT_ID = '$PUSAT_ID'");
         $response="Success";
         echo $response;
     } catch (\Throwable $th) {

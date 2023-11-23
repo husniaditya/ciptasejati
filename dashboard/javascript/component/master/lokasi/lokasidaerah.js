@@ -1,54 +1,40 @@
 
 
-// Anggota Table
+// Daerah Table
 $(document).ready(function() {
-    $('#lokasipusat-table').DataTable({
+    $('#lokasidaerah-table').DataTable({
       responsive: true,
+      order: [[1, 'asc']],
       dom: 'Bfrtip',
+      columnDefs: [
+        { width: '100px', targets: 0 }, // Set width for column 1
+        { width: '250px', targets: 1 }, // Set width for column 2
+        { width: '250px', targets: 2 }, // Set width for column 2
+        { width: '350px', targets: 3 }, // Set width for column 3
+        { width: '50px', targets: 4 }, // Set width for column 4
+        { width: '250px', targets: 5 }, // Set width for column 5
+        { width: '250px', targets: 6 }, // Set width for column 6
+        // Add more columnDefs as needed
+      ],
       // "pageLength": 7,
       scrollX: true,
+      scrollY: '300px', // Set the desired height here
       buttons: [
           'copy', 'csv', 'excel', 'pdf', 'print'
       ]
     });
 });
 
-// Load Pusat Maps
-function getMapsAdd(val) {
-  $.ajax({
-  type: "POST",
-  url: "module/ajax/lokasipusat/aj_getmap.php",
-  data:'maps='+val,
-  success: function(data){
-    $("#addPusatMap").html(data);
-  }
-  });
-  // console.log(val);
-}
 
-function getMapsEdit(val) {
-  $.ajax({
-  type: "POST",
-  url: "module/ajax/lokasipusat/aj_getmap.php",
-  data:'maps='+val,
-  success: function(data){
-    $("#editPusatMap").html(data);
-  }
-  });
-  // console.log(val);
-}
-
-
-// ----- Start of Pusat Section ----- //
+// ----- Start of Daerah Section ----- //
 $(document).ready(function() {
-  // add Pusat
-  $('#AddPusat-form').submit(function(event) {
+  // add Daerah
+  $('#AddDaerah-form').submit(function(event) {
     event.preventDefault(); // Prevent the default form submission
 
-    var pusatdesk = document.getElementById("PUSAT_DESKRIPSI").value;
-    var pusatsek = document.getElementById("PUSAT_SEKRETARIAT").value;
-    var pusatlat = document.getElementById("PUSAT_LAT").value;
-    var pusatlong = document.getElementById("PUSAT_LONG").value;
+    var daerahid = document.getElementById("DAERAH_ID").value;
+    var pusatid = document.getElementById("selectize-dropdown").value;
+    var daerahnama = document.getElementById("DAERAH_DESKRIPSI").value;
   
     var formData = new FormData($(this)[0]); // Create FormData object from the form
     var buttonId = $(event.originalEvent.submitter).attr('id'); // Retrieve button ID
@@ -56,10 +42,10 @@ $(document).ready(function() {
     // Manually add the button title or ID to the serialized data
     formData.append(buttonId, 'edit');
 
-    if (pusatdesk !== '' && pusatsek !== '' && pusatlat !== '' && pusatlong !== '') {
+    if (daerahid !== '' && pusatid !== '' && daerahnama !== '') {
       $.ajax({
         type: 'POST',
-        url: 'module/backend/t_lokasipusat.php',
+        url: 'module/backend/master/lokasi/t_lokasidaerah.php',
         data: formData,
         processData: false, // Prevent jQuery from processing the data
         contentType: false, // Prevent jQuery from setting content type
@@ -70,14 +56,14 @@ $(document).ready(function() {
             SuccessNotification('Data berhasil tersimpan!');
             
             // Close the modal
-            $('#AddPusat').modal('hide');
+            $('#AddDaerah').modal('hide');
     
             // Call the reloadDataTable() function after inserting data to reload the DataTable
             $.ajax({
               type: 'GET',
-              url: 'module/ajax/lokasipusat/aj_tablepusat.php',
+              url: 'module/ajax/master/lokasidaerah/aj_tabledaerah.php',
               success: function(response) {
-                $("#pusatdata").html(response);
+                $("#daerahdata").html(response);
               },
               error: function(xhr, status, error) {
                 // Handle any errors
@@ -99,14 +85,13 @@ $(document).ready(function() {
     console.log(pusatdesk);
   });  
 
-  // edit Pusat
-  $('#EditPusat-form').submit(function(event) {
+  // edit Daerah
+  $('#EditDaerah-form').submit(function(event) {
     event.preventDefault(); // Prevent the default form submission
 
-    var pusatdesk = document.getElementById("editPUSAT_DESKRIPSI").value;
-    var pusatsek = document.getElementById("editPUSAT_SEKRETARIAT").value;
-    var pusatlat = document.getElementById("editPUSAT_LAT").value;
-    var pusatlong = document.getElementById("editPUSAT_LONG").value;
+    var daerahid = document.getElementById("editDAERAH_ID").value;
+    var pusatid = document.getElementById("editPUSAT_ID").value;
+    var daerahnama = document.getElementById("editDAERAH_DESKRIPSI").value;
   
     var formData = new FormData($(this)[0]); // Create FormData object from the form
     var buttonId = $(event.originalEvent.submitter).attr('id'); // Retrieve button ID
@@ -114,10 +99,10 @@ $(document).ready(function() {
     // Manually add the button title or ID to the serialized data
     formData.append(buttonId, 'clicked');
 
-    if (pusatdesk !== '' && pusatsek !== '' && pusatlat !== '' && pusatlong !== '') {
+    if (daerahid !== '' && pusatid !== '' && daerahnama !== '') {
       $.ajax({
         type: 'POST',
-        url: 'module/backend/t_lokasipusat.php',
+        url: 'module/backend/master/lokasi/t_lokasidaerah.php',
         data: formData,
         processData: false, // Prevent jQuery from processing the data
         contentType: false, // Prevent jQuery from setting content type
@@ -128,14 +113,14 @@ $(document).ready(function() {
             UpdateNotification('Data Berhasil Diubah!');
             
             // Close the modal
-            $('#EditPusat').modal('hide');
+            $('#EditDaerah').modal('hide');
     
             // Call the reloadDataTable() function after inserting data to reload the DataTable
             $.ajax({
               type: 'GET',
-              url: 'module/ajax/lokasipusat/aj_tablepusat.php',
+              url: 'module/ajax/master/lokasidaerah/aj_tabledaerah.php',
               success: function(response) {
-                $("#pusatdata").html(response);
+                $("#daerahdata").html(response);
               },
               error: function(xhr, status, error) {
                 // Handle any errors
@@ -158,70 +143,52 @@ $(document).ready(function() {
   });  
 });
 
-// View Pusat
-$(document).on("click", ".open-ViewPusat", function () {
-  var pusatid = $(this).data('id');
-  var pusatdesk = $(this).data('desc');
-  var pusatsekre = $(this).data('sekre');
-  var pusatpengurus = $(this).data('pengurus');
-  var pusatmap = $(this).data('map');
-  var pusatlat = $(this).data('lat');
-  var pusatlong = $(this).data('long');
+// edit Daerah
+$(document).on("click", ".open-ViewDaerah", function () {
+  var daerahid = $(this).data('id');
+  var pusatdes = $(this).data('pusatdes');
+  var daerahdes = $(this).data('daerahdes');
+  var status = $(this).data('daerahstatus');
   
   // Set the values in the modal input fields
-  $(".modal-body #viewPUSAT_ID").val(pusatid);
-  $(".modal-body #viewPUSAT_DESKRIPSI").val(pusatdesk);
-  $(".modal-body #viewPUSAT_SEKRETARIAT").val(pusatsekre);
-  $(".modal-body #viewPUSAT_KEPENGURUSAN").val(pusatpengurus);
-  $(".modal-body #viewPUSAT_MAP").val(pusatmap);
-  $(".modal-body #viewPUSAT_LAT").val(pusatlat);
-  $(".modal-body #viewPUSAT_LONG").val(pusatlong);
-
-  // Set the source URL to the iframe
-  document.getElementById('ViewPusatMap').src = pusatmap;
+  $(".modal-body #viewDAERAH_ID").val(daerahid);
+  $(".modal-body #viewPUSAT_ID").val(pusatdes);
+  $(".modal-body #viewDAERAH_DESKRIPSI").val(daerahdes);
+  $(".modal-body #viewDELETION_STATUS").val(status);
   
   // console.log(tingatannama);
 });
 
-// Edit Pusat
-$(document).on("click", ".open-EditPusat", function () {
-  var pusatid = $(this).data('id');
-  var pusatdesk = $(this).data('desc');
-  var pusatsekre = $(this).data('sekre');
-  var pusatpengurus = $(this).data('pengurus');
-  var pusatmap = $(this).data('map');
-  var pusatlat = $(this).data('lat');
-  var pusatlong = $(this).data('long');
+// Edit Daerah
+$(document).on("click", ".open-EditDaerah", function () {
+  var daerahid = $(this).data('id');
+  var pusatid = $(this).data('pusatid');
+  var daerahdes = $(this).data('daerahdes');
+  var status = $(this).data('status');
 
   // Set the values in the modal input fields
+  $(".modal-body #editDAERAH_ID").val(daerahid);
   $(".modal-body #editPUSAT_ID").val(pusatid);
-  $(".modal-body #editPUSAT_DESKRIPSI").val(pusatdesk);
-  $(".modal-body #editPUSAT_SEKRETARIAT").val(pusatsekre);
-  $(".modal-body #editPUSAT_KEPENGURUSAN").val(pusatpengurus);
-  $(".modal-body #editPUSAT_MAP").val(pusatmap);
-  $(".modal-body #editPUSAT_LAT").val(pusatlat);
-  $(".modal-body #editPUSAT_LONG").val(pusatlong);
-  
-  // Set the source URL to the iframe
-  document.getElementById('EditPusatMap').src = pusatmap;
+  $(".modal-body #editDAERAH_DESKRIPSI").val(daerahdes);
+  $(".modal-body #editDELETION_STATUS").val(status);
 
-  // console.log(tingkatanstatus);
+  // console.log(pusatid);
 });
 
 // Delete Pusat
-function deleteTingkatan(value1,value2) {
+function deletedaerah(value1,value2) {
   // Ask for confirmation
   if (confirm("Apakah anda yakin untuk menghapus data ini?")) {
     // Create the data object
     var eventdata = {
-      PUSAT_ID: value1,
+      DAERAH_ID: value1,
       EVENT_ACTION: value2
     };
 
     // Perform the AJAX request
     $.ajax({
       type: 'POST',
-      url: 'module/backend/t_lokasipusat.php',
+      url: 'module/backend/master/lokasi/t_lokasidaerah.php',
       data: eventdata,
       success: function(response) {
         // Check the response from the server
@@ -232,9 +199,9 @@ function deleteTingkatan(value1,value2) {
           // Call the reloadDataTable() function after inserting data to reload the DataTable
           $.ajax({
             type: 'GET',
-            url: 'module/ajax/lokasipusat/aj_tablepusat.php',
+            url: 'module/ajax/master/lokasidaerah/aj_tabledaerah.php',
             success: function(response) {
-                $("#pusatdata").html(response);
+                $("#daerahdata").html(response);
             },
             error: function(xhr, status, error) {
               // Handle any errors

@@ -1,11 +1,31 @@
 <?php
-	// Start the session
-	session_start();
 	
 	date_default_timezone_set("Asia/Jakarta");
 	ini_set('max_execution_time', 300); //300 seconds = 5 minutes
 	$db1 = new PDO('mysql:host=localhost;dbname=ciptasejati', 'admciptasejati', '**ciptasejati');
 	ini_set('upload_max_filesize', '10M');
+	
+	// Start the session
+	session_start();
+
+	// Set the inactivity timeout to 10 minutes (600 seconds)
+	$inactivityTimeout = 900;
+
+	// Check if the user is logged in and there is a last activity timestamp
+	if (isset($_SESSION['LOGINIDUS_CS']) && isset($_SESSION['last_activity'])) {
+		// Check if the user has been inactive for too long
+		if (time() - $_SESSION['last_activity'] > $inactivityTimeout) {
+			// If so, destroy the session and redirect to the login page
+			unset($_SESSION["LOGINIDUS_CS"]);
+			session_destroy();   // destroy session data in storage
+			
+			?><script>alert('Sesi berakhir, silahkan login kembali');</script><?php
+			?><script>document.location.href='index.php';</script><?php
+		}
+	}
+
+	// Update the last activity timestamp
+	$_SESSION['last_activity'] = time();
 
 
 	// $ssh_host = '158.140.167.180';

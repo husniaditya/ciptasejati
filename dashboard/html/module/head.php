@@ -38,12 +38,6 @@
 <link rel="stylesheet" href="../plugins/datatables/css/3.2.3-fixedHeader.dataTables-min.css">
 <!-- / Datatable -->
 
-<!-- Application stylesheet : mandatory -->
-<link rel="stylesheet" href="../stylesheet/bootstrap.css">
-<link rel="stylesheet" href="../stylesheet/layout.css">
-<link rel="stylesheet" href="../stylesheet/uielement.css">
-<!--/ Application stylesheet -->
-
 <!-- Theme stylesheet -->
 <link rel="stylesheet" href="../stylesheet/themes/theme.css">
 <!--/ Theme stylesheet -->
