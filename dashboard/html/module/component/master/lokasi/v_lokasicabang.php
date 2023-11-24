@@ -1,7 +1,14 @@
 <?php
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 
+$getCabang = GetQuery("SELECT c.*,d.DAERAH_DESKRIPSI,RIGHT(c.CABANG_ID,3) SHORT_ID FROM m_cabang c
+LEFT JOIN m_daerah d ON c.DAERAH_ID = d.DAERAH_ID
+WHERE c.DELETION_STATUS = 0
+ORDER BY c.CABANG_ID");
 
+$getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0 order by DAERAH_ID");
+// Fetch all rows into an array
+$rows = $getDaerah->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!-- START row -->
@@ -24,7 +31,7 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
                 <thead>
                     <tr>
                         <th></th>
-                        <th class="hidden">Pusat ID</th>
+                        <th>Cabang ID</th>
                         <th>Daerah </th>
                         <th>Lokasi </th>
                         <th>Alamat </th>
@@ -34,57 +41,39 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
                         <th>Map</th>
                     </tr>
                 </thead>
-                <tbody id="guestdata">
-                    <tr>
-                        <td align="center">
-                            <form id="eventoption-form" method="post" class="form">
-                                <div class="btn-group" style="margin-bottom:5px;">
-                                    <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a data-toggle="modal" href="#ViewCabang" class="open-ViewCabang" style="color:forestgreen;"><span class="ico-check"></span> Lihat</a></li>
-                                        <li><a data-toggle="modal" href="#EditCabang" class="open-EditCabang" style="color:cornflowerblue;"><span class="ico-edit"></span> Ubah</a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="#" onclick="confirmAndPost('<?= $EVENT_ID;?>','deleteevent')" style="color:firebrick;"><span class="ico-trash"></span> Hapus</a></li>
-                                    </ul>
-                                </div>
-                            </form>
-                        </td>
-                        <td hidden>001</td>
-                        <td>Kalimantan Selatan</td>
-                        <td>Banjarmasin</td>
-                        <td>Jln Pembangunan Ujung Rt 34 No, 30 Banjarmasin, Kalimantan Selatan</td>
-                        <td></td>
-                        <td>-3.3063120100780785</td>
-                        <td>114.56921894055016</td>
-                        <td>
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.177112189075!2d114.56663797386034!3d-3.306319941168371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2de4224cfc2f6dc7%3A0x6bf4b37319f90a83!2sSekretariat%20Bela%20Diri%20Silat%20CIPTA%20SEJATI!5e0!3m2!1sen!2sid!4v1698203909709!5m2!1sen!2sid" width="250" height="150" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center">
-                            <form id="eventoption-form" method="post" class="form">
-                                <div class="btn-group" style="margin-bottom:5px;">
-                                    <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a data-toggle="modal" href="#ViewCabang" class="open-ViewCabang" style="color:forestgreen;"><span class="ico-check"></span> Lihat</a></li>
-                                        <li><a data-toggle="modal" href="#EditCabang" class="open-EditCabang" style="color:cornflowerblue;"><span class="ico-edit"></span> Ubah</a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="#" onclick="confirmAndPost('<?= $EVENT_ID;?>','deleteevent')" style="color:firebrick;"><span class="ico-trash"></span> Hapus</a></li>
-                                    </ul>
-                                </div>
-                            </form>
-                        </td>
-                        <td hidden>001</td>
-                        <td>Kalimantan Tengah</td>
-                        <td>Sampit</td>
-                        <td>Bapeang, Kec. Mentawa Baru Ketapang, Kabupaten Kotawaringin Timur, Kalimantan Tengah</td>
-                        <td></td>
-                        <td>-2.6688532</td>
-                        <td>112.9354533</td>
-                        <td>
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3985.490704459315!2d112.9354532548705!3d-2.6688532014591!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2de2932387c9e82f%3A0xd776431bbaf915fa!2sSekretariat%20ISBDS%20Cipta%20Sejati%20Cab.%20Kotim!5e0!3m2!1sid!2sid!4v1698312696528!5m2!1sid!2sid" width="250" height="150" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        </td>
-                    </tr>
+                <tbody id="cabangdata">
+                    <?php
+                    while ($rowCabang = $getCabang->fetch(PDO::FETCH_ASSOC)) {
+                        extract($rowCabang);
+                        ?>
+                        <tr>
+                            <td align="center">
+                                <form id="eventoption-form-<?= uniqid(); ?>" method="post" class="form">
+                                    <div class="btn-group" style="margin-bottom:5px;">
+                                        <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a data-toggle="modal" href="#ViewCabang" class="open-ViewCabang" style="color:forestgreen;" data-daerahid="<?=$DAERAH_ID;?>" data-daerahdes="<?=$DAERAH_DESKRIPSI;?>" data-cabangid="<?=$CABANG_ID;?>" data-shortid="<?=$SHORT_ID;?>" data-desk="<?=$CABANG_DESKRIPSI;?>" data-pengurus="<?=$CABANG_PENGURUS;?>" data-sekre="<?=$CABANG_SEKRETARIAT;?>" data-map="<?=$CABANG_MAP;?>" data-lat="<?=$CABANG_LAT;?>" data-long="<?=$CABANG_LONG;?>"><span class="ico-check"></span> Lihat</a></li>
+                                            <li><a data-toggle="modal" href="#EditCabang" class="open-EditCabang" style="color:cornflowerblue;" data-daerahid="<?=$DAERAH_ID;?>" data-daerahdes="<?=$DAERAH_DESKRIPSI;?>" data-cabangid="<?=$CABANG_ID;?>" data-shortid="<?=$SHORT_ID;?>" data-desk="<?=$CABANG_DESKRIPSI;?>" data-pengurus="<?=$CABANG_PENGURUS;?>" data-sekre="<?=$CABANG_SEKRETARIAT;?>" data-map="<?=$CABANG_MAP;?>" data-lat="<?=$CABANG_LAT;?>" data-long="<?=$CABANG_LONG;?>"><span class="ico-edit"></span> Ubah</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="#" onclick="deleteCabang('<?= $CABANG_ID;?>','deleteevent')" style="color:firebrick;"><span class="ico-trash"></span> Hapus</a></li>
+                                        </ul>
+                                    </div>
+                                </form>
+                            </td>
+                            <td><?= $CABANG_ID; ?></td>
+                            <td><?= $DAERAH_DESKRIPSI; ?></td>
+                            <td><?= $CABANG_DESKRIPSI; ?></td>
+                            <td><?= $CABANG_SEKRETARIAT; ?></td>
+                            <td><?= $CABANG_PENGURUS; ?></td>
+                            <td><?= $CABANG_LAT; ?></td>
+                            <td><?= $CABANG_LONG; ?></td>
+                            <td>
+                                <iframe src="<?= $CABANG_MAP; ?>" width="250" height="150" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </td>
+                        </tr>
+                        <?php
+                    }
+                    ?>
                 </tbody>
             </table>
         </div>
@@ -99,64 +88,89 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Tambah Data Anggota</h3>
+                    <h3 class="semibold modal-title text-success">Tambah Data Cabang</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_NAME">Deskripsi<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" required id="ViewCabang_NAME" name="GUEST_NAME" value="Banjarmasin" data-parsley-required>
+                                <label for="">Daerah<span class="text-danger">*</span></label>
+                                <div id="selectize-wrapper" style="position: relative;">
+                                    <select name="DAERAH_ID" id="selectize-dropdown" required="" class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Daerah --</option>
+                                        <?php
+                                        foreach ($rows as $rowCabang) {
+                                            extract($rowCabang);
+                                            ?>
+                                            <option value="<?= $DAERAH_ID; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_PHONE">Kepengurusan<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="ViewCabang_RELATION" name="GUEST_RELATION" value="" data-parsley-required>
+                                <label for="">Cabang ID<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" required id="CABANG_ID" name="CABANG_ID" value="" data-parsley-required>
                             </div> 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_RELATION">Alamat<span class="text-danger">*</span></label>
-                                <textarea type="text" rows="5" class="form-control" id="GUEST_ADDRESS" name="GUEST_ADDRESS" value="" data-parsley-required>Jln Pembangunan Ujung Rt 34 No, 30 Banjarmasin, Kalimantan Selatan</textarea>
+                                <label for="">Lokasi Cabang<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" required id="CABANG_DESKRIPSI" name="CABANG_DESKRIPSI" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_ADDRESS">Map Link<span class="text-danger">*</span></label>
-                                <textarea type="text" rows="5" class="form-control" id="ViewCabang_ADDRESS" name="GUEST_ADDRESS" value="" data-parsley-required><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.177112189075!2d114.56663797386034!3d-3.306319941168371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2de4224cfc2f6dc7%3A0x6bf4b37319f90a83!2sSekretariat%20Bela%20Diri%20Silat%20CIPTA%20SEJATI!5e0!3m2!1sen!2sid!4v1698203909709!5m2!1sen!2sid" width="400" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></textarea>
+                                <label for="">Kepengurusan</label>
+                                <input type="text" class="form-control" id="CABANG_PENGURUS" name="CABANG_PENGURUS" value="">
                             </div> 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_NAME">Latitude<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" required id="ViewCabang_NAME" name="GUEST_NAME" value="-3.3063120100780785" data-parsley-required>
+                                <label for="">Alamat<span class="text-danger">*</span></label>
+                                <textarea type="text" rows="5" class="form-control" id="CABANG_SEKRETARIAT" name="CABANG_SEKRETARIAT" value="" data-parsley-required></textarea>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_PHONE">Longitude<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="ViewCabang_RELATION" name="GUEST_RELATION" value="114.56921894055016" data-parsley-required>
+                                <label for="">Map Link<span class="text-danger">*</span></label>
+                                <textarea type="text" rows="5" class="form-control" id="CABANG_MAP" name="CABANG_MAP" value="" onkeyup="getMapsAdd(this.value)" onClick="getMapsAdd(this.value)" data-parsley-required></textarea>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Latitude<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" required id="CABANG_LAT" name="CABANG_LAT" value="" data-parsley-required>
+                            </div> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Longitude<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="CABANG_LONG" name="CABANG_LONG" value="" data-parsley-required>
                             </div> 
                         </div>
                     </div>
                     <hr>
-                    <div class="row">
+                    <div class="row" id="addCabangMap">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="GUEST_PHONE">Google Maps</label>
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.177112189075!2d114.56663797386034!3d-3.306319941168371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2de4224cfc2f6dc7%3A0x6bf4b37319f90a83!2sSekretariat%20Bela%20Diri%20Silat%20CIPTA%20SEJATI!5e0!3m2!1sen!2sid!4v1698204837772!5m2!1sen!2sid" width="100%" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                            </div>
+                                <label for="">Google Maps</span></label><br>
+                            </div> 
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Cancel</button>
-                    <button type="submit" name="submit" id="saveguest" class="submit btn btn-primary btn-outline mb5 btn-rounded"><span class="ico-save"></span> Save</button>
+                    <button type="submit" name="submit" id="savecabang" class="submit btn btn-primary btn-outline mb5 btn-rounded"><span class="ico-save"></span> Save</button>
                 </div>
             </div>
         </div>
@@ -169,48 +183,62 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Lihat Data Pusat</h3>
+                    <h3 class="semibold modal-title text-success">Lihat Data Cabang</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_NAME">Deskripsi<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" readonly required id="ViewCabang_NAME" name="GUEST_NAME" value="Banjarmasin" data-parsley-required>
+                                <label for="">Daerah<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" required readonly id="viewDAERAH_ID" name="DAERAH_ID" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_PHONE">Kepengurusan<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="ViewCabang_RELATION" name="GUEST_RELATION" readonly value="">
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="GUEST_RELATION">Alamat<span class="text-danger">*</span></label>
-                                <textarea type="text" rows="5" class="form-control" id="GUEST_ADDRESS" name="GUEST_ADDRESS" value="" data-parsley-required readonly>Jln Pembangunan Ujung Rt 34 No, 30 Banjarmasin, Kalimantan Selatan</textarea>
-                            </div> 
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="GUEST_ADDRESS">Map Link<span class="text-danger">*</span></label>
-                                <textarea type="text" rows="5" class="form-control" id="ViewCabang_ADDRESS" name="GUEST_ADDRESS" readonly value=""><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.177112189075!2d114.56663797386034!3d-3.306319941168371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2de4224cfc2f6dc7%3A0x6bf4b37319f90a83!2sSekretariat%20Bela%20Diri%20Silat%20CIPTA%20SEJATI!5e0!3m2!1sen!2sid!4v1698203909709!5m2!1sen!2sid" width="400" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></textarea>
+                                <label for="">Cabang ID<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" required readonly id="viewCABANG_ID" name="CABANG_ID" value="" data-parsley-required>
                             </div> 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_NAME">Latitude<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" readonly required id="ViewCabang_NAME" name="GUEST_NAME" value="-3.3063120100780785" data-parsley-required>
+                                <label for="">Deskripsi<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" readonly required id="viewCABANG_DESKRIPSI" name="CABANG_DESKRIPSI" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_PHONE">Longitude<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="ViewCabang_RELATION" name="GUEST_RELATION" readonly value="114.56921894055016">
+                                <label for="">Kepengurusan<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="viewCABANG_PENGURUS" name="CABANG_PENGURUS" readonly value="">
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Alamat<span class="text-danger">*</span></label>
+                                <textarea type="text" rows="5" class="form-control" id="viewCABANG_SEKRETARIAT" name="CABANG_SEKRETARIAT" value="" data-parsley-required readonly></textarea>
+                            </div> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Map Link<span class="text-danger">*</span></label>
+                                <textarea type="text" rows="5" class="form-control" id="viewCABANG_MAP" name="CABANG_MAP" readonly value=""></textarea>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Latitude<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" readonly required id="viewCABANG_LAT" name="CABANG_LAT" value="" data-parsley-required>
+                            </div> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Longitude<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="viewCABANG_LONG" name="CABANG_LONG" readonly value="">
                             </div> 
                         </div>
                     </div>
@@ -218,8 +246,8 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="GUEST_PHONE">Google Maps</label>
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.177112189075!2d114.56663797386034!3d-3.306319941168371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2de4224cfc2f6dc7%3A0x6bf4b37319f90a83!2sSekretariat%20Bela%20Diri%20Silat%20CIPTA%20SEJATI!5e0!3m2!1sen!2sid!4v1698204837772!5m2!1sen!2sid" width="100%" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                <label for="">Google Maps</label>
+                                <iframe id="ViewCabangMap" src="" width="100%" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                             </div>
                         </div>
                     </div>
@@ -238,72 +266,98 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Edit Data Anggota</h3>
+                    <h3 class="semibold modal-title text-success">Ubah Data Cabang</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row hidden">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_ID">Guest ID<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" required readonly id="editGUEST_ID" name="GUEST_ID" value="" data-parsley-required>
+                                <label for="">ID<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" required readonly id="editID" name="ID" value="" data-parsley-required>
                             </div> 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_NAME">Deskripsi<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" required id="ViewCabang_NAME" name="GUEST_NAME" value="Banjarmasin" data-parsley-required>
+                                <label for="">Daerah<span class="text-danger">*</span></label>
+                                <div id="selectize-wrapper2" style="position: relative;">
+                                    <select name="DAERAH_ID" id="selectize-dropdown2" required="" class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Daerah --</option>
+                                        <?php
+                                        foreach ($rows as $rowCabang) {
+                                            extract($rowCabang);
+                                            ?>
+                                            <option value="<?= $DAERAH_ID; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_PHONE">Kepengurusan<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="ViewCabang_RELATION" name="GUEST_RELATION" value="" data-parsley-required>
+                                <label for="">Cabang ID<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" required id="editCABANG_ID" name="CABANG_ID" value="" data-parsley-required>
                             </div> 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_RELATION">Alamat<span class="text-danger">*</span></label>
-                                <textarea type="text" rows="5" class="form-control" id="GUEST_ADDRESS" name="GUEST_ADDRESS" value="" data-parsley-required>Jln Pembangunan Ujung Rt 34 No, 30 Banjarmasin, Kalimantan Selatan</textarea>
+                                <label for="">Lokasi Cabang<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" required id="editCABANG_DESKRIPSI" name="CABANG_DESKRIPSI" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_ADDRESS">Map Link<span class="text-danger">*</span></label>
-                                <textarea type="text" rows="5" class="form-control" id="ViewCabang_ADDRESS" name="GUEST_ADDRESS" value="" data-parsley-required><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.177112189075!2d114.56663797386034!3d-3.306319941168371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2de4224cfc2f6dc7%3A0x6bf4b37319f90a83!2sSekretariat%20Bela%20Diri%20Silat%20CIPTA%20SEJATI!5e0!3m2!1sen!2sid!4v1698203909709!5m2!1sen!2sid" width="400" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></textarea>
+                                <label for="">Kepengurusan</label>
+                                <input type="text" class="form-control" id="editCABANG_PENGURUS" name="CABANG_PENGURUS" value="">
                             </div> 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_NAME">Latitude<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" required id="ViewCabang_NAME" name="GUEST_NAME" value="-3.3063120100780785" data-parsley-required>
+                                <label for="">Alamat<span class="text-danger">*</span></label>
+                                <textarea type="text" rows="5" class="form-control" id="editCABANG_SEKRETARIAT" name="CABANG_SEKRETARIAT" value="" data-parsley-required></textarea>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="GUEST_PHONE">Longitude<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="ViewCabang_RELATION" name="GUEST_RELATION" value="114.56921894055016" data-parsley-required>
+                                <label for="">Map Link<span class="text-danger">*</span></label>
+                                <textarea type="text" rows="5" class="form-control" id="editCABANG_MAP" name="CABANG_MAP" value="" onkeyup="getMapsEdit(this.value)" onClick="getMapsEdit(this.value)" data-parsley-required></textarea>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Latitude<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" required id="editCABANG_LAT" name="CABANG_LAT" value="" data-parsley-required>
+                            </div> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Longitude<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editCABANG_LONG" name="CABANG_LONG" value="" data-parsley-required>
                             </div> 
                         </div>
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12" id="editCabangMap">
                             <div class="form-group">
-                                <label for="GUEST_PHONE">Google Maps</label>
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.177112189075!2d114.56663797386034!3d-3.306319941168371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2de4224cfc2f6dc7%3A0x6bf4b37319f90a83!2sSekretariat%20Bela%20Diri%20Silat%20CIPTA%20SEJATI!5e0!3m2!1sen!2sid!4v1698204837772!5m2!1sen!2sid" width="100%" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                            </div>
+                                <label for="">Google Maps</span></label><br>
+                                <iframe id="EditCabangMap" src="" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </div> 
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Close</button>
-                    <button type="submit" name="submit" id="EditCabang" class="submit btn btn-primary btn-outline mb5 btn-rounded"><span class="ico-save"></span> Save</button>
+                    <button type="submit" name="submit" id="editcabang" class="submit btn btn-primary btn-outline mb5 btn-rounded"><span class="ico-save"></span> Save</button>
                 </div>
             </div>
         </div>

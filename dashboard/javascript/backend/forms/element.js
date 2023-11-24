@@ -61,6 +61,18 @@
             });
         });
 
+        $(document).ready(function () {
+            // Initialize Selectize for the dropdown inside the modal
+            $('#selectize-dropdown2').selectize({
+                create: true,
+                sortField: {
+                    field: 'text',
+                    direction: 'asc'
+                },
+                dropdownParent: '#selectize-wrapper2'
+            });
+        });
+
         // multiple select
         // ================================
         $('#selectize-selectmultiple').selectize({

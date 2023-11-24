@@ -31,12 +31,14 @@ if (isset($_POST["savedaerah"])) {
 if (isset($_POST["editdaerah"])) {
 
     try {
+        $EDIT_ID = $_POST["EDIT_ID"];
+        
         $DAERAH_ID = $_POST["DAERAH_ID"];
         $PUSAT_ID = $_POST["PUSAT_ID"];
         $DAERAH_DESKRIPSI = $_POST["DAERAH_DESKRIPSI"];
         $DELETION_STATUS = $_POST["DELETION_STATUS"];
 
-        $response = GetQuery("update m_daerah set PUSAT_ID = '$PUSAT_ID', DAERAH_DESKRIPSI = '$DAERAH_DESKRIPSI', DELETION_STATUS = '$DELETION_STATUS', INPUT_BY = '$USER_ID', INPUT_DATE = now() where DAERAH_ID = '$DAERAH_ID'");
+        GetQuery("update m_daerah set DAERAH_ID= '$PUSAT_ID.$DAERAH_ID', PUSAT_ID = '$PUSAT_ID', DAERAH_DESKRIPSI = '$DAERAH_DESKRIPSI', DELETION_STATUS = '$DELETION_STATUS', INPUT_BY = '$USER_ID', INPUT_DATE = now() where DAERAH_ID = '$EDIT_ID'");
 
         $response="Success";
         echo $response;

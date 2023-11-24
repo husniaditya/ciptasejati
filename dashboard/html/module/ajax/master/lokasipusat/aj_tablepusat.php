@@ -9,7 +9,7 @@ while ($rowPusat = $getPusat->fetch(PDO::FETCH_ASSOC)) {
     ?>
     <tr>
         <td align="center">
-            <form id="eventoption-form-<?= $PUSAT_ID; ?>" method="post" class="form">
+            <form id="eventoption-form-<?= uniqid(); ?>" method="post" class="form">
                 <div class="btn-group" style="margin-bottom:5px;">
                     <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                     <ul class="dropdown-menu" role="menu">
