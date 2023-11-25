@@ -25,7 +25,7 @@ $getTingkatGelar = GetQuery("SELECT t.*,case when t.DELETION_STATUS = 0 then 'Ak
                     <tr>
                         <th></th>
                         <th class="hidden">Gelar ID</th>
-                        <th>Sabuk Tingkatan</th>
+                        <th>Tingkatan</th>
                         <th>Sebutan</th>
                         <th>Gelar</th>
                         <th>Level</th>

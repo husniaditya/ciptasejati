@@ -28,11 +28,11 @@ if(isset($_POST["login"]))
         $_SESSION["LOGINCAB_CS"] = $CABANG_ID;
         $_SESSION["LOGINPP_CS"] = $ANGGOTA_PIC;
 
-        ?><script>document.location.href='dashboard';</script><?php
+        ?><script>document.location.href='dashboard.php';</script><?php
         die(0);
     } else {
         ?><script>alert('ID Anggota atau password salah');</script><?php
-        ?><script>document.location.href='index';</script><?php
+        ?><script>document.location.href='index.php';</script><?php
         die(0);
     }
 
