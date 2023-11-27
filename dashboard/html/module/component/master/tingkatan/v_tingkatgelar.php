@@ -74,7 +74,7 @@ $getTingkatGelar = GetQuery("SELECT t.*,case when t.DELETION_STATUS = 0 then 'Ak
 <!--/ END row -->
 
 <div id="AddTingkatGelar" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="addTingkatGelar-form" method="post" class="form" data-parsley-validate>
+    <form id="AddTingkatGelar-form" method="post" class="form" data-parsley-validate>
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header text-center">
@@ -173,7 +173,7 @@ $getTingkatGelar = GetQuery("SELECT t.*,case when t.DELETION_STATUS = 0 then 'Ak
 </div>
 
 <div id="EditTingkatGelar" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="editTingkatGelar-form" method="post" class="form" data-parsley-validate>
+    <form id="EditTingkatGelar-form" method="post" class="form" data-parsley-validate>
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header text-center">

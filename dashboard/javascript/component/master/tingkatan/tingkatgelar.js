@@ -30,7 +30,7 @@ function callTable() {
 
 
 // ----- Start of Tingkatan Section ----- //
-function handleCabangForm(formId, successNotification, failedNotification, updateNotification) {
+function handleForm(formId, successNotification, failedNotification, updateNotification) {
   $(formId).submit(function(event) {
     event.preventDefault(); // Prevent the default form submission
 
@@ -85,10 +85,10 @@ function handleCabangForm(formId, successNotification, failedNotification, updat
 
 $(document).ready(function() {
   // add Daerah
-  handleCabangForm('#AddTingkatGelar-form', SuccessNotification, FailedNotification, UpdateNotification);
+  handleForm('#AddTingkatGelar-form', SuccessNotification, FailedNotification, UpdateNotification);
 
   // edit Daerah
-  handleCabangForm('#EditTingkatGelar-form', UpdateNotification, FailedNotification, UpdateNotification);
+  handleForm('#EditTingkatGelar-form', UpdateNotification, FailedNotification, UpdateNotification);
 });
 
 // Delete Tingkatan
@@ -104,7 +104,7 @@ function deleteTingkatan(value1,value2) {
     // Perform the AJAX request
     $.ajax({
       type: 'POST',
-      url: 'module/backend/t_tingkatgelar.php',
+      url: 'module/backend/master/tingkatan/t_tingkatgelar.php',
       data: eventdata,
       success: function(response) {
         // Check the response from the server
@@ -115,13 +115,13 @@ function deleteTingkatan(value1,value2) {
           // Call the reloadDataTable() function after inserting data to reload the DataTable
           $.ajax({
             type: 'POST',
-            url: 'module/ajax/tingkatgelar/aj_tingkatgelar.php',
+            url: 'module/ajax/master/tingkatan/aj_tingkatgelar.php',
             success: function(response) {
               // Destroy the DataTable before updating
               $('#tingkatgelar-table').DataTable().destroy();
               $("#tingkatgelardata").html(response);
               // Reinitialize Daerah Table
-              callDaerahTable();
+              callTable();
             },
             error: function(xhr, status, error) {
               // Handle any errors

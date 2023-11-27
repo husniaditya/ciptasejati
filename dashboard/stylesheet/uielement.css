@@ -1153,7 +1153,7 @@ input[type="checkbox"] {
  * --------------------------- */
 /* anchor reset */
 a {
-  color: #00b1e1;
+  /* color: #00b1e1; */
   text-decoration: none;
 }
 a:hover,

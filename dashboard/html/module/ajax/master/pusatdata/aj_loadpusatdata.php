@@ -8,10 +8,9 @@ while ($rowFile = $GetFile->fetch(PDO::FETCH_ASSOC)) {
     extract($rowFile);
     ?>
     <div class="col-md-12">
-        <a href="<?= $PUSATDATA_FILE; ?>" target="_blank">
-        <i class="fa-solid fa-file-circle-check fa-2xl"></i><br>
+        <a href="<?= $PUSATDATA_FILE; ?>" target="_blank" style="font-size: large;">
+        <i class="fa-solid fa-paperclip"></i> <?= $PUSATDATA_FILENAMA; ?>
         </a>
-        <p><?= $PUSATDATA_FILENAMA; ?></p>
     </div>
     <?php
 }
