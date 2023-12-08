@@ -25,8 +25,8 @@ $getTingkatGelar = GetQuery("SELECT t.*,case when t.DELETION_STATUS = 0 then 'Ak
                     <tr>
                         <th></th>
                         <th class="hidden">Gelar ID</th>
+                        <th>Sabuk</th>
                         <th>Tingkatan</th>
-                        <th>Sebutan</th>
                         <th>Gelar</th>
                         <th>Level</th>
                         <th>Status</th>
@@ -85,13 +85,13 @@ $getTingkatGelar = GetQuery("SELECT t.*,case when t.DELETION_STATUS = 0 then 'Ak
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Sabuk Tingkatan<span class="text-danger">*</span></label>
+                                <label for="">Sabuk<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="TINGKATAN_NAMA" name="TINGKATAN_NAMA" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Sebutan<span class="text-danger">*</span></label>
+                                <label for="">Tingkatan<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="TINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" required data-parsley-required>
                             </div> 
                         </div>
@@ -121,7 +121,7 @@ $getTingkatGelar = GetQuery("SELECT t.*,case when t.DELETION_STATUS = 0 then 'Ak
 </div>
 
 <div id="ViewTingkatGelar" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="viewTingkatGelar-form" method="post" class="form" data-parsley-validate>
+    <form id="ViewTingkatGelar-form" method="post" class="form" data-parsley-validate>
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header text-center">
@@ -132,13 +132,13 @@ $getTingkatGelar = GetQuery("SELECT t.*,case when t.DELETION_STATUS = 0 then 'Ak
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Sabuk Tingkatan<span class="text-danger">*</span></label>
+                                <label for="">Sabuk<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" readonly required id="viewTINGKATAN_NAMA" name="TINGKATAN_NAMA" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Sebutan<span class="text-danger">*</span></label>
+                                <label for="">Tingkatan<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="viewTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" required readonly data-parsley-required>
                             </div> 
                         </div>
@@ -192,13 +192,13 @@ $getTingkatGelar = GetQuery("SELECT t.*,case when t.DELETION_STATUS = 0 then 'Ak
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Sabuk Tingkatan<span class="text-danger">*</span></label>
+                                <label for="">Sabuk<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="editTINGKATAN_NAMA" name="TINGKATAN_NAMA" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Sebutan<span class="text-danger">*</span></label>
+                                <label for="">Tingkatan<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="editTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" required data-parsley-required>
                             </div> 
                         </div>

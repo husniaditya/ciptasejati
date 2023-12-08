@@ -28,7 +28,7 @@ while ($rowPusatdata = $getPusatdata->fetch(PDO::FETCH_ASSOC)) {
         <td align="center"><?= $PUSATDATA_KATEGORI; ?></td>
         <td><?= $PUSATDATA_JUDUL; ?></td>
         <td><?= $PUSATDATA_DESKRIPSI; ?></td>
-        <td align="center"><a href="<?= $PUSATDATA_FILE; ?>" target="_blank"><i class="fa-solid fa-file-circle-check"></i><br> Lihat File</a>
+        <td align="center"><a href="<?= $PUSATDATA_FILE; ?>" target="_blank"><i class="fa-solid fa-file-circle-check fa-xl"></i><br> Lihat File</a>
         </td>
         <td align="center"><?= $PUSATDATA_STATUS; ?></td>
         <td><?= $ANGGOTA_NAMA; ?></td>

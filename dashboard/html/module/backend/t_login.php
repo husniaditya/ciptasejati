@@ -14,10 +14,10 @@ if(isset($_POST["login"]))
 
     $GetUser = GetQuery("SELECT u.*,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.CABANG_ID,c.CABANG_DESKRIPSI,a.TINGKATAN_ID,t.TINGKATAN_NAMA,a.ANGGOTA_PIC 
     from m_user u 
-    left join m_anggota a on u.ANGGOTA_ID = a.ANGGOTA_ID 
+    left join m_anggota a on u.ANGGOTA_KEY = a.ANGGOTA_KEY 
     LEFT JOIN m_cabang c ON a.CABANG_ID = c.CABANG_ID
     LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
-    where u.ANGGOTA_ID='$USERNAME'");
+    where a.ANGGOTA_ID='$USERNAME'");
     while ($rowUser = $GetUser->fetch(PDO::FETCH_ASSOC)) {
         extract($rowUser);
     }

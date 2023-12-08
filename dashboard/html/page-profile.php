@@ -1,5 +1,5 @@
 <?php 
-require_once ("./module/connection/conn.php");
+require_once ("module/connection/conn.php");
 
 if(!isset($_SESSION["LOGINIDUS_CS"]))
 {
@@ -38,14 +38,14 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
                 <!-- Page Header -->
                 <div class="page-header page-header-block">
                     <div class="page-header-section">
-                        <h4 class="title semibold">Data Anggota</h4>
+                        <h4 class="title semibold">Akun Saya</h4>
                     </div>
                     <div class="page-header-section">
                         <!-- Toolbar -->
                         <div class="toolbar">
                             <ol class="breadcrumb breadcrumb-transparent nm">
-                                <li><a href="javascript:void(0);">Master</a></li>
-                                <li class="active">Anggota</li>
+                                <li><a href="dashboard.php">Dashboard</a></li>
+                                <li class="active">Akun Saya</li>
                             </ol>
                         </div>
                         <!--/ Toolbar -->
@@ -53,24 +53,33 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
                 </div>
                 <!-- Page Header -->
 
-                <?php include 'module/component/transaksi/anggota/daftaranggota/v_anggota.php';?>
+			    <?php include 'module/component/master/page-profile/v_page-profile.php'; ?>
             </div>
-        </section>
             <!--/ END Template Container -->
-            <!-- START Template Footer -->
-            <footer id="footer">
-                <?php include 'module/footer.php';?>
-            </footer>
-            <!--/ END Template Footer -->
 
             <!-- START To Top Scroller -->
             <a href="#" class="totop animation" data-toggle="waypoints totop" data-showanim="bounceIn" data-hideanim="bounceOut" data-offset="50%"><i class="ico-angle-up"></i></a>
             <!--/ END To Top Scroller -->
+        </section>
         <!--/ END Template Main -->
+        
+        <br><br>
+        <!-- START Template Footer -->
+        <footer id="footer">
+            <?php include 'module/footer.php';?>
+        </footer>
+        <!--/ END Template Footer -->
 
         <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
-        <?php include 'module/js.php';?>
-        <script type="text/javascript" src="../javascript/component/transaksi/anggota/daftaranggota/daftaranggota.js"></script>
+        <!-- Application and vendor script : mandatory -->
+        <script type="text/javascript" src="../javascript/vendor.js"></script>
+        <script type="text/javascript" src="../javascript/core.js"></script>
+        <script type="text/javascript" src="../javascript/backend/app.js"></script>
+        <!--/ Application and vendor script : mandatory -->
+
+        <!-- Plugins and page level script : optional -->
+		<script type="text/javascript" src="../javascript/pace.min.js"></script>
+        <!--/ Plugins and page level script : optional -->
         <!--/ END JAVASCRIPT SECTION -->
     </body>
     <!--/ END Body -->

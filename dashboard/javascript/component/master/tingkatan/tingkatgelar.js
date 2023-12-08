@@ -1,8 +1,10 @@
 
+// Declare dataTable globally
+var dataTable;
 
 // Tingkatan Table
 function callTable() {
-    $('#tingkatgelar-table').DataTable({
+    datatable = $('#tingkatgelar-table').DataTable({
       responsive: true,
       columnDefs: [
         { width: '10%', targets: 0 }, // Set width for column 1
@@ -65,6 +67,8 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
               $("#tingkatgelardata").html(response);
               // Reinitialize Daerah Table
               callTable();
+              // Stay on the Same Page
+              dataTable.page(currentPage).draw('page');
             },
             error: function(xhr, status, error) {
               // Handle any errors

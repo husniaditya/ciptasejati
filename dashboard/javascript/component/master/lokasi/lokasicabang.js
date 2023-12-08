@@ -7,6 +7,7 @@ function callTable() {
       dom: 'Bfrtip',
       // "pageLength": 7,
       scrollX: true,
+      scrollY: '400px', // Set the desired height here
       buttons: [
           'copy', 'csv', 'excel', 'pdf', 'print'
       ]

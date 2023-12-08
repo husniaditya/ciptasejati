@@ -59,6 +59,7 @@
                 </span>
             </a>
             <ul class="dropdown-menu" role="menu">
+                <li><a href="page-profile.php"><span class="icon"><i class="fa-solid fa-user-check"></i></span> Akun Saya</a></li>
                 <li><a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-ChangePassword" href="#ChangePassword"><span class="icon"><i class="ico-cog4"></i></span> Change Password</a></li>
                 <li><a href="assets/dataterpusat/panduan/Panduan Aplikasi Cipta Sejati.pdf" target="_blank"><span class="icon"><i class="ico-book2"></i></span> Buku Panduan</a></li>
                 <li class="divider"></li>

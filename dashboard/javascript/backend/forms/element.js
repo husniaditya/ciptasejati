@@ -48,6 +48,14 @@
             },
             dropdownParent: 'body'
         });
+        $('#selectize-select2').selectize({
+            create: true,
+            sortField: {
+                field: 'text',
+                direction: 'asc'
+            },
+            dropdownParent: 'body'
+        });
 
         $(document).ready(function () {
             // Initialize Selectize for the dropdown inside the modal
@@ -169,7 +177,8 @@
         // date in other moonth
         $('#datepicker2').datepicker({
             showOtherMonths: true,
-            selectOtherMonths: true
+            selectOtherMonths: true,
+            dateFormat: 'yy-mm-dd',
         });
 
         // button bar
@@ -180,7 +189,18 @@
         // display month & year
         $('#datepicker4').datepicker({
             changeMonth: true,
-            changeYear: true
+            changeYear: true,
+            dateFormat: 'yy-mm-dd',
+        });
+        $('#datepicker41').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy-mm-dd',
+        });
+        $('#datepicker44').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy-mm-dd',
         });
 
         // select date range
