@@ -2,7 +2,7 @@
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 
 $getPusatdata = GetQuery("SELECT p.*,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,case when p.DELETION_STATUS = 0 then 'Aktif' ELSE 'Tidak Aktif' END PUSATDATA_STATUS FROM m_pusatdata p
-LEFT JOIN m_cabang c ON p.CABANG_ID = c.CABANG_ID
+LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
 LEFT JOIN m_anggota a ON p.INPUT_BY = a.ANGGOTA_ID");
 
 $getCabang = GetQuery("select * from m_cabang where DELETION_STATUS = 0");
@@ -52,8 +52,8 @@ $rows = $getCabang->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewPusatdata" data-pusatid="<?=$PUSATDATA_ID;?>" data-cabangid="<?=$CABANG_ID;?>" data-cabangnama="<?=$CABANG_DESKRIPSI;?>" data-kategori="<?=$PUSATDATA_KATEGORI;?>" data-judul="<?=$PUSATDATA_JUDUL;?>" data-deskripsi="<?=$PUSATDATA_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-pusatstatus="<?=$PUSATDATA_STATUS;?>" class="open-ViewPusatdata" style="color:forestgreen;"><span class="ico-check"></span> Lihat</a></li>
-                                            <li><a data-toggle="modal" href="#EditPusatdata" data-pusatid="<?=$PUSATDATA_ID;?>" data-cabangid="<?=$CABANG_ID;?>" data-cabangnama="<?=$CABANG_DESKRIPSI;?>" data-kategori="<?=$PUSATDATA_KATEGORI;?>" data-judul="<?=$PUSATDATA_JUDUL;?>" data-deskripsi="<?=$PUSATDATA_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-pusatstatus="<?=$PUSATDATA_STATUS;?>" class="open-EditPusatdata" style="color:cornflowerblue;"><span class="ico-edit"></span> Ubah</a></li>
+                                            <li><a data-toggle="modal" href="#ViewPusatdata" data-pusatid="<?=$PUSATDATA_ID;?>" data-cabangid="<?=$CABANG_KEY;?>" data-cabangnama="<?=$CABANG_DESKRIPSI;?>" data-kategori="<?=$PUSATDATA_KATEGORI;?>" data-judul="<?=$PUSATDATA_JUDUL;?>" data-deskripsi="<?=$PUSATDATA_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-pusatstatus="<?=$PUSATDATA_STATUS;?>" class="open-ViewPusatdata" style="color:forestgreen;"><span class="ico-check"></span> Lihat</a></li>
+                                            <li><a data-toggle="modal" href="#EditPusatdata" data-pusatid="<?=$PUSATDATA_ID;?>" data-cabangid="<?=$CABANG_KEY;?>" data-cabangnama="<?=$CABANG_DESKRIPSI;?>" data-kategori="<?=$PUSATDATA_KATEGORI;?>" data-judul="<?=$PUSATDATA_JUDUL;?>" data-deskripsi="<?=$PUSATDATA_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-pusatstatus="<?=$PUSATDATA_STATUS;?>" class="open-EditPusatdata" style="color:cornflowerblue;"><span class="ico-edit"></span> Ubah</a></li>
                                             <li class="divider"></li>
                                             <li><a href="#" onclick="deletepusatdata('<?= $PUSATDATA_ID;?>','deleteevent')" style="color:firebrick;"><span class="ico-trash"></span> Hapus</a></li>
                                         </ul>
@@ -96,13 +96,13 @@ $rows = $getCabang->fetchAll(PDO::FETCH_ASSOC);
                             <div class="form-group">
                                 <label for="">Cabang<span class="text-danger">*</span></label>
                                 <div id="selectize-wrapper" style="position: relative;">
-                                    <select name="CABANG_ID" id="selectize-dropdown" required class="form-control" data-parsley-required>
+                                    <select name="CABANG_KEY" id="selectize-dropdown" required class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Cabang --</option>
                                         <?php
                                         foreach ($rows as $rowCabang) {
                                             extract($rowCabang);
                                             ?>
-                                            <option value="<?= $CABANG_ID; ?>"><?= $CABANG_DESKRIPSI; ?></option>
+                                            <option value="<?= $CABANG_KEY; ?>"><?= $CABANG_DESKRIPSI; ?></option>
                                             <?php
                                         }
                                         ?>
@@ -240,13 +240,13 @@ $rows = $getCabang->fetchAll(PDO::FETCH_ASSOC);
                             <div class="form-group">
                                 <label for="">Cabang<span class="text-danger">*</span></label>
                                 <div id="selectize-wrapper2" style="position: relative;">
-                                    <select name="CABANG_ID" id="selectize-dropdown2" required class="form-control" data-parsley-required>
+                                    <select name="CABANG_KEY" id="selectize-dropdown2" required class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Cabang --</option>
                                         <?php
                                         foreach ($rows as $rowEditCabang) {
                                             extract($rowEditCabang);
                                             ?>
-                                            <option value="<?= $CABANG_ID; ?>"><?= $CABANG_DESKRIPSI; ?></option>
+                                            <option value="<?= $CABANG_KEY; ?>"><?= $CABANG_DESKRIPSI; ?></option>
                                             <?php
                                         }
                                         ?>

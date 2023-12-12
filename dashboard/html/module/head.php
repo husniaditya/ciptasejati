@@ -30,6 +30,7 @@
 <link rel="stylesheet" href="../plugins/select2/css/select2.css">
 <link rel="stylesheet" href="../plugins/touchspin/css/touchspin.css">
 <link rel="stylesheet" href="../plugins/gritter/css/gritter.css">
+<link rel="stylesheet" href="../plugins/fileupload/css/fileupload.css">
 <!--/ Plugins stylesheet : optional -->
 
 <!-- Datatable -->

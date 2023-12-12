@@ -44,10 +44,10 @@ $getPusat = GetQuery("select * from m_pusat p left join m_anggota a on p.INPUT_B
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewPusat" class="open-ViewPusat" style="color:forestgreen;" data-id="<?= $PUSAT_ID; ?>" data-desc="<?= $PUSAT_DESKRIPSI; ?>" data-sekre="<?= $PUSAT_SEKRETARIAT; ?>" data-pengurus="<?= $PUSAT_KEPENGURUSAN; ?>" data-map="<?= $PUSAT_MAP; ?>" data-lat="<?= $PUSAT_LAT; ?>" data-long="<?= $PUSAT_LONG; ?>"><span class="ico-check"></span> Lihat</a></li>
-                                            <li><a data-toggle="modal" href="#EditPusat" class="open-EditPusat" style="color:cornflowerblue;" data-id="<?= $PUSAT_ID; ?>" data-desc="<?= $PUSAT_DESKRIPSI; ?>" data-sekre="<?= $PUSAT_SEKRETARIAT; ?>" data-pengurus="<?= $PUSAT_KEPENGURUSAN; ?>" data-map="<?= $PUSAT_MAP; ?>" data-lat="<?= $PUSAT_LAT; ?>" data-long="<?= $PUSAT_LONG; ?>"><span class="ico-edit"></span> Ubah</a></li>
+                                            <li><a data-toggle="modal" href="#ViewPusat" class="open-ViewPusat" style="color:forestgreen;" data-key="<?=$PUSAT_KEY;?>" data-id="<?= $PUSAT_ID; ?>" data-desc="<?= $PUSAT_DESKRIPSI; ?>" data-sekre="<?= $PUSAT_SEKRETARIAT; ?>" data-pengurus="<?= $PUSAT_KEPENGURUSAN; ?>" data-map="<?= $PUSAT_MAP; ?>" data-lat="<?= $PUSAT_LAT; ?>" data-long="<?= $PUSAT_LONG; ?>"><span class="ico-check"></span> Lihat</a></li>
+                                            <li><a data-toggle="modal" href="#EditPusat" class="open-EditPusat" style="color:cornflowerblue;" data-key="<?=$PUSAT_KEY;?>" data-id="<?= $PUSAT_ID; ?>" data-desc="<?= $PUSAT_DESKRIPSI; ?>" data-sekre="<?= $PUSAT_SEKRETARIAT; ?>" data-pengurus="<?= $PUSAT_KEPENGURUSAN; ?>" data-map="<?= $PUSAT_MAP; ?>" data-lat="<?= $PUSAT_LAT; ?>" data-long="<?= $PUSAT_LONG; ?>"><span class="ico-edit"></span> Ubah</a></li>
                                             <li class="divider"></li>
-                                            <li><a href="#" onclick="deletePusat('<?= $PUSAT_ID;?>','deletepusat')" style="color:firebrick;"><span class="ico-trash"></span> Hapus</a></li>
+                                            <li><a href="#" onclick="deletePusat('<?= $PUSAT_KEY;?>','deletepusat')" style="color:firebrick;"><span class="ico-trash"></span> Hapus</a></li>
                                         </ul>
                                     </div>
                                 </form>
@@ -222,7 +222,7 @@ $getPusat = GetQuery("select * from m_pusat p left join m_anggota a on p.INPUT_B
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="">Pusat ID<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" required readonly id="editPUSAT_ID" name="PUSAT_ID" value="" data-parsley-required>
+                                <input type="text" class="form-control" required readonly id="editPUSAT_KEY" name="PUSAT_KEY" value="" data-parsley-required>
                             </div> 
                         </div>
                     </div>

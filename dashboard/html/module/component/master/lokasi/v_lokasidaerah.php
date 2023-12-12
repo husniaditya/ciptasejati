@@ -1,7 +1,7 @@
 <?php
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 
-$getDaerah = GetQuery("select d.*,p.PUSAT_DESKRIPSI,a.ANGGOTA_NAMA,case when d.DELETION_STATUS = 0 then 'Aktif' ELSE 'Tidak Aktif' END DAERAH_STATUS,DATE_FORMAT(d.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE, RIGHT(DAERAH_ID,3) SHORT_ID from m_daerah d left join m_pusat p on d.PUSAT_ID = p.PUSAT_ID left join m_anggota a on d.INPUT_BY = a.ANGGOTA_ID order by d.PUSAT_ID asc");
+$getDaerah = GetQuery("select d.*,p.PUSAT_DESKRIPSI,a.ANGGOTA_NAMA,case when d.DELETION_STATUS = 0 then 'Aktif' ELSE 'Tidak Aktif' END DAERAH_STATUS,DATE_FORMAT(d.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE, RIGHT(DAERAH_ID,3) SHORT_ID from m_daerah d left join m_pusat p on d.PUSAT_KEY = p.PUSAT_KEY left join m_anggota a on d.INPUT_BY = a.ANGGOTA_ID order by d.PUSAT_KEY asc");
 
 $getPusat = GetQuery("select * from m_pusat where DELETION_STATUS = 0");
 // Fetch all rows into an array
@@ -47,10 +47,10 @@ $rows = $getPusat->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewDaerah" data-id="<?=$DAERAH_ID;?>" data-shortid="<?=$SHORT_ID;?>" data-pusatid="<?=$PUSAT_ID;?>" data-pusatdes="<?=$PUSAT_DESKRIPSI;?>" data-daerahdes="<?=$DAERAH_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-daerahstatus="<?=$DAERAH_STATUS;?>" class="open-ViewDaerah" style="color:forestgreen;"><span class="ico-check"></span> Lihat</a></li>
-                                            <li><a data-toggle="modal" href="#EditDaerah" data-id="<?=$DAERAH_ID;?>" data-shortid="<?=$SHORT_ID;?>" data-pusatid="<?=$PUSAT_ID;?>" data-pusatdes="<?=$PUSAT_DESKRIPSI;?>" data-daerahdes="<?=$DAERAH_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-daerahstatus="<?=$DAERAH_STATUS;?>" class="open-EditDaerah" style="color:cornflowerblue;"><span class="ico-edit"></span> Ubah</a></li>
+                                            <li><a data-toggle="modal" href="#ViewDaerah" data-key=<?=$DAERAH_KEY;?> data-id="<?=$DAERAH_ID;?>" data-shortid="<?=$SHORT_ID;?>" data-pusatid="<?=$PUSAT_KEY;?>" data-pusatdes="<?=$PUSAT_DESKRIPSI;?>" data-daerahdes="<?=$DAERAH_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-daerahstatus="<?=$DAERAH_STATUS;?>" class="open-ViewDaerah" style="color:forestgreen;"><span class="ico-check"></span> Lihat</a></li>
+                                            <li><a data-toggle="modal" href="#EditDaerah" data-key=<?=$DAERAH_KEY;?> data-id="<?=$DAERAH_ID;?>" data-shortid="<?=$SHORT_ID;?>" data-pusatid="<?=$PUSAT_KEY;?>" data-pusatdes="<?=$PUSAT_DESKRIPSI;?>" data-daerahdes="<?=$DAERAH_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-daerahstatus="<?=$DAERAH_STATUS;?>" class="open-EditDaerah" style="color:cornflowerblue;"><span class="ico-edit"></span> Ubah</a></li>
                                             <li class="divider"></li>
-                                            <li><a href="#" onclick="deletedaerah('<?= $DAERAH_ID;?>','deleteevent')" style="color:firebrick;"><span class="ico-trash"></span> Hapus</a></li>
+                                            <li><a href="#" onclick="deletedaerah('<?= $DAERAH_KEY;?>','deleteevent')" style="color:firebrick;"><span class="ico-trash"></span> Hapus</a></li>
                                         </ul>
                                     </div>
                                 </form>
@@ -87,13 +87,13 @@ $rows = $getPusat->fetchAll(PDO::FETCH_ASSOC);
                             <div class="form-group">
                                 <label for="">Pusat<span class="text-danger">*</span></label>
                                 <div id="selectize-wrapper" style="position: relative;">
-                                    <select name="PUSAT_ID" id="selectize-dropdown" required="" class="form-control" data-parsley-required>
+                                    <select name="PUSAT_KEY" id="selectize-dropdown" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Pusat --</option>
                                         <?php
                                         foreach ($rows as $rowPusat) {
                                             extract($rowPusat);
                                             ?>
-                                            <option value="<?= $PUSAT_ID; ?>"><?= $PUSAT_DESKRIPSI; ?></option>
+                                            <option value="<?= $PUSAT_KEY; ?>"><?= $PUSAT_DESKRIPSI; ?></option>
                                             <?php
                                         }
                                         ?>
@@ -139,7 +139,7 @@ $rows = $getPusat->fetchAll(PDO::FETCH_ASSOC);
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Pusat<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" required id="viewPUSAT_ID" name="PUSAT_ID" value="" data-parsley-required readonly>
+                                <input type="text" class="form-control" required id="viewPUSAT_KEY" name="PUSAT_KEY" value="" data-parsley-required readonly>
                             </div> 
                         </div>
                     </div>
@@ -187,7 +187,7 @@ $rows = $getPusat->fetchAll(PDO::FETCH_ASSOC);
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">ID<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" required id="edit_ID" name="EDIT_ID" value="" data-parsley-required>
+                                <input type="text" class="form-control" required id="editDAERAH_KEY" name="DAERAH_KEY" value="" data-parsley-required readonly>
                             </div> 
                         </div>
                     </div>
@@ -195,13 +195,13 @@ $rows = $getPusat->fetchAll(PDO::FETCH_ASSOC);
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Pusat<span class="text-danger">*</span></label>
-                                <select name="PUSAT_ID" id="editPUSAT_ID" required="" class="form-control" data-parsley-required>
+                                <select name="PUSAT_KEY" id="editPUSAT_KEY" required="" class="form-control" data-parsley-required>
                                     <option value="">-- Pilih Pusat --</option>
                                     <?php
                                     foreach ($rows as $rowEditPusat) {
                                         extract($rowEditPusat);
                                         ?>
-                                        <option value="<?= $PUSAT_ID; ?>"><?= $PUSAT_DESKRIPSI; ?></option>
+                                        <option value="<?= $PUSAT_KEY; ?>"><?= $PUSAT_DESKRIPSI; ?></option>
                                         <?php
                                     }
                                     ?>

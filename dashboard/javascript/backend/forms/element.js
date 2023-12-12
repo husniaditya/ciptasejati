@@ -56,6 +56,14 @@
             },
             dropdownParent: 'body'
         });
+        $('#selectize-select3').selectize({
+            create: true,
+            sortField: {
+                field: 'text',
+                direction: 'asc'
+            },
+            dropdownParent: 'body'
+        });
 
         $(document).ready(function () {
             // Initialize Selectize for the dropdown inside the modal
@@ -78,6 +86,52 @@
                     direction: 'asc'
                 },
                 dropdownParent: '#selectize-wrapper2'
+            });
+        });
+
+        $(document).ready(function () {
+            // Initialize Selectize for the dropdown inside the modal
+            $('#selectize-dropdown3').selectize({
+                create: true,
+                sortField: {
+                    field: 'text',
+                    direction: 'asc'
+                },
+                dropdownParent: '#selectize-wrapper3'
+            });
+        });
+
+        $(document).ready(function () {
+            // Initialize Selectize for the dropdown inside the modal
+            $('#selectize-dropdown4').selectize({
+                create: true,
+                sortField: {
+                    field: 'text',
+                    direction: 'asc'
+                },
+                dropdownParent: '#selectize-wrapper4'
+            });
+        });
+        $(document).ready(function () {
+            // Initialize Selectize for the dropdown inside the modal
+            $('#selectize-dropdown5').selectize({
+                create: true,
+                sortField: {
+                    field: 'text',
+                    direction: 'asc'
+                },
+                dropdownParent: '#selectize-wrapper5'
+            });
+        });
+        $(document).ready(function () {
+            // Initialize Selectize for the dropdown inside the modal
+            $('#selectize-dropdown6').selectize({
+                create: true,
+                sortField: {
+                    field: 'text',
+                    direction: 'asc'
+                },
+                dropdownParent: '#selectize-wrapper6'
             });
         });
 
@@ -198,6 +252,16 @@
             dateFormat: 'yy-mm-dd',
         });
         $('#datepicker44').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy-mm-dd',
+        });
+        $('#datepicker45').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy-mm-dd',
+        });
+        $('#datepicker46').datepicker({
             changeMonth: true,
             changeYear: true,
             dateFormat: 'yy-mm-dd',

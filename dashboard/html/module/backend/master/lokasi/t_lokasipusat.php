@@ -22,7 +22,7 @@ if (isset($_POST["savepusat"])) {
         $PUSAT_LAT = $_POST["PUSAT_LAT"];
         $PUSAT_LONG = $_POST["PUSAT_LONG"];
 
-        GetQuery("insert into m_pusat select '$PUSAT_ID','$PUSAT_DESKRIPSI','$PUSAT_SEKRETARIAT','$PUSAT_KEPENGURUSAN','$PUSAT_MAP','$PUSAT_LAT','$PUSAT_LONG',0,'$USER_ID',now()");
+        GetQuery("insert into m_pusat select uuid(),'$PUSAT_ID','$PUSAT_DESKRIPSI','$PUSAT_SEKRETARIAT','$PUSAT_KEPENGURUSAN','$PUSAT_MAP','$PUSAT_LAT','$PUSAT_LONG',0,'$USER_ID',now()");
 
         $response="Success";
         echo $response;
@@ -38,7 +38,7 @@ if (isset($_POST["savepusat"])) {
 if (isset($_POST["editpusat"])) {
 
     try {
-        $PUSAT_ID = $_POST["PUSAT_ID"];
+        $PUSAT_KEY = $_POST["PUSAT_KEY"];
         $PUSAT_DESKRIPSI = $_POST["PUSAT_DESKRIPSI"];
         $PUSAT_SEKRETARIAT = $_POST["PUSAT_SEKRETARIAT"];
         $PUSAT_KEPENGURUSAN = $_POST["PUSAT_KEPENGURUSAN"];
@@ -46,7 +46,7 @@ if (isset($_POST["editpusat"])) {
         $PUSAT_LAT = $_POST["PUSAT_LAT"];
         $PUSAT_LONG = $_POST["PUSAT_LONG"];
 
-        $response = GetQuery("update m_pusat set PUSAT_DESKRIPSI = '$PUSAT_DESKRIPSI', PUSAT_SEKRETARIAT = '$PUSAT_SEKRETARIAT', PUSAT_KEPENGURUSAN = '$PUSAT_KEPENGURUSAN', PUSAT_MAP = '$PUSAT_MAP', PUSAT_LAT = '$PUSAT_LAT', PUSAT_LONG = '$PUSAT_LONG', INPUT_BY = '$USER_ID', INPUT_DATE = now() where PUSAT_ID = '$PUSAT_ID'");
+        $response = GetQuery("update m_pusat set PUSAT_DESKRIPSI = '$PUSAT_DESKRIPSI', PUSAT_SEKRETARIAT = '$PUSAT_SEKRETARIAT', PUSAT_KEPENGURUSAN = '$PUSAT_KEPENGURUSAN', PUSAT_MAP = '$PUSAT_MAP', PUSAT_LAT = '$PUSAT_LAT', PUSAT_LONG = '$PUSAT_LONG', INPUT_BY = '$USER_ID', INPUT_DATE = now() where PUSAT_KEY = '$PUSAT_KEY'");
 
         $response="Success";
         echo $response;
@@ -61,9 +61,9 @@ if (isset($_POST["editpusat"])) {
 if (isset($_POST["EVENT_ACTION"])) {
 
     try {
-        $PUSAT_ID = $_POST["PUSAT_ID"];
+        $PUSAT_KEY = $_POST["PUSAT_KEY"];
     
-        GetQuery("delete from m_pusat where PUSAT_ID = '$PUSAT_ID'");
+        GetQuery("delete from m_pusat where PUSAT_KEY = '$PUSAT_KEY'");
         $response="Success";
         echo $response;
     } catch (\Throwable $th) {

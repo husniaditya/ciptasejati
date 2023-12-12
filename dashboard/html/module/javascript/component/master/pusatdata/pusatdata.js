@@ -31,50 +31,47 @@ $(document).ready(function() {
   callTable();
 });
 
+function reloadDataTable() {
+  $.ajax({
+    type: 'POST',
+    url: 'module/ajax/master/pusatdata/aj_tablepusatdata.php',
+    success: function(response) {
+      $('#pusatdata-table').DataTable().destroy();
+      $("#datapusatdata").html(response);
+      callTable(); // Reinitialize Sertifikat Table
+    },
+    error: function(xhr, status, error) {
+      // Handle any errors
+    }
+  });
+}
+
 
 // ----- Start of Sertifikat Section ----- //
 function handleForm(formId, successNotification, failedNotification, updateNotification) {
   $(formId).submit(function(event) {
-    event.preventDefault(); // Prevent the default form submission
+    event.preventDefault();
 
-    var formData = new FormData($(this)[0]); // Create FormData object from the form
-    var buttonId = $(event.originalEvent.submitter).attr('id'); // Retrieve button ID
-
-    // Manually add the button title or ID to the serialized data
+    var formData = new FormData($(this)[0]);
+    var buttonId = $(event.originalEvent.submitter).attr('id');
     formData.append(buttonId, 'edit');
 
     $.ajax({
       type: 'POST',
       url: 'module/backend/master/pusatdata/t_pusatdata.php',
       data: formData,
-      processData: false, // Prevent jQuery from processing the data
-      contentType: false, // Prevent jQuery from setting content type
+      processData: false,
+      contentType: false,
       success: function(response) {
-        // Check the response from the server
-        if (response === 'Success') {
-          // Display success notification
-          successNotification('Data berhasil tersimpan!');
+        var successMessage = response === 'Success' ? 'Data berhasil tersimpan!' : 'Data berhasil terupdate!';
 
-          // Close the modal
+        if (response === 'Success' || response === 'Update') {
+          successNotification(successMessage);
           $(formId.replace("-form", "")).modal('hide');
-
-          // Call the reloadDataTable() function after inserting data to reload the DataTable
-          $.ajax({
-            type: 'POST',
-            url: 'module/ajax/master/pusatdata/aj_tablepusatdata.php',
-            success: function(response) {
-              // Destroy the DataTable before updating
-              $('#pusatdata-table').DataTable().destroy();
-              $("#datapusatdata").html(response);
-              // Reinitialize Sertifikat Table
-              callTable();
-            },
-            error: function(xhr, status, error) {
-              // Handle any errors
-            }
-          });
+          
+          // Reload DataTable
+          reloadDataTable();
         } else {
-          // Display error notification
           failedNotification(response);
         }
       },
@@ -84,6 +81,7 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
     });
   });
 }
+
 
 
 $(document).ready(function() {

@@ -187,6 +187,7 @@ $(document).on("click", ".open-ViewCabang", function () {
 
 // Edit Cabang
 $(document).on("click", ".open-EditCabang", function () {
+  var key = $(this).data('key');
   var id = $(this).data('cabangid');
   var daerahid = $(this).data('daerahid');
   var shortid = $(this).data('shortid');
@@ -198,6 +199,7 @@ $(document).on("click", ".open-EditCabang", function () {
   var long = $(this).data('long');
   
   // Set the values in the modal input fields
+  $(".modal-body #editCABANG_KEY").val(key);
   $(".modal-body #editID").val(id);
   $(".modal-body #selectize-dropdown2")[0].selectize.setValue(daerahid);
   $(".modal-body #editCABANG_ID").val(shortid);

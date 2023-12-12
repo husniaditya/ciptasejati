@@ -98,7 +98,7 @@ function deletedaerah(value1,value2) {
   if (confirm("Apakah anda yakin untuk menghapus data ini?")) {
     // Create the data object
     var eventdata = {
-      DAERAH_ID: value1,
+      DAERAH_KEY: value1,
       EVENT_ACTION: value2
     };
 
@@ -118,11 +118,11 @@ function deletedaerah(value1,value2) {
             type: 'POST',
             url: 'module/ajax/master/lokasidaerah/aj_tabledaerah.php',
             success: function(response) {
-                // Destroy the DataTable before updating
-                $('#lokasidaerah-table').DataTable().destroy();
-                $("#daerahdata").html(response);
-                // Reinitialize Daerah Table
-                callDaerahTable();
+              // Destroy the DataTable before updating
+              $('#lokasidaerah-table').DataTable().destroy();
+              $("#daerahdata").html(response);
+              // Reinitialize Daerah Table
+              callTable();
             },
             error: function(xhr, status, error) {
               // Handle any errors
@@ -151,7 +151,7 @@ $(document).on("click", ".open-ViewDaerah", function () {
   
   // Set the values in the modal input fields
   $(".modal-body #viewDAERAH_ID").val(daerahid);
-  $(".modal-body #viewPUSAT_ID").val(pusatdes);
+  $(".modal-body #viewPUSAT_KEY").val(pusatdes);
   $(".modal-body #viewDAERAH_DESKRIPSI").val(daerahdes);
   $(".modal-body #viewDELETION_STATUS").val(status);
   
@@ -160,16 +160,16 @@ $(document).on("click", ".open-ViewDaerah", function () {
 
 // Edit Daerah
 $(document).on("click", ".open-EditDaerah", function () {
-  var id = $(this).data('id');
+  var key = $(this).data('key');
   var daerahid = $(this).data('shortid');
   var pusatid = $(this).data('pusatid');
   var daerahdes = $(this).data('daerahdes');
   var status = $(this).data('status');
 
   // Set the values in the modal input fields
-  $(".modal-body #edit_ID").val(id);
+  $(".modal-body #editDAERAH_KEY").val(key);
   $(".modal-body #editDAERAH_ID").val(daerahid);
-  $(".modal-body #editPUSAT_ID").val(pusatid);
+  $(".modal-body #editPUSAT_KEY").val(pusatid);
   $(".modal-body #editDAERAH_DESKRIPSI").val(daerahdes);
   $(".modal-body #editDELETION_STATUS").val(status);
 

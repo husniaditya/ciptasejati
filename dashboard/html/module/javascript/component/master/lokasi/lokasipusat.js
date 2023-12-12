@@ -112,7 +112,7 @@ function deletePusat(value1,value2) {
   if (confirm("Apakah anda yakin untuk menghapus data ini?")) {
     // Create the data object
     var eventdata = {
-      PUSAT_ID: value1,
+      PUSAT_KEY: value1,
       EVENT_ACTION: value2
     };
 
@@ -179,7 +179,7 @@ $(document).on("click", ".open-ViewPusat", function () {
 
 // Edit Pusat
 $(document).on("click", ".open-EditPusat", function () {
-  var pusatid = $(this).data('id');
+  var pusatkey = $(this).data('key');
   var pusatdesk = $(this).data('desc');
   var pusatsekre = $(this).data('sekre');
   var pusatpengurus = $(this).data('pengurus');
@@ -188,7 +188,7 @@ $(document).on("click", ".open-EditPusat", function () {
   var pusatlong = $(this).data('long');
 
   // Set the values in the modal input fields
-  $(".modal-body #editPUSAT_ID").val(pusatid);
+  $(".modal-body #editPUSAT_KEY").val(pusatkey);
   $(".modal-body #editPUSAT_DESKRIPSI").val(pusatdesk);
   $(".modal-body #editPUSAT_SEKRETARIAT").val(pusatsekre);
   $(".modal-body #editPUSAT_KEPENGURUSAN").val(pusatpengurus);

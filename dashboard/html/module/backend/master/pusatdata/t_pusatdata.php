@@ -6,12 +6,12 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
 if (isset($_POST["savepusatdata"])) {
 
     try {
-        $CABANG_ID = $_POST["CABANG_ID"];
+        $CABANG_KEY = $_POST["CABANG_KEY"];
         $PUSATDATA_KATEGORI = $_POST["PUSATDATA_KATEGORI"];
         $PUSATDATA_JUDUL = $_POST["PUSATDATA_JUDUL"];
         $PUSATDATA_DESKRIPSI = $_POST["PUSATDATA_DESKRIPSI"];
 
-        $getNamaCabang = GetQuery("select CABANG_DESKRIPSI from m_cabang where CABANG_ID = '$CABANG_ID'");
+        $getNamaCabang = GetQuery("select CABANG_DESKRIPSI from m_cabang where CABANG_KEY = '$CABANG_KEY'");
         while ($rowNamaCabang = $getNamaCabang->fetch(PDO::FETCH_ASSOC)) {
             extract($rowNamaCabang);
         }
@@ -37,9 +37,10 @@ if (isset($_POST["savepusatdata"])) {
         }
         else {
             $idCardFileDestination = "";
+            $idCardFileName="";
         }
 
-        GetQuery("insert into m_pusatdata select uuid(), '$CABANG_ID', '$PUSATDATA_KATEGORI', '$PUSATDATA_JUDUL', '$PUSATDATA_DESKRIPSI', '$idCardFileDestination','$idCardFileName', '0', '$USER_ID', now()");
+        GetQuery("insert into m_pusatdata select uuid(), '$CABANG_KEY', '$PUSATDATA_KATEGORI', '$PUSATDATA_JUDUL', '$PUSATDATA_DESKRIPSI', '$idCardFileDestination','$idCardFileName', '0', '$USER_ID', now()");
 
         $response="Success";
         echo $response;
@@ -56,13 +57,13 @@ if (isset($_POST["editpusatdata"])) {
 
     try {
         $PUSATDATA_ID = $_POST["PUSATDATA_ID"];
-        $CABANG_ID = $_POST["CABANG_ID"];
+        $CABANG_KEY = $_POST["CABANG_KEY"];
         $PUSATDATA_KATEGORI = $_POST["PUSATDATA_KATEGORI"];
         $PUSATDATA_JUDUL = $_POST["PUSATDATA_JUDUL"];
         $PUSATDATA_DESKRIPSI = $_POST["PUSATDATA_DESKRIPSI"];
         $DELETION_STATUS = $_POST["DELETION_STATUS"];
 
-        $getNamaCabang = GetQuery("select CABANG_DESKRIPSI from m_cabang where CABANG_ID = '$CABANG_ID'");
+        $getNamaCabang = GetQuery("select CABANG_DESKRIPSI from m_cabang where CABANG_KEY = '$CABANG_KEY'");
         while ($rowNamaCabang = $getNamaCabang->fetch(PDO::FETCH_ASSOC)) {
             extract($rowNamaCabang);
         }
@@ -89,9 +90,9 @@ if (isset($_POST["editpusatdata"])) {
             }
         }
 
-        GetQuery("update m_pusatdata set CABANG_ID = '$CABANG_ID', PUSATDATA_KATEGORI = '$PUSATDATA_KATEGORI', PUSATDATA_JUDUL = '$PUSATDATA_JUDUL', PUSATDATA_DESKRIPSI = '$PUSATDATA_DESKRIPSI', DELETION_STATUS = '$DELETION_STATUS', INPUT_BY = '$USER_ID', INPUT_DATE = now() where PUSATDATA_ID = '$PUSATDATA_ID'");
+        GetQuery("update m_pusatdata set CABANG_KEY = '$CABANG_KEY', PUSATDATA_KATEGORI = '$PUSATDATA_KATEGORI', PUSATDATA_JUDUL = '$PUSATDATA_JUDUL', PUSATDATA_DESKRIPSI = '$PUSATDATA_DESKRIPSI', DELETION_STATUS = '$DELETION_STATUS', INPUT_BY = '$USER_ID', INPUT_DATE = now() where PUSATDATA_ID = '$PUSATDATA_ID'");
 
-        $response="Success";
+        $response="Update";
         echo $response;
 
     } catch (Exception $e) {
