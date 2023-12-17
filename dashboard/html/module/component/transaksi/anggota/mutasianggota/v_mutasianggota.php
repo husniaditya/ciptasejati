@@ -3,7 +3,7 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
 
 $getMutasi = GetQuery("SELECT t.*,a.ANGGOTA_ID,a.ANGGOTA_NAMA,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(t.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(t.MUTASI_TANGGAL, '%d %M %Y %H:%i') MUTASI_TGL, DATE_FORMAT(t.MUTASI_STATUS_TANGGAL, '%d %M %Y %H:%i') MUTASI_STATUS_TANGGAL, DATE_FORMAT(t.MUTASI_TANGGAL, '%d %M %Y') TANGGAL_EFEKTIF,
 CASE 
-    WHEN t.MUTASI_STATUS = '0' THEN 'Tertunda' 
+    WHEN t.MUTASI_STATUS = '0' THEN 'Menunggu' 
     WHEN t.MUTASI_STATUS = '1' THEN 'Disetujui' 
     ELSE 'Ditolak' 
 END AS MUTASI_STATUS_DES,
@@ -21,7 +21,8 @@ FROM t_mutasi t
 LEFT JOIN m_anggota a ON t.ANGGOTA_KEY = a.ANGGOTA_KEY
 LEFT JOIN m_anggota a2 ON t.INPUT_BY = a2.ANGGOTA_ID
 LEFT JOIN m_cabang c ON t.CABANG_TUJUAN = c.CABANG_KEY
-LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY");
+LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
+ORDER BY t.MUTASI_STATUS ASC, t.MUTASI_TANGGAL DESC");
 
 $getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0");
 $getCabang = GetQuery("select * from m_cabang where DELETION_STATUS = 0");
@@ -170,7 +171,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                         <ul class="dropdown-menu" role="menu">
                                             <li><a data-toggle="modal" href="#ViewMutasiAnggota" class="open-ViewMutasiAnggota" style="color:#222222;"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
                                             <li><a data-toggle="modal" href="#EditMutasiAnggota" class="open-EditMutasiAnggota" style="color:#00a5d2;"><span class="ico-edit"></span> Ubah</a></li>
-                                            <li><a href="#" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
+                                            <li><a href="./assets/print/transaksi/mutasi/print_mutasi.php?id=<?= $MUTASI_ID; ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
                                             <li class="divider"></li>
                                             <li><a href="#" onclick="approvemutasi('<?= $ANGGOTA_KEY;?>','approveevent')" style="color:forestgreen;"><i class="fa-regular fa-circle-check fa-lg"></i> Setuju</a></li>
                                             <li><a href="#" onclick="rejectmutasi('<?= $ANGGOTA_KEY;?>','rejectevent')" style="color:firebrick;"><i class="fa-regular fa-circle-xmark fa-lg"></i> Tolak</a></li>

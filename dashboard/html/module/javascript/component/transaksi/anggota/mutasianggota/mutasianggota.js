@@ -4,7 +4,6 @@
 function callTable() {
   $('#mutasianggota-table').DataTable({
       responsive: true,
-      order: [[1, 'asc']],
       dom: 'Bfrtip',
       paging: true,
       scrollX: true,
