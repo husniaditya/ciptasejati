@@ -77,16 +77,16 @@ try {
     die("Database connection failed: " . $e->getMessage());
 }
 
-// $ssh_host = '158.140.167.180';
-// $ssh_username = 'lo';
-// $ssh_password = 'waru51';
+// $ssh_host = 'IP HOST';
+// $ssh_username = 'SSH USERNAME';
+// $ssh_password = 'SSH PASSWORD';
 
 
-// $mysql_host = 'localhost';
-// $mysql_port = 3306;
-// $mysql_database = 'ciptasejati';
-// $mysql_username = 'lo';
-// $mysql_password = 'waru51';
+// $mysql_host = 'MYSQL HOST';
+// $mysql_port = MYSQL PORT;
+// $mysql_database = 'MYSQL DATABASE';
+// $mysql_username = 'MYSQL USERNAME';
+// $mysql_password = 'MYSQL PASSWORD';
 
 // // Create an SSH connection
 // $connection = ssh2_connect($ssh_host);
