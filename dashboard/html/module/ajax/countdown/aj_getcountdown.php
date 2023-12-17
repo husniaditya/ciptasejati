@@ -20,7 +20,7 @@ while ($rowGuest = $GetGuest->fetch(PDO::FETCH_ASSOC)) {
                         <li><a data-toggle="modal" href="#ViewCountdown" class="open-ViewCountdown" data-countid="<?= $COUNTDOWN_ID; ?>" data-text1="<?= $COUNTDOWN_TEXT1; ?>" data-text2="<?= $COUNTDOWN_TEXT2; ?>" data-date="<?= $COUNTDOWN_DATE; ?>" style="color:forestgreen;"><span class="ico-check"></span> View</a></li>
                         <li><a data-toggle="modal" href="#EditCountdown" class="open-EditCountdown editButtons" data-countid="<?= $COUNTDOWN_ID; ?>" data-text1="<?= $COUNTDOWN_TEXT1; ?>" data-text2="<?= $COUNTDOWN_TEXT2; ?>" data-date="<?= $COUNTDOWN_DATE; ?>" style="color:cornflowerblue;"><span class="ico-edit"></span> Edit</a></li>
                         <li class="divider"></li>
-                        <li><a href="#" onclick="CountconfirmAndPost('<?= $COUNTDOWN_ID;?>','deletecount')" style="color:firebrick;"><span class="ico-trash"></span> Delete</a></li>
+                        <li><a href="#" onclick="CountconfirmAndPost('<?= $COUNTDOWN_ID;?>','deletecount')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Delete</a></li>
                     </ul>
                 </div>
             </form>

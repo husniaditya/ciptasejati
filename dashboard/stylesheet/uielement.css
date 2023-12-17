@@ -13353,7 +13353,7 @@ a.list-group-item:focus {
   content: "";
   position: absolute;
   bottom: 0px;
-  left: 75px;
+  left: 0px;
   right: 0px;
   height: 1px;
   border-bottom: 1px solid #dde4e6;
@@ -15058,9 +15058,9 @@ hr {
   #header.navbar .navbar-header > .navbar-brand > .logo-text {
     background-image: url("../image/logo/logo-text.png");
   }
-  #header.navbar .navbar-toolbar .navbar-nav > .navbar-main > a {
+  /* #header.navbar .navbar-toolbar .navbar-nav > .navbar-main > a {
     color: rgba(0, 0, 0, 0.35);
-  }
+  } */
   #header.navbar .navbar-toolbar .navbar-nav > .navbar-main > a:hover,
   #header.navbar .navbar-toolbar .navbar-nav > .navbar-main > a:active,
   #header.navbar .navbar-toolbar .navbar-nav > .navbar-main > a:focus {
@@ -15294,4 +15294,8 @@ hr {
 .screen-sm .sidebar .topmenu li > .submenu .submenu,
 .screen-sm .sidebar .mainmenu li > .submenu .submenu {
   padding-left: 30px;
+}
+.scrollable {
+    max-height: 300px; /* Set a max height for the scrollable area */
+    overflow-y: auto;  /* Enable vertical scrolling */
 }

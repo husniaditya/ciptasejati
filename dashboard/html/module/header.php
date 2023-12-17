@@ -49,6 +49,85 @@
     <!-- START Right nav -->
     <ul class="nav navbar-nav navbar-right">
         <!-- Notification dropdown -->
+        <li class="dropdown custom" id="header-dd-notification">
+            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
+                <span class="meta">
+                    <span class="icon"><i class="fa-regular fa-bell fa-lg"></i></span>
+                    <span class="label label-success">2</span>
+                </span>
+            </a>
+
+            <!-- Dropdown menu -->
+            <div class="dropdown-menu" role="menu">
+                <div class="dropdown-header">
+                    <span class="title"><i class="fa-regular fa-bell"></i> Notifikasi <span class="count"></span></span>
+                </div>
+                <div class="dropdown-body">
+                    
+                    <!-- Message list -->
+                    <div class="media-list">
+                        <a href="#" data-toggle="modal" data-toggle="modal" class="media border-dotted open-ChangePassword" style="background-color: lavender;">
+                            <span class="media-body">
+                                <span class="media-heading text-primary semibold">[MTS-202312-0001]</span>
+                                <span class="media-heading text-primary semibold">Mutasi Anggota Approval</span>
+                                <span class="media-text ellipsis nm semibold">Mutasi a.n Husni dari cabang Sidoarjo</span>
+                                <!-- meta icon -->
+                                <span class="media-meta pull-left">Husni Aditya / Kotawaringin Timur</span>
+                                <span class="media-meta pull-right">2d</span>
+                                <!--/ meta icon -->
+                            </span>
+                        </a>
+                        <a href="javascript:void(0);" class="media border-dotted" style="background-color: lavender;">
+                            <span class="media-body">
+                                <span class="media-heading text-primary semibold">[MTS-202312-0002]</span>
+                                <span class="media-heading text-primary semibold">Mutasi Anggota Approval</span>
+                                <span class="media-text ellipsis nm semibold">Mutasi a.n Husni dari cabang Sidoarjo</span>
+                                <!-- meta icon -->
+                                <span class="media-meta pull-left">Husni Aditya / Kotawaringin Timur</span>
+                                <span class="media-meta pull-right">2d</span>
+                                <!--/ meta icon -->
+                            </span>
+                        </a>
+                        <a href="javascript:void(0);" class="media read border-dotted">
+                            <span class="media-body">
+                                <span class="media-heading">[MTS-202312-0003]</span>
+                                <span class="media-heading">Mutasi Anggota Approval</span>
+                                <span class="media-text ellipsis nm">Mutasi a.n Husni dari cabang Sidoarjo</span>
+                                <!-- meta icon -->
+                                <span class="media-meta pull-left">Husni Aditya / Kotawaringin Timur</span>
+                                <span class="media-meta pull-right">2d</span>
+                                <!--/ meta icon -->
+                            </span>
+                        </a>
+                        <a href="javascript:void(0);" class="media read border-dotted">
+                            <span class="media-body">
+                                <span class="media-heading">[MTS-202312-0004]</span>
+                                <span class="media-heading">Mutasi Anggota Approval</span>
+                                <span class="media-text ellipsis nm">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</span>
+                                <!-- meta icon -->
+                                <span class="media-meta pull-left">Husni Aditya / Kotawaringin Timur</span>
+                                <span class="media-meta pull-right">2d</span>
+                                <!--/ meta icon -->
+                            </span>
+                        </a>
+                        <a href="javascript:void(0);" class="media read border-dotted">
+                            <span class="media-body">
+                                <span class="media-heading">[MTS-202312-0005]</span>
+                                <span class="media-heading">Mutasi Anggota Approval</span>
+                                <span class="media-text ellipsis nm">Mutasi a.n Husni dari cabang Sidoarjo tes</span>
+                                <!-- meta icon -->
+                                <span class="media-meta pull-left">Husni Aditya / Kotawaringin Timur</span>
+                                <span class="media-meta pull-right">2d</span>
+                                <!--/ meta icon -->
+                            </span>
+                        </a>
+                    </div>
+                    <!--/ Message list -->
+                </div>
+            </div>
+            <!--/ Dropdown menu -->
+        </li>
+        <!--/ Notification dropdown -->
         
         <!-- Profile dropdown -->
         <li class="dropdown profile">

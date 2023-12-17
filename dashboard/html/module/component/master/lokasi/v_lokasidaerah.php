@@ -8,14 +8,20 @@ $getPusat = GetQuery("select * from m_pusat where DELETION_STATUS = 0");
 $rows = $getPusat->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<!-- START row -->
-<div class="row">
-    <div class="col-lg-12">
-        <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddDaerah btn btn-inverse btn-outline mb5 btn-rounded" href="#AddDaerah"><i class="ico-plus2"></i> Tambah Lokasi Daerah</a>
+<?php
+if ($_SESSION["ADD_LokasiDaerah"] == "Y") {
+    ?>
+    <!-- START row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddDaerah btn btn-inverse btn-outline mb5 btn-rounded" href="#AddDaerah"><i class="ico-plus2"></i> Tambah Lokasi Daerah</a>
+        </div>
     </div>
-</div>
-<br>
-<!--/ END row -->
+    <br>
+    <!--/ END row -->
+    <?php
+}
+?>
 
 <!-- START row -->
 <div class="row">
@@ -47,10 +53,24 @@ $rows = $getPusat->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewDaerah" data-key=<?=$DAERAH_KEY;?> data-id="<?=$DAERAH_ID;?>" data-shortid="<?=$SHORT_ID;?>" data-pusatid="<?=$PUSAT_KEY;?>" data-pusatdes="<?=$PUSAT_DESKRIPSI;?>" data-daerahdes="<?=$DAERAH_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-daerahstatus="<?=$DAERAH_STATUS;?>" class="open-ViewDaerah" style="color:forestgreen;"><span class="ico-check"></span> Lihat</a></li>
-                                            <li><a data-toggle="modal" href="#EditDaerah" data-key=<?=$DAERAH_KEY;?> data-id="<?=$DAERAH_ID;?>" data-shortid="<?=$SHORT_ID;?>" data-pusatid="<?=$PUSAT_KEY;?>" data-pusatdes="<?=$PUSAT_DESKRIPSI;?>" data-daerahdes="<?=$DAERAH_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-daerahstatus="<?=$DAERAH_STATUS;?>" class="open-EditDaerah" style="color:cornflowerblue;"><span class="ico-edit"></span> Ubah</a></li>
-                                            <li class="divider"></li>
-                                            <li><a href="#" onclick="deletedaerah('<?= $DAERAH_KEY;?>','deleteevent')" style="color:firebrick;"><span class="ico-trash"></span> Hapus</a></li>
+                                            <?php
+                                            if ($_SESSION["VIEW_LokasiDaerah"] == "Y") {
+                                                ?>
+                                                <li><a data-toggle="modal" href="#ViewDaerah" data-key=<?=$DAERAH_KEY;?> data-id="<?=$DAERAH_ID;?>" data-shortid="<?=$SHORT_ID;?>" data-pusatid="<?=$PUSAT_KEY;?>" data-pusatdes="<?=$PUSAT_DESKRIPSI;?>" data-daerahdes="<?=$DAERAH_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-daerahstatus="<?=$DAERAH_STATUS;?>" class="open-ViewDaerah" style="color:#222222;"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
+                                                <?php
+                                            }
+                                            if ($_SESSION["EDIT_LokasiDaerah"] == "Y") {
+                                                ?>
+                                                <li><a data-toggle="modal" href="#EditDaerah" data-key=<?=$DAERAH_KEY;?> data-id="<?=$DAERAH_ID;?>" data-shortid="<?=$SHORT_ID;?>" data-pusatid="<?=$PUSAT_KEY;?>" data-pusatdes="<?=$PUSAT_DESKRIPSI;?>" data-daerahdes="<?=$DAERAH_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-daerahstatus="<?=$DAERAH_STATUS;?>" class="open-EditDaerah" style="color:cornflowerblue;"><span class="ico-edit"></span> Ubah</a></li>
+                                                <?php
+                                            }
+                                            if ($_SESSION["DELETE_LokasiDaerah"] == "Y") {
+                                                ?>
+                                                <li class="divider"></li>
+                                                <li><a href="#" onclick="deletedaerah('<?= $DAERAH_KEY;?>','deleteevent')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
+                                                <?php
+                                            }
+                                            ?>
                                         </ul>
                                     </div>
                                 </form>

@@ -4,14 +4,20 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
 $getPusat = GetQuery("select * from m_pusat p left join m_anggota a on p.INPUT_BY = a.ANGGOTA_ID where p.DELETION_STATUS = 0");
 ?>
 
-<!-- START row -->
-<div class="row">
-    <div class="col-lg-12">
-        <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddPusat btn btn-inverse btn-outline mb5 btn-rounded" href="#AddPusat"><i class="ico-plus2"></i> Tambah Lokasi Pusat</a>
+<?php
+if ($_SESSION["ADD_LokasiPusat"] == "Y") {
+    ?>
+    <!-- START row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddPusat btn btn-inverse btn-outline mb5 btn-rounded" href="#AddPusat"><i class="ico-plus2"></i> Tambah Lokasi Pusat</a>
+        </div>
     </div>
-</div>
-<br>
-<!--/ END row -->
+    <br>
+    <!--/ END row -->
+    <?php
+}
+?>
 
 <!-- START row -->
 <div class="row">
@@ -44,10 +50,24 @@ $getPusat = GetQuery("select * from m_pusat p left join m_anggota a on p.INPUT_B
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewPusat" class="open-ViewPusat" style="color:forestgreen;" data-key="<?=$PUSAT_KEY;?>" data-id="<?= $PUSAT_ID; ?>" data-desc="<?= $PUSAT_DESKRIPSI; ?>" data-sekre="<?= $PUSAT_SEKRETARIAT; ?>" data-pengurus="<?= $PUSAT_KEPENGURUSAN; ?>" data-map="<?= $PUSAT_MAP; ?>" data-lat="<?= $PUSAT_LAT; ?>" data-long="<?= $PUSAT_LONG; ?>"><span class="ico-check"></span> Lihat</a></li>
-                                            <li><a data-toggle="modal" href="#EditPusat" class="open-EditPusat" style="color:cornflowerblue;" data-key="<?=$PUSAT_KEY;?>" data-id="<?= $PUSAT_ID; ?>" data-desc="<?= $PUSAT_DESKRIPSI; ?>" data-sekre="<?= $PUSAT_SEKRETARIAT; ?>" data-pengurus="<?= $PUSAT_KEPENGURUSAN; ?>" data-map="<?= $PUSAT_MAP; ?>" data-lat="<?= $PUSAT_LAT; ?>" data-long="<?= $PUSAT_LONG; ?>"><span class="ico-edit"></span> Ubah</a></li>
-                                            <li class="divider"></li>
-                                            <li><a href="#" onclick="deletePusat('<?= $PUSAT_KEY;?>','deletepusat')" style="color:firebrick;"><span class="ico-trash"></span> Hapus</a></li>
+                                            <?php
+                                            if ($_SESSION["VIEW_LokasiPusat"] == "Y") {
+                                                ?>
+                                                <li><a data-toggle="modal" href="#ViewPusat" class="open-ViewPusat" style="color:#222222;" data-key="<?=$PUSAT_KEY;?>" data-id="<?= $PUSAT_ID; ?>" data-desc="<?= $PUSAT_DESKRIPSI; ?>" data-sekre="<?= $PUSAT_SEKRETARIAT; ?>" data-pengurus="<?= $PUSAT_KEPENGURUSAN; ?>" data-map="<?= $PUSAT_MAP; ?>" data-lat="<?= $PUSAT_LAT; ?>" data-long="<?= $PUSAT_LONG; ?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
+                                                <?php
+                                            }
+                                            if ($_SESSION["EDIT_LokasiPusat"] == "Y") {
+                                                ?>
+                                                <li><a data-toggle="modal" href="#EditPusat" class="open-EditPusat" style="color:cornflowerblue;" data-key="<?=$PUSAT_KEY;?>" data-id="<?= $PUSAT_ID; ?>" data-desc="<?= $PUSAT_DESKRIPSI; ?>" data-sekre="<?= $PUSAT_SEKRETARIAT; ?>" data-pengurus="<?= $PUSAT_KEPENGURUSAN; ?>" data-map="<?= $PUSAT_MAP; ?>" data-lat="<?= $PUSAT_LAT; ?>" data-long="<?= $PUSAT_LONG; ?>"><span class="ico-edit"></span> Ubah</a></li>
+                                                <?php
+                                            }
+                                            if ($_SESSION["DELETE_LokasiPusat"] == "Y") {
+                                                ?>
+                                                <li class="divider"></li>
+                                                <li><a href="#" onclick="deletePusat('<?= $PUSAT_KEY;?>','deletepusat')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
+                                                <?php
+                                            }
+                                            ?>
                                         </ul>
                                     </div>
                                 </form>

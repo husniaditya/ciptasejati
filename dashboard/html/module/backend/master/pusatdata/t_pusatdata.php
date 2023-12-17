@@ -2,11 +2,17 @@
 require_once ("../../../../module/connection/conn.php");
 
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
+$USER_CABANG = $_SESSION["LOGINCAB_CS"];
+$USER_AKSES = $_SESSION["LOGINAKS_CS"];
 
 if (isset($_POST["savepusatdata"])) {
 
     try {
-        $CABANG_KEY = $_POST["CABANG_KEY"];
+        if ($USER_AKSES == "Administrator") {
+            $CABANG_KEY = $_POST["CABANG_KEY"];
+        } else {
+            $CABANG_KEY = $USER_CABANG;
+        }
         $PUSATDATA_KATEGORI = $_POST["PUSATDATA_KATEGORI"];
         $PUSATDATA_JUDUL = $_POST["PUSATDATA_JUDUL"];
         $PUSATDATA_DESKRIPSI = $_POST["PUSATDATA_DESKRIPSI"];
@@ -57,7 +63,11 @@ if (isset($_POST["editpusatdata"])) {
 
     try {
         $PUSATDATA_ID = $_POST["PUSATDATA_ID"];
-        $CABANG_KEY = $_POST["CABANG_KEY"];
+        if ($USER_AKSES == "Administrator") {
+            $CABANG_KEY = $_POST["CABANG_KEY"];
+        } else {
+            $CABANG_KEY = $USER_CABANG;
+        }
         $PUSATDATA_KATEGORI = $_POST["PUSATDATA_KATEGORI"];
         $PUSATDATA_JUDUL = $_POST["PUSATDATA_JUDUL"];
         $PUSATDATA_DESKRIPSI = $_POST["PUSATDATA_DESKRIPSI"];

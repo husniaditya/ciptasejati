@@ -1,23 +1,131 @@
 <?php
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
+$USER_AKSES = $_SESSION["LOGINAKS_CS"];
+$USER_CABANG = $_SESSION["LOGINCAB_CS"];
 
-$getPusatdata = GetQuery("SELECT p.*,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,case when p.DELETION_STATUS = 0 then 'Aktif' ELSE 'Tidak Aktif' END PUSATDATA_STATUS FROM m_pusatdata p
-LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
-LEFT JOIN m_anggota a ON p.INPUT_BY = a.ANGGOTA_ID");
+if ($USER_AKSES == "Administrator") {
+    $getPusatdata = GetQuery("SELECT p.*,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,case when p.DELETION_STATUS = 0 then 'Aktif' ELSE 'Tidak Aktif' END PUSATDATA_STATUS FROM m_pusatdata p
+    LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
+    LEFT JOIN m_anggota a ON p.INPUT_BY = a.ANGGOTA_ID");
+    
+    $getKategori = GetQuery("SELECT DISTINCT(PUSATDATA_KATEGORI) FROM m_pusatdata WHERE DELETION_STATUS = 0");
+} else {
+    $getPusatdata = GetQuery("SELECT p.*,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,case when p.DELETION_STATUS = 0 then 'Aktif' ELSE 'Tidak Aktif' END PUSATDATA_STATUS FROM m_pusatdata p
+    LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
+    LEFT JOIN m_anggota a ON p.INPUT_BY = a.ANGGOTA_ID
+    WHERE p.CABANG_KEY = '$USER_CABANG'");
+
+    $getKategori = GetQuery("SELECT DISTINCT(PUSATDATA_KATEGORI) FROM m_pusatdata WHERE DELETION_STATUS = 0 AND CABANG_KEY = '$USER_CABANG'");
+}
 
 $getCabang = GetQuery("select * from m_cabang where DELETION_STATUS = 0");
 // Fetch all rows into an array
 $rows = $getCabang->fetchAll(PDO::FETCH_ASSOC);
+$rowk = $getKategori->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<!-- START row -->
-<div class="row">
-    <div class="col-lg-12">
-        <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddPusatdata btn btn-inverse btn-outline mb5 btn-rounded" href="#AddPusatdata"><i class="ico-plus2"></i> Tambah Data Terpusat</a>
+<div class="panel-group" id="accordion1">
+    <div class="panel panel-default">
+        <a data-toggle="collapse" data-parent="#accordion1" href="#collapseOne" class="collapsed">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <i class="fa-solid fa-chevron-down"></i> Filter Data Terpusat
+                </h4>
+            </div>
+        </a>
+        <div id="collapseOne" class="panel-collapse collapse">
+            <div class="panel-body">
+                <form method="post" class="form filterPusatData" id="filterPusatData">
+                    <div class="row">
+                        <?php
+                        if ($USER_AKSES == "Administrator") {
+                            ?>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="">Cabang</label>
+                                    <select name="CABANG_KEY" id="selectize-select" required="" class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Cabang --</option>
+                                        <?php
+                                        foreach ($rows as $filterCabang) {
+                                            extract($filterCabang);
+                                            ?>
+                                            <option value="<?= $CABANG_KEY; ?>"><?= $CABANG_DESKRIPSI; ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div> 
+                            </div>
+                            <?php
+                        }
+                        ?>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="">Kategori</label>
+                                <select name="PUSATDATA_KATEGORI" id="selectize-select2" required="" class="form-control" data-parsley-required>
+                                    <option value="">Tampilkan Semua</option>
+                                    <?php
+                                        foreach ($rowk as $filterKategori) {
+                                            extract($filterKategori);
+                                            ?>
+                                            <option value="<?= $PUSATDATA_KATEGORI; ?>"><?= $PUSATDATA_KATEGORI; ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                </select>
+                            </div> 
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="">Judul</label>
+                                <input type="text" class="form-control" id="filterPUSATDATA_JUDUL" name="PUSATDATA_JUDUL" value="" placeholder="Inputkan Judul">
+                            </div> 
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="">Deskripsi</label>
+                                <input type="text" class="form-control" id="filterPUSATDATA_DESKRIPSI" name="PUSATDATA__DESKRIPSI" value="" placeholder="Inputkan Deskripsi">
+                            </div> 
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="">Status Data</label>
+                                <select id="filterDELETION_STATUS" name="DELETION_STATUS" class="form-control"  data-parsley-required required>
+                                    <option value="">Tampilkan semua</option>
+                                    <option value="0">Aktif</option>
+                                    <option value="1">Non Aktif</option>
+                                </select>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" align="center">
+                            <button type="button" id="reloadButton" onclick="clearForm()" class="submit btn btn-teal btn-outline mb5 btn-rounded"><span class="ico-refresh"></span> Reset Filter</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
-<br>
-<!--/ END row -->
+<hr>
+
+<?php
+if ($_SESSION["ADD_DataTerpusat"] == "Y") {
+    ?>
+    <!-- START row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddPusatdata btn btn-inverse btn-outline mb5 btn-rounded" href="#AddPusatdata"><i class="ico-plus2"></i> Tambah Data Terpusat</a>
+        </div>
+    </div>
+    <br>
+    <!--/ END row -->
+    <?php
+}
+?>
 
 <!-- START row -->
 <div class="row">
@@ -52,10 +160,24 @@ $rows = $getCabang->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewPusatdata" data-pusatid="<?=$PUSATDATA_ID;?>" data-cabangid="<?=$CABANG_KEY;?>" data-cabangnama="<?=$CABANG_DESKRIPSI;?>" data-kategori="<?=$PUSATDATA_KATEGORI;?>" data-judul="<?=$PUSATDATA_JUDUL;?>" data-deskripsi="<?=$PUSATDATA_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-pusatstatus="<?=$PUSATDATA_STATUS;?>" class="open-ViewPusatdata" style="color:forestgreen;"><span class="ico-check"></span> Lihat</a></li>
-                                            <li><a data-toggle="modal" href="#EditPusatdata" data-pusatid="<?=$PUSATDATA_ID;?>" data-cabangid="<?=$CABANG_KEY;?>" data-cabangnama="<?=$CABANG_DESKRIPSI;?>" data-kategori="<?=$PUSATDATA_KATEGORI;?>" data-judul="<?=$PUSATDATA_JUDUL;?>" data-deskripsi="<?=$PUSATDATA_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-pusatstatus="<?=$PUSATDATA_STATUS;?>" class="open-EditPusatdata" style="color:cornflowerblue;"><span class="ico-edit"></span> Ubah</a></li>
-                                            <li class="divider"></li>
-                                            <li><a href="#" onclick="deletepusatdata('<?= $PUSATDATA_ID;?>','deleteevent')" style="color:firebrick;"><span class="ico-trash"></span> Hapus</a></li>
+                                            <?php
+                                            if ($_SESSION["VIEW_DataTerpusat"] == "Y") {
+                                                ?>
+                                                <li><a data-toggle="modal" href="#ViewPusatdata" data-pusatid="<?=$PUSATDATA_ID;?>" data-cabangid="<?=$CABANG_KEY;?>" data-cabangnama="<?=$CABANG_DESKRIPSI;?>" data-kategori="<?=$PUSATDATA_KATEGORI;?>" data-judul="<?=$PUSATDATA_JUDUL;?>" data-deskripsi="<?=$PUSATDATA_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-pusatstatus="<?=$PUSATDATA_STATUS;?>" class="open-ViewPusatdata" style="color:#222222;"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
+                                                <?php
+                                            }
+                                            if ($_SESSION["EDIT_DataTerpusat"] == "Y") {
+                                                ?>
+                                                <li><a data-toggle="modal" href="#EditPusatdata" data-pusatid="<?=$PUSATDATA_ID;?>" data-cabangid="<?=$CABANG_KEY;?>" data-cabangnama="<?=$CABANG_DESKRIPSI;?>" data-kategori="<?=$PUSATDATA_KATEGORI;?>" data-judul="<?=$PUSATDATA_JUDUL;?>" data-deskripsi="<?=$PUSATDATA_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-pusatstatus="<?=$PUSATDATA_STATUS;?>" class="open-EditPusatdata" style="color:cornflowerblue;"><span class="ico-edit"></span> Ubah</a></li>
+                                                <?php
+                                            }
+                                            if ($_SESSION["DELETE_DataTerpusat"] == "Y") {
+                                                ?>
+                                                <li class="divider"></li>
+                                                <li><a href="#" onclick="deletepusatdata('<?= $PUSATDATA_ID;?>','deleteevent')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
+                                                <?php
+                                            }
+                                            ?>
                                         </ul>
                                     </div>
                                 </form>
@@ -92,24 +214,30 @@ $rows = $getCabang->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="">Cabang<span class="text-danger">*</span></label>
-                                <div id="selectize-wrapper" style="position: relative;">
-                                    <select name="CABANG_KEY" id="selectize-dropdown" required class="form-control" data-parsley-required>
-                                        <option value="">-- Pilih Cabang --</option>
-                                        <?php
-                                        foreach ($rows as $rowCabang) {
-                                            extract($rowCabang);
-                                            ?>
-                                            <option value="<?= $CABANG_KEY; ?>"><?= $CABANG_DESKRIPSI; ?></option>
+                        <?php
+                        if ($USER_AKSES == "Administrator") {
+                            ?>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Cabang<span class="text-danger">*</span></label>
+                                    <div id="selectize-wrapper" style="position: relative;">
+                                        <select name="CABANG_KEY" id="selectize-dropdown" required class="form-control" data-parsley-required>
+                                            <option value="">-- Pilih Cabang --</option>
                                             <?php
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div> 
-                        </div>
+                                            foreach ($rows as $rowCabang) {
+                                                extract($rowCabang);
+                                                ?>
+                                                <option value="<?= $CABANG_KEY; ?>"><?= $CABANG_DESKRIPSI; ?></option>
+                                                <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div> 
+                            </div>
+                            <?php
+                        }
+                        ?>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Kategori<span class="text-danger">*</span></label>
@@ -236,24 +364,30 @@ $rows = $getCabang->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="">Cabang<span class="text-danger">*</span></label>
-                                <div id="selectize-wrapper2" style="position: relative;">
-                                    <select name="CABANG_KEY" id="selectize-dropdown2" required class="form-control" data-parsley-required>
-                                        <option value="">-- Pilih Cabang --</option>
-                                        <?php
-                                        foreach ($rows as $rowEditCabang) {
-                                            extract($rowEditCabang);
-                                            ?>
-                                            <option value="<?= $CABANG_KEY; ?>"><?= $CABANG_DESKRIPSI; ?></option>
+                        <?php
+                        if ($USER_AKSES == "Administrator") {
+                            ?>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Cabang<span class="text-danger">*</span></label>
+                                    <div id="selectize-wrapper2" style="position: relative;">
+                                        <select name="CABANG_KEY" id="selectize-dropdown2" required class="form-control" data-parsley-required>
+                                            <option value="">-- Pilih Cabang --</option>
                                             <?php
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div> 
-                        </div>
+                                            foreach ($rows as $rowEditCabang) {
+                                                extract($rowEditCabang);
+                                                ?>
+                                                <option value="<?= $CABANG_KEY; ?>"><?= $CABANG_DESKRIPSI; ?></option>
+                                                <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div> 
+                            </div>
+                            <?php
+                        }
+                        ?>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Kategori<span class="text-danger">*</span></label>

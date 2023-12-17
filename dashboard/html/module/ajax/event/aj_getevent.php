@@ -39,7 +39,7 @@ while ($rowEvent = $GetEvent->fetch(PDO::FETCH_ASSOC)) {
                         <li><a data-toggle="modal" href="#ViewEvent" class="open-ViewEvent" data-eventid="<?= $EVENT_ID; ?>" data-title="<?= $EVENT_TITLE; ?>" data-location="<?= $EVENT_LOCATION; ?>" data-datetime="<?= $EVENT_DATETIME; ?>" data-desc="<?= $EVENT_DESC; ?>" data-map="<?= $EVENT_MAP; ?>"  data-eventstatus="<?= $EVENT_STATUS; ?>" style="color:forestgreen;"><span class="ico-check"></span> View</a></li>
                         <li><a data-toggle="modal" href="#EditEvent" class="open-EditEvent editButtons" data-eventid="<?= $EVENT_ID; ?>" data-title="<?= $EVENT_TITLE; ?>" data-location="<?= $EVENT_LOCATION; ?>" data-datetime="<?= $EVENT_DATETIME; ?>" data-desc="<?= $EVENT_DESC; ?>" data-map="<?= $EVENT_MAP; ?>"  data-eventstatus="<?= $EVENT_STATUS; ?>" style="color:cornflowerblue;"><span class="ico-edit"></span> Edit</a></li>
                         <li class="divider"></li>
-                        <li><a href="#" onclick="confirmAndPost('<?= $EVENT_ID;?>','deleteevent')" style="color:firebrick;"><span class="ico-trash"></span> Delete</a></li>
+                        <li><a href="#" onclick="confirmAndPost('<?= $EVENT_ID;?>','deleteevent')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Delete</a></li>
                     </ul>
                 </div>
             </form>

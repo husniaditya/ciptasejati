@@ -29,7 +29,7 @@ while ($rowGuest = $GetGuest->fetch(PDO::FETCH_ASSOC)) {
                         <li><a data-toggle="modal" href="#ViewGuest" class="open-ViewGuest" data-guestid="<?= $GUEST_ID; ?>" data-name="<?= $GUEST_NAME; ?>" data-address="<?= $GUEST_ADDRESS; ?>" data-phone="<?= $GUEST_PHONE; ?>" data-relation="<?= $GUEST_RELATION; ?>" style="color:forestgreen;"><span class="ico-check"></span> View</a></li>
                         <li><a data-toggle="modal" href="#EditGuest" class="open-EditGuest editButtons" data-guestid="<?= $GUEST_ID; ?>" data-name="<?= $GUEST_NAME; ?>" data-address="<?= $GUEST_ADDRESS; ?>" data-phone="<?= $GUEST_PHONE; ?>" data-relation="<?= $GUEST_RELATION; ?>" style="color:cornflowerblue;"><span class="ico-edit"></span> Edit</a></li>
                         <li class="divider"></li>
-                        <li><a href="#" onclick="GuestconfirmAndPost('<?= $GUEST_ID;?>','deleteguest')" style="color:firebrick;"><span class="ico-trash"></span> Delete</a></li>
+                        <li><a href="#" onclick="GuestconfirmAndPost('<?= $GUEST_ID;?>','deleteguest')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Delete</a></li>
                     </ul>
                 </div>
             </form>

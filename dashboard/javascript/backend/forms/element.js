@@ -266,6 +266,11 @@
             changeYear: true,
             dateFormat: 'yy-mm-dd',
         });
+        $('#datepicker47').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy-mm-dd',
+        });
 
         // select date range
         $('#datepicker-from').datepicker({

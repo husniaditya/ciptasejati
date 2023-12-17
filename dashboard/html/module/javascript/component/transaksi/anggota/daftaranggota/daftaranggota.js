@@ -11,7 +11,7 @@ function callTable() {
       scrollY: '350px', // Set the desired height here
       buttons: [
           'copy', 'csv', 'excel', 'pdf', 'print'
-      ]
+      ],
   });
 }
 
@@ -154,22 +154,48 @@ function previewImageedit(input) {
   reader.readAsDataURL(input.files[0]);
 }
 function resetPreview() {
-  var previewImage = document.getElementById('preview-image-edit');
-  var previewContainer = document.getElementById('preview-container-edit');
-  var loadPicDiv = document.getElementById('loadpicedit');
+  var previewImage = document.getElementById('preview-image');
+  var previewContainer = document.getElementById('preview-container');
+  var previewImageEdit = document.getElementById('preview-image-edit');
+  var previewContainerEdit = document.getElementById('preview-container-edit');
+  var loadPicDiv = document.getElementById('loadpic');
+  var loadPicDivEdit = document.getElementById('loadpicedit');
+  document.getElementById('warning-message').innerText = '';
+  document.getElementById('warning-message-edit').innerText = '';
 
   // Reset the image source and hide the preview container
   previewImage.src = '#';
   previewContainer.style.display = 'none';
+  previewImageEdit.src = '#';
+  previewContainerEdit.style.display = 'none';
 
   // Show the loadpicedit div
   loadPicDiv.style.display = 'block';
+  loadPicDivEdit.style.display = 'block';
 }
 
 // Assuming you have a Bootstrap modal with the ID "myModal"
-$('#EditAnggota').on('hidden.bs.modal', function () {
+
+$('#EditAnggota').on('hidden.bs.modal', handleModalHidden);
+$('#AddAnggota').on('hidden.bs.modal', handleModalHidden);
+function handleModalHidden() {
   resetPreview();
-});
+}
+
+
+function validateInput(input) {
+  const inputValue = input.value.replace(/[^0-9]/g, '').slice(0, 3);
+
+  if (inputValue.length !== 3) {
+      document.getElementById('warning-message').innerText = 'Mohon masukkan 3 digit angka!';
+      document.getElementById('warning-message-edit').innerText = 'Mohon masukkan 3 digit angka!';
+  } else {
+      document.getElementById('warning-message').innerText = '';
+      document.getElementById('warning-message-edit').innerText = '';
+  }
+
+  input.value = inputValue;
+}
 
 
 
@@ -413,6 +439,9 @@ $(document).on("click", ".open-ViewAnggota", function () {
   var email = $(this).data('email');
   var join = $(this).data('join');
   var resign = $(this).data('resign');
+  var agama = $(this).data('agama');
+  var akses = $(this).data('akses');
+  var status = $(this).data('statusdes');
   
   // Set the values in the modal input fields
   $(".modal-body #viewANGGOTA_KEY").val(key);
@@ -431,6 +460,9 @@ $(document).on("click", ".open-ViewAnggota", function () {
   $(".modal-body #viewANGGOTA_EMAIL").val(email);
   $(".modal-body #viewANGGOTA_JOIN").val(join);
   $(".modal-body #viewANGGOTA_RESIGN").val(resign);
+  $(".modal-body #viewANGGOTA_AGAMA").val(agama);
+  $(".modal-body #viewANGGOTA_AKSES").val(akses);
+  $(".modal-body #viewANGGOTA_STATUS").val(status);
 
   $.ajax({
     type: "POST",
@@ -472,6 +504,9 @@ $(document).on("click", ".open-EditAnggota", function () {
   var email = $(this).data('email');
   var join = $(this).data('join');
   var resign = $(this).data('resign');
+  var agama = $(this).data('agama');
+  var akses = $(this).data('akses');
+  var status = $(this).data('status');
   
   // Set the values in the modal input fields
   $(".modal-body #editANGGOTA_KEY").val(key);
@@ -492,7 +527,10 @@ $(document).on("click", ".open-EditAnggota", function () {
   $(".modal-body #editANGGOTA_HP").val(hp);
   $(".modal-body #editANGGOTA_EMAIL").val(email);
   $(".modal-body #datepicker45").val(join);
-  $(".modal-body #editANGGOTA_RESIGN").val(resign);
+  $(".modal-body #datepicker47").val(resign);
+  $(".modal-body #editANGGOTA_AGAMA").val(agama);
+  $(".modal-body #editANGGOTA_AKSES").val(akses);
+  $(".modal-body #editANGGOTA_STATUS").val(status);
 
   $.ajax({
     type: "POST",
@@ -516,7 +554,7 @@ function filterAnggotaEvent() {
   const ktp = $('#filterANGGOTA_KTP').val();
   const hp = $('#filterANGGOTA_HP').val();
   const tingkatan = $('#selectize-select').val();
-  const join = $('#datepicker41').val();
+  const status = $('#filterANGGOTA_STATUS').val();
 
   // Create a data object to hold the form data
   const formData = {
@@ -527,7 +565,7 @@ function filterAnggotaEvent() {
     ANGGOTA_KTP: ktp,
     ANGGOTA_HP: hp,
     TINGKATAN_ID: tingkatan,
-    ANGGOTA_JOIN: join
+    ANGGOTA_STATUS: status
   };
 
   $.ajax({

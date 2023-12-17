@@ -1,324 +1,126 @@
+<?php
+$USER_AKSES = $_SESSION["LOGINAKS_CS"];
+?>
+
 <!-- START Sidebar Content -->
 <section class="content slimscroll">
     <!-- START Template Navigation/Menu -->
     <ul class="topmenu topmenu-responsive" data-toggle="menu">
-        <li class="level1">
-            <a href="dashboard.php" data-target="#dashboard" data-parent=".topmenu">
-                <span class="figure"><i class="ico-home2"></i></span>
-                <span class="text">Dashboard</span>
-            </a>
-        </li>
-        <li class="level1" >
-            <a href="javascript:void(0);" data-toggle="submenu" data-target="#master" data-parent=".topmenu">
-                <span class="figure"><i class="ico-grid"></i></span>
-                <span class="text">Master</span>
-                <span class="arrow"></span>
-            </a>
-            <!-- START 2nd Level Menu -->
-            <ul id="master" class="submenu collapse ">
-                <li  class="level2">
-                    <a href="tingkatgelar.php">
-                        <span class="text">Tingkatan dan Gelar</span>
+        <?php
+        $getParent = GetQuery("SELECT m.* FROM m_menu m
+        LEFT JOIN m_menuakses a ON m.MENU_ID = a.MENU_ID
+        WHERE m.MENU_INDUK=0 AND a.USER_AKSES='$USER_AKSES' and a.`VIEW`='Y'
+        ORDER BY m.MENU_ID ASC;");
+
+        while ($rowParent = $getParent->fetch(PDO::FETCH_ASSOC)) {
+            extract($rowParent);
+            if ($MENU_ID == 1) {
+                ?>
+                <li  class="<?= $MENU_LEVEL; ?>">
+                    <a href="<?= $MENU_URL; ?>">
+                        <span class="figure"><i class="<?= $MENU_ICON; ?>"></i></span>
+                        <span class="text"><?= $MENU_NAMA; ?></span>
                     </a>
                 </li>
-                <li  class="level2" >
-                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#lokasi" data-parent="#master">
-                        <span class="text">Lokasi Institut</span>
+                <?php
+            } else {
+                ?>
+                <li class="<?= $MENU_LEVEL; ?>" >
+                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#<?= $MENU_TARGET; ?>" data-parent=".topmenu">
+                        <span class="figure"><i class="<?= $MENU_ICON; ?>"></i></span>
+                        <span class="text"><?= $MENU_NAMA; ?></span>
                         <span class="arrow"></span>
                     </a>
-                    <ul id="lokasi" class="submenu collapse ">
-                        <li  class="level3" >
-                            <a href="lokasipusat.php">
-                                <span class="text">Pusat</span>
-                            </a>
-                        </li>
-                        <li  class="level3" >
-                            <a href="lokasidaerah.php">
-                                <span class="text">Daerah</span>
-                            </a>
-                        </li>
-                        <li class="level3" >
-                            <a href="lokasicabang.php">
-                                <span class="text">Cabang</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li  class="level2" >
-                    <a href="idsertifikat.php">
-                        <span class="text">Kartu ID dan Sertifikat</span>
-                    </a>
-                </li>
-                <li  class="level2" >
-                    <a href="dataterpusat.php">
-                        <span class="text">Data Terpusat</span>
-                    </a>
-                </li>
-            </ul>
-            <!--/ END 2nd Level Menu -->
-        </li>
-        <li class="level1" >
-            <a href="javascript:void(0);" data-toggle="submenu" data-target="#transaksi" data-parent=".topmenu">
-                <span class="figure"><i class="ico-edit"></i></span>
-                <span class="text">Transaksi</span>
-                <span class="number"><span class="label label-success">N</span></span>
-                <span class="arrow"></span>
-            </a>
-            <!-- START 2nd Level Menu -->
-            <ul id="transaksi" class="submenu collapse ">
-                <li  class="level2" >
-                    <a href="kepengurusan.php">
-                        <span class="text">Kepengurusan</span>
-                    </a>
-                </li>
-                <li  class="level2" >
-                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#anggota" data-parent="#transaksi">
-                        <span class="text">Anggota</span>
-                        <span class="arrow"></span>
-                    </a>
-                    <ul id="anggota" class="submenu collapse ">
-                        <li class="level3" >
-                            <a href="anggota.php">
-                                <span class="text">Daftar Anggota</span>
-                            </a>
-                        </li>
-                        <li class="level3" >
-                            <a href="mutasianggota.php">
-                                <span class="text">Mutasi Anggota</span>
-                            </a>
-                        </li>
-                        <li class="level3" >
-                            <a href="kasanggota.php">
-                                <span class="text">Kas Anggota</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li  class="level2" >
-                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#aktivitas" data-parent="#transaksi">
-                        <span class="text">Aktivitas</span>
-                        <span class="arrow"></span>
-                    </a>
-                    <ul id="aktivitas" class="submenu collapse ">
-                        <li class="level3" >
-                            <a href="pusatdaya.php">
-                                <span class="text">Pembukaan Pusat Daya</span>
-                            </a>
-                        </li>
-                        <li class="level3" >
-                            <a href="ujinaiktingkat.php">
-                                <span class="text">Ujian Kenaikan Tingkat</span>
-                            </a>
-                        </li>
-                        <li class="level3" >
-                            <a href="latihangabungan.php">
-                                <span class="text">Latihan Gabungan</span>
-                            </a>
-                        </li>
-                        <li class="level3" >
-                            <a href="pendidikanlatihan.php">
-                                <span class="text">Pendidikan dan Latihan</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-            <!--/ END 2nd Level Menu -->
-        </li>
-        <li class="level1" >
-            <a href="javascript:void(0);" data-toggle="submenu" data-target="#laporan" data-parent=".topmenu">
-                <span class="figure"><i class="ico-file-pdf"></i></span>
-                <span class="text">Laporan</span>
-                <span class="arrow"></span>
-            </a>
-            <!-- START 2nd Level Menu -->
-            <ul id="laporan" class="submenu collapse ">
-                <li  class="level2" >
-                    <a href="lapdaftarcabang.php">
-                        <span class="text">Daftar Cabang</span>
-                    </a>
-                </li>
-                <li  class="level2" >
-                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#lappengurus" data-parent="#laporan">
-                        <span class="text">Laporan Kepengurusan</span>
-                        <span class="arrow"></span>
-                    </a>
-                    <ul id="lappengurus" class="submenu collapse ">
-                        <li class="level3" >
-                            <a href="lapdaftarguru.php">
-                                <span class="text">Daftar Dewan Guru</span>
-                            </a>
-                        </li>
-                        <li class="level3" >
-                            <a href="lapdaftarpelatih.php">
-                                <span class="text">Daftar Pelatih</span>
-                            </a>
-                        </li>
-                        <li class="level3" >
-                            <a href="lapdaftarpengurus.php">
-                                <span class="text">Daftar Pengurus</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li  class="level2" >
-                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#lapanggota" data-parent="#laporan">
-                        <span class="text">Laporan Anggota</span>
-                        <span class="arrow"></span>
-                    </a>
-                    <ul id="lapanggota" class="submenu collapse ">
-                        <li class="level3" >
-                            <a href="lapdaftaranggota.php">
-                                <span class="text">Daftar Anggota</span>
-                            </a>
-                        </li>
-                        <li class="level3" >
-                            <a href="lapidanggota.php">
-                                <span class="text">ID Anggota</span>
-                            </a>
-                        </li>
-                        <li class="level3" >
-                            <a href="lapkasanggota.php">
-                                <span class="text">Kas Anggota</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li  class="level2" >
-                    <a href="lapformatstandar.php">
-                        <span class="text">Format Standar</span>
-                    </a>
-                </li>
-            </ul>
-            <!--/ END 2nd Level Menu -->
-        </li>
-        <li class="level1">
-            <a href="javascript:void(0);" data-toggle="submenu" data-target="#admin" data-parent=".topmenu">
-                <span class="figure"><i class="ico-settings"></i></span>
-                <span class="text">Menu Admin</span>
-                <span class="number"><span class="label label-success">N</span></span>
-                <span class="arrow"></span>
-            </a>
-            <!-- START 2nd Level Menu -->
-            <ul id="admin" class="submenu collapse">
-            <li  class="level2" >
-                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#profil" data-parent="#admin">
-                        <span class="text">Profil Institut</span>
-                        <span class="arrow"></span>
-                    </a>
-                    <ul id="profil" class="submenu collapse ">
-                        <li class="level3" >
-                            <a href="profil.php">
-                                <span class="text">Profil & Sejarah</span>
-                            </a>
-                        </li>
-                        <li class="level3" >
-                            <a href="visimisi.php">
-                                <span class="text">Visi & Misi</span>
-                            </a>
-                        </li>
-                        <li class="level3" >
-                            <a href="warnalambang.php">
-                                <span class="text">Arti Warna & Lambang</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li  class="level2" >
-                    <a href="mediasosial.php">
-                        <span class="text">Media Sosial</span>
-                    </a>
-                </li>
-                <li  class="level2" >
-                    <a href="user.php">
-                        <span class="text">User</span>
-                    </a>
-                </li>
-                <li  class="level2" >
-                    <a href="menu.php">
-                        <span class="text">Menu</span>
-                    </a>
-                </li>
-                <li  class="level2" >
-                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#manajemenkonten" data-parent="#admin">
-                        <span class="text">Manajemen Konten</span>
-                        <span class="arrow"></span>
-                    </a>
-                    <ul id="manajemenkonten" class="submenu collapse ">
-                        <li class="level3" >
-                            <a href="kontenheader.php">
-                                <span class="text">Header</span>
-                            </a>
-                        </li>
-                        <li class="level3" >
-                            <a href="kontenfooter.php">
-                                <span class="text">Footer</span>
-                            </a>
-                        </li>
-                        <li class="level3" >
-                            <a href="javascript:void(0);" data-toggle="submenu" data-target="#beranda" data-parent="#manajemenkonten">
-                                <span class="text">Halaman Beranda</span>
-                                <span class="arrow"></span>
-                            </a>
-                            <ul id="beranda" class="submenu collapse ">
-                                <li class="level4">
-                                    <a href="berandaposter.php">
-                                        <span class="text">Bagian Poster</span>
+                    <!-- START 2nd Level Menu -->
+                    <ul id="<?= $MENU_TARGET; ?>" class="submenu collapse ">
+                        <?php
+                        $getChild2 = GetQuery("SELECT m.* FROM m_menu m
+                        LEFT JOIN m_menuakses a ON m.MENU_ID = a.MENU_ID
+                        WHERE left(m.MENU_ID,1)='$MENU_ID' AND MENU_LEVEL='level2' and a.USER_AKSES = '$USER_AKSES' AND a.view = 'Y'
+                        ORDER BY m.MENU_ID ASC");
+
+                        while ($rowChild2 = $getChild2->fetch(PDO::FETCH_ASSOC)) {
+                            ?>
+                            <?php
+                            if ($rowChild2["MENU_TARGET"] == "") {
+                                ?>
+                                <li class="<?= $rowChild2["MENU_LEVEL"]; ?>">
+                                    <a href="<?= $rowChild2["MENU_URL"]; ?>">
+                                        <span class="text"><?= $rowChild2["MENU_NAMA"]; ?></span>
                                     </a>
                                 </li>
-                                <li class="level4" >
-                                    <a href="berandakegiatan.php">
-                                        <span class="text">Bagian Kegiatan</span>
+                                <?php
+                            }
+                            else {
+                                ?>
+                                <li  class="<?= $rowChild2["MENU_LEVEL"]; ?>" >
+                                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#<?= $rowChild2["MENU_TARGET"]; ?>" data-parent="<?= $MENU_TARGET; ?>">
+                                        <span class="text"><?= $rowChild2["MENU_NAMA"]; ?></span>
+                                        <span class="arrow"></span>
                                     </a>
+                                    <ul id="<?= $rowChild2["MENU_TARGET"]; ?>" class="submenu collapse ">
+                                        <?php
+                                        $getChild3 = GetQuery("SELECT m.* FROM m_menu m
+                                        LEFT JOIN m_menuakses a ON m.MENU_ID = a.MENU_ID
+                                        WHERE m.MENU_INDUK = '{$rowChild2["MENU_ID"]}' AND MENU_LEVEL='level3' and a.USER_AKSES = 'administrator' AND a.view = 'Y'
+                                        ORDER BY m.MENU_ID ASC");
+
+                                        while ($rowChild3 = $getChild3->fetch(PDO::FETCH_ASSOC)) {
+                                            if ($rowChild3["MENU_TARGET"] == "") {
+                                                ?>
+                                                <li  class="<?= $rowChild3["MENU_LEVEL"]; ?>" >
+                                                    <a href="<?= $rowChild3["MENU_URL"]; ?>">
+                                                        <span class="text"><?= $rowChild3["MENU_NAMA"]; ?></span>
+                                                    </a>
+                                                </li>
+                                                <?php
+                                            } else {
+                                                ?>
+                                                <li class="<?= $rowChild3["MENU_LEVEL"]; ?>" >
+                                                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#<?= $rowChild3["MENU_TARGET"]; ?>" data-parent="#<?= $rowChild2["MENU_TARGET"]; ?>">
+                                                        <span class="text"><?= $rowChild3["MENU_NAMA"]; ?></span>
+                                                        <span class="arrow"></span>
+                                                    </a>
+                                                    <ul id="beranda" class="submenu collapse ">
+                                                        <?php
+                                                        $getChild4 = GetQuery("SELECT m.* FROM m_menu m
+                                                        LEFT JOIN m_menuakses a ON m.MENU_ID = a.MENU_ID
+                                                        WHERE m.MENU_INDUK = '{$rowChild3["MENU_ID"]}' AND MENU_LEVEL='level4' and a.USER_AKSES = 'administrator' AND a.view = 'Y'
+                                                        ORDER BY m.MENU_ID ASC;");
+
+                                                        while ($rowChild4 = $getChild4->fetch(PDO::FETCH_ASSOC)) {
+                                                            ?>
+                                                            <li class="<?= $rowChild4["MENU_LEVEL"]; ?>">
+                                                                <a href="<?= $rowChild4["MENU_URL"]; ?>">
+                                                                    <span class="text"><?= $rowChild4["MENU_NAMA"]; ?></span>
+                                                                </a>
+                                                            </li>
+                                                            <?php
+                                                        }
+                                                        ?>
+                                                    </ul>
+                                                </li>
+                                                <?php
+                                            }
+                                            
+                                        }
+                                        ?>
+                                    </ul>
                                 </li>
-                                <li class="level4" >
-                                    <a href="berandainformasi.php">
-                                        <span class="text">Bagian Informasi</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="level3" >
-                            <a href="kontententang.php">
-                                <span class="text">Halaman Tentang Kami</span>
-                            </a>
-                        </li>
-                        <li class="level3" >
-                            <a href="javascript:void(0);" data-toggle="submenu" data-target="#cabang" data-parent="#manajemenkonten">
-                                <span class="text">Halaman Cabang</span>
-                                <span class="arrow"></span>
-                            </a>
-                            <ul id="cabang" class="submenu collapse ">
-                                <li class="level4" >
-                                    <a href="daftarcabang.php">
-                                        <span class="text">Daftar Cabang</span>
-                                    </a>
-                                </li>
-                                <li class="level4" >
-                                    <a href="koordinatorcabang.php">
-                                        <span class="text">Koordinator Cabang</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="level3" >
-                            <a href="kontenblog.php">
-                                <span class="text">Halaman Blog</span>
-                            </a>
-                        </li>
-                        <li class="level3" >
-                            <a href="kontenhubungi.php">
-                                <span class="text">Halaman Hubungi</span>
-                            </a>
-                        </li>
+                                <?php
+                            }
+                            ?>
+                            <?php
+                        }
+                        ?>
+                    <!--/ END 2nd Level Menu -->
                     </ul>
                 </li>
-            </ul>
-            <!--/ END 2nd Level Menu -->
-        </li>
-            </ul>
-            <!--/ END 2nd Level Menu -->
-        </li>
+                <?php
+            }
+            
+        }
+        ?>
     </ul>
     <!--/ END Template Navigation/Menu -->
 </section>

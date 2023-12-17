@@ -11,14 +11,20 @@ $getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0 order by
 $rows = $getDaerah->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<!-- START row -->
-<div class="row">
-    <div class="col-lg-12">
-        <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddCabang btn btn-inverse btn-outline mb5 btn-rounded" href="#AddCabang"><i class="ico-plus2"></i> Tambah Lokasi Cabang</a>
+<?php
+if ($_SESSION["ADD_LokasiCabang"] == "Y") {
+    ?>
+    <!-- START row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddCabang btn btn-inverse btn-outline mb5 btn-rounded" href="#AddCabang"><i class="ico-plus2"></i> Tambah Lokasi Cabang</a>
+        </div>
     </div>
-</div>
-<br>
-<!--/ END row -->
+    <br>
+    <!--/ END row -->
+    <?php
+}
+?>
 
 <!-- START row -->
 <div class="row">
@@ -52,10 +58,23 @@ $rows = $getDaerah->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewCabang" class="open-ViewCabang" style="color:forestgreen;" data-key="<?=$CABANG_KEY;?>" data-daerahid="<?=$DAERAH_KEY;?>" data-daerahdes="<?=$DAERAH_DESKRIPSI;?>" data-cabangid="<?=$CABANG_ID;?>" data-shortid="<?=$SHORT_ID;?>" data-desk="<?=$CABANG_DESKRIPSI;?>" data-pengurus="<?=$CABANG_PENGURUS;?>" data-sekre="<?=$CABANG_SEKRETARIAT;?>" data-map="<?=$CABANG_MAP;?>" data-lat="<?=$CABANG_LAT;?>" data-long="<?=$CABANG_LONG;?>"><span class="ico-check"></span> Lihat</a></li>
-                                            <li><a data-toggle="modal" href="#EditCabang" class="open-EditCabang" style="color:cornflowerblue;" data-key="<?=$CABANG_KEY;?>" data-daerahid="<?=$DAERAH_KEY;?>" data-daerahdes="<?=$DAERAH_DESKRIPSI;?>" data-cabangid="<?=$CABANG_ID;?>" data-shortid="<?=$SHORT_ID;?>" data-desk="<?=$CABANG_DESKRIPSI;?>" data-pengurus="<?=$CABANG_PENGURUS;?>" data-sekre="<?=$CABANG_SEKRETARIAT;?>" data-map="<?=$CABANG_MAP;?>" data-lat="<?=$CABANG_LAT;?>" data-long="<?=$CABANG_LONG;?>"><span class="ico-edit"></span> Ubah</a></li>
-                                            <li class="divider"></li>
-                                            <li><a href="#" onclick="deleteCabang('<?= $CABANG_KEY;?>','deleteevent')" style="color:firebrick;"><span class="ico-trash"></span> Hapus</a></li>
+                                            <?php if ($_SESSION["VIEW_LokasiCabang"] == "Y") {
+                                                ?>
+                                                <li><a data-toggle="modal" href="#ViewCabang" class="open-ViewCabang" style="color:#222222;" data-key="<?=$CABANG_KEY;?>" data-daerahid="<?=$DAERAH_KEY;?>" data-daerahdes="<?=$DAERAH_DESKRIPSI;?>" data-cabangid="<?=$CABANG_ID;?>" data-shortid="<?=$SHORT_ID;?>" data-desk="<?=$CABANG_DESKRIPSI;?>" data-pengurus="<?=$CABANG_PENGURUS;?>" data-sekre="<?=$CABANG_SEKRETARIAT;?>" data-map="<?=$CABANG_MAP;?>" data-lat="<?=$CABANG_LAT;?>" data-long="<?=$CABANG_LONG;?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
+                                                <?php
+                                            }
+                                            if ($_SESSION["EDIT_LokasiCabang"] == "Y") {
+                                                ?>
+                                                <li><a data-toggle="modal" href="#EditCabang" class="open-EditCabang" style="color:cornflowerblue;" data-key="<?=$CABANG_KEY;?>" data-daerahid="<?=$DAERAH_KEY;?>" data-daerahdes="<?=$DAERAH_DESKRIPSI;?>" data-cabangid="<?=$CABANG_ID;?>" data-shortid="<?=$SHORT_ID;?>" data-desk="<?=$CABANG_DESKRIPSI;?>" data-pengurus="<?=$CABANG_PENGURUS;?>" data-sekre="<?=$CABANG_SEKRETARIAT;?>" data-map="<?=$CABANG_MAP;?>" data-lat="<?=$CABANG_LAT;?>" data-long="<?=$CABANG_LONG;?>"><span class="ico-edit"></span> Ubah</a></li>
+                                                <?php
+                                            }
+                                            if ($_SESSION["DELETE_LokasiCabang"] == "Y") {
+                                                ?>
+                                                <li class="divider"></li>
+                                                <li><a href="#" onclick="deleteCabang('<?= $CABANG_KEY;?>','deleteevent')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
+                                                <?php
+                                            }
+                                            ?>
                                         </ul>
                                     </div>
                                 </form>

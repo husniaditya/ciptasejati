@@ -19,7 +19,7 @@ while ($rowSertifikat = $getSertifikat->fetch(PDO::FETCH_ASSOC)) {
                         <li><a data-toggle="modal" href="#ViewSertifikat" data-id="<?=$IDSERTIFIKAT_ID;?>" data-tingkatanid="<?=$TINGKATAN_ID;?>" data-tingkatannama="<?=$TINGKATAN_NAMA;?>" data-desk="<?=$IDSERTIFIKAT_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-sertifikatstatus="<?=$SERTIFIKAT_STATUS;?>" class="open-ViewSertifikat" style="color:forestgreen;"><span class="ico-check"></span> Lihat</a></li>
                         <li><a data-toggle="modal" href="#EditSertifikat" data-id="<?=$IDSERTIFIKAT_ID;?>" data-tingkatanid="<?=$TINGKATAN_ID;?>" data-tingkatannama="<?=$TINGKATAN_NAMA;?>" data-desk="<?=$IDSERTIFIKAT_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-sertifikatstatus="<?=$SERTIFIKAT_STATUS;?>" class="open-EditSertifikat" style="color:cornflowerblue;"><span class="ico-edit"></span> Ubah</a></li>
                         <li class="divider"></li>
-                        <li><a href="#" onclick="deletesertifikat('<?= $IDSERTIFIKAT_ID;?>','deleteevent')" style="color:firebrick;"><span class="ico-trash"></span> Hapus</a></li>
+                        <li><a href="#" onclick="deletesertifikat('<?= $IDSERTIFIKAT_ID;?>','deleteevent')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
                     </ul>
                 </div>
             </form>

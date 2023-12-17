@@ -9,16 +9,20 @@ LEFT JOIN m_anggota a ON s.INPUT_BY = a.ANGGOTA_ID");
 $getTingkatan = GetQuery("select * from m_tingkatan where DELETION_STATUS = 0");
 // Fetch all rows into an array
 $rows = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
-?>
 
-<!-- START row -->
-<div class="row">
-    <div class="col-lg-12">
-        <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddSertifikat btn btn-inverse btn-outline mb5 btn-rounded" href="#AddSertifikat"><i class="ico-plus2"></i> Tambah ID Sertifikat</a>
+if ($_SESSION["ADD_IDdanSertifikat"] == "Y") {
+    ?>
+    <!-- START row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddSertifikat btn btn-inverse btn-outline mb5 btn-rounded" href="#AddSertifikat"><i class="ico-plus2"></i> Tambah ID Sertifikat</a>
+        </div>
     </div>
-</div>
-<br>
-<!--/ END row -->
+    <br>
+    <!--/ END row -->
+    <?php
+}
+?>
 
 <!-- START row -->
 <div class="row">
@@ -52,10 +56,24 @@ $rows = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewSertifikat" data-id="<?=$IDSERTIFIKAT_ID;?>" data-tingkatanid="<?=$TINGKATAN_ID;?>" data-tingkatannama="<?=$TINGKATAN_NAMA;?>" data-desk="<?=$IDSERTIFIKAT_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-sertifikatstatus="<?=$SERTIFIKAT_STATUS;?>" class="open-ViewSertifikat" style="color:forestgreen;"><span class="ico-check"></span> Lihat</a></li>
-                                            <li><a data-toggle="modal" href="#EditSertifikat" data-id="<?=$IDSERTIFIKAT_ID;?>" data-tingkatanid="<?=$TINGKATAN_ID;?>" data-tingkatannama="<?=$TINGKATAN_NAMA;?>" data-desk="<?=$IDSERTIFIKAT_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-sertifikatstatus="<?=$SERTIFIKAT_STATUS;?>" class="open-EditSertifikat" style="color:cornflowerblue;"><span class="ico-edit"></span> Ubah</a></li>
-                                            <li class="divider"></li>
-                                            <li><a href="#" onclick="deletesertifikat('<?= $IDSERTIFIKAT_ID;?>','deleteevent')" style="color:firebrick;"><span class="ico-trash"></span> Hapus</a></li>
+                                            <?php
+                                            if ($_SESSION["VIEW_IDdanSertifikat"] == "Y") {
+                                                ?>
+                                                <li><a data-toggle="modal" href="#ViewSertifikat" data-id="<?=$IDSERTIFIKAT_ID;?>" data-tingkatanid="<?=$TINGKATAN_ID;?>" data-tingkatannama="<?=$TINGKATAN_NAMA;?>" data-desk="<?=$IDSERTIFIKAT_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-sertifikatstatus="<?=$SERTIFIKAT_STATUS;?>" class="open-ViewSertifikat" style="color:#222222;"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
+                                                <?php
+                                            }
+                                            if ($_SESSION["EDIT_IDdanSertifikat"] == "Y") {
+                                                ?>
+                                                <li><a data-toggle="modal" href="#EditSertifikat" data-id="<?=$IDSERTIFIKAT_ID;?>" data-tingkatanid="<?=$TINGKATAN_ID;?>" data-tingkatannama="<?=$TINGKATAN_NAMA;?>" data-desk="<?=$IDSERTIFIKAT_DESKRIPSI;?>" data-status="<?=$DELETION_STATUS;?>" data-sertifikatstatus="<?=$SERTIFIKAT_STATUS;?>" class="open-EditSertifikat" style="color:cornflowerblue;"><span class="ico-edit"></span> Ubah</a></li>
+                                                <?php
+                                            }
+                                            if ($_SESSION["DELETE_IDdanSertifikat"] == "Y") {
+                                                ?>
+                                                <li class="divider"></li>
+                                                <li><a href="#" onclick="deletesertifikat('<?= $IDSERTIFIKAT_ID;?>','deleteevent')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
+                                                <?php
+                                            }
+                                            ?>
                                         </ul>
                                     </div>
                                 </form>

@@ -29,7 +29,7 @@ while ($rowAnn = $GetAnn->fetch(PDO::FETCH_ASSOC)) {
                         <li><a data-toggle="modal" href="#ViewAnnouncement" class="open-ViewAnnouncement" data-annid="<?= $ANNOUNCEMENT_ID; ?>" data-title="<?= $ANNOUNCEMENT_TITLE; ?>" data-couple="<?= $ANNOUNCEMENT_COUPLE; ?>" data-video="<?= $ANNOUNCEMENT_VIDEO; ?>" data-textdate="<?= $ANNOUNCEMENT_TEXTDATE; ?>" data-date="<?= $ANNOUNCEMENT_DATE; ?>" style="color:forestgreen;"><span class="ico-check"></span> View</a></li>
                         <li><a data-toggle="modal" href="#EditAnnouncement" class="open-EditAnnouncement editButtons" data-annid="<?= $ANNOUNCEMENT_ID; ?>" data-title="<?= $ANNOUNCEMENT_TITLE; ?>" data-couple="<?= $ANNOUNCEMENT_COUPLE; ?>" data-video="<?= $ANNOUNCEMENT_VIDEO; ?>" data-textdate="<?= $ANNOUNCEMENT_TEXTDATE; ?>" data-date="<?= $ANNOUNCEMENT_DATE; ?>" style="color:cornflowerblue;"><span class="ico-edit"></span> Edit</a></li>
                         <li class="divider"></li>
-                        <li><a href="#" onclick="AnnconfirmAndPost('<?= $GUEST_ID;?>','deleteann')" style="color:firebrick;"><span class="ico-trash"></span> Delete</a></li>
+                        <li><a href="#" onclick="AnnconfirmAndPost('<?= $GUEST_ID;?>','deleteann')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Delete</a></li>
                     </ul>
                 </div>
             </form>

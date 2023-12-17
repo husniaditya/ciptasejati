@@ -1,10 +1,20 @@
 <?php
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
+$USER_AKSES = $_SESSION["LOGINAKS_CS"];
+$USER_CABANG = $_SESSION["LOGINCAB_CS"];
 
-$getAnggotadata = GetQuery("SELECT a.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_GELAR,t.TINGKATAN_SEBUTAN,DATE_FORMAT(a.ANGGOTA_TANGGAL_LAHIR, '%d %M %Y') TGL_LAHIR,DATE_FORMAT(a.ANGGOTA_JOIN, '%d %M %Y') TGL_JOIN,DATE_FORMAT(a.ANGGOTA_RESIGN, '%d %M %Y') TGL_RESIGN,RIGHT(a.ANGGOTA_ID,3) SHORT_ID FROM m_anggota a
-LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
-LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID");
+if ($USER_AKSES == "Administrator") {
+    $getAnggotadata = GetQuery("SELECT a.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_GELAR,t.TINGKATAN_SEBUTAN,DATE_FORMAT(a.ANGGOTA_TANGGAL_LAHIR, '%d %M %Y') TGL_LAHIR,DATE_FORMAT(a.ANGGOTA_JOIN, '%d %M %Y') TGL_JOIN,DATE_FORMAT(a.ANGGOTA_RESIGN, '%d %M %Y') TGL_RESIGN,RIGHT(a.ANGGOTA_ID,3) SHORT_ID, CASE WHEN ANGGOTA_STATUS = 0 THEN 'Aktif' WHEN ANGGOTA_STATUS = 1 THEN 'Non Aktif' ELSE 'Mutasi' END STATUS_DES FROM m_anggota a
+    LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
+    LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
+    LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID");
+} else {
+    $getAnggotadata = GetQuery("SELECT a.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_GELAR,t.TINGKATAN_SEBUTAN,DATE_FORMAT(a.ANGGOTA_TANGGAL_LAHIR, '%d %M %Y') TGL_LAHIR,DATE_FORMAT(a.ANGGOTA_JOIN, '%d %M %Y') TGL_JOIN,DATE_FORMAT(a.ANGGOTA_RESIGN, '%d %M %Y') TGL_RESIGN,RIGHT(a.ANGGOTA_ID,3) SHORT_ID, CASE WHEN ANGGOTA_STATUS = 0 THEN 'Aktif' WHEN ANGGOTA_STATUS = 1 THEN 'Non Aktif' ELSE 'Mutasi' END STATUS_DES FROM m_anggota a
+    LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
+    LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
+    LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
+    WHERE a.CABANG_KEY = '$USER_CABANG'");
+}
 
 $getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0");
 $getCabang = GetQuery("select * from m_cabang where DELETION_STATUS = 0");
@@ -15,96 +25,127 @@ $rows = $getCabang->fetchAll(PDO::FETCH_ASSOC);
 $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<h4>Filter Anggota</h4>
-<form method="post" class="form filterAnggota" id="filterAnggota">
-    <div class="row">
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="">Daerah</label>
-                <select name="DAERAH_KEY" id="selectize-select3" required="" class="form-control" data-parsley-required>
-                    <option value="">-- Pilih Daerah --</option>
-                    <?php
-                    foreach ($rowd as $filterDaerah) {
-                        extract($filterDaerah);
-                        ?>
-                        <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+<div class="panel-group" id="accordion1">
+    <div class="panel panel-default">
+        <a data-toggle="collapse" data-parent="#accordion1" href="#collapseOne" class="collapsed">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <i class="fa-solid fa-chevron-down"></i> Filter Data Anggota
+                </h4>
+            </div>
+        </a>
+        <div id="collapseOne" class="panel-collapse collapse">
+            <div class="panel-body">
+                <form method="post" class="form filterAnggota" id="filterAnggota">
+                    <div class="row">
                         <?php
-                    }
-                    ?>
-                </select>
-            </div> 
-        </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="">Cabang</label>
-                <select name="CABANG_KEY" id="selectize-select2" required="" class="form-control" data-parsley-required>
-                    <option value="">-- Pilih Cabang --</option>
-                </select>
-            </div> 
-        </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="">Tingkatan</label>
-                <select name="TINGKATAN_ID" id="selectize-select" required="" class="form-control" data-parsley-required>
-                    <option value="">-- Pilih Tingkatan --</option>
-                    <?php
-                    foreach ($rowt as $filterTingkatan) {
-                        extract($filterTingkatan);
+                        if ($USER_AKSES == "Administrator") {
+                            ?>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="">Daerah</label>
+                                    <select name="DAERAH_KEY" id="selectize-select3" required="" class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Daerah --</option>
+                                        <?php
+                                        foreach ($rowd as $filterDaerah) {
+                                            extract($filterDaerah);
+                                            ?>
+                                            <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div> 
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="">Cabang</label>
+                                    <select name="CABANG_KEY" id="selectize-select2" required="" class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Cabang --</option>
+                                    </select>
+                                </div> 
+                            </div>
+                            <?php
+                        }
                         ?>
-                        <option value="<?= $TINGKATAN_ID; ?>"><?= $TINGKATAN_NAMA; ?> - <?= $TINGKATAN_SEBUTAN; ?></option>
-                        <?php
-                    }
-                    ?>
-                </select>
-            </div> 
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="">Tingkatan</label>
+                                <select name="TINGKATAN_ID" id="selectize-select" required="" class="form-control" data-parsley-required>
+                                    <option value="">-- Pilih Tingkatan --</option>
+                                    <?php
+                                    foreach ($rowt as $filterTingkatan) {
+                                        extract($filterTingkatan);
+                                        ?>
+                                        <option value="<?= $TINGKATAN_ID; ?>"><?= $TINGKATAN_NAMA; ?> - <?= $TINGKATAN_SEBUTAN; ?></option>
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div> 
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="">ID Anggota</label>
+                                <input type="text" class="form-control" id="filterANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Input ID Anggota">
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="">Nama</label>
+                                <input type="text" class="form-control" id="filterANGGOTA_NAMA" name="ANGGOTA_NAMA" value="" placeholder="Input Nama">
+                            </div> 
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="">KTP</label>
+                                <input type="text" class="form-control" id="filterANGGOTA_KTP" name="ANGGOTA_KTP" value="" placeholder="Input KTP">
+                            </div> 
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="">No HP</label>
+                                <input type="text" class="form-control" id="filterANGGOTA_HP" name="ANGGOTA_HP" value="" placeholder="Input Nomor HP">
+                            </div> 
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="">Status Anggota</label>
+                                <select id="filterANGGOTA_STATUS" name="ANGGOTA_STATUS" class="form-control"  data-parsley-required required>
+                                    <option value="">Tampilkan semua</option>
+                                    <option value="0">Aktif</option>
+                                    <option value="1">Non Aktif</option>
+                                    <option value="2">Mutasi</option>
+                                </select>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" align="center">
+                            <button type="button" id="reloadButton" onclick="clearForm()" class="submit btn btn-teal btn-outline mb5 btn-rounded"><span class="ico-refresh"></span> Reset Filter</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="">ID Anggota</label>
-                <input type="text" class="form-control" id="filterANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Input ID Anggota">
-            </div> 
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="">Nama</label>
-                <input type="text" class="form-control" id="filterANGGOTA_NAMA" name="ANGGOTA_NAMA" value="" placeholder="Input Nama">
-            </div> 
-        </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="">KTP</label>
-                <input type="text" class="form-control" id="filterANGGOTA_KTP" name="ANGGOTA_KTP" value="" placeholder="Input KTP">
-            </div> 
-        </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="">No HP</label>
-                <input type="text" class="form-control" id="filterANGGOTA_HP" name="ANGGOTA_HP" value="" placeholder="Input Nomor HP">
-            </div> 
-        </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="">Tanggal Join</label>
-                <input type="text" class="form-control" id="datepicker41" name="ANGGOTA_JOIN" placeholder="Pilih tanggal" readonly/>
-            </div> 
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12" align="center">
-            <button type="button" id="reloadButton" onclick="clearForm()" class="submit btn btn-teal btn-outline mb5 btn-rounded"><span class="ico-refresh"></span> Reset Filter</button>
-        </div>
-    </div>
-</form>
-<hr>
-<!-- START row -->
-<div class="row">
-    <div class="col-lg-12">
-        <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddAnggota btn btn-inverse btn-outline mb5 btn-rounded" href="#AddAnggota"><i class="ico-plus2"></i> Tambah Data Anggota</a>
     </div>
 </div>
-<br>
+<hr>
+<!-- START row -->
+<?php
+if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
+    ?>
+    <div class="row">
+        <div class="col-lg-12">
+            <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddAnggota btn btn-inverse btn-outline mb5 btn-rounded" href="#AddAnggota"><i class="ico-plus2"></i> Tambah Data Anggota</a>
+        </div>
+    </div>
+    <br>
+    <?php
+}
+?>
 <!--/ END row -->
 
 <!-- START row -->
@@ -131,6 +172,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                         <th>No HP</th>
                         <th>Email</th>
                         <th>Tgl Bergabung</th>
+                        <th>Status Anggota</th>
                         <th>Tgl Resign</th>
                     </tr>
                 </thead>
@@ -145,10 +187,24 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewAnggota" class="open-ViewAnggota" style="color:forestgreen;" data-key="<?= $ANGGOTA_KEY; ?>" data-id="<?= $ANGGOTA_ID; ?>" data-shortid="<?= $SHORT_ID; ?>" data-daerahkey="<?= $DAERAH_KEY;?>" data-daerahdes="<?= $DAERAH_DESKRIPSI;?>" data-cabangkey="<?= $CABANG_KEY; ?>" data-cabangdes="<?= $CABANG_DESKRIPSI; ?>" data-tingkatanid=<?= $TINGKATAN_ID; ?> data-tingkatannama="<?= $TINGKATAN_NAMA; ?>" data-ktp="<?= $ANGGOTA_KTP; ?>" data-nama="<?= $ANGGOTA_NAMA; ?>" data-alamat="<?= $ANGGOTA_ALAMAT;?>" data-pekerjaan="<?= $ANGGOTA_PEKERJAAN; ?>" data-kelamin="<?= $ANGGOTA_KELAMIN; ?>" data-tempatlahir="<?= $ANGGOTA_TEMPAT_LAHIR; ?>" data-tanggallahir="<?= $ANGGOTA_TANGGAL_LAHIR; ?>" data-hp="<?= $ANGGOTA_HP; ?>" data-email="<?= $ANGGOTA_EMAIL; ?>" data-pic="<?= $ANGGOTA_PIC; ?>" data-join="<?= $ANGGOTA_JOIN; ?>" data-resign="<?= $ANGGOTA_RESIGN; ?>"><span class="ico-check"></span> Lihat</a></li>
-                                            <li><a data-toggle="modal" href="#EditAnggota" class="open-EditAnggota" style="color:cornflowerblue;" data-key="<?= $ANGGOTA_KEY; ?>" data-id="<?= $ANGGOTA_ID; ?>" data-shortid="<?= $SHORT_ID; ?>" data-daerahkey="<?= $DAERAH_KEY;?>" data-daerahdes="<?= $DAERAH_DESKRIPSI;?>" data-cabangkey="<?= $CABANG_KEY; ?>" data-cabangdes="<?= $CABANG_DESKRIPSI; ?>" data-tingkatanid=<?= $TINGKATAN_ID; ?> data-tingkatannama="<?= $TINGKATAN_NAMA; ?>" data-ktp="<?= $ANGGOTA_KTP; ?>" data-nama="<?= $ANGGOTA_NAMA; ?>" data-alamat="<?= $ANGGOTA_ALAMAT;?>" data-pekerjaan="<?= $ANGGOTA_PEKERJAAN; ?>" data-kelamin="<?= $ANGGOTA_KELAMIN; ?>" data-tempatlahir="<?= $ANGGOTA_TEMPAT_LAHIR; ?>" data-tanggallahir="<?= $ANGGOTA_TANGGAL_LAHIR; ?>" data-hp="<?= $ANGGOTA_HP; ?>" data-email="<?= $ANGGOTA_EMAIL; ?>" data-pic="<?= $ANGGOTA_PIC; ?>" data-join="<?= $ANGGOTA_JOIN; ?>" data-resign="<?= $ANGGOTA_RESIGN; ?>"><span class="ico-edit"></span> Ubah</a></li>
+                                        <?php
+                                        if ($_SESSION['VIEW_DaftarAnggota'] == "Y") {
+                                            ?>
+                                            <li><a data-toggle="modal" href="#ViewAnggota" class="open-ViewAnggota" style="color:#222222;" data-key="<?= $ANGGOTA_KEY; ?>" data-id="<?= $ANGGOTA_ID; ?>" data-shortid="<?= $SHORT_ID; ?>" data-daerahkey="<?= $DAERAH_KEY;?>" data-daerahdes="<?= $DAERAH_DESKRIPSI;?>" data-cabangkey="<?= $CABANG_KEY; ?>" data-cabangdes="<?= $CABANG_DESKRIPSI; ?>" data-tingkatanid=<?= $TINGKATAN_ID; ?> data-tingkatannama="<?= $TINGKATAN_NAMA; ?>" data-ktp="<?= $ANGGOTA_KTP; ?>" data-nama="<?= $ANGGOTA_NAMA; ?>" data-alamat="<?= $ANGGOTA_ALAMAT;?>" data-pekerjaan="<?= $ANGGOTA_PEKERJAAN; ?>" data-agama="<?= $ANGGOTA_AGAMA; ?>" data-kelamin="<?= $ANGGOTA_KELAMIN; ?>" data-tempatlahir="<?= $ANGGOTA_TEMPAT_LAHIR; ?>" data-tanggallahir="<?= $ANGGOTA_TANGGAL_LAHIR; ?>" data-hp="<?= $ANGGOTA_HP; ?>" data-email="<?= $ANGGOTA_EMAIL; ?>" data-pic="<?= $ANGGOTA_PIC; ?>" data-join="<?= $ANGGOTA_JOIN; ?>" data-resign="<?= $ANGGOTA_RESIGN; ?>" data-akses="<?= $ANGGOTA_AKSES; ?>" data-status="<?= $ANGGOTA_STATUS; ?>" data-statusdes="<?= $STATUS_DES; ?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
+                                            <?php
+                                        }
+                                        if ($_SESSION['EDIT_DaftarAnggota'] == "Y") {
+                                            ?>
+                                            <li><a data-toggle="modal" href="#EditAnggota" class="open-EditAnggota" style="color:cornflowerblue;" data-key="<?= $ANGGOTA_KEY; ?>" data-id="<?= $ANGGOTA_ID; ?>" data-shortid="<?= $SHORT_ID; ?>" data-daerahkey="<?= $DAERAH_KEY;?>" data-daerahdes="<?= $DAERAH_DESKRIPSI;?>" data-cabangkey="<?= $CABANG_KEY; ?>" data-cabangdes="<?= $CABANG_DESKRIPSI; ?>" data-tingkatanid=<?= $TINGKATAN_ID; ?> data-tingkatannama="<?= $TINGKATAN_NAMA; ?>" data-ktp="<?= $ANGGOTA_KTP; ?>" data-nama="<?= $ANGGOTA_NAMA; ?>" data-alamat="<?= $ANGGOTA_ALAMAT;?>" data-pekerjaan="<?= $ANGGOTA_PEKERJAAN; ?>" data-agama="<?= $ANGGOTA_AGAMA; ?>" data-kelamin="<?= $ANGGOTA_KELAMIN; ?>" data-tempatlahir="<?= $ANGGOTA_TEMPAT_LAHIR; ?>" data-tanggallahir="<?= $ANGGOTA_TANGGAL_LAHIR; ?>" data-hp="<?= $ANGGOTA_HP; ?>" data-email="<?= $ANGGOTA_EMAIL; ?>" data-pic="<?= $ANGGOTA_PIC; ?>" data-join="<?= $ANGGOTA_JOIN; ?>" data-resign="<?= $ANGGOTA_RESIGN; ?>" data-akses="<?= $ANGGOTA_AKSES; ?>" data-status="<?= $ANGGOTA_STATUS; ?>" data-statusdes="<?= $STATUS_DES; ?>"><span class="ico-edit"></span> Ubah</a></li>
+                                            <?php
+                                        }
+                                        if ($_SESSION['DELETE_DaftarAnggota'] == "Y") {
+                                            ?>
                                             <li class="divider"></li>
-                                            <li><a href="#" onclick="deletedaftaranggota('<?= $ANGGOTA_KEY;?>','deleteevent')" style="color:firebrick;"><span class="ico-trash"></span> Hapus</a></li>
+                                            <li><a href="#" onclick="deletedaftaranggota('<?= $ANGGOTA_KEY;?>','deleteevent')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
+                                            <?php
+                                        }
+                                        ?>
                                         </ul>
                                     </div>
                                 </form>
@@ -166,6 +222,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                             <td><?= $ANGGOTA_HP; ?></td>
                             <td><?= $ANGGOTA_EMAIL; ?></td>
                             <td><?= $TGL_JOIN; ?></td>
+                            <td><?= $STATUS_DES; ?></td>
                             <td><?= $TGL_RESIGN; ?></td>
                         </tr>
                         <?php
@@ -257,8 +314,9 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                             <div class="short-div">
                                 <div class="form-group">
                                     <label for="">No Urut Anggota<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" minlength="3" maxlength="3" pattern="\d{1,3}" required id="ANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Inputkan 3 digit nomor urut keanggotaan" data-parsley-required>
-                                </div> 
+                                    <input type="number" class="form-control" minlength="3" maxlength="3" oninput="validateInput(this)" required id="ANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Inputkan 3 digit nomor urut keanggotaan" data-parsley-required>
+                                    <div id="warning-message" style="color: red;"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -270,18 +328,40 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                 <input type="text" class="form-control" id="datepicker44" name="ANGGOTA_JOIN" placeholder="Pilih tanggal" readonly required data-parsley-required/>
                             </div> 
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="">KTP</label><span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="ANGGOTA_KTP" name="ANGGOTA_KTP" value="" placeholder="Inputkan no KTP" data-parsley-required required>
-                            </div> 
-                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Nama</label><span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="ANGGOTA_NAMA" name="ANGGOTA_NAMA" value="" data-parsley-required required>
+                            </div> 
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="">Tempat &amp; Tanggal Lahir</label><span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="ANGGOTA_TEMPAT_LAHIR" name="ANGGOTA_TEMPAT_LAHIR" value="" data-parsley-required required>
+                            </div> 
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="" style="color: transparent;">.</label>
+                                <input type="text" class="form-control" id="datepicker4" name="ANGGOTA_TANGGAL_LAHIR" placeholder="Pilih tanggal" readonly data-parsley-required required/>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Agama</label><span class="text-danger">*</span></label>
+                                <select id="ANGGOTA_AGAMA" name="ANGGOTA_AGAMA" class="form-control" placeholder="Pilih Agama..." data-parsley-required required>
+                                    <option value="">Pilih Agama...</option>
+                                    <option value="Islam">Islam</option>
+                                    <option value="Kristen">Kristen</option>
+                                    <option value="Katolik">Katolik</option>
+                                    <option value="Hindu">Hindu</option>
+                                    <option value="Buddha">Buddha</option>
+                                    <option value="Khonghucu">Khonghucu</option>
+                                </select>
                             </div> 
                         </div>
                         <div class="col-md-6">
@@ -298,43 +378,47 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label for="">KTP</label><span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="ANGGOTA_KTP" name="ANGGOTA_KTP" value="" placeholder="Inputkan no KTP" data-parsley-required required>
+                            </div> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Alamat</label>
+                                <textarea type="text" rows="4" class="form-control" id="ANGGOTA_ALAMAT" name="ANGGOTA_ALAMAT" value=""></textarea>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
                                 <label for="">Pekerjaan</label>
                                 <input type="text" class="form-control" id="ANGGOTA_PEKERJAAN" name="ANGGOTA_PEKERJAAN" value="">
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Alamat</label><span class="text-danger">*</span></label>
-                                <textarea type="text" rows="4" class="form-control" id="ANGGOTA_ALAMAT" name="ANGGOTA_ALAMAT" value="" data-parsley-required required></textarea>
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
                                 <label for="">No HP</label><span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="ANGGOTA_HP" name="ANGGOTA_HP" value="" data-parsley-required required>
                             </div> 
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="">Tempat Lahir</label><span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="ANGGOTA_TEMPAT_LAHIR" name="ANGGOTA_TEMPAT_LAHIR" value="" data-parsley-required required>
-                            </div> 
-                        </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="">Tanggal Lahir</label><span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="datepicker4" name="ANGGOTA_TANGGAL_LAHIR" placeholder="Pilih tanggal" readonly data-parsley-required required/>
-                            </div> 
-                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Email</label><span class="text-danger">*</span></label>
                                 <input type="email" class="form-control" id="ANGGOTA_EMAIL" name="ANGGOTA_EMAIL" data-parsley-required required/>
                             </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Akses Anggota</label><span class="text-danger">*</span></label>
+                                <select id="ANGGOTA_AKSES" name="ANGGOTA_AKSES" class="form-control" data-parsley-required required>
+                                    <option value="User">User</option>
+                                    <option value="Koordinator">Koordinator</option>
+                                    <option value="Pengurus">Pengurus</option>
+                                </select>
+                            </div> 
                         </div>
                     </div>
                 </div>
@@ -412,8 +496,8 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">KTP</label>
-                                                <input type="text" class="form-control" id="viewANGGOTA_KTP" name="ANGGOTA_KTP" value="" data-parsley-required readonly>
+                                                <label for="">Status Anggota</label>
+                                                <input type="text" class="form-control" id="viewANGGOTA_STATUS" name="ANGGOTA_STATUS" value="" data-parsley-required readonly>
                                             </div> 
                                         </div>
                                     </div>
@@ -422,6 +506,26 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                             <div class="form-group">
                                                 <label for="">Nama</label>
                                                 <input type="text" class="form-control" id="viewANGGOTA_NAMA" name="ANGGOTA_NAMA" value="" data-parsley-required readonly>
+                                            </div> 
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="">Tempat &amp; Tanggal Lahir</label>
+                                                <input type="text" class="form-control" id="viewANGGOTA_TEMPAT_LAHIR" name="ANGGOTA_TEMPAT_LAHIR" value="" data-parsley-required readonly>
+                                            </div> 
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="" style="color: transparent;">.</label>
+                                                <input type="text" class="form-control" id="viewANGGOTA_TANGGAL_LAHIR" name="ANGGOTA_TANGGAL_LAHIR" readonly data-parsley-required/>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="">Agama</label>
+                                                <input type="text" class="form-control" id="viewANGGOTA_AGAMA" name="ANGGOTA_AGAMA" value="" data-parsley-required readonly>
                                             </div> 
                                         </div>
                                         <div class="col-md-6">
@@ -434,8 +538,8 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">Pekerjaan</label>
-                                                <input type="text" class="form-control" id="viewANGGOTA_PEKERJAAN" name="ANGGOTA_PEKERJAAN" value="" readonly>
+                                                <label for="">KTP</label>
+                                                <input type="text" class="form-control" id="viewANGGOTA_KTP" name="ANGGOTA_KTP" value="" data-parsley-required readonly>
                                             </div> 
                                         </div>
                                         <div class="col-md-6">
@@ -448,29 +552,29 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">No HP</label>
-                                                <input type="text" class="form-control" id="viewANGGOTA_HP" name="ANGGOTA_HP" value="" data-parsley-required readonly>
+                                                <label for="">Pekerjaan</label>
+                                                <input type="text" class="form-control" id="viewANGGOTA_PEKERJAAN" name="ANGGOTA_PEKERJAAN" value="" readonly>
                                             </div> 
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">Tempat Lahir</label>
-                                                <input type="text" class="form-control" id="viewANGGOTA_TEMPAT_LAHIR" name="ANGGOTA_TEMPAT_LAHIR" value="" data-parsley-required readonly>
+                                                <label for="">No HP</label>
+                                                <input type="text" class="form-control" id="viewANGGOTA_HP" name="ANGGOTA_HP" value="" data-parsley-required readonly>
                                             </div> 
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">Tanggal Lahir</label>
-                                                <input type="text" class="form-control" id="viewANGGOTA_TANGGAL_LAHIR" name="ANGGOTA_TANGGAL_LAHIR" readonly data-parsley-required/>
-                                            </div> 
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
                                                 <label for="">Email</label>
                                                 <input type="email" class="form-control" id="viewANGGOTA_EMAIL" name="ANGGOTA_EMAIL" data-parsley-required readonly/>
                                             </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="">Akses Anggota</label><span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" id="viewANGGOTA_AKSES" name="ANGGOTA_AKSES" value="" data-parsley-required readonly>
+                                            </div> 
                                         </div>
                                     </div>
                                 </div>
@@ -692,8 +796,9 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                             <div class="short-div">
                                 <div class="form-group">
                                     <label for="">No Urut Anggota<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" minlength="3" maxlength="3" pattern="\d{1,3}" required id="editANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Inputkan 3 digit nomor urut keanggotaan" data-parsley-required>
-                                </div> 
+                                    <input type="number" class="form-control" minlength="3" maxlength="3" oninput="validateInput(this)" required id="editANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Inputkan 3 digit nomor urut keanggotaan" data-parsley-required>
+                                    <div id="warning-message-edit" style="color: red;"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -701,28 +806,60 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Tanggal Bergabung</label>
-                                <input type="text" class="form-control" id="datepicker45" name="ANGGOTA_JOIN" placeholder="Pilih tanggal" readonly data-parsley-required/>
+                                <label for="">Tanggal Bergabung</label><span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="datepicker45" name="ANGGOTA_JOIN" placeholder="Pilih tanggal" readonly data-parsley-required required/>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">KTP</label>
-                                <input type="text" class="form-control" id="editANGGOTA_KTP" name="ANGGOTA_KTP" value="" placeholder="Inputkan no KTP" data-parsley-required>
+                                <label for="">Status Anggota</label><span class="text-danger">*</span></label>
+                                <select id="editANGGOTA_STATUS" name="ANGGOTA_STATUS" class="form-control" data-parsley-required required>
+                                    <option value="0">Aktif</option>
+                                    <option value="1">Non Aktif</option>
+                                    <option value="2">Mutasi</option>
+                                </select>
                             </div> 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Nama</label>
-                                <input type="text" class="form-control" id="editANGGOTA_NAMA" name="ANGGOTA_NAMA" value="" data-parsley-required>
+                                <label for="">Nama</label><span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editANGGOTA_NAMA" name="ANGGOTA_NAMA" value="" data-parsley-required required>
+                            </div> 
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="">Tempat &amp; Tanggal Lahir</label><span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editANGGOTA_TEMPAT_LAHIR" name="ANGGOTA_TEMPAT_LAHIR" value="" data-parsley-required required>
+                            </div> 
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="" style="color: transparent;">.</label>
+                                <input type="text" class="form-control" id="datepicker46" name="ANGGOTA_TANGGAL_LAHIR" placeholder="Pilih tanggal" readonly data-parsley-required required/>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Agama</label><span class="text-danger">*</span></label>
+                                <select id="editANGGOTA_AGAMA" name="ANGGOTA_AGAMA" class="form-control" placeholder="Pilih Agama..." data-parsley-required required>
+                                    <option value="">Pilih Agama...</option>
+                                    <option value="Islam">Islam</option>
+                                    <option value="Kristen">Kristen</option>
+                                    <option value="Katolik">Katolik</option>
+                                    <option value="Hindu">Hindu</option>
+                                    <option value="Buddha">Buddha</option>
+                                    <option value="Khonghucu">Khonghucu</option>
+                                </select>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Jenis Kelamin</label>
-                                <select id="editANGGOTA_KELAMIN" name="ANGGOTA_KELAMIN" class="form-control" placeholder="Pilih Jenis Kelamin..." data-parsley-required>
+                                <label for="">Jenis Kelamin</label><span class="text-danger">*</span></label>
+                                <select id="editANGGOTA_KELAMIN" name="ANGGOTA_KELAMIN" class="form-control" placeholder="Pilih Jenis Kelamin..." data-parsley-required required>
                                     <option value="">Pilih Jenis Kelamin...</option>
                                     <option value="L">Pria</option>
                                     <option value="P">Wanita</option>
@@ -733,8 +870,8 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Pekerjaan</label>
-                                <input type="text" class="form-control" id="editANGGOTA_PEKERJAAN" name="ANGGOTA_PEKERJAAN" value="">
+                                <label for="">KTP</label><span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editANGGOTA_KTP" name="ANGGOTA_KTP" value="" placeholder="Inputkan no KTP" data-parsley-required required>
                             </div> 
                         </div>
                         <div class="col-md-6">
@@ -747,29 +884,33 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">No HP</label><span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="editANGGOTA_HP" name="ANGGOTA_HP" value="" data-parsley-required required>
+                                <label for="">Pekerjaan</label>
+                                <input type="text" class="form-control" id="editANGGOTA_PEKERJAAN" name="ANGGOTA_PEKERJAAN" value="">
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Tempat Lahir</label>
-                                <input type="text" class="form-control" id="editANGGOTA_TEMPAT_LAHIR" name="ANGGOTA_TEMPAT_LAHIR" value="" data-parsley-required>
+                                <label for="">No HP</label><span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editANGGOTA_HP" name="ANGGOTA_HP" value="" data-parsley-required required>
                             </div> 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Tanggal Lahir</label>
-                                <input type="text" class="form-control" id="datepicker46" name="ANGGOTA_TANGGAL_LAHIR" placeholder="Pilih tanggal" readonly data-parsley-required/>
-                            </div> 
+                                <label for="">Email</label><span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="editANGGOTA_EMAIL" name="ANGGOTA_EMAIL" data-parsley-required required/>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Email</label>
-                                <input type="email" class="form-control" id="editANGGOTA_EMAIL" name="ANGGOTA_EMAIL" data-parsley-required/>
-                            </div>
+                                <label for="">Akses Anggota</label><span class="text-danger">*</span></label>
+                                <select id="editANGGOTA_AKSES" name="ANGGOTA_AKSES" class="form-control" data-parsley-required required>
+                                    <option value="User">User</option>
+                                    <option value="Koordinator">Koordinator</option>
+                                    <option value="Pengurus">Pengurus</option>
+                                </select>
+                            </div> 
                         </div>
                     </div>
                 </div>

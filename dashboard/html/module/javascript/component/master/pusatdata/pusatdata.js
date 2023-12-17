@@ -181,7 +181,7 @@ $(document).on("click", ".open-EditPusatdata", function () {
   
   // Set the values in the modal input fields
   $(".modal-body #editPUSATDATA_ID").val(id);
-  $(".modal-body #selectize-dropdown2")[0].selectize.setValue(cabangid);
+  $(".modal-body #selectize-dropdown2").val(cabangid); // Set value directly for a regular select element
   $(".modal-body #editPUSATDATA_KATEGORI").val(kategori);
   $(".modal-body #editPUSATDATA_JUDUL").val(judul);
   $(".modal-body #editPUSATDATA_DESKRIPSI").val(deskripsi);
@@ -196,8 +196,89 @@ $(document).on("click", ".open-EditPusatdata", function () {
     }
   });
 
+  // Update the Selectize control
+  var selectize = $(".modal-body #selectize-dropdown2")[0].selectize;
+  selectize.setValue(cabangid);
+
   // console.log(pusatid);
 });
+
+// Filtering
+// Attach debounced event handler to form inputs
+$('.filterPusatData select, .filterPusatData input').on('change input', debounce(filterPusatDataEvent, 500));
+function filterPusatDataEvent() {
+  // Your event handling code here
+  const cabang = $('#selectize-select').val();
+  const kategori = $('#selectize-select2').val();
+  const judul = $('#filterPUSATDATA_JUDUL').val();
+  const deskripsi = $('#filterPUSATDATA_DESKRIPSI').val();
+  const status = $('#filterDELETION_STATUS').val();
+
+  // Create a data object to hold the form data
+  const formData = {
+    CABANG_KEY: cabang,
+    PUSATDATA_KATEGORI: kategori,
+    PUSATDATA_JUDUL: judul,
+    PUSATDATA_DESKRIPSI: deskripsi,
+    DELETION_STATUS: status
+  };
+
+  $.ajax({
+    type: "POST",
+    url: 'module/ajax/master/pusatdata/aj_tablepusatdata.php',
+    data: formData,
+    success: function(response){
+      // Destroy the DataTable before updating
+      $('#pusatdata-table').DataTable().destroy();
+      $("#datapusatdata").html(response);
+      // Reinitialize Sertifikat Table
+      callTable();
+    }
+  });
+  // console.log(formData);
+}
+
+// ----- Function to reset form ----- //
+function clearForm() {
+  // Clear the first Selectize dropdown
+  var selectizeInstance = $('#selectize-select')[0];
+  var selectizeInstance2 = $('#selectize-select2')[0].selectize;
+
+  if (selectizeInstance) {
+    var selectizeInstance = selectizeInstance.selectize;
+    if (selectizeInstance) {
+      selectizeInstance.clear();
+    }
+  }
+  // Clear the second Selectize dropdown (corrected ID)
+  if (selectizeInstance2) {
+    var selectizeInstance2 = selectizeInstance2.selectize;
+    if (selectizeInstance2) {
+      selectizeInstance2.clear();
+    }
+  }
+  var selectizeInstance2 = $('#selectize-select2')[0].selectize;
+  if (selectizeInstance2) {
+    selectizeInstance2.clear();
+  }
+
+  document.getElementById("filterPusatData").reset();
+  // Call the reloadDataTable() function after inserting data to reload the DataTable
+  $.ajax({
+    type: 'POST',
+    url: 'module/ajax/master/pusatdata/aj_tablepusatdata.php',
+    success: function(response) {
+      // Destroy the DataTable before updating
+      $('#pusatdata-table').DataTable().destroy();
+      $("#datapusatdata").html(response);
+      // Reinitialize Sertifikat Table
+      callTable();
+    },
+    error: function(xhr, status, error) {
+      // Handle any errors
+    }
+  });
+}
 
 
 // ----- End of Pusat Section ----- //
