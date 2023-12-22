@@ -5,7 +5,7 @@
 <title>Cipta Sejati Indonesia</title>	
 
 <meta name="keywords" content="WebSite Template" />
-<meta name="description" content="Porto - Multipurpose Website Template">
+<meta name="description" content="Institut Seni Bela Diri Silat Cipta Sejati Indonesia">
 <meta name="author" content="okler.net">
 
 <!-- Favicon -->
