@@ -2,7 +2,8 @@
 require_once ("../../../../../module/connection/conn.php");
 
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
-$CABANG_AWAL = $_SESSION["LOGINCAB_CS"];
+$USER_CABANG = $_SESSION["LOGINCAB_CS"];
+$USER_AKSES = $_SESSION["LOGINAKS_CS"];
 
 $YEAR=date("Y");
 $MONTH=date("m");
@@ -12,15 +13,31 @@ if (isset($_POST["savemutasianggota"])) {
 
     try {
         $MUTASI_ID = createKode("t_mutasi","MUTASI_ID","MTS-$YEAR$MONTH-",3);
-        $CABANG_TUJUAN = $_POST["CABANG_KEY"];
+        $CABANG_TUJUAN = $_POST["CABANG_TUJUAN"];
         $ANGGOTA_KEY = $_POST["ANGGOTA_KEY"];
         $MUTASI_DESKRIPSI = $_POST["MUTASI_DESKRIPSI"];
         $MUTASI_TANGGAL = $_POST["MUTASI_TANGGAL"];
+        $CABANG_DESKRIPSI = $_POST["CABANG_DESKRIPSI"];
         $MUTASI_FILE = "";
+        if ($USER_AKSES == "Administrator") {
+            $CABANG_AWAL = $_POST["CABANG_AWAL"];
+        } else {
+            $CABANG_AWAL = $USER_CABANG;
+        }
+        
+        $getNamaAnggota = GetQuery("select ANGGOTA_NAMA from m_anggota where ANGGOTA_KEY = '$ANGGOTA_KEY'");
+        while ($rowNamaAnggota = $getNamaAnggota->fetch(PDO::FETCH_ASSOC)) {
+            extract($rowNamaAnggota);
+        }
 
-        GetQuery("insert into t_mutasi select '$MUTASI_ID', '$CABANG_AWAL', '$CABANG_TUJUAN', '$ANGGOTA_KEY', '$MUTASI_DESKRIPSI', '$MUTASI_TANGGAL', 0, now(), '$MUTASI_FILE',0, '$USER_ID', now()");
+        GetQuery("insert into t_mutasi select '$MUTASI_ID', '$CABANG_AWAL', '$CABANG_TUJUAN', '$ANGGOTA_KEY', '$MUTASI_DESKRIPSI', '$MUTASI_TANGGAL', 0, now(), null, null, '$MUTASI_FILE',0, '$USER_ID', now()");
 
-        GetQuery("insert into t_mutasi_log select uuid(), MUTASI_ID, CABANG_AWAL, CABANG_TUJUAN, ANGGOTA_KEY, MUTASI_DESKRIPSI, MUTASI_TANGGAL, MUTASI_STATUS, MUTASI_FILE, DELETION_STATUS, 'I', '$USER_ID', now() from t_mutasi where MUTASI_ID = '$MUTASI_ID'");
+        GetQuery("insert into t_mutasi_log select uuid(), MUTASI_ID, CABANG_AWAL, CABANG_TUJUAN, ANGGOTA_KEY, MUTASI_DESKRIPSI, MUTASI_TANGGAL, MUTASI_STATUS, MUTASI_STATUS_TANGGAL, MUTASI_APPROVE_BY, MUTASI_APPROVE_TANGGAL, MUTASI_FILE, DELETION_STATUS, 'I', '$USER_ID', now() from t_mutasi where MUTASI_ID = '$MUTASI_ID'");
+
+        GetQuery("insert into t_notifikasi
+        select uuid(),ANGGOTA_KEY,'$MUTASI_ID','$CABANG_AWAL','$CABANG_TUJUAN','Mutasi','Mutasi Anggota Approval','Mutasi a.n $ANGGOTA_NAMA dari cabang $CABANG_DESKRIPSI', 0, 0, '$USER_ID', NOW()
+        FROM m_anggota
+        WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN ('$CABANG_AWAL','') AND ANGGOTA_AKSES = 'Koordinator') AND ANGGOTA_STATUS = 0");
 
         $response="Success";
         echo $response;
@@ -33,77 +50,100 @@ if (isset($_POST["savemutasianggota"])) {
 }
 
 
-if (isset($_POST["editdaftaranggota"])) {
+if (isset($_POST["editmutasianggota"])) {
 
     try {
+        $MUTASI_ID = $_POST["MUTASI_ID"];
+        $CABANG_TUJUAN = $_POST["CABANG_TUJUAN"];
         $ANGGOTA_KEY = $_POST["ANGGOTA_KEY"];
-        $ANGGOTA_ID = $_POST["ANGGOTA_ID"];
-        $CABANG_KEY = $_POST["CABANG_KEY"];
-        $TINGKATAN_ID = $_POST["TINGKATAN_ID"];
-        $ANGGOTA_KTP = $_POST["ANGGOTA_KTP"];
-        $ANGGOTA_NAMA = $_POST["ANGGOTA_NAMA"];
-        $ANGGOTA_ALAMAT = $_POST["ANGGOTA_ALAMAT"];
-        $ANGGOTA_PEKERJAAN = $_POST["ANGGOTA_PEKERJAAN"];
-        $ANGGOTA_KELAMIN = $_POST["ANGGOTA_KELAMIN"];
-        $ANGGOTA_TEMPAT_LAHIR = $_POST["ANGGOTA_TEMPAT_LAHIR"];
-        $ANGGOTA_TANGGAL_LAHIR = $_POST["ANGGOTA_TANGGAL_LAHIR"];
-        $ANGGOTA_HP = $_POST["ANGGOTA_HP"];
-        $ANGGOTA_EMAIL = $_POST["ANGGOTA_EMAIL"];
-        $ANGGOTA_JOIN = $_POST["ANGGOTA_JOIN"];
-        $ANGGOTA_RESIGN = $_POST["ANGGOTA_RESIGN"];
-
-        $getCabangID = GetQuery("select CABANG_ID from m_cabang where CABANG_KEY = '$CABANG_KEY'");
-        while ($rowCabangID = $getCabangID->fetch(PDO::FETCH_ASSOC)) {
-            extract($rowCabangID);
-        }
-
-        // Create a DateTime object from the date string
-        $date = new DateTime($ANGGOTA_JOIN);
-        // Get the year from the DateTime object
-        $year = $date->format("Y");
-
-        // Split the string into an array using dot as the delimiter
-        $parts = explode('.', $CABANG_ID);
-        // Remove the middle part (index 1)
-        unset($parts[0]);
-        // Join the remaining parts back into a string using dot as the separator
-        $result = implode('.', $parts);
-
-        $getNamaCabang = GetQuery("select CABANG_DESKRIPSI from m_cabang where CABANG_KEY = '$CABANG_KEY'");
-        while ($rowNamaCabang = $getNamaCabang->fetch(PDO::FETCH_ASSOC)) {
-            extract($rowNamaCabang);
-        }
-        $lastAnggotaId = substr($ANGGOTA_ID, -4);
-
-        // Create directory if not exists
-        if (!file_exists("../../../../../assets/images/daftaranggota/".$CABANG_DESKRIPSI."/".$ANGGOTA_NAMA."_".$lastAnggotaId)) {
-            mkdir("../../../../../assets/images/daftaranggota/".$CABANG_DESKRIPSI."/".$ANGGOTA_NAMA."_".$lastAnggotaId, 0777, true);
-        }
-
-        // Directory to store files
-        $directory = "../../../../../assets/images/daftaranggota/".$CABANG_DESKRIPSI."/".$ANGGOTA_NAMA."_".$lastAnggotaId."/";
-
-        // Handle ANGGOTA_PIC files
-        if (!empty($_FILES['ANGGOTA_PIC']['tmp_name'][0])) {
-            foreach ($_FILES['ANGGOTA_PIC']['tmp_name'] as $key => $idCardFileTmp) {
-                $idCardFileName = $_FILES['ANGGOTA_PIC']['name'][$key];
-                $idCardFileDestination = $directory . "/" . $idCardFileName;
-                move_uploaded_file($idCardFileTmp, $idCardFileDestination);
-
-                // Re-initialize the variable for database
-                $idCardFileDestination = "./assets/images/daftaranggota/".$CABANG_DESKRIPSI."/".$ANGGOTA_NAMA."_".$lastAnggotaId."/" . $idCardFileName;
-
-                GetQuery("update m_anggota set ANGGOTA_PIC = '$idCardFileDestination' where ANGGOTA_KEY = '$ANGGOTA_KEY'");
-            }
-        }
-
-        if ($ANGGOTA_RESIGN == "") {
-            GetQuery("update m_anggota set CABANG_KEY = '$CABANG_KEY', TINGKATAN_ID = '$TINGKATAN_ID', ANGGOTA_KTP = '$ANGGOTA_KTP', ANGGOTA_NAMA = '$ANGGOTA_NAMA', ANGGOTA_ALAMAT = '$ANGGOTA_ALAMAT', ANGGOTA_PEKERJAAN = '$ANGGOTA_PEKERJAAN', ANGGOTA_KELAMIN = '$ANGGOTA_KELAMIN', ANGGOTA_TEMPAT_LAHIR = '$ANGGOTA_TEMPAT_LAHIR', ANGGOTA_TANGGAL_LAHIR = '$ANGGOTA_TANGGAL_LAHIR', ANGGOTA_HP = '$ANGGOTA_HP', ANGGOTA_EMAIL = '$ANGGOTA_EMAIL', ANGGOTA_JOIN = '$ANGGOTA_JOIN', ANGGOTA_RESIGN = null, INPUT_BY = '$USER_ID', INPUT_DATE = now() where ANGGOTA_KEY = '$ANGGOTA_KEY'");
+        $MUTASI_DESKRIPSI = $_POST["MUTASI_DESKRIPSI"];
+        $MUTASI_TANGGAL = $_POST["MUTASI_TANGGAL"];
+        $CABANG_DESKRIPSI = $_POST["CABANG_DESKRIPSI"];
+        $MUTASI_FILE = "";
+        if ($USER_AKSES == "Administrator") {
+            $CABANG_AWAL = $_POST["CABANG_AWAL"];
         } else {
-            GetQuery("update m_anggota set CABANG_KEY = '$CABANG_KEY', TINGKATAN_ID = '$TINGKATAN_ID', ANGGOTA_KTP = '$ANGGOTA_KTP', ANGGOTA_NAMA = '$ANGGOTA_NAMA', ANGGOTA_ALAMAT = '$ANGGOTA_ALAMAT', ANGGOTA_PEKERJAAN = '$ANGGOTA_PEKERJAAN', ANGGOTA_KELAMIN = '$ANGGOTA_KELAMIN', ANGGOTA_TEMPAT_LAHIR = '$ANGGOTA_TEMPAT_LAHIR', ANGGOTA_TANGGAL_LAHIR = '$ANGGOTA_TANGGAL_LAHIR', ANGGOTA_HP = '$ANGGOTA_HP', ANGGOTA_EMAIL = '$ANGGOTA_EMAIL', ANGGOTA_JOIN = '$ANGGOTA_JOIN', ANGGOTA_RESIGN = '$ANGGOTA_RESIGN', INPUT_BY = '$USER_ID', INPUT_DATE = now() where ANGGOTA_KEY = '$ANGGOTA_KEY'");
+            $CABANG_AWAL = $USER_CABANG;
+        }
+        
+        $getNamaAnggota = GetQuery("select ANGGOTA_NAMA from m_anggota where ANGGOTA_KEY = '$ANGGOTA_KEY'");
+        while ($rowNamaAnggota = $getNamaAnggota->fetch(PDO::FETCH_ASSOC)) {
+            extract($rowNamaAnggota);
         }
 
-        GetQuery("insert into m_anggota_log select uuid(), ANGGOTA_KEY, ANGGOTA_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_KTP, ANGGOTA_NAMA, ANGGOTA_ALAMAT, ANGGOTA_PEKERJAAN, ANGGOTA_KELAMIN, ANGGOTA_TEMPAT_LAHIR, ANGGOTA_TANGGAL_LAHIR, ANGGOTA_HP, ANGGOTA_EMAIL, ANGGOTA_PIC, ANGGOTA_JOIN, ANGGOTA_RESIGN, DELETION_STATUS,'U', '$USER_ID', now() from m_anggota where ANGGOTA_KEY = '$ANGGOTA_KEY'");
+        GetQuery("update t_mutasi set CABANG_AWAL = '$CABANG_AWAL', CABANG_TUJUAN = '$CABANG_TUJUAN', ANGGOTA_KEY = '$ANGGOTA_KEY', MUTASI_DESKRIPSI = '$MUTASI_DESKRIPSI', MUTASI_TANGGAL = '$MUTASI_TANGGAL', MUTASI_STATUS = 0, MUTASI_STATUS_TANGGAL = now(), MUTASI_APPROVE_BY = null, MUTASI_APPROVE_TANGGAL = null, MUTASI_FILE = '$MUTASI_FILE', DELETION_STATUS = 0, INPUT_BY = '$USER_ID', INPUT_DATE = now() where MUTASI_ID = '$MUTASI_ID'");
+
+        GetQuery("insert into t_mutasi_log select uuid(), MUTASI_ID, CABANG_AWAL, CABANG_TUJUAN, ANGGOTA_KEY, MUTASI_DESKRIPSI, MUTASI_TANGGAL, MUTASI_STATUS, MUTASI_STATUS_TANGGAL, MUTASI_APPROVE_BY, MUTASI_APPROVE_TANGGAL, MUTASI_FILE, DELETION_STATUS, 'U', '$USER_ID', now() from t_mutasi where MUTASI_ID = '$MUTASI_ID'");
+
+        GetQuery("update t_notifikasi set CABANG_AWAL = '$CABANG_AWAL', CABANG_TUJUAN = '$CABANG_TUJUAN', BODY = 'Mutasi a.n $ANGGOTA_NAMA dari cabang $CABANG_DESKRIPSI', INPUT_BY = '$USER_ID', INPUT_DATE = now() where DOKUMEN_ID = '$MUTASI_ID'");
+
+        $response="Success";
+        echo $response;
+
+    } catch (Exception $e) {
+        // Generic exception handling
+        $response =  "Caught Exception: " . $e->getMessage();
+        echo $response;
+    }
+}
+
+if (isset($_POST["approvemutasianggota"])) {
+
+    try {
+        $MUTASI_ID = $_POST["MUTASI_ID"];
+
+        GetQuery("update t_mutasi set MUTASI_STATUS = 1, MUTASI_APPROVE_BY = '$USER_ID', MUTASI_APPROVE_TANGGAL = now() where MUTASI_ID = '$MUTASI_ID'");
+
+        GetQuery("insert into t_mutasi_log select uuid(), MUTASI_ID, CABANG_AWAL, CABANG_TUJUAN, ANGGOTA_KEY, MUTASI_DESKRIPSI, MUTASI_TANGGAL, MUTASI_STATUS, MUTASI_STATUS_TANGGAL, MUTASI_APPROVE_BY, MUTASI_APPROVE_TANGGAL, MUTASI_FILE, DELETION_STATUS, 'U', '$USER_ID', now() from t_mutasi where MUTASI_ID = '$MUTASI_ID'");
+
+        GetQuery("update t_notifikasi set READ_STATUS = 1 where DOKUMEN_ID = '$MUTASI_ID'");
+
+        $getDataMutasi =  GetQuery("SELECT m.CABANG_AWAL,m.CABANG_TUJUAN,a.ANGGOTA_NAMA,c.CABANG_DESKRIPSI FROM t_mutasi m
+        LEFT JOIN m_anggota a ON m.ANGGOTA_KEY = a.ANGGOTA_KEY
+        LEFT JOIN m_cabang c ON m.CABANG_AWAL = c.CABANG_KEY
+        WHERE m.mutasi_id = '$MUTASI_ID'");
+        while ($rowMutasi = $getDataMutasi->fetch(PDO::FETCH_ASSOC)) {
+            extract($rowMutasi);
+        }
+
+        GetQuery("insert into t_notifikasi
+        select uuid(),ANGGOTA_KEY,'$MUTASI_ID','$CABANG_AWAL','$CABANG_TUJUAN','Mutasi','Mutasi Anggota Approval','Mutasi a.n $ANGGOTA_NAMA dari cabang $CABANG_DESKRIPSI', 1, 0, '$USER_ID', NOW()
+        FROM m_anggota
+        WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN ('$CABANG_AWAL','$CABANG_TUJUAN') AND ANGGOTA_AKSES = 'Koordinator') AND ANGGOTA_STATUS = 0");
+
+        $response="Success";
+        echo $response;
+
+    } catch (Exception $e) {
+        // Generic exception handling
+        $response =  "Caught Exception: " . $e->getMessage();
+        echo $response;
+    }
+}
+
+if (isset($_POST["rejectmutasianggota"])) {
+
+    try {
+        $MUTASI_ID = $_POST["MUTASI_ID"];
+
+        GetQuery("update t_mutasi set MUTASI_STATUS = 2, MUTASI_APPROVE_BY = '$USER_ID', MUTASI_APPROVE_TANGGAL = now() where MUTASI_ID = '$MUTASI_ID'");
+
+        GetQuery("insert into t_mutasi_log select uuid(), MUTASI_ID, CABANG_AWAL, CABANG_TUJUAN, ANGGOTA_KEY, MUTASI_DESKRIPSI, MUTASI_TANGGAL, MUTASI_STATUS, MUTASI_STATUS_TANGGAL, MUTASI_APPROVE_BY, MUTASI_APPROVE_TANGGAL, MUTASI_FILE, DELETION_STATUS, 'U', '$USER_ID', now() from t_mutasi where MUTASI_ID = '$MUTASI_ID'");
+
+        GetQuery("update t_notifikasi set READ_STATUS = 1 where DOKUMEN_ID = '$MUTASI_ID'");
+
+        $getDataMutasi =  GetQuery("SELECT m.CABANG_AWAL,m.CABANG_TUJUAN,a.ANGGOTA_NAMA,c.CABANG_DESKRIPSI FROM t_mutasi m
+        LEFT JOIN m_anggota a ON m.ANGGOTA_KEY = a.ANGGOTA_KEY
+        LEFT JOIN m_cabang c ON m.CABANG_AWAL = c.CABANG_KEY
+        WHERE m.mutasi_id = '$MUTASI_ID'");
+        while ($rowMutasi = $getDataMutasi->fetch(PDO::FETCH_ASSOC)) {
+            extract($rowMutasi);
+        }
+
+        GetQuery("insert into t_notifikasi
+        select uuid(),ANGGOTA_KEY,'$MUTASI_ID','$CABANG_AWAL','$CABANG_TUJUAN','Mutasi','Mutasi Anggota Approval','Mutasi a.n $ANGGOTA_NAMA dari cabang $CABANG_DESKRIPSI', 2, 0, '$USER_ID', NOW()
+        FROM m_anggota
+        WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN ('$CABANG_AWAL','$CABANG_TUJUAN') AND ANGGOTA_AKSES = 'Koordinator') AND ANGGOTA_STATUS = 0");
 
         $response="Success";
         echo $response;
@@ -118,11 +158,21 @@ if (isset($_POST["editdaftaranggota"])) {
 if (isset($_POST["EVENT_ACTION"])) {
 
     try {
-        $ANGGOTA_KEY = $_POST["ANGGOTA_KEY"];
+        $EVENT_ACTION = $_POST["EVENT_ACTION"];
+        $MUTASI_ID = $_POST["MUTASI_ID"];
 
-        GetQuery("insert into m_anggota_log select uuid(), ANGGOTA_KEY, ANGGOTA_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_KTP, ANGGOTA_NAMA, ANGGOTA_ALAMAT, ANGGOTA_PEKERJAAN, ANGGOTA_KELAMIN, ANGGOTA_TEMPAT_LAHIR, ANGGOTA_TANGGAL_LAHIR, ANGGOTA_HP, ANGGOTA_EMAIL, ANGGOTA_PIC, ANGGOTA_JOIN, ANGGOTA_RESIGN, DELETION_STATUS,'D', '$USER_ID', now() from m_anggota where ANGGOTA_KEY = '$ANGGOTA_KEY'");
+        if ($EVENT_ACTION == "reset") {
+            GetQuery("update t_mutasi set MUTASI_STATUS = 0, MUTASI_APPROVE_BY = null, MUTASI_APPROVE_TANGGAL = null where MUTASI_ID = '$MUTASI_ID'");
+
+            GetQuery("insert into t_mutasi_log select uuid(), MUTASI_ID, CABANG_AWAL, CABANG_TUJUAN, ANGGOTA_KEY, MUTASI_DESKRIPSI, MUTASI_TANGGAL, MUTASI_STATUS, MUTASI_STATUS_TANGGAL, MUTASI_APPROVE_BY, MUTASI_APPROVE_TANGGAL, MUTASI_FILE, DELETION_STATUS, 'U', '$USER_ID', now() from t_mutasi where MUTASI_ID = '$MUTASI_ID'");
+
+            GetQuery("update t_notifikasi set APPROVE_STATUS = 0, READ_STATUS = 0 where DOKUMEN_ID = '$MUTASI_ID'");
+        } else {
+            GetQuery("insert into t_mutasi_log select uuid(), MUTASI_ID, CABANG_AWAL, CABANG_TUJUAN, ANGGOTA_KEY, MUTASI_DESKRIPSI, MUTASI_TANGGAL, MUTASI_STATUS, MUTASI_STATUS_TANGGAL, MUTASI_APPROVE_BY, MUTASI_APPROVE_TANGGAL, MUTASI_FILE, DELETION_STATUS, 'D', '$USER_ID', now() from t_mutasi where MUTASI_ID = '$MUTASI_ID'");
     
-        GetQuery("delete from m_anggota where ANGGOTA_KEY = '$ANGGOTA_KEY'");
+            GetQuery("delete from t_mutasi where MUTASI_ID = '$MUTASI_ID'");
+            GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$MUTASI_ID'");
+        }
         
         $response="Success";
         echo $response;

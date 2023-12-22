@@ -54,7 +54,7 @@ $USER_AKSES = $_SESSION["LOGINAKS_CS"];
                             else {
                                 ?>
                                 <li  class="<?= $rowChild2["MENU_LEVEL"]; ?>" >
-                                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#<?= $rowChild2["MENU_TARGET"]; ?>" data-parent="<?= $MENU_TARGET; ?>">
+                                    <a href="javascript:void(0);" data-toggle="submenu" data-target="#<?= $rowChild2["MENU_TARGET"]; ?>" data-parent="#<?= $MENU_TARGET; ?>">
                                         <span class="text"><?= $rowChild2["MENU_NAMA"]; ?></span>
                                         <span class="arrow"></span>
                                     </a>
@@ -81,12 +81,12 @@ $USER_AKSES = $_SESSION["LOGINAKS_CS"];
                                                         <span class="text"><?= $rowChild3["MENU_NAMA"]; ?></span>
                                                         <span class="arrow"></span>
                                                     </a>
-                                                    <ul id="beranda" class="submenu collapse ">
+                                                    <ul id="<?= $rowChild3["MENU_TARGET"]; ?>" class="submenu collapse ">
                                                         <?php
                                                         $getChild4 = GetQuery("SELECT m.* FROM m_menu m
                                                         LEFT JOIN m_menuakses a ON m.MENU_ID = a.MENU_ID
                                                         WHERE m.MENU_INDUK = '{$rowChild3["MENU_ID"]}' AND MENU_LEVEL='level4' and a.USER_AKSES = 'administrator' AND a.view = 'Y'
-                                                        ORDER BY m.MENU_ID ASC;");
+                                                        ORDER BY m.MENU_ID ASC");
 
                                                         while ($rowChild4 = $getChild4->fetch(PDO::FETCH_ASSOC)) {
                                                             ?>

@@ -2,13 +2,21 @@
 require_once ("../../../../../module/connection/conn.php");
 
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
+$USER_CABANG = $_SESSION["LOGINCAB_CS"];
+$USER_AKSES = $_SESSION["LOGINAKS_CS"];
 
 
 if (isset($_POST["savedaftaranggota"])) {
 
     try {
         $ANGGOTA_ID = $_POST["ANGGOTA_ID"];
-        $CABANG_KEY = $_POST["CABANG_KEY"];
+
+        if ($USER_AKSES == "Administrator") {
+            $CABANG_KEY = $_POST["CABANG_KEY"];
+        } else {
+            $CABANG_KEY = $USER_CABANG;
+        }
+        
         $TINGKATAN_ID = $_POST["TINGKATAN_ID"];
         $ANGGOTA_KTP = $_POST["ANGGOTA_KTP"];
         $ANGGOTA_NAMA = $_POST["ANGGOTA_NAMA"];
@@ -89,7 +97,13 @@ if (isset($_POST["editdaftaranggota"])) {
     try {
         $ANGGOTA_KEY = $_POST["ANGGOTA_KEY"];
         $ANGGOTA_ID = $_POST["ANGGOTA_ID"];
-        $CABANG_KEY = $_POST["CABANG_KEY"];
+        
+        if ($USER_AKSES == "Administrator") {
+            $CABANG_KEY = $_POST["CABANG_KEY"];
+        } else {
+            $CABANG_KEY = $USER_CABANG;
+        }
+        
         $TINGKATAN_ID = $_POST["TINGKATAN_ID"];
         $ANGGOTA_KTP = $_POST["ANGGOTA_KTP"];
         $ANGGOTA_NAMA = $_POST["ANGGOTA_NAMA"];

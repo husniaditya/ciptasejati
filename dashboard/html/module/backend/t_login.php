@@ -23,6 +23,7 @@ if(isset($_POST["login"]))
     }
 
     if ($USER_STATUS == 0 && password_verify($PASSWORD, $USER_PASSWORD)) {
+        $_SESSION["LOGINKEY_CS"] = $ANGGOTA_KEY;
         $_SESSION["LOGINIDUS_CS"] = $ANGGOTA_ID;
         $_SESSION["LOGINNAME_CS"] = $ANGGOTA_NAMA;
         $_SESSION["LOGINCAB_CS"] = $CABANG_KEY;

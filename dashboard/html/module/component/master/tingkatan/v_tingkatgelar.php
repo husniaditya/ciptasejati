@@ -99,7 +99,7 @@ if ($_SESSION["ADD_TingkatandanGelar"] == "Y") {
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Tambah Data Tingkatan & Gelar</h3>
+                    <h3 class="semibold modal-title text-inverse">Tambah Data Tingkatan & Gelar</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -146,7 +146,7 @@ if ($_SESSION["ADD_TingkatandanGelar"] == "Y") {
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Lihat Data TIngkatan & Gelar</h3>
+                    <h3 class="semibold modal-title text-inverse">Lihat Data TIngkatan & Gelar</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -198,7 +198,7 @@ if ($_SESSION["ADD_TingkatandanGelar"] == "Y") {
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Edit Data Tingkat & Gelar</h3>
+                    <h3 class="semibold modal-title text-inverse">Edit Data Tingkat & Gelar</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row hidden">

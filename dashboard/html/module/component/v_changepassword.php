@@ -5,7 +5,7 @@
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Ubah Password</h3>
+                    <h3 class="semibold modal-title text-inverse">Ubah Password</h3>
                 </div>
                 <div class="modal-body">
                     <!-- Form horizontal layout striped -->         

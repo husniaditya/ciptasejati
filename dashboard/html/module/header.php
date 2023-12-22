@@ -1,3 +1,28 @@
+<?php
+$USER_ID = $_SESSION["LOGINIDUS_CS"];
+$USER_KEY = $_SESSION["LOGINKEY_CS"];
+
+$getNotif = GetQuery("SELECT n.*,a.ANGGOTA_NAMA,c.CABANG_DESKRIPSI,
+CASE
+  WHEN DATEDIFF(NOW(), n.INPUT_DATE) < 1 THEN
+      CONCAT(
+          HOUR(TIMEDIFF(NOW(), n.INPUT_DATE)), ' Jam ',
+          MINUTE(TIMEDIFF(NOW(), n.INPUT_DATE)), ' Menit yang lalu'
+      )
+  ELSE
+      CONCAT(
+			DATEDIFF(NOW(), n.INPUT_DATE), ' Hari ',
+			HOUR(TIMEDIFF(time(NOW()), time(n.INPUT_DATE))), ' Jam ',
+         MINUTE(TIMEDIFF(time(NOW()), time(n.INPUT_DATE))), ' Menit yang lalu'
+		)
+END AS difference
+FROM t_notifikasi n
+LEFT JOIN m_anggota a ON n.INPUT_BY = a.ANGGOTA_ID
+LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
+WHERE NOTIFIKASI_USER = '$USER_KEY' ORDER BY READ_STATUS ASC,INPUT_DATE DESC LIMIT 15");
+
+$getCountNotif = GetQuery("SELECT COUNT(*) AS TOTAL FROM t_notifikasi WHERE NOTIFIKASI_USER = '$USER_KEY' AND READ_STATUS = 0");
+?>
 <!-- START navbar header -->
 <div class="navbar-header">
     <!-- Brand -->
@@ -53,7 +78,14 @@
             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
                 <span class="meta">
                     <span class="icon"><i class="fa-regular fa-bell fa-lg"></i></span>
-                    <span class="label label-success">2</span>
+                    <?php
+                    while ($rowNotif = $getCountNotif->fetch(PDO::FETCH_ASSOC)) {
+                        extract($rowNotif);
+                        ?>
+                        <span class="label label-danger"><?= $TOTAL; ?></span>
+                        <?php
+                    }
+                    ?>
                 </span>
             </a>
 
@@ -66,61 +98,41 @@
                     
                     <!-- Message list -->
                     <div class="media-list">
-                        <a href="#" data-toggle="modal" data-toggle="modal" class="media border-dotted open-ChangePassword" style="background-color: lavender;">
-                            <span class="media-body">
-                                <span class="media-heading text-primary semibold">[MTS-202312-0001]</span>
-                                <span class="media-heading text-primary semibold">Mutasi Anggota Approval</span>
-                                <span class="media-text ellipsis nm semibold">Mutasi a.n Husni dari cabang Sidoarjo</span>
-                                <!-- meta icon -->
-                                <span class="media-meta pull-left">Husni Aditya / Kotawaringin Timur</span>
-                                <span class="media-meta pull-right">2d</span>
-                                <!--/ meta icon -->
-                            </span>
-                        </a>
-                        <a href="javascript:void(0);" class="media border-dotted" style="background-color: lavender;">
-                            <span class="media-body">
-                                <span class="media-heading text-primary semibold">[MTS-202312-0002]</span>
-                                <span class="media-heading text-primary semibold">Mutasi Anggota Approval</span>
-                                <span class="media-text ellipsis nm semibold">Mutasi a.n Husni dari cabang Sidoarjo</span>
-                                <!-- meta icon -->
-                                <span class="media-meta pull-left">Husni Aditya / Kotawaringin Timur</span>
-                                <span class="media-meta pull-right">2d</span>
-                                <!--/ meta icon -->
-                            </span>
-                        </a>
-                        <a href="javascript:void(0);" class="media read border-dotted">
-                            <span class="media-body">
-                                <span class="media-heading">[MTS-202312-0003]</span>
-                                <span class="media-heading">Mutasi Anggota Approval</span>
-                                <span class="media-text ellipsis nm">Mutasi a.n Husni dari cabang Sidoarjo</span>
-                                <!-- meta icon -->
-                                <span class="media-meta pull-left">Husni Aditya / Kotawaringin Timur</span>
-                                <span class="media-meta pull-right">2d</span>
-                                <!--/ meta icon -->
-                            </span>
-                        </a>
-                        <a href="javascript:void(0);" class="media read border-dotted">
-                            <span class="media-body">
-                                <span class="media-heading">[MTS-202312-0004]</span>
-                                <span class="media-heading">Mutasi Anggota Approval</span>
-                                <span class="media-text ellipsis nm">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</span>
-                                <!-- meta icon -->
-                                <span class="media-meta pull-left">Husni Aditya / Kotawaringin Timur</span>
-                                <span class="media-meta pull-right">2d</span>
-                                <!--/ meta icon -->
-                            </span>
-                        </a>
-                        <a href="javascript:void(0);" class="media read border-dotted">
-                            <span class="media-body">
-                                <span class="media-heading">[MTS-202312-0005]</span>
-                                <span class="media-heading">Mutasi Anggota Approval</span>
-                                <span class="media-text ellipsis nm">Mutasi a.n Husni dari cabang Sidoarjo tes</span>
-                                <!-- meta icon -->
-                                <span class="media-meta pull-left">Husni Aditya / Kotawaringin Timur</span>
-                                <span class="media-meta pull-right">2d</span>
-                                <!--/ meta icon -->
-                            </span>
-                        </a>
+                        <?php
+                        while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
+                            extract($rowNotif);
+                            if ($READ_STATUS == 0) {
+                                ?>
+                                <a href="#" data-toggle="modal" data-toggle="modal" class="media border-dotted open-ChangePassword" style="background-color: lavender;">
+                                    <span class="media-body">
+                                        <span class="media-heading text-primary semibold"><?= $DOKUMEN_ID; ?></span>
+                                        <span class="media-heading text-primary semibold"><?= $SUBJECT; ?></span>
+                                        <span class="media-text ellipsis nm semibold"><?= $BODY; ?></span>
+                                        <!-- meta icon -->
+                                        <span class="media-meta pull-left"><?= $ANGGOTA_NAMA." / ".$CABANG_DESKRIPSI; ?></span>
+                                        <span class="media-meta pull-right"><?= $difference; ?></span>
+                                        <!--/ meta icon -->
+                                    </span>
+                                </a>
+                                <?php
+                            } else {
+                                ?>
+                                <a href="javascript:void(0);" class="media read border-dotted">
+                                    <span class="media-body">
+                                        <span class="media-heading"><?= $DOKUMEN_ID; ?></span>
+                                        <span class="media-heading"><?= $SUBJECT; ?></span>
+                                        <span class="media-text ellipsis nm"><?= $BODY; ?></span>
+                                        <!-- meta icon -->
+                                        <span class="media-meta pull-left"><?= $ANGGOTA_NAMA." / ".$CABANG_DESKRIPSI; ?></span>
+                                        <span class="media-meta pull-right"><?= $difference; ?></span>
+                                        <!--/ meta icon -->
+                                    </span>
+                                </a>
+                                <?php
+                            }
+                            
+                        }
+                        ?>
                     </div>
                     <!--/ Message list -->
                 </div>
@@ -139,7 +151,7 @@
             </a>
             <ul class="dropdown-menu" role="menu">
                 <li><a href="page-profile.php"><span class="icon"><i class="fa-solid fa-user-check"></i></span> Akun Saya</a></li>
-                <li><a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-ChangePassword" href="#ChangePassword"><span class="icon"><i class="ico-cog4"></i></span> Ubah Password</a></li>
+                <li><a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-ChangePassword" href="#ChangePassword"><span class="icon"><i class="fa-solid fa-key"></i></span> Ubah Password</a></li>
                 <li><a href="assets/dataterpusat/panduan/Panduan Aplikasi Cipta Sejati.pdf" target="_blank"><span class="icon"><i class="ico-book2"></i></span> Buku Panduan</a></li>
                 <li class="divider"></li>
                 <li><a href="logout.php"><span class="icon"><i class="ico-exit"></i></span> Sign Out</a></li>

@@ -36,6 +36,7 @@ try {
 
     $YEAR = date("Y");
     $MONTH = date("m");
+    $DATE = date("d");
 
     function GetQuery($query)
     {

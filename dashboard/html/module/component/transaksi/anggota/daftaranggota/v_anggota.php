@@ -242,7 +242,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Tambah Data Anggota</h3>
+                    <h3 class="semibold modal-title text-inverse">Tambah Data Anggota</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -265,34 +265,40 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label for="">Daerah<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper" style="position: relative;">
-                                        <select name="DAERAH_KEY" id="selectize-dropdown" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Daerah --</option>
-                                            <?php
-                                            foreach ($rowd as $rowDaerah) {
-                                                extract($rowDaerah);
-                                                ?>
-                                                <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                            <?php
+                            if ($USER_AKSES == "Administrator") {
+                                ?>
+                                <div class="short-div">
+                                    <div class="form-group">
+                                        <label for="">Daerah<span class="text-danger">*</span></label>
+                                        <div id="selectize-wrapper" style="position: relative;">
+                                            <select name="DAERAH_KEY" id="selectize-dropdown" required="" class="form-control" data-parsley-required>
+                                                <option value="">-- Pilih Daerah --</option>
                                                 <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label for="">Cabang<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper3" style="position: relative;">
-                                        <select name="CABANG_KEY" id="selectize-dropdown3" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Cabang --</option>]
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
+                                                foreach ($rowd as $rowDaerah) {
+                                                    extract($rowDaerah);
+                                                    ?>
+                                                    <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="short-div">
+                                    <div class="form-group">
+                                        <label for="">Cabang<span class="text-danger">*</span></label>
+                                        <div id="selectize-wrapper3" style="position: relative;">
+                                            <select name="CABANG_KEY" id="selectize-dropdown3" required="" class="form-control" data-parsley-required>
+                                                <option value="">-- Pilih Cabang --</option>]
+                                            </select>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <?php
+                            }
+                            ?>
                             <div class="short-div">
                                 <div class="form-group">
                                     <label for="">Tingkatan<span class="text-danger">*</span></label>
@@ -437,7 +443,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Lihat Data Anggota</h3>
+                    <h3 class="semibold modal-title text-inverse">Lihat Data Anggota</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -717,7 +723,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Edit Data Anggota</h3>
+                    <h3 class="semibold modal-title text-inverse">Edit Data Anggota</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row hidden">
@@ -747,34 +753,40 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label for="">Daerah<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper4" style="position: relative;">
-                                        <select name="DAERAH_KEY" id="selectize-dropdown4" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Daerah --</option>
-                                            <?php
-                                            foreach ($rowd as $rowDaerah) {
-                                                extract($rowDaerah);
-                                                ?>
-                                                <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                            <?php
+                            if ($USER_AKSES == "Administrator") {
+                                ?>
+                                <div class="short-div">
+                                    <div class="form-group">
+                                        <label for="">Daerah<span class="text-danger">*</span></label>
+                                        <div id="selectize-wrapper4" style="position: relative;">
+                                            <select name="DAERAH_KEY" id="selectize-dropdown4" required="" class="form-control" data-parsley-required>
+                                                <option value="">-- Pilih Daerah --</option>
                                                 <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label for="">Cabang<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper5" style="position: relative;">
-                                        <select name="CABANG_KEY" id="selectize-dropdown5" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Cabang --</option>]
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
+                                                foreach ($rowd as $rowDaerah) {
+                                                    extract($rowDaerah);
+                                                    ?>
+                                                    <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="short-div">
+                                    <div class="form-group">
+                                        <label for="">Cabang<span class="text-danger">*</span></label>
+                                        <div id="selectize-wrapper5" style="position: relative;">
+                                            <select name="CABANG_KEY" id="selectize-dropdown5" required="" class="form-control" data-parsley-required>
+                                                <option value="">-- Pilih Cabang --</option>]
+                                            </select>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <?php
+                            }
+                            ?>
                             <div class="short-div">
                                 <div class="form-group">
                                     <label for="">Tingkatan<span class="text-danger">*</span></label>

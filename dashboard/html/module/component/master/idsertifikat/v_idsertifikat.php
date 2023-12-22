@@ -116,7 +116,7 @@ if ($_SESSION["ADD_IDdanSertifikat"] == "Y") {
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Tambah ID dan Sertifikat</h3>
+                    <h3 class="semibold modal-title text-inverse">Tambah ID dan Sertifikat</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -181,7 +181,7 @@ if ($_SESSION["ADD_IDdanSertifikat"] == "Y") {
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Lihat ID dan Sertifikat</h3>
+                    <h3 class="semibold modal-title text-inverse">Lihat ID dan Sertifikat</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -235,7 +235,7 @@ if ($_SESSION["ADD_IDdanSertifikat"] == "Y") {
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Edit ID dan Sertifikat</h3>
+                    <h3 class="semibold modal-title text-inverse">Edit ID dan Sertifikat</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row hidden">

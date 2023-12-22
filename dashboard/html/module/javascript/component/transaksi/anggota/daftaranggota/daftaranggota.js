@@ -511,11 +511,6 @@ $(document).on("click", ".open-EditAnggota", function () {
   // Set the values in the modal input fields
   $(".modal-body #editANGGOTA_KEY").val(key);
   $(".modal-body #editANGGOTA_ID").val(anggotaid);
-  $(".modal-body #selectize-dropdown4")[0].selectize.setValue(daerahkey);
-  // Wait for the options in the second dropdown to be populated before setting its value
-  setTimeout(function () {
-      $(".modal-body #selectize-dropdown5")[0].selectize.setValue(cabangkey);
-  }, 200); // You may need to adjust the delay based on your application's behavior
   $(".modal-body #selectize-dropdown6")[0].selectize.setValue(tingkatanid);
   $(".modal-body #editANGGOTA_KTP").val(ktp);
   $(".modal-body #editANGGOTA_NAMA").val(nama);
@@ -540,6 +535,13 @@ $(document).on("click", ".open-EditAnggota", function () {
       $("#loadpicedit").html(data);
     }
   });
+
+  
+  $(".modal-body #selectize-dropdown4")[0].selectize.setValue(daerahkey);
+  // Wait for the options in the second dropdown to be populated before setting its value
+  setTimeout(function () {
+      $(".modal-body #selectize-dropdown5")[0].selectize.setValue(cabangkey);
+  }, 200); // You may need to adjust the delay based on your application's behavior
 });
 
 // Anggota Filtering

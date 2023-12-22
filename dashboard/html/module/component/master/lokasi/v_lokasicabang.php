@@ -107,7 +107,7 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Tambah Data Cabang</h3>
+                    <h3 class="semibold modal-title text-inverse">Tambah Data Cabang</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -202,7 +202,7 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Lihat Data Cabang</h3>
+                    <h3 class="semibold modal-title text-inverse">Lihat Data Cabang</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -285,7 +285,7 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Ubah Data Cabang</h3>
+                    <h3 class="semibold modal-title text-inverse">Ubah Data Cabang</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row hidden">

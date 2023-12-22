@@ -4,7 +4,7 @@
 function SuccessNotification(text) {
   $.gritter.add({
     title: 'Saved',
-    text: text,
+    text: 'Data berhasil disimpan',
     time: 5000,
     image: '../image/notification/success.png',
     class_name: 'gritter-success',
@@ -22,7 +22,7 @@ function SuccessNotification(text) {
 function UpdateNotification(text) {
   $.gritter.add({
     title: 'Updated',
-    text: text,
+    text: 'Data berhasil diubah',
     time: 5000,
     image: '../image/notification/success.png',
     class_name: 'gritter-update',
@@ -40,7 +40,7 @@ function UpdateNotification(text) {
 function DeleteNotification(text) {
   $.gritter.add({
     title: 'Deleted',
-    text: text,
+    text: 'Data berhasil dihapus',
     time: 5000,
     image: '../image/notification/delete.png',
     class_name: 'gritter-delete',

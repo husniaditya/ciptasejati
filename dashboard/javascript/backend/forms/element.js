@@ -134,6 +134,28 @@
                 dropdownParent: '#selectize-wrapper6'
             });
         });
+        $(document).ready(function () {
+            // Initialize Selectize for the dropdown inside the modal
+            $('#selectize-dropdown7').selectize({
+                create: true,
+                sortField: {
+                    field: 'text',
+                    direction: 'asc'
+                },
+                dropdownParent: '#selectize-wrapper7'
+            });
+        });
+        $(document).ready(function () {
+            // Initialize Selectize for the dropdown inside the modal
+            $('#selectize-dropdown8').selectize({
+                create: true,
+                sortField: {
+                    field: 'text',
+                    direction: 'asc'
+                },
+                dropdownParent: '#selectize-wrapper8'
+            });
+        });
 
         // multiple select
         // ================================
@@ -267,6 +289,16 @@
             dateFormat: 'yy-mm-dd',
         });
         $('#datepicker47').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy-mm-dd',
+        });
+        $('#datepicker5').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy-mm-dd',
+        });
+        $('#datepicker6').datepicker({
             changeMonth: true,
             changeYear: true,
             dateFormat: 'yy-mm-dd',

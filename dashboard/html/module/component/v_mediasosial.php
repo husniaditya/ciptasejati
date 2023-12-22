@@ -83,7 +83,7 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Tambah Media Sosial</h3>
+                    <h3 class="semibold modal-title text-inverse">Tambah Media Sosial</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -124,7 +124,7 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-success">Edit Lokasi Daerah</h3>
+                    <h3 class="semibold modal-title text-inverse">Edit Lokasi Daerah</h3>
                 </div>
                 <div class="modal-body">
                 <div class="row">

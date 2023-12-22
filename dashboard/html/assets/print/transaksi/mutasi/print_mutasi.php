@@ -1,83 +1,231 @@
 <?php
 require_once ("../../../../module/connection/conn.php");
 
+$DATENOW = date("d-m-Y H:i:s");
+$USER_NAMA = $_SESSION["LOGINNAME_CS"];
+
 // Include the main TCPDF library (search for installation path).
 require_once('../../../tcpdf/tcpdf.php');
 
-// create new PDF document
-$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-// set document information
-$pdf->SetCreator(PDF_CREATOR);
-$pdf->SetAuthor('Nicola Asuni');
-$pdf->SetTitle('TCPDF Example 001');
-$pdf->SetSubject('TCPDF Tutorial');
-$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
-
-// set default header data
-$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001', PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
-$pdf->setFooterData(array(0,64,0), array(0,64,128));
-
-// set header and footer fonts
-$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
-// set default monospaced font
-$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-// set margins
-$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-// set auto page breaks
-$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-// set image scale factor
-$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-// set some language-dependent strings (optional)
-if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
-    require_once(dirname(__FILE__).'/lang/eng.php');
-    $pdf->setLanguageArray($l);
+if (isset($_GET['id'])) {
+    $MUTASI_ID = $_GET['id'];
 }
 
-// ---------------------------------------------------------
+$getData = GetQuery("SELECT t.MUTASI_ID,daeawal.DAERAH_KEY AS DAERAH_AWAL_KEY,daeawal.DAERAH_DESKRIPSI AS DAERAH_AWAL_DES,t.CABANG_AWAL,cabawal.CABANG_DESKRIPSI AS CABANG_AWAL_DES,cabawal.CABANG_SEKRETARIAT,daetujuan.DAERAH_KEY AS DAERAH_TUJUAN_KEY,daetujuan.DAERAH_DESKRIPSI AS DAERAH_TUJUAN_DES,t.CABANG_TUJUAN,cabtujuan.CABANG_DESKRIPSI AS CABANG_TUJUAN_DES,cabtujuan.CABANG_SEKRETARIAT AS CABANG_TUJUAN_SEKRETARIAT,a.ANGGOTA_KEY,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t2.TINGKATAN_NAMA,t2.TINGKATAN_SEBUTAN,t.MUTASI_DESKRIPSI,t.MUTASI_TANGGAL,t.MUTASI_STATUS,t.MUTASI_STATUS_TANGGAL,t.MUTASI_APPROVE_TANGGAL,a2.ANGGOTA_NAMA INPUT_BY,a2.ANGGOTA_ID INPUT_BY_ID,DATE_FORMAT(t.INPUT_DATE, '%d %M %Y') INPUT_DATE,DATE_FORMAT(t.MUTASI_TANGGAL, '%d %M %Y %H:%i') MUTASI_TGL, DATE_FORMAT(t.MUTASI_STATUS_TANGGAL, '%d %M %Y %H:%i') MUTASI_STATUS_TANGGAL, DATE_FORMAT(t.MUTASI_TANGGAL, '%d %M %Y') TANGGAL_EFEKTIF, DATE_FORMAT(t.MUTASI_APPROVE_TANGGAL, '%d %M %Y') MUTASI_APPROVE_TANGGAL,a3.ANGGOTA_NAMA APPROVE_BY,a2.ANGGOTA_AKSES INPUT_AKSES,a3.ANGGOTA_AKSES APPROVE_AKSES,a3.ANGGOTA_ID APPROVE_BY_ID,
+CASE 
+    WHEN t.MUTASI_STATUS = '0' THEN 'Menunggu' 
+    WHEN t.MUTASI_STATUS = '1' THEN 'Disetujui' 
+    ELSE 'Ditolak' 
+END AS MUTASI_STATUS_DES
+FROM t_mutasi t
+LEFT JOIN m_anggota a ON t.ANGGOTA_KEY = a.ANGGOTA_KEY
+LEFT JOIN m_anggota a2 ON t.INPUT_BY = a2.ANGGOTA_ID
+LEFT JOIN m_anggota a3 ON t.MUTASI_APPROVE_BY = a3.ANGGOTA_ID
+LEFT JOIN m_cabang cabawal ON t.CABANG_AWAL = cabawal.CABANG_KEY
+LEFT JOIN m_daerah daeawal ON cabawal.DAERAH_KEY = daeawal.DAERAH_KEY
+LEFT JOIN m_cabang cabtujuan ON t.CABANG_TUJUAN = cabtujuan.CABANG_KEY
+LEFT JOIN m_daerah daetujuan ON cabtujuan.DAERAH_KEY = daetujuan.DAERAH_KEY
+left join m_tingkatan t2 on a.TINGKATAN_ID = t2.TINGKATAN_ID
+ORDER BY t.MUTASI_STATUS ASC, t.MUTASI_TANGGAL DESC");
 
-// set default font subsetting mode
-$pdf->setFontSubsetting(true);
+while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
+    extract($data);
 
-// Set font
-// dejavusans is a UTF-8 Unicode font, if you only need to
-// print standard ASCII chars, you can use core fonts like
-// helvetica or times to reduce file size.
-$pdf->SetFont('dejavusans', '', 14, '', true);
+    // Extend the TCPDF class to create custom Header and Footer
+    class MYPDF extends TCPDF {
 
-// Add a page
-// This method has several options, check the source code documentation for more information.
-$pdf->AddPage();
+        //Page header
+        public function Header() {
+            global $MUTASI_ID, $CABANG_SEKRETARIAT;
+        
+            // Logo
+            $image_file = K_PATH_IMAGES.'/../../../../../../img/logo/logo_rev.png';
+            $this->Image($image_file, 15, 9, 20, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        
+            // Set font
+            $this->SetFont('helvetica', 'B', 14);
+        
+            // Get the width of the page
+            $pageWidth = $this->getPageWidth();
+        
+            // Title
+            $title = "Institut Seni Bela Diri Silat Cipta Sejati Indonesia";
+            $titleWidth = $this->GetStringWidth($title);
+        
+            $this->SetX(($pageWidth - $titleWidth) / 2); // Centering the title
+            $this->Write(5, $title, '', 0, 'L', true, 0, false, false, 0);
+            $this->Ln(1);
+        
+            $this->SetFont('helvetica', '', 10);
+        
+            // Centering the branch information
+            $branchWidth = $this->GetStringWidth($CABANG_SEKRETARIAT);
+            $this->SetX(($pageWidth - $branchWidth) / 5);
+            $this->Write(5, $CABANG_SEKRETARIAT, '', 0, 'C', true, 0, false, false, 0);
+            $this->Ln(5);
+            // Draw a horizontal line under the header
+            $this->Line(10, $this->GetY() + 2, $pageWidth - 10, $this->GetY() + 2);
 
-// set text shadow effect
-$pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
+        }
 
-// Set some content to print
-$html = <<<EOD
-<h1>Welcome to <a href="http://www.tcpdf.org" style="text-decoration:none;background-color:#CC0000;color:black;">&nbsp;<span style="color:black;">TC</span><span style="color:white;">PDF</span>&nbsp;</a>!</h1>
-<i>This is the first example of TCPDF library.</i>
-<p>This text is printed using the <i>writeHTMLCell()</i> method but you can also use: <i>Multicell(), writeHTML(), Write(), Cell() and Text()</i>.</p>
-<p>Please check the source code documentation and other examples for further information.</p>
-<p style="color:#CC0000;">TO IMPROVE AND EXPAND TCPDF I NEED YOUR SUPPORT, PLEASE <a href="http://sourceforge.net/donate/index.php?group_id=128076">MAKE A DONATION!</a></p>
-EOD;
+        // Page footer
+        public function Footer() {
+            global $USER_NAMA;
+            global $DATENOW;
+            // Position at 15 mm from bottom
+            $this->SetY(-15);
+            $pageWidth = $this->getPageWidth();
+            // Draw a horizontal line under the header
+            $this->Line(10, $this->GetY() + 2, $pageWidth - 10, $this->GetY() + 2);
+            $this->Ln();
+            $this->SetFont('helvetica', '', 8); // Set font for body
+            $this->Cell(0, 10, 'Dicetak Oleh: '. $USER_NAMA.' / '.$DATENOW, 0, false, 'L', 0, '', 0, false, 'T', 'M');
+            
+            // Set font
+            $this->SetFont('helvetica', 'I', 8);// Get the width of the page
+            // Page number
+            $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'R', 0, '', 0, false, 'T', 'M');
+        }
+    }
 
-// Print text using writeHTMLCell()
-$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+    // create new PDF document
+    $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
-// ---------------------------------------------------------
+    // set document information
+    $pdf->SetCreator(PDF_CREATOR);
+    $pdf->SetAuthor('Cipta Sejati Indonesia');
+    $pdf->SetTitle($MUTASI_ID. ' Mutasi Anggota ' . $ANGGOTA_NAMA . '  ' . $TANGGAL_EFEKTIF);
 
-// Close and output PDF document
-// This method has several options, check the source code documentation for more information.
-$pdf->Output('example_001.pdf', 'I');
+    $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
-//============================================================+
-// END OF FILE
-//============================================================+
+
+    // set auto page breaks
+    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+    // ---------------------------------------------------------
+
+    // add a page
+    $pdf->AddPage();
+    // Get the width of the page
+    $pageWidth = $pdf->getPageWidth();
+
+    // set style for barcode
+    $style = array(
+        'border' => true,
+        'vpadding' => 'auto',
+        'hpadding' => 'auto',
+        'fgcolor' => array(0,0,0),
+        'bgcolor' => false, //array(255,255,255)
+        'module_width' => 1, // width of a single module in points
+        'module_height' => 1 // height of a single module in points
+    );
+
+    // set some text to print
+    $pdf->Ln(30);// Set font for title
+    $pdf->SetFont('helvetica', 'B', 13);
+    $pdf->Cell($pageWidth-15,5,"Formulir Mutasi Anggota",0,0,"C");
+    $pdf->Ln(15);
+    $pdf->SetFont('times', '', 12); // Set font for body
+    $pdf->Cell(35,5,"Nomor Dokumen",0,0,"L");
+    $pdf->Cell(5,5,":",0,0,"L");
+    $pdf->Cell(30,5,$MUTASI_ID,0,0,"L");
+    
+    
+    if ($MUTASI_STATUS == 0) {
+        $pdf->Image('../../../images/statusapproval/Pending.png', 140, 50, 50, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+    } elseif ($MUTASI_STATUS == 1) {
+        $pdf->Image('../../../images/statusapproval/Approved.png', 140, 50, 50, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+    } else {
+        $pdf->Image('../../../images/statusapproval/Rejected.png', 140, 50, 50, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+    }
+
+    $pdf->Ln(10);
+    $pdf->Cell(35,5,"Tanggal Pengajuan",0,0,"L");
+    $pdf->Cell(5,5,":",0,0,"L");
+    $pdf->Cell(30,5,$INPUT_DATE,0,0,"L");
+    $pdf->Ln();
+    $pdf->Cell(35,5,"Tanggal Approval",0,0,"L");
+    $pdf->Cell(5,5,":",0,0,"L");
+    $pdf->Cell(30,5,$MUTASI_APPROVE_TANGGAL,0,0,"L");
+    $pdf->Ln();
+    $pdf->Cell(35,5,"Tangal Efektif",0,0,"L");
+    $pdf->Cell(5,5,":",0,0,"L");
+    $pdf->Cell(30,5,$TANGGAL_EFEKTIF,0,0,"L");
+    $pdf->Ln();
+    $pdf->Cell(35,5,"Status Dokumen",0,0,"L");
+    $pdf->Cell(5,5,":",0,0,"L");
+    $pdf->Cell(30,5,$MUTASI_STATUS_DES,0,0,"L");
+    $pdf->Ln(15);
+    $pdf->SetFont('times','',12);
+    $pdf->Cell(20,5,"Yang bertanda tangan di bawah ini: ",0,0,"L");
+    $pdf->Ln(10);
+    $pdf->Cell(10,5,"",0,0,"L");
+    $pdf->Cell(30,5,"ID Anggota",0,0,"L");
+    $pdf->Cell(5,5,":",0,0,"L");
+    $pdf->Cell(30,5,$ANGGOTA_ID,0,0,"L");
+    $pdf->Ln();
+    $pdf->Cell(10,5,"",0,0,"L");
+    $pdf->Cell(30,5,"Nama",0,0,"L");
+    $pdf->Cell(5,5,":",0,0,"L");
+    $pdf->Cell(30,5,$ANGGOTA_NAMA,0,0,"L");
+    $pdf->Ln();
+    $pdf->Cell(10,5,"",0,0,"L");
+    $pdf->Cell(30,5,"Asal Cabang",0,0,"L");
+    $pdf->Cell(5,5,":",0,0,"L");
+    $pdf->Cell(30,5,$DAERAH_AWAL_DES." - ".$CABANG_AWAL_DES,0,0,"L");
+    $pdf->Ln();
+    $pdf->Cell(10,5,"",0,0,"L");
+    $pdf->Cell(30,5,"Tingkatan",0,0,"L");
+    $pdf->Cell(5,5,":",0,0,"L");
+    $pdf->Cell(30,5,$TINGKATAN_NAMA." - ".$TINGKATAN_SEBUTAN,0,0,"L");
+    $pdf->Ln(10);
+    $pdf->Cell(20,5,"Telah pindah tempat cabang ke: ",0,0,"L");
+    $pdf->Ln(10);
+    $pdf->Cell(10,5,"",0,0,"L");
+    $pdf->Cell(30,5,"Cabang Tujuan",0,0,"L");
+    $pdf->Cell(5,5,":",0,0,"L");
+    $pdf->Cell(30,5,$DAERAH_TUJUAN_DES." - ".$CABANG_TUJUAN_DES,0,0,"L");
+    $pdf->Ln();
+    $pdf->Cell(10,5,"",0,0,"L");
+    $pdf->Cell(30,5,"Alamat Cabang",0,0,"L");
+    $pdf->Cell(5,5,":",0,0,"L");
+    $pdf->MultiCell(120,5,$CABANG_TUJUAN_SEKRETARIAT, 0, 'L', false, 1, '', '', true);
+    $pdf->Ln(2);
+    $pdf->Cell(10,5,"",0,0,"L");
+    $pdf->Cell(30,5,"Deskripsi Mutasi",0,0,"L");
+    $pdf->Cell(5,5,":",0,0,"L");
+    $pdf->MultiCell(120,5,$MUTASI_DESKRIPSI, 0, 'L', false, 1, '', '', true);
+    $pdf->Ln(10);
+    $pdf->MultiCell(180,5,"Keputusan ini atas kesepakatan bersama antar dua belah pihak dan akan efektif per tanggal ".$TANGGAL_EFEKTIF.". Dimohon karyawan menyelesaikan urusan dengan baik di cabang lama dan menyiapkan segala sesuatunya dengan baik ke cabang yang baru.", 0, 'L', false, 1, '', '', true);
+    $pdf->Ln(5);
+    $pdf->MultiCell(180,5,"Demikian formulir mutasi anggota ini disampaikan dengan sebenarnya untuk digunakan sebagaimana mestinya.", 0, 'J', false, 1, '', '', true);
+    $pdf->Ln(10);
+    $pdf->Cell(10,5,$CABANG_AWAL_DES.', '.$INPUT_DATE,0,0,"L");
+    $pdf->Cell(170,5,$CABANG_TUJUAN_DES.', '.$MUTASI_APPROVE_TANGGAL,0,0,"R");
+    $pdf->Ln();
+    $pdf->Cell(10,5,"Diajukan Oleh,",0,0,"L");
+    $pdf->Cell(170,5,"Disetujui Oleh,",0,0,"R");
+    $pdf->Ln();
+    // QRCODE,H : QR-CODE Best error correction
+    $pdf->write2DBarcode($INPUT_BY_ID.' - '.$INPUT_BY, 'QRCODE,H', 10, 225, 30, 30, $style, 'N');
+    if ($APPROVE_BY) {
+        $pdf->write2DBarcode($APPROVE_BY_ID.' - '.$APPROVE_BY, 'QRCODE,H', 155, 225, 30, 30, $style, 'N');
+    }
+    $pdf->Ln(3);
+    $pdf->SetFont('times', 'U', 12); // Set font for body
+    $pdf->Cell(10,5,$INPUT_BY,0,0,"L");
+    $pdf->Cell(170,5,$APPROVE_BY,0,0,"R");
+    $pdf->Ln();
+    $pdf->SetFont('times', '', 12); // Set font for body
+    $pdf->Cell(10,5,$INPUT_AKSES .' - '.$CABANG_AWAL_DES,0,0,"L");
+    $pdf->Cell(170,5,$APPROVE_AKSES.' - '.$CABANG_TUJUAN_DES,0,0,"R");
+
+    // ---------------------------------------------------------
+
+    //Close and output PDF document
+    $pdf->Output($MUTASI_ID. ' Mutasi Anggota ' . $ANGGOTA_NAMA . '  ' . $TANGGAL_EFEKTIF.'.pdf', 'I');
+
+    //============================================================+
+    // END OF FILE
+    //============================================================+
+}
