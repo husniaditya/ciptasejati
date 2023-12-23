@@ -4,9 +4,9 @@
 
 <title>Cipta Sejati Indonesia</title>	
 
-<meta name="keywords" content="WebSite Template" />
+<meta name="keywords" content="Institut Seni Bela Diri Silat" />
 <meta name="description" content="Institut Seni Bela Diri Silat Cipta Sejati Indonesia">
-<meta name="author" content="okler.net">
+<meta name="author" content="ciptasejatiindonesia.com">
 
 <!-- Favicon -->
 <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">

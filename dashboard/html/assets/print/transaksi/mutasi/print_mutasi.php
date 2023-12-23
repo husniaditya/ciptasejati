@@ -36,11 +36,11 @@ while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
 
         //Page header
         public function Header() {
-            global $MUTASI_ID, $CABANG_SEKRETARIAT;
+            global $DAERAH_AWAL_DES,$CABANG_AWAL_DES, $CABANG_SEKRETARIAT;
         
             // Logo
             $image_file = K_PATH_IMAGES.'/../../../../../../img/logo/logo_rev.png';
-            $this->Image($image_file, 15, 9, 20, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+            $this->Image($image_file, 15, 9, 25, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         
             // Set font
             $this->SetFont('helvetica', 'B', 14);
@@ -49,20 +49,24 @@ while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
             $pageWidth = $this->getPageWidth();
         
             // Title
-            $title = "Institut Seni Bela Diri Silat Cipta Sejati Indonesia";
+            $title = "Institut Seni Bela Diri Silat";
             $titleWidth = $this->GetStringWidth($title);
         
             $this->SetX(($pageWidth - $titleWidth) / 2); // Centering the title
             $this->Write(5, $title, '', 0, 'L', true, 0, false, false, 0);
             $this->Ln(1);
+            $this->Write(5, 'CIPTA SEJATI', '', 0, 'C', true, 0, false, false, 0);
+            $this->Ln(1);
         
-            $this->SetFont('helvetica', '', 10);
+            $this->SetFont('helvetica', '', 8);
         
             // Centering the branch information
+            $this->Write(5,$CABANG_AWAL_DES.' - '.$DAERAH_AWAL_DES, '', 0, 'C', true, 0, false, false, 0);
+            $this->Ln(-1);
             $branchWidth = $this->GetStringWidth($CABANG_SEKRETARIAT);
-            $this->SetX(($pageWidth - $branchWidth) / 5);
+            $this->SetX(($pageWidth - $branchWidth) / 8);
             $this->Write(5, $CABANG_SEKRETARIAT, '', 0, 'C', true, 0, false, false, 0);
-            $this->Ln(5);
+            $this->Ln(-1);
             // Draw a horizontal line under the header
             $this->Line(10, $this->GetY() + 2, $pageWidth - 10, $this->GetY() + 2);
 
@@ -122,8 +126,8 @@ while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
 
     // set some text to print
     $pdf->Ln(30);// Set font for title
-    $pdf->SetFont('helvetica', 'B', 13);
-    $pdf->Cell($pageWidth-15,5,"Formulir Mutasi Anggota",0,0,"C");
+    $pdf->SetFont('helvetica', 'BU', 13);
+    $pdf->Cell($pageWidth-15,10,"Formulir Mutasi Anggota",0,0,"C");
     $pdf->Ln(15);
     $pdf->SetFont('times', '', 12); // Set font for body
     $pdf->Cell(35,5,"Nomor Dokumen",0,0,"L");
@@ -196,7 +200,7 @@ while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
     $pdf->Cell(5,5,":",0,0,"L");
     $pdf->MultiCell(120,5,$MUTASI_DESKRIPSI, 0, 'L', false, 1, '', '', true);
     $pdf->Ln(10);
-    $pdf->MultiCell(180,5,"Keputusan ini atas kesepakatan bersama antar dua belah pihak dan akan efektif per tanggal ".$TANGGAL_EFEKTIF.". Dimohon karyawan menyelesaikan urusan dengan baik di cabang lama dan menyiapkan segala sesuatunya dengan baik ke cabang yang baru.", 0, 'L', false, 1, '', '', true);
+    $pdf->MultiCell(180,5,"Keputusan ini atas kesepakatan bersama antar dua belah pihak dan akan efektif per tanggal ".$TANGGAL_EFEKTIF.". Dimohon anggota menyelesaikan urusan dengan baik di cabang lama dan menyiapkan segala sesuatunya dengan baik ke cabang yang baru.", 0, 'L', false, 1, '', '', true);
     $pdf->Ln(5);
     $pdf->MultiCell(180,5,"Demikian formulir mutasi anggota ini disampaikan dengan sebenarnya untuk digunakan sebagaimana mestinya.", 0, 'J', false, 1, '', '', true);
     $pdf->Ln(10);
@@ -207,9 +211,9 @@ while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
     $pdf->Cell(170,5,"Disetujui Oleh,",0,0,"R");
     $pdf->Ln();
     // QRCODE,H : QR-CODE Best error correction
-    $pdf->write2DBarcode($INPUT_BY_ID.' - '.$INPUT_BY, 'QRCODE,H', 10, 225, 30, 30, $style, 'N');
+    $pdf->write2DBarcode($INPUT_BY_ID.' - '.$INPUT_BY, 'QRCODE,H', 15, 225, 25, 25, $style, 'N');
     if ($APPROVE_BY) {
-        $pdf->write2DBarcode($APPROVE_BY_ID.' - '.$APPROVE_BY, 'QRCODE,H', 155, 225, 30, 30, $style, 'N');
+        $pdf->write2DBarcode($APPROVE_BY_ID.' - '.$APPROVE_BY, 'QRCODE,H', 160, 225, 25, 25, $style, 'N');
     }
     $pdf->Ln(3);
     $pdf->SetFont('times', 'U', 12); // Set font for body
@@ -221,8 +225,17 @@ while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
     $pdf->Cell(170,5,$APPROVE_AKSES.' - '.$CABANG_TUJUAN_DES,0,0,"R");
 
     // ---------------------------------------------------------
+    GetQuery("update t_mutasi set MUTASI_FILE = './assets/report/mutasi/$CABANG_AWAL_DES/$MUTASI_ID Mutasi Anggota $ANGGOTA_NAMA  $TANGGAL_EFEKTIF.pdf' where MUTASI_ID = '$MUTASI_ID'");
+
+    $pdfFilePath = '../../../report/mutasi/'.$CABANG_AWAL_DES;
+
+    // Create directory if not exists
+    if (!file_exists($pdfFilePath)) {
+        mkdir($pdfFilePath, 0777, true);
+    }
 
     //Close and output PDF document
+    $pdf->Output(__DIR__ .'/'.$pdfFilePath.'/'.$MUTASI_ID. ' Mutasi Anggota ' . $ANGGOTA_NAMA . '  ' . $TANGGAL_EFEKTIF.'.pdf', 'F');
     $pdf->Output($MUTASI_ID. ' Mutasi Anggota ' . $ANGGOTA_NAMA . '  ' . $TANGGAL_EFEKTIF.'.pdf', 'I');
 
     //============================================================+
