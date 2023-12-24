@@ -3,7 +3,7 @@
 <script type="text/javascript" src="../javascript/vendor.js"></script>
 <script type="text/javascript" src="../javascript/core.js"></script>
 <script type="text/javascript" src="module/javascript/sidebar.js"></script>
-<script type="text/javascript" src="../javascript/script.js"></script>
+<script type="text/javascript" src="module/javascript/script.js"></script>
 <script type="text/javascript" src="../javascript/library.js"></script>
 <script type="text/javascript" src="../javascript/backend/app.js"></script>
 <!--/ Application and vendor script : mandatory -->

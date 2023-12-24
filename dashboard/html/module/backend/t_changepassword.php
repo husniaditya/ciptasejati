@@ -7,6 +7,7 @@ $CONFIRMPASSWORD = "";
 $PASSWORD = "";
 
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
+$USER_KEY = $_SESSION["LOGINKEY_CS"];
 
 $USERNAME = "";
 $USER_PASSWORD = "";
@@ -25,7 +26,7 @@ if (isset($_POST["changepassword"])) {
         'cost' => 12,
     ];
 
-    $rows = $CheckPassword = GetQuery("select * from m_user where ANGGOTA_ID = '$USER_ID'");
+    $rows = $CheckPassword = GetQuery("select * from m_user where ANGGOTA_KEY = '$USER_KEY'");
     while ($rowCheckPassword = $CheckPassword->fetch(PDO::FETCH_ASSOC)) {
         extract($rowCheckPassword);
     }
@@ -36,7 +37,7 @@ if (isset($_POST["changepassword"])) {
     elseif (password_verify($OLDPASSWORD, $USER_PASSWORD)) {
         
         $PASSWORD = password_hash($CONFIRMPASSWORD, PASSWORD_BCRYPT, $options);
-        GetQuery("update m_user set USER_PASSWORD = '$PASSWORD' where ANGGOTA_ID = '$USER_ID'");
+        GetQuery("update m_user set USER_PASSWORD = '$PASSWORD' where ANGGOTA_KEY = '$USER_KEY'");
 
         $response="Success";
         echo $response;

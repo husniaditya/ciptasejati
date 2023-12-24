@@ -27,6 +27,7 @@ LEFT JOIN m_daerah daeawal ON cabawal.DAERAH_KEY = daeawal.DAERAH_KEY
 LEFT JOIN m_cabang cabtujuan ON t.CABANG_TUJUAN = cabtujuan.CABANG_KEY
 LEFT JOIN m_daerah daetujuan ON cabtujuan.DAERAH_KEY = daetujuan.DAERAH_KEY
 left join m_tingkatan t2 on a.TINGKATAN_ID = t2.TINGKATAN_ID
+WHERE t.DELETION_STATUS = 0
 ORDER BY t.MUTASI_STATUS ASC, t.MUTASI_TANGGAL DESC");
 
 $getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0");
