@@ -96,4 +96,7 @@
 </div>
 <!--/ END Toolbar -->
 
-<?php include 'module/component/v_changepassword.php'; ?>
+<?php 
+include 'module/component/header/v_changepassword.php'; 
+include 'module/component/header/v_notif.php';
+?>

@@ -35,7 +35,7 @@ if (isset($_POST["savemutasianggota"])) {
         GetQuery("insert into t_mutasi_log select uuid(), MUTASI_ID, CABANG_AWAL, CABANG_TUJUAN, ANGGOTA_KEY, MUTASI_DESKRIPSI, MUTASI_TANGGAL, MUTASI_STATUS, MUTASI_STATUS_TANGGAL, MUTASI_APPROVE_BY, MUTASI_APPROVE_TANGGAL, MUTASI_FILE, DELETION_STATUS, 'I', '$USER_ID', now() from t_mutasi where MUTASI_ID = '$MUTASI_ID'");
 
         GetQuery("insert into t_notifikasi
-        select uuid(),ANGGOTA_KEY,'$MUTASI_ID','$CABANG_AWAL','$CABANG_TUJUAN','Mutasi','Mutasi Anggota Approval','Mutasi a.n $ANGGOTA_NAMA dari cabang $CABANG_DESKRIPSI', 0, 0, '$USER_ID', NOW()
+        select uuid(),ANGGOTA_KEY,'$MUTASI_ID','$CABANG_AWAL','$CABANG_TUJUAN','Mutasi','ApproveNotifMutasi','open-ApproveNotifMutasi','Mutasi Anggota Approval','Mutasi a.n $ANGGOTA_NAMA dari cabang $CABANG_DESKRIPSI', 0, 0, '$USER_ID', NOW()
         FROM m_anggota
         WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN ('$CABANG_AWAL','') AND ANGGOTA_AKSES = 'Koordinator') AND ANGGOTA_STATUS = 0");
 
@@ -96,8 +96,6 @@ if (isset($_POST["approvemutasianggota"])) {
 
         GetQuery("insert into t_mutasi_log select uuid(), MUTASI_ID, CABANG_AWAL, CABANG_TUJUAN, ANGGOTA_KEY, MUTASI_DESKRIPSI, MUTASI_TANGGAL, MUTASI_STATUS, MUTASI_STATUS_TANGGAL, MUTASI_APPROVE_BY, MUTASI_APPROVE_TANGGAL, MUTASI_FILE, DELETION_STATUS, 'U', '$USER_ID', now() from t_mutasi where MUTASI_ID = '$MUTASI_ID'");
 
-        GetQuery("update t_notifikasi set READ_STATUS = 1 where DOKUMEN_ID = '$MUTASI_ID'");
-
         $getDataMutasi =  GetQuery("SELECT m.CABANG_AWAL,m.CABANG_TUJUAN,a.ANGGOTA_NAMA,c.CABANG_DESKRIPSI FROM t_mutasi m
         LEFT JOIN m_anggota a ON m.ANGGOTA_KEY = a.ANGGOTA_KEY
         LEFT JOIN m_cabang c ON m.CABANG_AWAL = c.CABANG_KEY
@@ -106,8 +104,10 @@ if (isset($_POST["approvemutasianggota"])) {
             extract($rowMutasi);
         }
 
+        GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$MUTASI_ID'");
+
         GetQuery("insert into t_notifikasi
-        select uuid(),ANGGOTA_KEY,'$MUTASI_ID','$CABANG_AWAL','$CABANG_TUJUAN','Mutasi','Mutasi Anggota Approval','Mutasi a.n $ANGGOTA_NAMA dari cabang $CABANG_DESKRIPSI', 1, 0, '$USER_ID', NOW()
+        select uuid(),ANGGOTA_KEY,'$MUTASI_ID','$CABANG_AWAL','$CABANG_TUJUAN','Mutasi','ViewNotifMutasi','open-ViewNotifMutasi','Mutasi Anggota Approval','Mutasi a.n $ANGGOTA_NAMA dari cabang $CABANG_DESKRIPSI', 1, 0, '$USER_ID', NOW()
         FROM m_anggota
         WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN ('$CABANG_AWAL','$CABANG_TUJUAN') AND ANGGOTA_AKSES = 'Koordinator') AND ANGGOTA_STATUS = 0");
 
@@ -130,7 +130,7 @@ if (isset($_POST["rejectmutasianggota"])) {
 
         GetQuery("insert into t_mutasi_log select uuid(), MUTASI_ID, CABANG_AWAL, CABANG_TUJUAN, ANGGOTA_KEY, MUTASI_DESKRIPSI, MUTASI_TANGGAL, MUTASI_STATUS, MUTASI_STATUS_TANGGAL, MUTASI_APPROVE_BY, MUTASI_APPROVE_TANGGAL, MUTASI_FILE, DELETION_STATUS, 'U', '$USER_ID', now() from t_mutasi where MUTASI_ID = '$MUTASI_ID'");
 
-        GetQuery("update t_notifikasi set READ_STATUS = 1 where DOKUMEN_ID = '$MUTASI_ID'");
+        GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$MUTASI_ID'");
 
         $getDataMutasi =  GetQuery("SELECT m.CABANG_AWAL,m.CABANG_TUJUAN,a.ANGGOTA_NAMA,c.CABANG_DESKRIPSI FROM t_mutasi m
         LEFT JOIN m_anggota a ON m.ANGGOTA_KEY = a.ANGGOTA_KEY
@@ -141,7 +141,7 @@ if (isset($_POST["rejectmutasianggota"])) {
         }
 
         GetQuery("insert into t_notifikasi
-        select uuid(),ANGGOTA_KEY,'$MUTASI_ID','$CABANG_AWAL','$CABANG_TUJUAN','Mutasi','Mutasi Anggota Approval','Mutasi a.n $ANGGOTA_NAMA dari cabang $CABANG_DESKRIPSI', 2, 0, '$USER_ID', NOW()
+        select uuid(),ANGGOTA_KEY,'$MUTASI_ID','$CABANG_AWAL','$CABANG_TUJUAN','Mutasi','ViewNotifMutasi','open-ViewNotifMutasi','Mutasi Anggota Approval','Mutasi a.n $ANGGOTA_NAMA dari cabang $CABANG_DESKRIPSI', 2, 0, '$USER_ID', NOW()
         FROM m_anggota
         WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN ('$CABANG_AWAL','$CABANG_TUJUAN') AND ANGGOTA_AKSES = 'Koordinator') AND ANGGOTA_STATUS = 0");
 
@@ -166,7 +166,7 @@ if (isset($_POST["EVENT_ACTION"])) {
 
             GetQuery("insert into t_mutasi_log select uuid(), MUTASI_ID, CABANG_AWAL, CABANG_TUJUAN, ANGGOTA_KEY, MUTASI_DESKRIPSI, MUTASI_TANGGAL, MUTASI_STATUS, MUTASI_STATUS_TANGGAL, MUTASI_APPROVE_BY, MUTASI_APPROVE_TANGGAL, MUTASI_FILE, DELETION_STATUS, 'U', '$USER_ID', now() from t_mutasi where MUTASI_ID = '$MUTASI_ID'");
 
-            GetQuery("update t_notifikasi set APPROVE_STATUS = 0, READ_STATUS = 0 where DOKUMEN_ID = '$MUTASI_ID'");
+            GetQuery("update t_notifikasi set HREF = 'ApproveNotifMutasi', TOGGLE = 'open-ApproveNotifMutasi', APPROVE_STATUS = 0, READ_STATUS = 0 where DOKUMEN_ID = '$MUTASI_ID'");
         } else {
             GetQuery("insert into t_mutasi_log select uuid(), MUTASI_ID, CABANG_AWAL, CABANG_TUJUAN, ANGGOTA_KEY, MUTASI_DESKRIPSI, MUTASI_TANGGAL, MUTASI_STATUS, MUTASI_STATUS_TANGGAL, MUTASI_APPROVE_BY, MUTASI_APPROVE_TANGGAL, MUTASI_FILE, DELETION_STATUS, 'D', '$USER_ID', now() from t_mutasi where MUTASI_ID = '$MUTASI_ID'");
     

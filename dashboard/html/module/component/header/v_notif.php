@@ -1,0 +1,259 @@
+
+
+<div id="ViewNotifMutasi" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form id="ViewNotifMutasi-form" method="post" class="form" data-parsley-validate>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h3 class="semibold modal-title text-inverse">Lihat Data Mutasi Anggota</h3>
+                </div>
+                <div class="modal-body">
+                    <h5 class="text-center" id="viewnotifMUTASI_STATUS_DES"></h5><br>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-3">
+                            <div class="form-group">
+                                <label for="">Diajukan Oleh</label>
+                                <p id="viewnotifINPUT_BY"></p>
+                            </div> 
+                        </div>
+                        <div class="col-md-3 col-sm-3">
+                            <div class="form-group">
+                                <label for="">Tanggal Pengajuan</label>
+                                <p id="viewnotifINPUT_DATE"></p>
+                            </div> 
+                        </div>
+                        <div class="col-md-3 col-sm-3">
+                            <div class="form-group">
+                                <label for="">Disetujui Oleh</label>
+                                <p id="viewnotifAPPROVE_BY"></p>
+                            </div> 
+                        </div>
+                        <div class="col-md-3 col-sm-3">
+                            <div class="form-group">
+                                <label for="">Tanggal persetujuan</label>
+                                <p id="viewnotifMUTASI_APP_TANGGAL"></p>
+                            </div> 
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <div class="short-div">
+                                <div class="form-group">
+                                    <label for="">ID - Nama Anggota</label>
+                                    <input type="text" class="form-control" id="viewnotifANGGOTA_IDNAMA" name="ANGGOTA_ID" value="" readonly>
+                                </div> 
+                            </div>
+                            <div class="short-div hidden">
+                                <div class="form-group">
+                                    <label for="">ID Cabang</label>
+                                    <input type="text" class="form-control" id="viewnotifCABANG_AWAL" name="CABANG_AWAL" value="" readonly>
+                                </div> 
+                            </div>
+                            <div class="short-div">
+                                <div class="form-group">
+                                    <label for="">Daerah</label>
+                                    <input type="text" class="form-control" id="viewnotifDAERAH_AWAL_DES" name="DAERAH_AWAL" value="" readonly>
+                                </div> 
+                            </div>
+                            <div class="short-div">
+                                <div class="form-group">
+                                    <label for="">Cabang</label>
+                                    <input type="text" class="form-control" id="viewnotifCABANG_AWAL_DES" name="CABANG_DESKRIPSI" value="" readonly>
+                                </div> 
+                            </div>
+                            <div class="short-div">
+                                <div class="form-group">
+                                    <label for="">Sabuk</label>
+                                    <input type="text" class="form-control" id="viewnotifTINGKATAN_NAMA" name="TINGKATAN_ID" value="" readonly>
+                                </div> 
+                            </div>
+                            <div class="short-div">
+                                <div class="form-group">
+                                    <label for="">Tingkatan</label>
+                                    <input type="text" class="form-control" id="viewnotifTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
+                                </div> 
+                            </div>   
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
+                            <div class="short-div">
+                                <label for="">Foto Anggota </label><br>
+                                <div id="notifloadpicview"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Daerah Tujuan</label>
+                                <input type="text" class="form-control" id="viewnotifDAERAH_TUJUAN_DES" name="DAERAH_TUJUAN" value="" readonly>
+                            </div> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Cabang Tujuan</label>
+                                <input type="text" class="form-control" id="viewnotifCABANG_TUJUAN_DES" name="CABANG_TUJUAN" value="" readonly>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Deskripsi</label>
+                                <textarea type="text" rows="4" class="form-control" id="viewnotifMUTASI_DESKRIPSI" name="MUTASI_DESKRIPSI" value="" data-parsley-required readonly></textarea>
+                            </div> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Tanggal Efektif</label>
+                                <input type="text" class="form-control" id="viewnotifTANGGAL_EFEKTIF" name="MUTAS_TANGGAL" value="" readonly>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Close</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="ApproveNotifMutasi" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form id="ApproveNotifMutasi-form" method="post" class="form" data-parsley-validate>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h3 class="semibold modal-title text-inverse">Persetujuan Data Mutasi Anggota</h3>
+                </div>
+                <div class="modal-body">
+                    <h5 class="text-center" id="appnotifMUTASI_STATUS_DES"></h5><br>
+                    <div class="row hidden">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">ID Mutasi</label>
+                                <input type="text" class="form-control" id="appnotifMUTASI_ID" name="MUTASI_ID" value="" readonly>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-3">
+                            <div class="form-group">
+                                <label for="">Diajukan Oleh</label>
+                                <p id="appnotifINPUT_BY"></p>
+                            </div> 
+                        </div>
+                        <div class="col-md-3 col-sm-3">
+                            <div class="form-group">
+                                <label for="">Tanggal Pengajuan</label>
+                                <p id="appnotifINPUT_DATE"></p>
+                            </div> 
+                        </div>
+                        <div class="col-md-3 col-sm-3">
+                            <div class="form-group">
+                                <label for="">Disetujui Oleh</label>
+                                <p id="appnotifAPPROVE_BY"></p>
+                            </div> 
+                        </div>
+                        <div class="col-md-3 col-sm-3">
+                            <div class="form-group">
+                                <label for="">Tanggal persetujuan</label>
+                                <p id="appnotifMUTASI_APP_TANGGAL"></p>
+                            </div> 
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <div class="short-div">
+                                <div class="form-group">
+                                    <label for="">ID - Nama Anggota</label>
+                                    <input type="text" class="form-control" id="appnotifANGGOTA_IDNAMA" name="ANGGOTA_ID" value="" readonly>
+                                </div> 
+                            </div>
+                            <div class="short-div hidden">
+                                <div class="form-group">
+                                    <label for="">ID Cabang</label>
+                                    <input type="text" class="form-control" id="appnotifCABANG_AWAL" name="CABANG_AWAL" value="" readonly>
+                                </div> 
+                            </div>
+                            <div class="short-div">
+                                <div class="form-group">
+                                    <label for="">Daerah</label>
+                                    <input type="text" class="form-control" id="appnotifDAERAH_AWAL_DES" name="DAERAH_AWAL" value="" readonly>
+                                </div> 
+                            </div>
+                            <div class="short-div">
+                                <div class="form-group">
+                                    <label for="">Cabang</label>
+                                    <input type="text" class="form-control" id="appnotifCABANG_AWAL_DES" name="CABANG_DESKRIPSI" value="" readonly>
+                                </div> 
+                            </div>
+                            <div class="short-div">
+                                <div class="form-group">
+                                    <label for="">Sabuk</label>
+                                    <input type="text" class="form-control" id="appnotifTINGKATAN_NAMA" name="TINGKATAN_ID" value="" readonly>
+                                </div> 
+                            </div>
+                            <div class="short-div">
+                                <div class="form-group">
+                                    <label for="">Tingkatan</label>
+                                    <input type="text" class="form-control" id="appnotifTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
+                                </div> 
+                            </div>   
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
+                            <div class="short-div">
+                                <label for="">Foto Anggota </label><br>
+                                <div id="notifloadpicapp"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Daerah Tujuan</label>
+                                <input type="text" class="form-control" id="appnotifDAERAH_TUJUAN_DES" name="DAERAH_TUJUAN" value="" readonly>
+                            </div> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Cabang Tujuan</label>
+                                <input type="text" class="form-control" id="appnotifCABANG_TUJUAN_DES" name="CABANG_TUJUAN" value="" readonly>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Deskripsi</label>
+                                <textarea type="text" rows="4" class="form-control" id="appnotifMUTASI_DESKRIPSI" name="MUTASI_DESKRIPSI" value="" data-parsley-required readonly></textarea>
+                            </div> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Tanggal Efektif</label>
+                                <input type="text" class="form-control" id="appnotifTANGGAL_EFEKTIF" name="MUTAS_TANGGAL" value="" readonly>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-6 text-left">
+                            <button type="submit" name="submit" id="approvemutasianggota" class="submit btn btn-success mb5 btn-rounded"><i class="fa-regular fa-square-check"></i> Setuju</button>
+                            <button type="submit" name="submit" id="rejectmutasianggota" class="submit btn btn-danger mb5 btn-rounded"><i class="fa-regular fa-rectangle-xmark"></i> Tolak</button>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <button type="button" class="btn btn-inverse btn-outline mb5 btn-rounded next" data-dismiss="modal"><span class="ico-cancel"></span> Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

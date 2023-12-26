@@ -99,10 +99,10 @@
         });
 
         // Init template notification dropdown
-        APP.headerDropdown.init({
-            'dropdown': '#header-dd-notification',
-            'url': '../api/notification.php'
-        });
+        // APP.headerDropdown.init({
+        //     'dropdown': '#header-dd-notification',
+        //     'url': '../api/notification.php'
+        // });
     });
     
 }));
