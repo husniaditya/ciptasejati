@@ -42,7 +42,7 @@ $rowk = $getKategori->fetchAll(PDO::FETCH_ASSOC);
                             ?>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="">Cabang</label>
+                                    <label>Cabang</label>
                                     <select name="CABANG_KEY" id="selectize-select" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Cabang --</option>
                                         <?php
@@ -63,7 +63,7 @@ $rowk = $getKategori->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="">Kategori</label>
+                                <label>Kategori</label>
                                 <select name="PUSATDATA_KATEGORI" id="selectize-select2" required="" class="form-control" data-parsley-required>
                                     <option value="">Tampilkan Semua</option>
                                     <?php
@@ -79,19 +79,19 @@ $rowk = $getKategori->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="">Judul</label>
+                                <label>Judul</label>
                                 <input type="text" class="form-control" id="filterPUSATDATA_JUDUL" name="PUSATDATA_JUDUL" value="" placeholder="Inputkan Judul">
                             </div> 
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="">Deskripsi</label>
+                                <label>Deskripsi</label>
                                 <input type="text" class="form-control" id="filterPUSATDATA_DESKRIPSI" name="PUSATDATA__DESKRIPSI" value="" placeholder="Inputkan Deskripsi">
                             </div> 
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="">Status Data</label>
+                                <label>Status Data</label>
                                 <select id="filterDELETION_STATUS" name="DELETION_STATUS" class="form-control"  data-parsley-required required>
                                     <option value="">Tampilkan semua</option>
                                     <option value="0">Aktif</option>
@@ -219,7 +219,7 @@ if ($_SESSION["ADD_DataTerpusat"] == "Y") {
                             ?>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="">Cabang<span class="text-danger">*</span></label>
+                                    <label>Cabang<span class="text-danger">*</span></label>
                                     <div id="selectize-wrapper" style="position: relative;">
                                         <select name="CABANG_KEY" id="selectize-dropdown" required class="form-control" data-parsley-required>
                                             <option value="">-- Pilih Cabang --</option>
@@ -240,7 +240,7 @@ if ($_SESSION["ADD_DataTerpusat"] == "Y") {
                         ?>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Kategori<span class="text-danger">*</span></label>
+                                <label>Kategori<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="PUSATDATA_KATEGORI" name="PUSATDATA_KATEGORI" value="" required data-parsley-required>
                             </div> 
                         </div>
@@ -248,7 +248,7 @@ if ($_SESSION["ADD_DataTerpusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="">Judul<span class="text-danger">*</span></label>
+                                <label>Judul<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="PUSATDATA_JUDUL" name="PUSATDATA_JUDUL" value="" required data-parsley-required>
                             </div> 
                         </div>
@@ -256,7 +256,7 @@ if ($_SESSION["ADD_DataTerpusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="">Deskripsi</label>
+                                <label>Deskripsi</label>
                                 <textarea type="text" rows="3" class="form-control" id="PUSATDATA_DESKRIPSI" name="PUSATDATA_DESKRIPSI" value=""></textarea>
                             </div> 
                         </div>
@@ -264,7 +264,7 @@ if ($_SESSION["ADD_DataTerpusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Upload File </label><br>
+                                <label>Upload File </label><br>
                                 <div>
                                     <input type="file" name="PUSATDATA_FILE[]" id="PUSATDATA_FILE" /><br/>
                                 </div>
@@ -293,13 +293,13 @@ if ($_SESSION["ADD_DataTerpusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Cabang<span class="text-danger">*</span></label>
+                                <label>Cabang<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="viewCABANG_ID" name="CABANG_ID" value="" required readonly data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Kategori<span class="text-danger">*</span></label>
+                                <label>Kategori<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="viewPUSATDATA_KATEGORI" name="PUSATDATA_KATEGORI" value="" required readonly data-parsley-required>
                             </div> 
                         </div>
@@ -307,7 +307,7 @@ if ($_SESSION["ADD_DataTerpusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="">Judul<span class="text-danger">*</span></label>
+                                <label>Judul<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="viewPUSATDATA_JUDUL" name="PUSATDATA_JUDUL" value="" required readonly data-parsley-required>
                             </div> 
                         </div>
@@ -315,7 +315,7 @@ if ($_SESSION["ADD_DataTerpusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="">Deskripsi</label>
+                                <label>Deskripsi</label>
                                 <textarea type="text" rows="3" class="form-control" id="viewPUSATDATA_DESKRIPSI" name="PUSATDATA_DESKRIPSI" value="" readonly></textarea>
                             </div> 
                         </div>
@@ -323,7 +323,7 @@ if ($_SESSION["ADD_DataTerpusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Status<span class="text-danger">*</span></label>
+                                <label>Status<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="viewDELETION_STATUS" name="DELETION_STATUS" value="" required readonly data-parsley-required>
                             </div> 
                         </div>
@@ -332,7 +332,7 @@ if ($_SESSION["ADD_DataTerpusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="">File Lampiran </label><br>
+                                <label>File Lampiran </label><br>
                                 <div class="row" id="viewpusatfile"></div>
                             </div>
                         </div>
@@ -358,7 +358,7 @@ if ($_SESSION["ADD_DataTerpusat"] == "Y") {
                     <div class="row hidden">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">ID<span class="text-danger">*</span></label>
+                                <label>ID<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required readonly id="editPUSATDATA_ID" name="PUSATDATA_ID" value="" data-parsley-required>
                             </div> 
                         </div>
@@ -369,7 +369,7 @@ if ($_SESSION["ADD_DataTerpusat"] == "Y") {
                             ?>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="">Cabang<span class="text-danger">*</span></label>
+                                    <label>Cabang<span class="text-danger">*</span></label>
                                     <div id="selectize-wrapper2" style="position: relative;">
                                         <select name="CABANG_KEY" id="selectize-dropdown2" required class="form-control" data-parsley-required>
                                             <option value="">-- Pilih Cabang --</option>
@@ -390,7 +390,7 @@ if ($_SESSION["ADD_DataTerpusat"] == "Y") {
                         ?>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Kategori<span class="text-danger">*</span></label>
+                                <label>Kategori<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="editPUSATDATA_KATEGORI" name="PUSATDATA_KATEGORI" value="" required data-parsley-required>
                             </div> 
                         </div>
@@ -398,7 +398,7 @@ if ($_SESSION["ADD_DataTerpusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="">Judul<span class="text-danger">*</span></label>
+                                <label>Judul<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="editPUSATDATA_JUDUL" name="PUSATDATA_JUDUL" value="" required data-parsley-required>
                             </div> 
                         </div>
@@ -406,7 +406,7 @@ if ($_SESSION["ADD_DataTerpusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="">Deskripsi</label>
+                                <label>Deskripsi</label>
                                 <textarea type="text" rows="3" class="form-control" id="editPUSATDATA_DESKRIPSI" name="PUSATDATA_DESKRIPSI" value=""></textarea>
                             </div> 
                         </div>
@@ -414,7 +414,7 @@ if ($_SESSION["ADD_DataTerpusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Status<span class="text-danger">*</span></label>
+                                <label>Status<span class="text-danger">*</span></label>
                                 <select name="DELETION_STATUS" id="editDELETION_STATUS" required class="form-control" data-parsley-required>
                                     <option value="">-- Pilih Status --</option>
                                     <option value="0">Aktif</option>
@@ -426,9 +426,9 @@ if ($_SESSION["ADD_DataTerpusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Upload File </label><br>
+                                <label>Upload File </label><br>
                                 <div>
-                                    <input type="file" name="PUSATDATA_FILE[]" id="PUSATDATA_FILE" /><br/>
+                                    <input type="file" name="PUSATDATA_FILE[]" id="editPUSATDATA_FILE" /><br/>
                                 </div>
                             </div>
                         </div>
@@ -437,7 +437,7 @@ if ($_SESSION["ADD_DataTerpusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="">File Lampiran </label><br>
+                                <label>File Lampiran </label><br>
                                 <div class="row" id="editpusatfile"></div>
                             </div>
                         </div>

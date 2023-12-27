@@ -103,13 +103,13 @@ if ($_SESSION["ADD_LokasiPusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Deskripsi<span class="text-danger">*</span></label>
+                                <label>Deskripsi<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="PUSAT_DESKRIPSI" name="PUSAT_DESKRIPSI" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Kepengurusan<span class="text-danger">*</span></label>
+                                <label>Kepengurusan<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="PUSAT_KEPENGURUSAN" name="PUSAT_KEPENGURUSAN" value="" data-parsley-required>
                             </div> 
                         </div>
@@ -117,13 +117,13 @@ if ($_SESSION["ADD_LokasiPusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Alamat<span class="text-danger">*</span></label>
+                                <label>Alamat<span class="text-danger">*</span></label>
                                 <textarea type="text" rows="5" class="form-control" id="PUSAT_SEKRETARIAT" name="PUSAT_SEKRETARIAT" value="" data-parsley-required></textarea>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Map Link<span class="text-danger">*</span></label>
+                                <label>Map Link<span class="text-danger">*</span></label>
                                 <textarea type="text" rows="5" class="form-control" id="PUSAT_MAP" name="PUSAT_MAP" value="" onkeyup="getMapsAdd(this.value)" onClick="getMapsAdd(this.value)" data-parsley-required></textarea>
                             </div> 
                         </div>
@@ -131,13 +131,13 @@ if ($_SESSION["ADD_LokasiPusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Latitude<span class="text-danger">*</span></label>
+                                <label>Latitude<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="PUSAT_LAT" name="PUSAT_LAT" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Longitude<span class="text-danger">*</span></label>
+                                <label>Longitude<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="PUSAT_LONG" name="PUSAT_LONG" value="" data-parsley-required>
                             </div> 
                         </div>
@@ -146,7 +146,7 @@ if ($_SESSION["ADD_LokasiPusat"] == "Y") {
                     <div class="row" id="addPusatMap">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="">Google Maps</span></label><br>
+                                <label>Google Maps</span></label><br>
                             </div> 
                         </div>
                     </div>
@@ -172,13 +172,13 @@ if ($_SESSION["ADD_LokasiPusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Deskripsi<span class="text-danger">*</span></label>
+                                <label>Deskripsi<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" readonly required id="viewPUSAT_DESKRIPSI" name="PUSAT_DESKRIPSI" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Kepengurusan<span class="text-danger">*</span></label>
+                                <label>Kepengurusan<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="viewPUSAT_KEPENGURUSAN" name="PUSAT_KEPENGURUSAN" readonly value="">
                             </div> 
                         </div>
@@ -186,13 +186,13 @@ if ($_SESSION["ADD_LokasiPusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Alamat<span class="text-danger">*</span></label>
+                                <label>Alamat<span class="text-danger">*</span></label>
                                 <textarea type="text" rows="5" class="form-control" id="viewPUSAT_SEKRETARIAT" name="PUSAT_SEKRETARIAT" value="" data-parsley-required readonly></textarea>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Map Link<span class="text-danger">*</span></label>
+                                <label>Map Link<span class="text-danger">*</span></label>
                                 <textarea type="text" rows="5" class="form-control" id="viewPUSAT_MAP" name="PUSAT_MAP" readonly value=""></textarea>
                             </div> 
                         </div>
@@ -200,13 +200,13 @@ if ($_SESSION["ADD_LokasiPusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Latitude<span class="text-danger">*</span></label>
+                                <label>Latitude<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" readonly required id="viewPUSAT_LAT" name="PUSAT_LAT" value="-3.3063120100780785" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Longitude<span class="text-danger">*</span></label>
+                                <label>Longitude<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="viewPUSAT_LONG" name="PUSAT_LONG" readonly value="114.56921894055016">
                             </div> 
                         </div>
@@ -215,7 +215,7 @@ if ($_SESSION["ADD_LokasiPusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="">Google Maps</label><br>
+                                <label>Google Maps</label><br>
                                 <iframe id="ViewPusatMap" src="" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                             </div> 
                         </div>
@@ -241,7 +241,7 @@ if ($_SESSION["ADD_LokasiPusat"] == "Y") {
                     <div class="row hidden">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="">Pusat ID<span class="text-danger">*</span></label>
+                                <label>Pusat ID<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required readonly id="editPUSAT_KEY" name="PUSAT_KEY" value="" data-parsley-required>
                             </div> 
                         </div>
@@ -249,13 +249,13 @@ if ($_SESSION["ADD_LokasiPusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Deskripsi<span class="text-danger">*</span></label>
+                                <label>Deskripsi<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="editPUSAT_DESKRIPSI" name="PUSAT_DESKRIPSI" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Kepengurusan<span class="text-danger">*</span></label>
+                                <label>Kepengurusan<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="editPUSAT_KEPENGURUSAN" name="PUSAT_KEPENGURUSAN" value="" data-parsley-required>
                             </div> 
                         </div>
@@ -263,13 +263,13 @@ if ($_SESSION["ADD_LokasiPusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Alamat<span class="text-danger">*</span></label>
+                                <label>Alamat<span class="text-danger">*</span></label>
                                 <textarea type="text" rows="5" class="form-control" id="editPUSAT_SEKRETARIAT" name="PUSAT_SEKRETARIAT" value="" data-parsley-required></textarea>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Map Link<span class="text-danger">*</span></label>
+                                <label>Map Link<span class="text-danger">*</span></label>
                                 <textarea type="text" rows="5" class="form-control" id="editPUSAT_MAP" name="PUSAT_MAP" value="" onkeyup="getMapsEdit(this.value)" onClick="getMapsEdit(this.value)" data-parsley-required></textarea>
                             </div> 
                         </div>
@@ -277,13 +277,13 @@ if ($_SESSION["ADD_LokasiPusat"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Latitude<span class="text-danger">*</span></label>
+                                <label>Latitude<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="editPUSAT_LAT" name="PUSAT_LAT" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6" id="pusatmapedit">
                             <div class="form-group">
-                                <label for="">Longitude<span class="text-danger">*</span></label>
+                                <label>Longitude<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="editPUSAT_LONG" name="PUSAT_LONG" value="" data-parsley-required>
                             </div> 
                         </div>
@@ -292,7 +292,7 @@ if ($_SESSION["ADD_LokasiPusat"] == "Y") {
                     <div class="row" id="editPusatMap">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="">Google Maps</label>
+                                <label>Google Maps</label>
                                 <iframe id="EditPusatMap" src="" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                             </div>
                         </div>

@@ -166,8 +166,13 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
       processData: false, // Prevent jQuery from processing the data
       contentType: false, // Prevent jQuery from setting content type
       success: function(response) {
+        // Split the response into parts using a separator (assuming a dot in this case)
+        var parts = response.split(',');
+        var successMessage = parts[0];
+        var MUTASI_ID = parts[1];
+        
         // Check the response from the server
-        if (response === 'Success') {
+        if (successMessage === 'Success') {
           // Display success notification
           successNotification('Data berhasil tersimpan!');
 
@@ -193,6 +198,37 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
           // Display error notification
           failedNotification(response);
         }
+        // Save PDF to Drive
+        $.ajax({
+          type: 'POST',
+          url: 'module/backend/transaksi/anggota/mutasianggota/t_mutasifile.php',
+          data: { MUTASI_ID: MUTASI_ID },
+          success: function(response) {
+            // Check the response from the server
+          },
+          error: function(xhr, status, error) {
+            errorNotification('Error! '+xhr.status+' '+error);
+          }
+        });
+        // Send email notification
+        $.ajax({
+          type: 'POST',
+          url: 'module/backend/transaksi/anggota/mutasianggota/t_mutasimail.php',
+          data: { MUTASI_ID: MUTASI_ID },
+          success: function(response) {
+            // Check the response from the server
+            if (response === 'Success') {
+              // Display success notification
+              MailNotification('Email pemberitahuan berhasil dikirimkan!');
+            } else {
+              // Display error notification
+              failedNotification(response);
+            }
+          },
+          error: function(xhr, status, error) {
+            errorNotification('Error! '+xhr.status+' '+error);
+          }
+        });
       },
       error: function(xhr, status, error) {
         // Handle any errors

@@ -26,6 +26,7 @@ LEFT JOIN m_daerah daeawal ON cabawal.DAERAH_KEY = daeawal.DAERAH_KEY
 LEFT JOIN m_cabang cabtujuan ON t.CABANG_TUJUAN = cabtujuan.CABANG_KEY
 LEFT JOIN m_daerah daetujuan ON cabtujuan.DAERAH_KEY = daetujuan.DAERAH_KEY
 left join m_tingkatan t2 on a.TINGKATAN_ID = t2.TINGKATAN_ID
+WHERE t.MUTASI_ID = '$MUTASI_ID'
 ORDER BY t.MUTASI_STATUS ASC, t.MUTASI_TANGGAL DESC");
 
 while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
@@ -197,7 +198,7 @@ while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
     $pdf->Cell(10,5,"",0,0,"L");
     $pdf->Cell(30,5,"Asal Cabang",0,0,"L");
     $pdf->Cell(5,5,":",0,0,"L");
-    $pdf->Cell(30,5,$DAERAH_AWAL_DES." - ".$CABANG_AWAL_DES,0,0,"L");
+    $pdf->Cell(30,5,$CABANG_AWAL_DES." - ".$DAERAH_AWAL_DES,0,0,"L");
     $pdf->Ln();
     $pdf->Cell(10,5,"",0,0,"L");
     $pdf->Cell(30,5,"Tingkatan",0,0,"L");
@@ -209,7 +210,7 @@ while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
     $pdf->Cell(10,5,"",0,0,"L");
     $pdf->Cell(30,5,"Cabang Tujuan",0,0,"L");
     $pdf->Cell(5,5,":",0,0,"L");
-    $pdf->Cell(30,5,$DAERAH_TUJUAN_DES." - ".$CABANG_TUJUAN_DES,0,0,"L");
+    $pdf->Cell(30,5,$CABANG_TUJUAN_DES." - ".$DAERAH_TUJUAN_DES,0,0,"L");
     $pdf->Ln();
     $pdf->Cell(10,5,"",0,0,"L");
     $pdf->Cell(30,5,"Alamat Cabang",0,0,"L");

@@ -122,7 +122,7 @@ if ($_SESSION["ADD_IDdanSertifikat"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Tingkatan<span class="text-danger">*</span></label>
+                                <label>Tingkatan<span class="text-danger">*</span></label>
                                 <div id="selectize-wrapper" style="position: relative;">
                                     <select name="TINGKATAN_ID" id="selectize-dropdown" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Tingkatan --</option>
@@ -142,7 +142,7 @@ if ($_SESSION["ADD_IDdanSertifikat"] == "Y") {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="">Deskripsi</label>
+                                <label>Deskripsi</label>
                                 <textarea type="text" rows="3" class="form-control" id="IDSERTIFIKAT_DESKRIPSI" name="IDSERTIFIKAT_DESKRIPSI" value=""></textarea>
                             </div> 
                         </div>
@@ -187,13 +187,13 @@ if ($_SESSION["ADD_IDdanSertifikat"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Tingkatan<span class="text-danger">*</span></label>
+                                <label>Tingkatan<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="viewTINGKATAN_ID" name="TINGKATAN_ID" value="" readonly>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Status<span class="text-danger">*</span></label>
+                                <label>Status<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="viewDELETION_STATUS" name="DELETION_STATUS" value="" data-parsley-required readonly>
                             </div> 
                         </div>
@@ -201,7 +201,7 @@ if ($_SESSION["ADD_IDdanSertifikat"] == "Y") {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="">Deskripsi<span class="text-danger">*</span></label>
+                                <label>Deskripsi<span class="text-danger">*</span></label>
                                 <textarea type="text" rows="3" class="form-control" id="viewIDSERTIFIKAT_DESKRIPSI" name="IDSERTIFIKAT_DESKRIPSI" value="" data-parsley-required readonly></textarea>
                             </div> 
                         </div>
@@ -241,7 +241,7 @@ if ($_SESSION["ADD_IDdanSertifikat"] == "Y") {
                     <div class="row hidden">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">ID<span class="text-danger">*</span></label>
+                                <label>ID<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required readonly id="editIDSERTIFIKAT_ID" name="IDSERTIFIKAT_ID" value="" data-parsley-required>
                             </div> 
                         </div>
@@ -249,7 +249,7 @@ if ($_SESSION["ADD_IDdanSertifikat"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Tingkatan<span class="text-danger">*</span></label>
+                                <label>Tingkatan<span class="text-danger">*</span></label>
                                 <div id="selectize-wrapper2" style="position: relative;">
                                     <select name="TINGKATAN_ID" id="selectize-dropdown2" required class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Tingkatan --</option>
@@ -267,7 +267,7 @@ if ($_SESSION["ADD_IDdanSertifikat"] == "Y") {
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Status<span class="text-danger">*</span></label>
+                                <label>Status<span class="text-danger">*</span></label>
                                 <select name="DELETION_STATUS" id="editDELETION_STATUS" required class="form-control" data-parsley-required>
                                     <option value="">-- Pilih Status --</option>
                                     <option value="0">Aktif</option>
@@ -279,7 +279,7 @@ if ($_SESSION["ADD_IDdanSertifikat"] == "Y") {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="">Deskripsi</label>
+                                <label>Deskripsi</label>
                                 <textarea type="text" rows="3" class="form-control" id="editIDSERTIFIKAT_DESKRIPSI" name="IDSERTIFIKAT_DESKRIPSI" value=""></textarea>
                             </div> 
                         </div>
@@ -289,7 +289,7 @@ if ($_SESSION["ADD_IDdanSertifikat"] == "Y") {
                             <div class="form-group">
                                 <label for="File">Upload File ID Card </label><br>
                                 <div>
-                                    <input type="file" name="ID_CARD[]" id="ID_CARD" accept="image/*" /><br/>
+                                    <input type="file" name="ID_CARD[]" id="editID_CARD" accept="image/*" /><br/>
                                 </div>
                             </div>
                         </div>
@@ -297,7 +297,7 @@ if ($_SESSION["ADD_IDdanSertifikat"] == "Y") {
                             <div class="form-group">
                                 <label for="File">Upload File Sertifikat </label><br>
                                 <div>
-                                    <input type="file" name="SERTIFIKAT[]" id="SERTIFIKAT" accept="image/*" /> 
+                                    <input type="file" name="SERTIFIKAT[]" id="editSERTIFIKAT" accept="image/*" /> 
                                 </div>
                             </div>
                         </div>

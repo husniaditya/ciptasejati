@@ -4,7 +4,7 @@
 function SuccessNotification(text) {
   $.gritter.add({
     title: 'Saved',
-    text: 'Data berhasil disimpan',
+    text: text,
     time: 5000,
     image: '../image/notification/success.png',
     class_name: 'gritter-success',
@@ -22,7 +22,7 @@ function SuccessNotification(text) {
 function UpdateNotification(text) {
   $.gritter.add({
     title: 'Updated',
-    text: 'Data berhasil diubah',
+    text: text,
     time: 5000,
     image: '../image/notification/success.png',
     class_name: 'gritter-update',
@@ -62,6 +62,23 @@ function FailedNotification(text) {
     time: 5000,
     image: '../image/notification/failed.png',
     class_name: 'gritter-error',
+    // (function) before the gritter notice is opened
+    'before_open': function () {
+      if ($('.gritter-item-wrapper').length === 3) {
+          // Returning false prevents a new gritter from opening
+          return false;
+      }
+  }
+  });
+}
+// Mail notification
+function MailNotification(text) {
+  $.gritter.add({
+    title: 'Email Terkirim',
+    text: text,
+    time: 5000,
+    image: '../image/notification/mail.png',
+    class_name: 'gritter-update',
     // (function) before the gritter notice is opened
     'before_open': function () {
       if ($('.gritter-item-wrapper').length === 3) {

@@ -105,7 +105,7 @@ if ($_SESSION["ADD_LokasiDaerah"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Pusat<span class="text-danger">*</span></label>
+                                <label>Pusat<span class="text-danger">*</span></label>
                                 <div id="selectize-wrapper" style="position: relative;">
                                     <select name="PUSAT_KEY" id="selectize-dropdown" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Pusat --</option>
@@ -125,13 +125,13 @@ if ($_SESSION["ADD_LokasiDaerah"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Daerah ID<span class="text-danger">*</span></label>
+                                <label>Daerah ID<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="DAERAH_ID" name="DAERAH_ID" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Lokasi<span class="text-danger">*</span></label>
+                                <label>Lokasi<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="DAERAH_DESKRIPSI" name="DAERAH_DESKRIPSI" value="" data-parsley-required>
                             </div> 
                         </div>
@@ -158,7 +158,7 @@ if ($_SESSION["ADD_LokasiDaerah"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Pusat<span class="text-danger">*</span></label>
+                                <label>Pusat<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="viewPUSAT_KEY" name="PUSAT_KEY" value="" data-parsley-required readonly>
                             </div> 
                         </div>
@@ -166,13 +166,13 @@ if ($_SESSION["ADD_LokasiDaerah"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Daerah ID<span class="text-danger">*</span></label>
+                                <label>Daerah ID<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="viewDAERAH_ID" name="DAERAH_ID" value="" data-parsley-required readonly>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Lokasi<span class="text-danger">*</span></label>
+                                <label>Lokasi<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="viewDAERAH_DESKRIPSI" name="DAERAH_DESKRIPSI" value="" data-parsley-required readonly>
                             </div> 
                         </div>
@@ -180,7 +180,7 @@ if ($_SESSION["ADD_LokasiDaerah"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Status<span class="text-danger">*</span></label>
+                                <label>Status<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="viewDELETION_STATUS" name="DELETION_STATUS" value="" data-parsley-required readonly>
                             </div> 
                         </div>
@@ -206,7 +206,7 @@ if ($_SESSION["ADD_LokasiDaerah"] == "Y") {
                     <div class="row hidden">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">ID<span class="text-danger">*</span></label>
+                                <label>ID<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="editDAERAH_KEY" name="DAERAH_KEY" value="" data-parsley-required readonly>
                             </div> 
                         </div>
@@ -214,7 +214,7 @@ if ($_SESSION["ADD_LokasiDaerah"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Pusat<span class="text-danger">*</span></label>
+                                <label>Pusat<span class="text-danger">*</span></label>
                                 <select name="PUSAT_KEY" id="editPUSAT_KEY" required="" class="form-control" data-parsley-required>
                                     <option value="">-- Pilih Pusat --</option>
                                     <?php
@@ -232,13 +232,13 @@ if ($_SESSION["ADD_LokasiDaerah"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Daerah ID<span class="text-danger">*</span></label>
+                                <label>Daerah ID<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="editDAERAH_ID" name="DAERAH_ID" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Lokasi<span class="text-danger">*</span></label>
+                                <label>Lokasi<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="editDAERAH_DESKRIPSI" name="DAERAH_DESKRIPSI" value="" data-parsley-required>
                             </div> 
                         </div>
@@ -246,7 +246,7 @@ if ($_SESSION["ADD_LokasiDaerah"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Status</label>
+                                <label>Status</label>
                                 <select id="editDELETION_STATUS" name="DELETION_STATUS" class="form-control" placeholder="" data-parsley-required>
                                     <option value="">-- Pilih Status --</option>
                                     <option value="0">Aktif</option>

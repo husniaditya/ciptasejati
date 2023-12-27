@@ -1977,7 +1977,7 @@ fieldset[disabled] .btn-twitter.active {
 @font-face {
   font-family: 'iconfont';
   src: url('fonts/iconfont.eot');
-  src: url('fonts/iconfont.eot?#iefix') format('embedded-opentype'), url('fonts/iconfont.svg#iconfont') format('svg'), url('fonts/iconfont.woff') format('woff'), url('fonts/iconfont.ttf') format('truetype');
+  src: url('fonts/iconfont.eot?#iefix') format('embedded-opentype'), url('fonts/iconfont.svg#iconfont') format('svg'), url('fonts/iconfont.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }

@@ -105,13 +105,13 @@ if ($_SESSION["ADD_TingkatandanGelar"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Sabuk<span class="text-danger">*</span></label>
+                                <label>Sabuk<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="TINGKATAN_NAMA" name="TINGKATAN_NAMA" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Tingkatan<span class="text-danger">*</span></label>
+                                <label>Tingkatan<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="TINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" required data-parsley-required>
                             </div> 
                         </div>
@@ -119,13 +119,13 @@ if ($_SESSION["ADD_TingkatandanGelar"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Gelar<span class="text-danger">*</span></label>
+                                <label>Gelar<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="TINGKATAN_GELAR" name="TINGKATAN_GELAR" value="" required data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Tingkatan Level<span class="text-danger">*</span></label>
+                                <label>Tingkatan Level<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="TINGKATAN_LEVEL" name="TINGKATAN_LEVEL" value="" required data-parsley-required>
                             </div> 
                         </div>
@@ -152,13 +152,13 @@ if ($_SESSION["ADD_TingkatandanGelar"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Sabuk<span class="text-danger">*</span></label>
+                                <label>Sabuk<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" readonly required id="viewTINGKATAN_NAMA" name="TINGKATAN_NAMA" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Tingkatan<span class="text-danger">*</span></label>
+                                <label>Tingkatan<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="viewTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" required readonly data-parsley-required>
                             </div> 
                         </div>
@@ -166,19 +166,19 @@ if ($_SESSION["ADD_TingkatandanGelar"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Gelar<span class="text-danger">*</span></label>
+                                <label>Gelar<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="viewTINGKATAN_GELAR" name="TINGKATAN_GELAR" value="" required readonly data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Tingkatan Level<span class="text-danger">*</span></label></label>
+                                <label>Tingkatan Level<span class="text-danger">*</span></label></label>
                                 <input type="text" class="form-control" id="viewTINGKATAN_LEVEL" name="TINGKATAN_LEVEL" readonly value="" required data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Status<span class="text-danger">*</span></label></label>
+                                <label>Status<span class="text-danger">*</span></label></label>
                                 <input type="text" class="form-control" id="viewTINGKATAN_STATUS" name="DELETION_STATUS" readonly value="" required data-parsley-required>
                             </div> 
                         </div>
@@ -204,7 +204,7 @@ if ($_SESSION["ADD_TingkatandanGelar"] == "Y") {
                     <div class="row hidden">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="">Tingkatan ID<span class="text-danger">*</span></label>
+                                <label>Tingkatan ID<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required readonly id="editTINGKATAN_ID" name="TINGKATAN_ID" value="" data-parsley-required>
                             </div> 
                         </div>
@@ -212,13 +212,13 @@ if ($_SESSION["ADD_TingkatandanGelar"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Sabuk<span class="text-danger">*</span></label>
+                                <label>Sabuk<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="editTINGKATAN_NAMA" name="TINGKATAN_NAMA" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Tingkatan<span class="text-danger">*</span></label>
+                                <label>Tingkatan<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="editTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" required data-parsley-required>
                             </div> 
                         </div>
@@ -226,13 +226,13 @@ if ($_SESSION["ADD_TingkatandanGelar"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Gelar<span class="text-danger">*</span></label>
+                                <label>Gelar<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="editTINGKATAN_GELAR" name="TINGKATAN_GELAR" value="" required data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Tingkatan Level<span class="text-danger">*</span></label>
+                                <label>Tingkatan Level<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="editTINGKATAN_LEVEL" name="TINGKATAN_LEVEL" value="" required data-parsley-required>
                             </div> 
                         </div>
@@ -240,7 +240,7 @@ if ($_SESSION["ADD_TingkatandanGelar"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Status<span class="text-danger">*</span></label>
+                                <label>Status<span class="text-danger">*</span></label>
                                 <select name="DELETION_STATUS" id="editTINGKATAN_STATUS" required="" class="form-control" data-parsley-required>
                                     <option value="">-- Pilih Status --</option>
                                     <option value="0">Aktif</option>

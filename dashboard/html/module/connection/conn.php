@@ -1,4 +1,5 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
 
 require __DIR__ . '/../../../../vendor/autoload.php';
 
@@ -76,6 +77,52 @@ try {
 
 } catch (PDOException $e) {
     die("Database connection failed: " . $e->getMessage());
+}
+
+function sendEmail($toAddress, $toName, $ccAddresses, $ccNames, $subject, $body, $attachmentPath = null, $attachmentName = null)
+{
+    try {
+        // Create an instance; passing `true` enables exceptions
+        $mail = new PHPMailer(true);
+
+        // Server settings
+        $mail->isSMTP();            // Send using SMTP
+        $mail->Host       = 'smtp.hostinger.com'; // Set the SMTP server to send through
+        $mail->SMTPAuth   = true;    // Enable SMTP authentication
+        $mail->Username   = 'no-reply@ciptasejatiindonesia.com'; // SMTP username
+        $mail->Password   = '**Noreplycs2024'; // SMTP password
+        $mail->SMTPSecure = 'ssl';   // Enable implicit TLS encryption
+        $mail->Port       = 465;      // TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+        // Recipients
+        $mail->setFrom('no-reply@ciptasejatiindonesia.com', 'No-Reply Cipta Sejati');
+        $mail->addAddress($toAddress, $toName);   // Add a recipient
+
+        // Add CC recipients
+        if (!empty($ccAddresses) && is_array($ccAddresses)) {
+            foreach ($ccAddresses as $key => $ccAddress) {
+                $ccName = isset($ccNames[$key]) ? $ccNames[$key] : '';
+                $mail->addCC($ccAddress, $ccName);
+            }
+        }
+
+        // Attachments
+        if ($attachmentPath !== null) {
+            $mail->addAttachment($attachmentPath, $attachmentName); // Add attachments
+        }
+
+        // Content
+        $mail->isHTML(true);       // Set email format to HTML
+        $mail->Subject = $subject;
+        $mail->Body    = $body;
+
+        $mail->send();
+
+        // Return success or error message
+        return "Email sent successfully to $toAddress";
+    } catch (Exception $e) {
+        return "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
 }
 
 // $ssh_host = 'IP HOST';

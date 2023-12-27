@@ -56,7 +56,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="">Daerah Tujuan</label>
+                                <label>Daerah Tujuan</label>
                                 <select name="DAERAH_KEY" id="selectize-select3" required="" class="form-control" data-parsley-required>
                                     <option value="">-- Pilih Daerah --</option>
                                     <?php
@@ -72,7 +72,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="">Cabang Tujuan</label>
+                                <label>Cabang Tujuan</label>
                                 <select name="CABANG_KEY" id="selectize-select2" required="" class="form-control" data-parsley-required>
                                     <option value="">-- Pilih Cabang --</option>
                                 </select>
@@ -80,7 +80,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="">Tingkatan</label>
+                                <label>Tingkatan</label>
                                 <select name="TINGKATAN_ID" id="selectize-select" required="" class="form-control" data-parsley-required>
                                     <option value="">-- Pilih Tingkatan --</option>
                                     <?php
@@ -96,7 +96,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="">Status Mutasi</label>
+                                <label>Status Mutasi</label>
                                 <select id="filterMUTASI_STATUS" name="MUTASI_STATUS" class="form-control"  data-parsley-required required>
                                     <option value="">Tampilkan semua</option>
                                     <option value="0">Menunggu</option>
@@ -109,13 +109,13 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="">ID Anggota</label>
+                                <label>ID Anggota</label>
                                 <input type="text" class="form-control" id="filterANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Input ID Anggota">
                             </div> 
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="">Nama</label>
+                                <label>Nama</label>
                                 <input type="text" class="form-control" id="filterANGGOTA_NAMA" name="ANGGOTA_NAMA" value="" placeholder="Input Nama">
                             </div> 
                         </div>
@@ -261,7 +261,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Anggota</label>
+                                    <label>Anggota</label>
                                     <div id="selectize-wrapper" style="position: relative;">
                                         <select name="ANGGOTA_KEY" id="selectize-dropdown" required="" class="form-control" onchange="populateFields()" data-parsley-required>
                                             <option value="">-- Pilih Anggota --</option>
@@ -279,38 +279,38 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                             <div class="short-div hidden">
                                 <div class="form-group">
-                                    <label for="">ID Cabang</label>
+                                    <label>ID Cabang</label>
                                     <input type="text" class="form-control" id="CABANG_AWAL" name="CABANG_AWAL" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Daerah</label>
+                                    <label>Daerah</label>
                                     <input type="text" class="form-control" id="DAERAH_AWAL" name="DAERAH_AWAL" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Cabang</label>
+                                    <label>Cabang</label>
                                     <input type="text" class="form-control" id="CABANG_DESKRIPSI" name="CABANG_DESKRIPSI" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Sabuk</label>
+                                    <label>Sabuk</label>
                                     <input type="text" class="form-control" id="TINGKATAN_ID" name="TINGKATAN_ID" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Tingkatan</label>
+                                    <label>Tingkatan</label>
                                     <input type="text" class="form-control" id="TINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
                                 </div> 
                             </div>   
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
                             <div class="short-div">
-                                <label for="">Foto Anggota </label><br>
+                                <label>Foto Anggota </label><br>
                                 <div id="loadpic"></div>
                             </div>
                         </div>
@@ -319,7 +319,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Daerah Tujuan<span class="text-danger">*</span></label>
+                                <label>Daerah Tujuan<span class="text-danger">*</span></label>
                                 <div id="selectize-wrapper2" style="position: relative;">
                                     <select name="DAERAH_TUJUAN" id="selectize-dropdown2" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Daerah --</option>
@@ -337,7 +337,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Cabang Tujuan<span class="text-danger">*</span></label>
+                                <label>Cabang Tujuan<span class="text-danger">*</span></label>
                                 <div id="selectize-wrapper3" style="position: relative;">
                                     <select name="CABANG_TUJUAN" id="selectize-dropdown3" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Cabang --</option>
@@ -349,13 +349,13 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Deskripsi<span class="text-danger">*</span></label>
+                                <label>Deskripsi<span class="text-danger">*</span></label>
                                 <textarea type="text" rows="4" class="form-control" id="MUTASI_DESKRIPSI" name="MUTASI_DESKRIPSI" value="" data-parsley-required required></textarea>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Tanggal Efektif<span class="text-danger">*</span></label>
+                                <label>Tanggal Efektif<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="datepicker4" name="MUTASI_TANGGAL" placeholder="Pilih tanggal" readonly data-parsley-required required/>
                             </div> 
                         </div>
@@ -383,25 +383,25 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row">
                         <div class="col-md-3 col-sm-3">
                             <div class="form-group">
-                                <label for="">Diajukan Oleh</label>
+                                <label>Diajukan Oleh</label>
                                 <p id="viewINPUT_BY"></p>
                             </div> 
                         </div>
                         <div class="col-md-3 col-sm-3">
                             <div class="form-group">
-                                <label for="">Tanggal Pengajuan</label>
+                                <label>Tanggal Pengajuan</label>
                                 <p id="viewINPUT_DATE"></p>
                             </div> 
                         </div>
                         <div class="col-md-3 col-sm-3">
                             <div class="form-group">
-                                <label for="">Disetujui Oleh</label>
+                                <label>Disetujui Oleh</label>
                                 <p id="viewAPPROVE_BY"></p>
                             </div> 
                         </div>
                         <div class="col-md-3 col-sm-3">
                             <div class="form-group">
-                                <label for="">Tanggal persetujuan</label>
+                                <label>Tanggal persetujuan</label>
                                 <p id="viewMUTASI_APP_TANGGAL"></p>
                             </div> 
                         </div>
@@ -411,44 +411,44 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">ID - Nama Anggota</label>
+                                    <label>ID - Nama Anggota</label>
                                     <input type="text" class="form-control" id="viewANGGOTA_IDNAMA" name="ANGGOTA_ID" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div hidden">
                                 <div class="form-group">
-                                    <label for="">ID Cabang</label>
+                                    <label>ID Cabang</label>
                                     <input type="text" class="form-control" id="viewCABANG_AWAL" name="CABANG_AWAL" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Daerah</label>
+                                    <label>Daerah</label>
                                     <input type="text" class="form-control" id="viewDAERAH_AWAL_DES" name="DAERAH_AWAL" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Cabang</label>
+                                    <label>Cabang</label>
                                     <input type="text" class="form-control" id="viewCABANG_AWAL_DES" name="CABANG_DESKRIPSI" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Sabuk</label>
+                                    <label>Sabuk</label>
                                     <input type="text" class="form-control" id="viewTINGKATAN_NAMA" name="TINGKATAN_ID" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Tingkatan</label>
+                                    <label>Tingkatan</label>
                                     <input type="text" class="form-control" id="viewTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
                                 </div> 
                             </div>   
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
                             <div class="short-div">
-                                <label for="">Foto Anggota </label><br>
+                                <label>Foto Anggota </label><br>
                                 <div id="loadpicview"></div>
                             </div>
                         </div>
@@ -457,13 +457,13 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Daerah Tujuan</label>
+                                <label>Daerah Tujuan</label>
                                 <input type="text" class="form-control" id="viewDAERAH_TUJUAN_DES" name="DAERAH_TUJUAN" value="" readonly>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Cabang Tujuan</label>
+                                <label>Cabang Tujuan</label>
                                 <input type="text" class="form-control" id="viewCABANG_TUJUAN_DES" name="CABANG_TUJUAN" value="" readonly>
                             </div> 
                         </div>
@@ -471,13 +471,13 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Deskripsi</label>
+                                <label>Deskripsi</label>
                                 <textarea type="text" rows="4" class="form-control" id="viewMUTASI_DESKRIPSI" name="MUTASI_DESKRIPSI" value="" data-parsley-required readonly></textarea>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Tanggal Efektif</label>
+                                <label>Tanggal Efektif</label>
                                 <input type="text" class="form-control" id="viewTANGGAL_EFEKTIF" name="MUTAS_TANGGAL" value="" readonly>
                             </div> 
                         </div>
@@ -503,7 +503,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row hidden">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">ID Mutasi</label>
+                                <label>ID Mutasi</label>
                                 <input type="text" class="form-control" id="editMUTASI_ID" name="MUTASI_ID" value="" readonly>
                             </div> 
                         </div>
@@ -512,7 +512,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Anggota</label>
+                                    <label>Anggota</label>
                                     <div id="selectize-wrapper4" style="position: relative;">
                                         <select name="ANGGOTA_KEY" id="selectize-dropdown4" required="" class="form-control" onchange="populateFieldsEdit()" data-parsley-required>
                                             <option value="">-- Pilih Anggota --</option>
@@ -530,38 +530,38 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                             <div class="short-div hidden">
                                 <div class="form-group">
-                                    <label for="">ID Cabang</label>
+                                    <label>ID Cabang</label>
                                     <input type="text" class="form-control" id="editCABANG_AWAL" name="CABANG_AWAL" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Daerah</label>
+                                    <label>Daerah</label>
                                     <input type="text" class="form-control" id="editDAERAH_AWAL_DES" name="DAERAH_AWAL" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Cabang</label>
+                                    <label>Cabang</label>
                                     <input type="text" class="form-control" id="editCABANG_AWAL_DES" name="CABANG_DESKRIPSI" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Sabuk</label>
+                                    <label>Sabuk</label>
                                     <input type="text" class="form-control" id="editTINGKATAN_NAMA" name="TINGKATAN_ID" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Tingkatan</label>
+                                    <label>Tingkatan</label>
                                     <input type="text" class="form-control" id="editTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
                                 </div> 
                             </div>   
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
                             <div class="short-div">
-                                <label for="">Foto Anggota </label><br>
+                                <label>Foto Anggota </label><br>
                                 <div id="loadpicedit"></div>
                             </div>
                         </div>
@@ -570,7 +570,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Daerah Tujuan<span class="text-danger">*</span></label>
+                                <label>Daerah Tujuan<span class="text-danger">*</span></label>
                                 <div id="selectize-wrapper5" style="position: relative;">
                                     <select name="DAERAH_TUJUAN" id="selectize-dropdown5" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Daerah --</option>
@@ -588,7 +588,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Cabang Tujuan<span class="text-danger">*</span></label>
+                                <label>Cabang Tujuan<span class="text-danger">*</span></label>
                                 <div id="selectize-wrapper6" style="position: relative;">
                                     <select name="CABANG_TUJUAN" id="selectize-dropdown6" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Cabang --</option>
@@ -600,13 +600,13 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Deskripsi<span class="text-danger">*</span></label>
+                                <label>Deskripsi<span class="text-danger">*</span></label>
                                 <textarea type="text" rows="4" class="form-control" id="editMUTASI_DESKRIPSI" name="MUTASI_DESKRIPSI" value="" data-parsley-required required></textarea>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Tanggal Efektif<span class="text-danger">*</span></label>
+                                <label>Tanggal Efektif<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="datepicker5" name="MUTASI_TANGGAL" placeholder="Pilih tanggal" readonly data-parsley-required required/>
                             </div> 
                         </div>
@@ -634,7 +634,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row hidden">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">ID Mutasi</label>
+                                <label>ID Mutasi</label>
                                 <input type="text" class="form-control" id="appMUTASI_ID" name="MUTASI_ID" value="" readonly>
                             </div> 
                         </div>
@@ -642,25 +642,25 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row">
                         <div class="col-md-3 col-sm-3">
                             <div class="form-group">
-                                <label for="">Diajukan Oleh</label>
+                                <label>Diajukan Oleh</label>
                                 <p id="appINPUT_BY"></p>
                             </div> 
                         </div>
                         <div class="col-md-3 col-sm-3">
                             <div class="form-group">
-                                <label for="">Tanggal Pengajuan</label>
+                                <label>Tanggal Pengajuan</label>
                                 <p id="appINPUT_DATE"></p>
                             </div> 
                         </div>
                         <div class="col-md-3 col-sm-3">
                             <div class="form-group">
-                                <label for="">Disetujui Oleh</label>
+                                <label>Disetujui Oleh</label>
                                 <p id="appAPPROVE_BY"></p>
                             </div> 
                         </div>
                         <div class="col-md-3 col-sm-3">
                             <div class="form-group">
-                                <label for="">Tanggal persetujuan</label>
+                                <label>Tanggal persetujuan</label>
                                 <p id="appMUTASI_APP_TANGGAL"></p>
                             </div> 
                         </div>
@@ -670,44 +670,44 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">ID - Nama Anggota</label>
+                                    <label>ID - Nama Anggota</label>
                                     <input type="text" class="form-control" id="appANGGOTA_IDNAMA" name="ANGGOTA_ID" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div hidden">
                                 <div class="form-group">
-                                    <label for="">ID Cabang</label>
+                                    <label>ID Cabang</label>
                                     <input type="text" class="form-control" id="appCABANG_AWAL" name="CABANG_AWAL" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Daerah</label>
+                                    <label>Daerah</label>
                                     <input type="text" class="form-control" id="appDAERAH_AWAL_DES" name="DAERAH_AWAL" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Cabang</label>
+                                    <label>Cabang</label>
                                     <input type="text" class="form-control" id="appCABANG_AWAL_DES" name="CABANG_DESKRIPSI" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Sabuk</label>
+                                    <label>Sabuk</label>
                                     <input type="text" class="form-control" id="appTINGKATAN_NAMA" name="TINGKATAN_ID" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Tingkatan</label>
+                                    <label>Tingkatan</label>
                                     <input type="text" class="form-control" id="appTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
                                 </div> 
                             </div>   
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
                             <div class="short-div">
-                                <label for="">Foto Anggota </label><br>
+                                <label>Foto Anggota </label><br>
                                 <div id="loadpicapp"></div>
                             </div>
                         </div>
@@ -716,13 +716,13 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Daerah Tujuan</label>
+                                <label>Daerah Tujuan</label>
                                 <input type="text" class="form-control" id="appDAERAH_TUJUAN_DES" name="DAERAH_TUJUAN" value="" readonly>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Cabang Tujuan</label>
+                                <label>Cabang Tujuan</label>
                                 <input type="text" class="form-control" id="appCABANG_TUJUAN_DES" name="CABANG_TUJUAN" value="" readonly>
                             </div> 
                         </div>
@@ -730,13 +730,13 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Deskripsi</label>
+                                <label>Deskripsi</label>
                                 <textarea type="text" rows="4" class="form-control" id="appMUTASI_DESKRIPSI" name="MUTASI_DESKRIPSI" value="" data-parsley-required readonly></textarea>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Tanggal Efektif</label>
+                                <label>Tanggal Efektif</label>
                                 <input type="text" class="form-control" id="appTANGGAL_EFEKTIF" name="MUTAS_TANGGAL" value="" readonly>
                             </div> 
                         </div>

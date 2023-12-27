@@ -113,7 +113,7 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Daerah<span class="text-danger">*</span></label>
+                                <label>Daerah<span class="text-danger">*</span></label>
                                 <div id="selectize-wrapper" style="position: relative;">
                                     <select name="DAERAH_KEY" id="selectize-dropdown" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Daerah --</option>
@@ -131,7 +131,7 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Cabang ID<span class="text-danger">*</span></label>
+                                <label>Cabang ID<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="CABANG_ID" name="CABANG_ID" value="" data-parsley-required>
                             </div> 
                         </div>
@@ -139,13 +139,13 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Lokasi Cabang<span class="text-danger">*</span></label>
+                                <label>Lokasi Cabang<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="CABANG_DESKRIPSI" name="CABANG_DESKRIPSI" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Kepengurusan</label>
+                                <label>Kepengurusan</label>
                                 <input type="text" class="form-control" id="CABANG_PENGURUS" name="CABANG_PENGURUS" value="">
                             </div> 
                         </div>
@@ -153,13 +153,13 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Alamat<span class="text-danger">*</span></label>
+                                <label>Alamat<span class="text-danger">*</span></label>
                                 <textarea type="text" rows="5" class="form-control" id="CABANG_SEKRETARIAT" name="CABANG_SEKRETARIAT" value="" data-parsley-required></textarea>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Map Link<span class="text-danger">*</span></label>
+                                <label>Map Link<span class="text-danger">*</span></label>
                                 <textarea type="text" rows="5" class="form-control" id="CABANG_MAP" name="CABANG_MAP" value="" onkeyup="getMapsAdd(this.value)" onClick="getMapsAdd(this.value)" data-parsley-required></textarea>
                             </div> 
                         </div>
@@ -167,13 +167,13 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Latitude<span class="text-danger">*</span></label>
+                                <label>Latitude<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="CABANG_LAT" name="CABANG_LAT" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Longitude<span class="text-danger">*</span></label>
+                                <label>Longitude<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="CABANG_LONG" name="CABANG_LONG" value="" data-parsley-required>
                             </div> 
                         </div>
@@ -182,7 +182,7 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                     <div class="row" id="addCabangMap">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="">Google Maps</span></label><br>
+                                <label>Google Maps</span></label><br>
                             </div> 
                         </div>
                     </div>
@@ -208,13 +208,13 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Daerah<span class="text-danger">*</span></label>
+                                <label>Daerah<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required readonly id="viewDAERAH_ID" name="DAERAH_ID" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Cabang ID<span class="text-danger">*</span></label>
+                                <label>Cabang ID<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required readonly id="viewCABANG_ID" name="CABANG_ID" value="" data-parsley-required>
                             </div> 
                         </div>
@@ -222,13 +222,13 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Deskripsi<span class="text-danger">*</span></label>
+                                <label>Deskripsi<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" readonly required id="viewCABANG_DESKRIPSI" name="CABANG_DESKRIPSI" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Kepengurusan<span class="text-danger">*</span></label>
+                                <label>Kepengurusan<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="viewCABANG_PENGURUS" name="CABANG_PENGURUS" readonly value="">
                             </div> 
                         </div>
@@ -236,13 +236,13 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Alamat<span class="text-danger">*</span></label>
+                                <label>Alamat<span class="text-danger">*</span></label>
                                 <textarea type="text" rows="5" class="form-control" id="viewCABANG_SEKRETARIAT" name="CABANG_SEKRETARIAT" value="" data-parsley-required readonly></textarea>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Map Link<span class="text-danger">*</span></label>
+                                <label>Map Link<span class="text-danger">*</span></label>
                                 <textarea type="text" rows="5" class="form-control" id="viewCABANG_MAP" name="CABANG_MAP" readonly value=""></textarea>
                             </div> 
                         </div>
@@ -250,13 +250,13 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Latitude<span class="text-danger">*</span></label>
+                                <label>Latitude<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" readonly required id="viewCABANG_LAT" name="CABANG_LAT" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Longitude<span class="text-danger">*</span></label>
+                                <label>Longitude<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="viewCABANG_LONG" name="CABANG_LONG" readonly value="">
                             </div> 
                         </div>
@@ -265,7 +265,7 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="">Google Maps</label>
+                                <label>Google Maps</label>
                                 <iframe id="ViewCabangMap" src="" width="100%" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                             </div>
                         </div>
@@ -291,7 +291,7 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                     <div class="row hidden">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">ID<span class="text-danger">*</span></label>
+                                <label>ID<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required readonly id="editCABANG_KEY" name="CABANG_KEY" value="" data-parsley-required>
                             </div> 
                         </div>
@@ -299,7 +299,7 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Daerah<span class="text-danger">*</span></label>
+                                <label>Daerah<span class="text-danger">*</span></label>
                                 <div id="selectize-wrapper2" style="position: relative;">
                                     <select name="DAERAH_KEY" id="selectize-dropdown2" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Daerah --</option>
@@ -317,7 +317,7 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Cabang ID<span class="text-danger">*</span></label>
+                                <label>Cabang ID<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="editCABANG_ID" name="CABANG_ID" value="" data-parsley-required>
                             </div> 
                         </div>
@@ -325,13 +325,13 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Lokasi Cabang<span class="text-danger">*</span></label>
+                                <label>Lokasi Cabang<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="editCABANG_DESKRIPSI" name="CABANG_DESKRIPSI" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Kepengurusan</label>
+                                <label>Kepengurusan</label>
                                 <input type="text" class="form-control" id="editCABANG_PENGURUS" name="CABANG_PENGURUS" value="">
                             </div> 
                         </div>
@@ -339,13 +339,13 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Alamat<span class="text-danger">*</span></label>
+                                <label>Alamat<span class="text-danger">*</span></label>
                                 <textarea type="text" rows="5" class="form-control" id="editCABANG_SEKRETARIAT" name="CABANG_SEKRETARIAT" value="" data-parsley-required></textarea>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Map Link<span class="text-danger">*</span></label>
+                                <label>Map Link<span class="text-danger">*</span></label>
                                 <textarea type="text" rows="5" class="form-control" id="editCABANG_MAP" name="CABANG_MAP" value="" onkeyup="getMapsEdit(this.value)" onClick="getMapsEdit(this.value)" data-parsley-required></textarea>
                             </div> 
                         </div>
@@ -353,13 +353,13 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Latitude<span class="text-danger">*</span></label>
+                                <label>Latitude<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" required id="editCABANG_LAT" name="CABANG_LAT" value="" data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Longitude<span class="text-danger">*</span></label>
+                                <label>Longitude<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="editCABANG_LONG" name="CABANG_LONG" value="" data-parsley-required>
                             </div> 
                         </div>
@@ -368,7 +368,7 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                     <div class="row">
                         <div class="col-md-12" id="editCabangMap">
                             <div class="form-group">
-                                <label for="">Google Maps</span></label><br>
+                                <label>Google Maps</span></label><br>
                                 <iframe id="EditCabangMap" src="" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                             </div> 
                         </div>

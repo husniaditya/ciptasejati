@@ -43,7 +43,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                             ?>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="">Daerah</label>
+                                    <label>Daerah</label>
                                     <select name="DAERAH_KEY" id="selectize-select3" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Daerah --</option>
                                         <?php
@@ -59,7 +59,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="">Cabang</label>
+                                    <label>Cabang</label>
                                     <select name="CABANG_KEY" id="selectize-select2" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Cabang --</option>
                                     </select>
@@ -70,7 +70,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                         ?>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="">Tingkatan</label>
+                                <label>Tingkatan</label>
                                 <select name="TINGKATAN_ID" id="selectize-select" required="" class="form-control" data-parsley-required>
                                     <option value="">-- Pilih Tingkatan --</option>
                                     <?php
@@ -86,7 +86,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="">ID Anggota</label>
+                                <label>ID Anggota</label>
                                 <input type="text" class="form-control" id="filterANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Input ID Anggota">
                             </div> 
                         </div>
@@ -94,25 +94,25 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="">Nama</label>
+                                <label>Nama</label>
                                 <input type="text" class="form-control" id="filterANGGOTA_NAMA" name="ANGGOTA_NAMA" value="" placeholder="Input Nama">
                             </div> 
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="">KTP</label>
+                                <label>KTP</label>
                                 <input type="text" class="form-control" id="filterANGGOTA_KTP" name="ANGGOTA_KTP" value="" placeholder="Input KTP">
                             </div> 
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="">No HP</label>
+                                <label>No HP</label>
                                 <input type="text" class="form-control" id="filterANGGOTA_HP" name="ANGGOTA_HP" value="" placeholder="Input Nomor HP">
                             </div> 
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="">Status Anggota</label>
+                                <label>Status Anggota</label>
                                 <select id="filterANGGOTA_STATUS" name="ANGGOTA_STATUS" class="form-control"  data-parsley-required required>
                                     <option value="">Tampilkan semua</option>
                                     <option value="0">Aktif</option>
@@ -249,7 +249,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
                             <div class="form-group">
                                 <!-- PUT THE SAMPLE UPLOAD PHOTO HERE -->
-                                <label for="">Foto Anggota </label><br>
+                                <label>Foto Anggota </label><br>
                                 <div id="preview-container">
                                     <img id="preview-image" src="#" alt="Preview" style="max-width: 250px; max-height: 250px;" />
                                 </div>
@@ -270,7 +270,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                 ?>
                                 <div class="short-div">
                                     <div class="form-group">
-                                        <label for="">Daerah<span class="text-danger">*</span></label>
+                                        <label>Daerah<span class="text-danger">*</span></label>
                                         <div id="selectize-wrapper" style="position: relative;">
                                             <select name="DAERAH_KEY" id="selectize-dropdown" required="" class="form-control" data-parsley-required>
                                                 <option value="">-- Pilih Daerah --</option>
@@ -288,7 +288,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                 </div>
                                 <div class="short-div">
                                     <div class="form-group">
-                                        <label for="">Cabang<span class="text-danger">*</span></label>
+                                        <label>Cabang<span class="text-danger">*</span></label>
                                         <div id="selectize-wrapper3" style="position: relative;">
                                             <select name="CABANG_KEY" id="selectize-dropdown3" required="" class="form-control" data-parsley-required>
                                                 <option value="">-- Pilih Cabang --</option>]
@@ -301,7 +301,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                             ?>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Tingkatan<span class="text-danger">*</span></label>
+                                    <label>Tingkatan<span class="text-danger">*</span></label>
                                     <div id="selectize-wrapper2" style="position: relative;">
                                         <select name="TINGKATAN_ID" id="selectize-dropdown2" required="" class="form-control" data-parsley-required>
                                             <option value="">-- Pilih Tingkatan --</option>
@@ -319,7 +319,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">No Urut Anggota<span class="text-danger">*</span></label>
+                                    <label>No Urut Anggota<span class="text-danger">*</span></label>
                                     <input type="number" class="form-control" minlength="3" maxlength="3" oninput="validateInput(this)" required id="ANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Inputkan 3 digit nomor urut keanggotaan" data-parsley-required>
                                     <div id="warning-message" style="color: red;"></div>
                                 </div>
@@ -330,7 +330,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Tanggal Bergabung</label><span class="text-danger">*</span></label>
+                                <label>Tanggal Bergabung</label><span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="datepicker44" name="ANGGOTA_JOIN" placeholder="Pilih tanggal" readonly required data-parsley-required/>
                             </div> 
                         </div>
@@ -338,19 +338,19 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Nama</label><span class="text-danger">*</span></label>
+                                <label>Nama</label><span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="ANGGOTA_NAMA" name="ANGGOTA_NAMA" value="" data-parsley-required required>
                             </div> 
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="">Tempat &amp; Tanggal Lahir</label><span class="text-danger">*</span></label>
+                                <label>Tempat &amp; Tanggal Lahir</label><span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="ANGGOTA_TEMPAT_LAHIR" name="ANGGOTA_TEMPAT_LAHIR" value="" data-parsley-required required>
                             </div> 
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="" style="color: transparent;">.</label>
+                                <label style="color: transparent;">.</label>
                                 <input type="text" class="form-control" id="datepicker4" name="ANGGOTA_TANGGAL_LAHIR" placeholder="Pilih tanggal" readonly data-parsley-required required/>
                             </div> 
                         </div>
@@ -358,7 +358,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Agama</label><span class="text-danger">*</span></label>
+                                <label>Agama</label><span class="text-danger">*</span></label>
                                 <select id="ANGGOTA_AGAMA" name="ANGGOTA_AGAMA" class="form-control" placeholder="Pilih Agama..." data-parsley-required required>
                                     <option value="">Pilih Agama...</option>
                                     <option value="Islam">Islam</option>
@@ -372,7 +372,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Jenis Kelamin</label><span class="text-danger">*</span></label>
+                                <label>Jenis Kelamin</label><span class="text-danger">*</span></label>
                                 <select id="ANGGOTA_KELAMIN" name="ANGGOTA_KELAMIN" class="form-control" placeholder="Pilih Jenis Kelamin..." data-parsley-required required>
                                     <option value="">Pilih Jenis Kelamin...</option>
                                     <option value="L">Pria</option>
@@ -384,13 +384,13 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">KTP</label><span class="text-danger">*</span></label>
+                                <label>KTP</label><span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="ANGGOTA_KTP" name="ANGGOTA_KTP" value="" placeholder="Inputkan no KTP" data-parsley-required required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Alamat</label>
+                                <label>Alamat</label>
                                 <textarea type="text" rows="4" class="form-control" id="ANGGOTA_ALAMAT" name="ANGGOTA_ALAMAT" value=""></textarea>
                             </div> 
                         </div>
@@ -398,13 +398,13 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Pekerjaan</label>
+                                <label>Pekerjaan</label>
                                 <input type="text" class="form-control" id="ANGGOTA_PEKERJAAN" name="ANGGOTA_PEKERJAAN" value="">
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">No HP</label><span class="text-danger">*</span></label>
+                                <label>No HP</label><span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="ANGGOTA_HP" name="ANGGOTA_HP" value="" data-parsley-required required>
                             </div> 
                         </div>
@@ -412,13 +412,13 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Email</label><span class="text-danger">*</span></label>
+                                <label>Email</label><span class="text-danger">*</span></label>
                                 <input type="email" class="form-control" id="ANGGOTA_EMAIL" name="ANGGOTA_EMAIL" data-parsley-required required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Akses Anggota</label><span class="text-danger">*</span></label>
+                                <label>Akses Anggota</label><span class="text-danger">*</span></label>
                                 <select id="ANGGOTA_AKSES" name="ANGGOTA_AKSES" class="form-control" data-parsley-required required>
                                     <option value="User">User</option>
                                     <option value="Koordinator">Koordinator</option>
@@ -448,31 +448,31 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
-                            <label for="">Foto Anggota </label><br>
+                            <label>Foto Anggota </label><br>
                             <div id="loadpic"></div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Daerah<span class="text-danger">*</span></label>
+                                    <label>Daerah<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="viewDAERAH_KEY" name="DAERAH_KEY" value="" data-parsley-required readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Cabang<span class="text-danger">*</span></label>
+                                    <label>Cabang<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="viewCABANG_KEY" name="CABANG_KEY" value="" data-parsley-required readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Tingkatan<span class="text-danger">*</span></label>
+                                    <label>Tingkatan<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="viewTINGKATAN_ID" name="TINGKATAN_ID" value="" data-parsley-required readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">No Urut Anggota<span class="text-danger">*</span></label>
+                                    <label>No Urut Anggota<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="viewANGGOTA_ID" name="ANGGOTA_ID" value="" data-parsley-required readonly>
                                 </div>
                             </div>
@@ -496,13 +496,13 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">Tanggal Bergabung</label>
+                                                <label>Tanggal Bergabung</label>
                                                 <input type="text" class="form-control" id="viewANGGOTA_JOIN" name="ANGGOTA_JOIN" value="" data-parsley-required readonly>
                                             </div> 
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">Status Anggota</label>
+                                                <label>Status Anggota</label>
                                                 <input type="text" class="form-control" id="viewANGGOTA_STATUS" name="ANGGOTA_STATUS" value="" data-parsley-required readonly>
                                             </div> 
                                         </div>
@@ -510,19 +510,19 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">Nama</label>
+                                                <label>Nama</label>
                                                 <input type="text" class="form-control" id="viewANGGOTA_NAMA" name="ANGGOTA_NAMA" value="" data-parsley-required readonly>
                                             </div> 
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="">Tempat &amp; Tanggal Lahir</label>
+                                                <label>Tempat &amp; Tanggal Lahir</label>
                                                 <input type="text" class="form-control" id="viewANGGOTA_TEMPAT_LAHIR" name="ANGGOTA_TEMPAT_LAHIR" value="" data-parsley-required readonly>
                                             </div> 
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="" style="color: transparent;">.</label>
+                                                <label style="color: transparent;">.</label>
                                                 <input type="text" class="form-control" id="viewANGGOTA_TANGGAL_LAHIR" name="ANGGOTA_TANGGAL_LAHIR" readonly data-parsley-required/>
                                             </div> 
                                         </div>
@@ -530,13 +530,13 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">Agama</label>
+                                                <label>Agama</label>
                                                 <input type="text" class="form-control" id="viewANGGOTA_AGAMA" name="ANGGOTA_AGAMA" value="" data-parsley-required readonly>
                                             </div> 
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">Jenis Kelamin</label>
+                                                <label>Jenis Kelamin</label>
                                                 <input type="text" class="form-control" id="viewANGGOTA_KELAMIN" name="ANGGOTA_KELAMIN" value="" data-parsley-required readonly>
                                             </div> 
                                         </div>
@@ -544,13 +544,13 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">KTP</label>
+                                                <label>KTP</label>
                                                 <input type="text" class="form-control" id="viewANGGOTA_KTP" name="ANGGOTA_KTP" value="" data-parsley-required readonly>
                                             </div> 
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">Alamat</label>
+                                                <label>Alamat</label>
                                                 <textarea type="text" rows="4" class="form-control" id="viewANGGOTA_ALAMAT" name="ANGGOTA_ALAMAT" value="" data-parsley-required readonly></textarea>
                                             </div> 
                                         </div>
@@ -558,13 +558,13 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">Pekerjaan</label>
+                                                <label>Pekerjaan</label>
                                                 <input type="text" class="form-control" id="viewANGGOTA_PEKERJAAN" name="ANGGOTA_PEKERJAAN" value="" readonly>
                                             </div> 
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">No HP</label>
+                                                <label>No HP</label>
                                                 <input type="text" class="form-control" id="viewANGGOTA_HP" name="ANGGOTA_HP" value="" data-parsley-required readonly>
                                             </div> 
                                         </div>
@@ -572,13 +572,13 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">Email</label>
+                                                <label>Email</label>
                                                 <input type="email" class="form-control" id="viewANGGOTA_EMAIL" name="ANGGOTA_EMAIL" data-parsley-required readonly/>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">Akses Anggota</label><span class="text-danger">*</span></label>
+                                                <label>Akses Anggota</label><span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" id="viewANGGOTA_AKSES" name="ANGGOTA_AKSES" value="" data-parsley-required readonly>
                                             </div> 
                                         </div>
@@ -728,7 +728,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                 <div class="modal-body">
                     <div class="row hidden">
                         <div class="col-md-6">
-                            <label for="">Key<span class="text-danger">*</span></label>
+                            <label>Key<span class="text-danger">*</span></label>
                             <input type="text" class="form-control" required id="editANGGOTA_KEY" name="ANGGOTA_KEY" value="" data-parsley-required readonly>
                         </div>
                     </div>
@@ -736,7 +736,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
                             <div class="form-group">
                                 <!-- PUT THE SAMPLE UPLOAD PHOTO HERE -->
-                                <label for="">Foto Anggota </label><br>
+                                <label>Foto Anggota </label><br>
                                 <div id="loadpicedit" style="display: block;"></div>
                                 <div id="preview-container-edit">
                                     <img id="preview-image-edit" src="#" alt="Preview" style="max-width: 250px; max-height: 250px;" />
@@ -747,7 +747,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                         <i class="fa-regular fa-image"></i>
                                         <span>Upload Foto...</span>
                                         <!-- The file input field used as target for the file upload widget -->
-                                        <input type="file" name="ANGGOTA_PIC[]" id="ANGGOTA_PIC" onchange="previewImageedit(this);" accept="image/*" /> <br>
+                                        <input type="file" name="ANGGOTA_PIC[]" id="editANGGOTA_PIC" onchange="previewImageedit(this);" accept="image/*" /> <br>
                                     </span>
                                 </div>
                             </div>
@@ -758,7 +758,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                 ?>
                                 <div class="short-div">
                                     <div class="form-group">
-                                        <label for="">Daerah<span class="text-danger">*</span></label>
+                                        <label>Daerah<span class="text-danger">*</span></label>
                                         <div id="selectize-wrapper4" style="position: relative;">
                                             <select name="DAERAH_KEY" id="selectize-dropdown4" required="" class="form-control" data-parsley-required>
                                                 <option value="">-- Pilih Daerah --</option>
@@ -776,7 +776,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                 </div>
                                 <div class="short-div">
                                     <div class="form-group">
-                                        <label for="">Cabang<span class="text-danger">*</span></label>
+                                        <label>Cabang<span class="text-danger">*</span></label>
                                         <div id="selectize-wrapper5" style="position: relative;">
                                             <select name="CABANG_KEY" id="selectize-dropdown5" required="" class="form-control" data-parsley-required>
                                                 <option value="">-- Pilih Cabang --</option>]
@@ -789,7 +789,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                             ?>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">Tingkatan<span class="text-danger">*</span></label>
+                                    <label>Tingkatan<span class="text-danger">*</span></label>
                                     <div id="selectize-wrapper6" style="position: relative;">
                                         <select name="TINGKATAN_ID" id="selectize-dropdown6" required="" class="form-control" data-parsley-required>
                                             <option value="">-- Pilih Tingkatan --</option>
@@ -807,7 +807,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label for="">No Urut Anggota<span class="text-danger">*</span></label>
+                                    <label>No Urut Anggota<span class="text-danger">*</span></label>
                                     <input type="number" class="form-control" minlength="3" maxlength="3" oninput="validateInput(this)" required id="editANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Inputkan 3 digit nomor urut keanggotaan" data-parsley-required>
                                     <div id="warning-message-edit" style="color: red;"></div>
                                 </div>
@@ -818,13 +818,13 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Tanggal Bergabung</label><span class="text-danger">*</span></label>
+                                <label>Tanggal Bergabung</label><span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="datepicker45" name="ANGGOTA_JOIN" placeholder="Pilih tanggal" readonly data-parsley-required required/>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Status Anggota</label><span class="text-danger">*</span></label>
+                                <label>Status Anggota</label><span class="text-danger">*</span></label>
                                 <select id="editANGGOTA_STATUS" name="ANGGOTA_STATUS" class="form-control" data-parsley-required required>
                                     <option value="0">Aktif</option>
                                     <option value="1">Non Aktif</option>
@@ -836,19 +836,19 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Nama</label><span class="text-danger">*</span></label>
+                                <label>Nama</label><span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="editANGGOTA_NAMA" name="ANGGOTA_NAMA" value="" data-parsley-required required>
                             </div> 
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="">Tempat &amp; Tanggal Lahir</label><span class="text-danger">*</span></label>
+                                <label>Tempat &amp; Tanggal Lahir</label><span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="editANGGOTA_TEMPAT_LAHIR" name="ANGGOTA_TEMPAT_LAHIR" value="" data-parsley-required required>
                             </div> 
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="" style="color: transparent;">.</label>
+                                <label style="color: transparent;">.</label>
                                 <input type="text" class="form-control" id="datepicker46" name="ANGGOTA_TANGGAL_LAHIR" placeholder="Pilih tanggal" readonly data-parsley-required required/>
                             </div> 
                         </div>
@@ -856,7 +856,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Agama</label><span class="text-danger">*</span></label>
+                                <label>Agama</label><span class="text-danger">*</span></label>
                                 <select id="editANGGOTA_AGAMA" name="ANGGOTA_AGAMA" class="form-control" placeholder="Pilih Agama..." data-parsley-required required>
                                     <option value="">Pilih Agama...</option>
                                     <option value="Islam">Islam</option>
@@ -870,7 +870,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Jenis Kelamin</label><span class="text-danger">*</span></label>
+                                <label>Jenis Kelamin</label><span class="text-danger">*</span></label>
                                 <select id="editANGGOTA_KELAMIN" name="ANGGOTA_KELAMIN" class="form-control" placeholder="Pilih Jenis Kelamin..." data-parsley-required required>
                                     <option value="">Pilih Jenis Kelamin...</option>
                                     <option value="L">Pria</option>
@@ -882,13 +882,13 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">KTP</label><span class="text-danger">*</span></label>
+                                <label>KTP</label><span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="editANGGOTA_KTP" name="ANGGOTA_KTP" value="" placeholder="Inputkan no KTP" data-parsley-required required>
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Alamat</label>
+                                <label>Alamat</label>
                                 <textarea type="text" rows="4" class="form-control" id="editANGGOTA_ALAMAT" name="ANGGOTA_ALAMAT" value="" data-parsley-required></textarea>
                             </div> 
                         </div>
@@ -896,13 +896,13 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Pekerjaan</label>
+                                <label>Pekerjaan</label>
                                 <input type="text" class="form-control" id="editANGGOTA_PEKERJAAN" name="ANGGOTA_PEKERJAAN" value="">
                             </div> 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">No HP</label><span class="text-danger">*</span></label>
+                                <label>No HP</label><span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="editANGGOTA_HP" name="ANGGOTA_HP" value="" data-parsley-required required>
                             </div> 
                         </div>
@@ -910,13 +910,13 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Email</label><span class="text-danger">*</span></label>
+                                <label>Email</label><span class="text-danger">*</span></label>
                                 <input type="email" class="form-control" id="editANGGOTA_EMAIL" name="ANGGOTA_EMAIL" data-parsley-required required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Akses Anggota</label><span class="text-danger">*</span></label>
+                                <label>Akses Anggota</label><span class="text-danger">*</span></label>
                                 <select id="editANGGOTA_AKSES" name="ANGGOTA_AKSES" class="form-control" data-parsley-required required>
                                     <option value="User">User</option>
                                     <option value="Koordinator">Koordinator</option>

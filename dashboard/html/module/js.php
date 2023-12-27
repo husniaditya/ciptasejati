@@ -36,8 +36,5 @@
 <script type="text/javascript" src="../plugins/datatables/js/3.2.3-dataTables.fixedHeader-min.js"></script>
 <!-- / Datatable -->
 
-<!-- Google Maps API Key -->
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjKL8RTKvyTrbjxwjtGMGcoMZbUP6E70s&callback=initMap"></script>
-
 
 <!--/ END JAVASCRIPT SECTION -->
