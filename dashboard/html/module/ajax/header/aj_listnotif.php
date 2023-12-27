@@ -58,7 +58,7 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
             </span>
         </a>
         <?php
-    } elseif ($READ_STATUS == 0 && $APPROVE_STATUS == 1 && ($USER_AKSES == "Administrator" || $USER_AKSES == "Koordinator")) {
+    } elseif ($READ_STATUS == 0 && $APPROVE_STATUS <> 0 && ($USER_AKSES == "Administrator" || $USER_AKSES == "Koordinator")) {
         ?>
         <a href="#<?= $HREF; ?>" data-toggle="modal" class="media border-dotted <?= $TOGGLE; ?>" style="background-color: lavender;" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" onclick="getNotif(this)">
             <span class="media-body">

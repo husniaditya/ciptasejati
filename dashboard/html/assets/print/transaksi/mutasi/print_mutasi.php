@@ -74,14 +74,46 @@ while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
 
         // Page footer
         public function Footer() {
-            global $USER_NAMA;
-            global $DATENOW;
+            global $USER_NAMA, $CABANG_TUJUAN_DES, $MUTASI_APPROVE_TANGGAL, $INPUT_BY, $INPUT_BY_ID, $APPROVE_BY, $APPROVE_BY_ID, $INPUT_AKSES, $APPROVE_AKSES, $CABANG_AWAL_DES, $DATENOW, $INPUT_DATE;
+
+            // set style for barcode
+            $style = array(
+                'border' => true,
+                'vpadding' => 'auto',
+                'hpadding' => 'auto',
+                'fgcolor' => array(0,0,0),
+                'bgcolor' => false, //array(255,255,255)
+                'module_width' => 1, // width of a single module in points
+                'module_height' => 1 // height of a single module in points
+            );
+            
             // Position at 15 mm from bottom
-            $this->SetY(-15);
+            $this->SetY(-70);
             $pageWidth = $this->getPageWidth();
+            $this->SetFont('times', '', 12); // Set font for body
             // Draw a horizontal line under the header
-            $this->Line(10, $this->GetY() + 2, $pageWidth - 10, $this->GetY() + 2);
+            $this->Cell(10,5,$CABANG_AWAL_DES.', '.$INPUT_DATE,0,0,"L");
+            $this->Cell(170,5,$CABANG_TUJUAN_DES.', '.$MUTASI_APPROVE_TANGGAL,0,0,"R");
             $this->Ln();
+            $this->Cell(10,5,"Diajukan Oleh,",0,0,"L");
+            $this->Cell(170,5,"Disetujui Oleh,",0,0,"R");
+            $this->Ln();
+            // QRCODE,H : QR-CODE Best error correction
+            $this->write2DBarcode($INPUT_BY_ID.' - '.$INPUT_BY, 'QRCODE,H', 15, 240, 25, 25, $style, 'N');
+            if ($APPROVE_BY) {
+                $this->write2DBarcode($APPROVE_BY_ID.' - '.$APPROVE_BY, 'QRCODE,H', 160, 240, 25, 25, $style, 'N');
+            }
+            $this->Ln(3);
+            $this->SetFont('times', 'U', 12); // Set font for body
+            $this->Cell(10,5,$INPUT_BY,0,0,"L");
+            $this->Cell(170,5,$APPROVE_BY,0,0,"R");
+            $this->Ln();
+            $this->SetFont('times', '', 12); // Set font for body
+            $this->Cell(10,5,$INPUT_AKSES .' - '.$CABANG_AWAL_DES,0,0,"L");
+            $this->Cell(170,5,$APPROVE_AKSES.' - '.$CABANG_TUJUAN_DES,0,0,"R");
+            $this->Ln(10);
+            $this->Line(10, $this->GetY() + 2, $pageWidth - 10, $this->GetY() + 2);
+            $this->Ln(1);
             $this->SetFont('helvetica', '', 8); // Set font for body
             $this->Cell(0, 10, 'Dicetak Oleh: '. $USER_NAMA.' / '.$DATENOW, 0, false, 'L', 0, '', 0, false, 'T', 'M');
             
@@ -112,17 +144,6 @@ while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
     $pdf->AddPage();
     // Get the width of the page
     $pageWidth = $pdf->getPageWidth();
-
-    // set style for barcode
-    $style = array(
-        'border' => true,
-        'vpadding' => 'auto',
-        'hpadding' => 'auto',
-        'fgcolor' => array(0,0,0),
-        'bgcolor' => false, //array(255,255,255)
-        'module_width' => 1, // width of a single module in points
-        'module_height' => 1 // height of a single module in points
-    );
 
     // set some text to print
     $pdf->Ln(30);// Set font for title
@@ -203,26 +224,7 @@ while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
     $pdf->MultiCell(180,5,"Keputusan ini atas kesepakatan bersama antar dua belah pihak dan akan efektif per tanggal ".$TANGGAL_EFEKTIF.". Dimohon anggota menyelesaikan urusan dengan baik di cabang lama dan menyiapkan segala sesuatunya dengan baik ke cabang yang baru.", 0, 'L', false, 1, '', '', true);
     $pdf->Ln(5);
     $pdf->MultiCell(180,5,"Demikian formulir mutasi anggota ini disampaikan dengan sebenarnya untuk digunakan sebagaimana mestinya.", 0, 'J', false, 1, '', '', true);
-    $pdf->Ln(10);
-    $pdf->Cell(10,5,$CABANG_AWAL_DES.', '.$INPUT_DATE,0,0,"L");
-    $pdf->Cell(170,5,$CABANG_TUJUAN_DES.', '.$MUTASI_APPROVE_TANGGAL,0,0,"R");
-    $pdf->Ln();
-    $pdf->Cell(10,5,"Diajukan Oleh,",0,0,"L");
-    $pdf->Cell(170,5,"Disetujui Oleh,",0,0,"R");
-    $pdf->Ln();
-    // QRCODE,H : QR-CODE Best error correction
-    $pdf->write2DBarcode($INPUT_BY_ID.' - '.$INPUT_BY, 'QRCODE,H', 15, 225, 25, 25, $style, 'N');
-    if ($APPROVE_BY) {
-        $pdf->write2DBarcode($APPROVE_BY_ID.' - '.$APPROVE_BY, 'QRCODE,H', 160, 225, 25, 25, $style, 'N');
-    }
-    $pdf->Ln(3);
-    $pdf->SetFont('times', 'U', 12); // Set font for body
-    $pdf->Cell(10,5,$INPUT_BY,0,0,"L");
-    $pdf->Cell(170,5,$APPROVE_BY,0,0,"R");
-    $pdf->Ln();
-    $pdf->SetFont('times', '', 12); // Set font for body
-    $pdf->Cell(10,5,$INPUT_AKSES .' - '.$CABANG_AWAL_DES,0,0,"L");
-    $pdf->Cell(170,5,$APPROVE_AKSES.' - '.$CABANG_TUJUAN_DES,0,0,"R");
+    
 
     // ---------------------------------------------------------
     GetQuery("update t_mutasi set MUTASI_FILE = './assets/report/mutasi/$CABANG_AWAL_DES/$MUTASI_ID Mutasi Anggota $ANGGOTA_NAMA  $TANGGAL_EFEKTIF.pdf' where MUTASI_ID = '$MUTASI_ID'");
