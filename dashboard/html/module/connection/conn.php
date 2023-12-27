@@ -87,10 +87,10 @@ function sendEmail($toAddress, $toName, $ccAddresses, $ccNames, $subject, $body,
 
         // Server settings
         $mail->isSMTP();            // Send using SMTP
-        $mail->Host       = 'smtp.hostinger.com'; // Set the SMTP server to send through
+        $mail->Host       = $_ENV['mailHost']; // Set the SMTP server to send through
         $mail->SMTPAuth   = true;    // Enable SMTP authentication
-        $mail->Username   = 'no-reply@ciptasejatiindonesia.com'; // SMTP username
-        $mail->Password   = '**Noreplycs2024'; // SMTP password
+        $mail->Username   = $_ENV['mailUsername']; // SMTP username
+        $mail->Password   = $_ENV['mailPassword']; // SMTP password
         $mail->SMTPSecure = 'ssl';   // Enable implicit TLS encryption
         $mail->Port       = 465;      // TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
