@@ -90,20 +90,37 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
         <?php
     } 
     else {
-        ?>
-        <a href="#<?= $HREF; ?>" data-toggle="modal" data-toggle="modal" class="media read border-dotted <?= $TOGGLE; ?>" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" onclick="getNotif(this)">
-            <span class="media-body">
-                <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
-                <span class="media-heading"><?= $DOKUMEN_ID; ?></span>
-                <span class="media-heading"><?= $SUBJECT; ?></span>
-                <span class="media-text ellipsis nm"><?= $BODY; ?></span>
-                <!-- meta icon -->
-                <span class="media-meta pull-left"><?= $ANGGOTA_NAMA." / ".$CABANG_DESKRIPSI; ?></span>
-                <span class="media-meta pull-right"><?= $difference; ?></span>
-                <!--/ meta icon -->
-            </span>
-        </a>
-        <?php
+        if ($READ_STATUS == 0) {
+            ?>
+            <a href="#<?= $HREF; ?>" data-toggle="modal" data-toggle="modal" class="media border-dotted <?= $TOGGLE; ?>" style="background-color: lavender;" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" onclick="getNotif(this)">
+                <span class="media-body">
+                    <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
+                    <span class="media-heading text-primary semibold"><?= $DOKUMEN_ID; ?></span>
+                    <span class="media-heading text-primary semibold"><?= $SUBJECT; ?></span>
+                    <span class="media-text ellipsis nm semibold"><?= $BODY; ?></span>
+                    <!-- meta icon -->
+                    <span class="media-meta pull-left"><?= $ANGGOTA_NAMA." / ".$CABANG_DESKRIPSI; ?></span>
+                    <span class="media-meta pull-right"><?= $difference; ?></span>
+                    <!--/ meta icon -->
+                </span>
+            </a>
+            <?php
+        } else {
+            ?>
+            <a href="#<?= $HREF; ?>" data-toggle="modal" data-toggle="modal" class="media read border-dotted <?= $TOGGLE; ?>" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" onclick="getNotif(this)">
+                <span class="media-body">
+                    <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
+                    <span class="media-heading"><?= $DOKUMEN_ID; ?></span>
+                    <span class="media-heading"><?= $SUBJECT; ?></span>
+                    <span class="media-text ellipsis nm"><?= $BODY; ?></span>
+                    <!-- meta icon -->
+                    <span class="media-meta pull-left"><?= $ANGGOTA_NAMA." / ".$CABANG_DESKRIPSI; ?></span>
+                    <span class="media-meta pull-right"><?= $difference; ?></span>
+                    <!--/ meta icon -->
+                </span>
+            </a>
+            <?php
+        }
     }
     
 }

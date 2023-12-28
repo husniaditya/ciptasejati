@@ -46,7 +46,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
         <a data-toggle="collapse" data-parent="#accordion1" href="#collapseOne" class="collapsed">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <i class="fa-solid fa-chevron-down"></i> Filter Data Mutasi Anggota
+                    <i class="fa-solid fa-chevron-down"></i> Filter Data Kas Anggota
                 </h4>
             </div>
         </a>
@@ -134,7 +134,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
 <!-- START row -->
 <div class="row"> <!-- Add Data Button -->
     <div class="col-lg-12">
-        <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddMutasiAnggota btn btn-inverse btn-outline mb5 btn-rounded" href="#AddMutasiAnggota"><i class="ico-plus2"></i> Tambah Data Mutasi Anggota</a>
+        <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddMutasiAnggota btn btn-inverse btn-outline mb5 btn-rounded" href="#AddMutasiAnggota"><i class="ico-plus2"></i> Tambah Data Kas Anggota</a>
     </div>
 </div>
 <br>
@@ -145,9 +145,9 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
     <div class="col-md-12">
         <div class="panel panel-default" id="demo">
             <div class="panel-heading">
-                <h3 class="panel-title">Tabel Mutasi Anggota</h3>
+                <h3 class="panel-title">Tabel Kas Anggota</h3>
             </div>
-            <table class="table table-striped table-bordered" id="mutasianggota-table">
+            <table class="table table-striped table-bordered" id="kasanggota-table">
                 <thead>
                     <tr>
                         <th></th>
@@ -158,10 +158,10 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         <th>Nama </th>
                         <th>Tingkatan </th>
                         <th>Gelar</th>
-                        <th>Daerah Tujuan </th>
-                        <th>Cabang Tujuan </th>
+                        <th>Tanggal </th>
+                        <th>Kategori </th>
                         <th>Deskripsi</th>
-                        <th>Tanggal Efektif</th>
+                        <th>Jumlah</th>
                         <th>Input Oleh</th>
                         <th>Input Tanggal</th>
                     </tr>
@@ -241,6 +241,12 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     }
                     ?>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="12" style="text-align:right">Total: 500.000</th>
+                        <th colspan="2"></th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

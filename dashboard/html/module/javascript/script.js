@@ -32,58 +32,93 @@ $(document).ready(loadAndRefresh);
 
 
 function handleNotif(formId, successNotification, failedNotification, updateNotification) {
-    $(formId).submit(function(event) {
-      event.preventDefault(); // Prevent the default form submission
-  
-      var formData = new FormData($(this)[0]); // Create FormData object from the form
-      var buttonId = $(event.originalEvent.submitter).attr('id'); // Retrieve button ID);
-  
-      // Manually add the button title or ID to the serialized data
-      formData.append(buttonId, 'edit');
-  
-      $.ajax({
-        type: 'POST',
-        url: 'module/backend/transaksi/anggota/mutasianggota/t_mutasianggota.php',
-        data: formData,
-        processData: false, // Prevent jQuery from processing the data
-        contentType: false, // Prevent jQuery from setting content type
-        success: function(response) {
-          // Check the response from the server
-          if (response === 'Success') {
-            // Display success notification
-            successNotification('Data berhasil tersimpan!');
-  
-            // Close the modal
-            $(formId.replace("-form", "")).modal('hide');
+  $(formId).submit(function(event) {
+    event.preventDefault(); // Prevent the default form submission
 
-            // Call the reloadDataTable() function after inserting data to reload the DataTable
-            $.ajax({
-                type: 'POST',
-                url: 'module/ajax/transaksi/anggota/mutasianggota/aj_tablemutasianggota.php',
-                success: function(response) {
-                // Destroy the DataTable before updating
-                $('#mutasianggota-table').DataTable().destroy();
-                $("#mutasianggotadata").html(response);
-                // Reinitialize Sertifikat Table
-                callTable();
-                },
-                error: function(xhr, status, error) {
-                // Handle any errors
-                }
-            });
-            
-          } else {
-            // Display error notification
-            failedNotification(response);
-          }
-        },
-        error: function(xhr, status, error) {
-            // Display error notification
-            failedNotification(xhr, status, error);
+    var formData = new FormData($(this)[0]); // Create FormData object from the form
+    var buttonId = $(event.originalEvent.submitter).attr('id'); // Retrieve button ID);
+
+    // Manually add the button title or ID to the serialized data
+    formData.append(buttonId, 'edit');
+
+    $.ajax({
+      type: 'POST',
+      url: 'module/backend/transaksi/anggota/mutasianggota/t_mutasianggota.php',
+      data: formData,
+      processData: false, // Prevent jQuery from processing the data
+      contentType: false, // Prevent jQuery from setting content type
+      success: function(response) {
+        // Split the response into parts using a separator (assuming a dot in this case)
+        var parts = response.split(',');
+        var successMessage = parts[0];
+        var MUTASI_ID = parts[1];
+        
+        // Check the response from the server
+        if (successMessage === 'Success') {
+          // Display success notification
+          successNotification('Data berhasil tersimpan!');
+
+          // Close the modal
+          $(formId.replace("-form", "")).modal('hide');
+
+          // Call the reloadDataTable() function after inserting data to reload the DataTable
+          $.ajax({
+            type: 'POST',
+            url: 'module/ajax/transaksi/anggota/mutasianggota/aj_tablemutasianggota.php',
+            success: function(response) {
+              // Destroy the DataTable before updating
+              $('#mutasianggota-table').DataTable().destroy();
+              $("#mutasianggotadata").html(response);
+              // Reinitialize Sertifikat Table
+              callTable();
+            },
+            error: function(xhr, status, error) {
+              // Handle any errors
+            }
+          });
+        } else {
+          // Display error notification
+          failedNotification(response);
         }
-      });
+        // Save PDF to Drive
+        $.ajax({
+          type: 'POST',
+          url: 'module/backend/transaksi/anggota/mutasianggota/t_mutasifile.php',
+          data: { MUTASI_ID: MUTASI_ID },
+          success: function(response) {
+            // Check the response from the server
+          },
+          error: function(xhr, status, error) {
+            errorNotification('Error! '+xhr.status+' '+error);
+          }
+        });
+        // Send email notification
+        $.ajax({
+          type: 'POST',
+          url: 'module/backend/transaksi/anggota/mutasianggota/t_mutasimail.php',
+          data: { MUTASI_ID: MUTASI_ID },
+          success: function(response) {
+            // Check the response from the server
+            if (response === 'Success') {
+              // Display success notification
+              MailNotification('Email pemberitahuan berhasil dikirimkan!');
+            } else {
+              // Display error notification
+              failedNotification(response);
+            }
+          },
+          error: function(xhr, status, error) {
+            errorNotification('Error! '+xhr.status+' '+error);
+          }
+        });
+      },
+      error: function(xhr, status, error) {
+          // Display error notification
+          failedNotification(xhr, status, error);
+      }
     });
-  }
+  });
+}
   
   
 $(document).ready(function() {

@@ -157,6 +157,8 @@ html.frontend body {
 #header.navbar .navbar-toolbar .navbar-nav > li > a > .meta > .avatar > img {
   display: block;
   width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 #header.navbar .navbar-toolbar .navbar-nav > li > a > .meta > .text {
   font-size: 13px;
