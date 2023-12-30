@@ -5,12 +5,12 @@ function callTable() {
   $('#anggota-table').DataTable({
       responsive: true,
       order: [[1, 'asc']],
-      dom: 'Bfrtip',
+      dom: 'Bfrtlip',
       paging: true,
       scrollX: true,
       scrollY: '350px', // Set the desired height here
       buttons: [
-          'copy', 'csv', 'excel', 'pdf', 'print'
+          'copy', 'csv', 'excel', 'pdf'
       ],
   });
 }
@@ -22,7 +22,7 @@ $(document).ready(function() {
   $('#riwayatmutasi-table').DataTable({
     responsive: true,
     order: [[7, 'asc']],
-    dom: 'Bfrtip',
+    dom: 'Bfrtlip',
     columnDefs: [
         { width: '100px', targets: 0 }, // Set width for column 1
         { width: '150px', targets: 1 }, // Set width for column 2
@@ -38,14 +38,14 @@ $(document).ready(function() {
     scrollX: true,
     scrollY: '350px', // Set the desired height here
     buttons: [
-        'copy', 'csv', 'excel', 'pdf', 'print'
+        'copy', 'csv', 'excel', 'pdf'
     ]
   });
 
   $('#idsertifikat-table').DataTable({
     responsive: true,
     order: [[9, 'asc']],
-    dom: 'Bfrtip',
+    dom: 'Bfrtlip',
     columnDefs: [
         { width: '100px', targets: 0 }, // Set width for column 1
         { width: '150px', targets: 1 }, // Set width for column 2
@@ -63,14 +63,14 @@ $(document).ready(function() {
     scrollX: true,
     scrollY: '350px', // Set the desired height here
     buttons: [
-        'copy', 'csv', 'excel', 'pdf', 'print'
+        'copy', 'csv', 'excel', 'pdf'
     ]
   });
 
   $('#mutasikas-table').DataTable({
     responsive: true,
     order: [[7, 'asc']],
-    dom: 'Bfrtip',
+    dom: 'Bfrtlip',
     columnDefs: [
         { width: '100px', targets: 0 }, // Set width for column 1
         { width: '150px', targets: 1 }, // Set width for column 2
@@ -89,14 +89,14 @@ $(document).ready(function() {
     scrollX: true,
     scrollY: '350px', // Set the desired height here
     buttons: [
-        'copy', 'csv', 'excel', 'pdf', 'print'
+        'copy', 'csv', 'excel', 'pdf'
     ]
   });
 
   $('#riwayatppd-table').DataTable({
     responsive: true,
     order: [[7, 'asc']],
-    dom: 'Bfrtip',
+    dom: 'Bfrtlip',
     columnDefs: [
         { width: '100px', targets: 0 }, // Set width for column 1
         { width: '150px', targets: 1 }, // Set width for column 2
@@ -112,7 +112,7 @@ $(document).ready(function() {
     scrollX: true,
     scrollY: '350px', // Set the desired height here
     buttons: [
-        'copy', 'csv', 'excel', 'pdf', 'print'
+        'copy', 'csv', 'excel', 'pdf'
     ]
   });
 });

@@ -5,12 +5,12 @@ function callTable() {
   $('#kasanggota-table').DataTable({
       responsive: true,
       order: [[1, 'asc']],
-      dom: 'Bfrtip',
+      dom: 'Bfrtlip',
       paging: true,
       scrollX: true,
       scrollY: '350px', // Set the desired height here
       buttons: [
-          'copy', 'csv', 'excel', 'pdf', 'print'
+          'copy', 'csv', 'excel', 'pdf'
       ]
   });
 }

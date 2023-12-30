@@ -5,7 +5,7 @@ function callTable() {
   $('#pusatdata-table').DataTable({
       responsive: true,
       order: [[1, 'asc']],
-      dom: 'Bfrtip',
+      dom: 'Bfrtlip',
       // columnDefs: [
       //     { width: '100px', targets: 0 }, // Set width for column 1
       //     { width: '150px', targets: 2 }, // Set width for column 2
@@ -21,7 +21,7 @@ function callTable() {
       scrollX: true,
       scrollY: '350px', // Set the desired height here
       buttons: [
-          'copy', 'csv', 'excel', 'pdf', 'print'
+          'copy', 'csv', 'excel', 'pdf'
       ]
   });
 }

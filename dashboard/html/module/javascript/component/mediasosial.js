@@ -5,7 +5,7 @@ $(document).ready(function() {
   $('#mediasosial-table').DataTable({
     responsive: true,
     order: [[1, 'asc']],
-    dom: 'Bfrtip',
+    dom: 'Bfrtlip',
     columnDefs: [
       { width: '100px', targets: 0 }, // Set width for column 1
       { width: '250px', targets: 1 }, // Set width for column 2
@@ -19,7 +19,7 @@ $(document).ready(function() {
     // "pageLength": 7,
     scrollX: true,
     buttons: [
-        'copy', 'csv', 'excel', 'pdf', 'print'
+        'copy', 'csv', 'excel', 'pdf'
     ]
   });
 });

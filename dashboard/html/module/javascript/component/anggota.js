@@ -4,11 +4,11 @@
 $(document).ready(function() {
     $('#anggota-table').DataTable({
       responsive: true,
-      dom: 'Bfrtip',
+      dom: 'Bfrtlip',
       // "pageLength": 7,
       scrollX: true,
       buttons: [
-          'copy', 'csv', 'excel', 'pdf', 'print'
+          'copy', 'csv', 'excel', 'pdf'
       ]
     });
 });

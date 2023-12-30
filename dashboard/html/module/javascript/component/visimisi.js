@@ -3,12 +3,12 @@
 // Konten Header Table
 $(document).ready(function() {
     $('#visi-table').DataTable({
-      dom: 'Bfrtip',
+      dom: 'Bfrtlip',
       autoWidth: true,
       // "pageLength": 7,
       scrollX: true,
       buttons: [
-          'copy', 'csv', 'excel', 'pdf', 'print'
+          'copy', 'csv', 'excel', 'pdf'
       ]
     });
 });
@@ -16,12 +16,12 @@ $(document).ready(function() {
 // Konten Header Table
 $(document).ready(function() {
   $('#misi-table').DataTable({
-    dom: 'Bfrtip',
+    dom: 'Bfrtlip',
     autoWidth: true,
     // "pageLength": 7,
     scrollX: true,
     buttons: [
-        'copy', 'csv', 'excel', 'pdf', 'print'
+        'copy', 'csv', 'excel', 'pdf'
     ]
   });
 });

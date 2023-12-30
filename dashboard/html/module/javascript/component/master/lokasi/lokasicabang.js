@@ -4,12 +4,14 @@
 function callTable() {
     $('#lokasicabang-table').DataTable({
       responsive: true,
-      dom: 'Bfrtip',
+      order: [],
+      // dom: 'Bfrtlip',
+      dom: 'Bfrtlip',
       // "pageLength": 7,
       scrollX: true,
       scrollY: '400px', // Set the desired height here
       buttons: [
-          'copy', 'csv', 'excel', 'pdf', 'print'
+          'copy', 'csv', 'excel', 'pdf'
       ]
     });
   }

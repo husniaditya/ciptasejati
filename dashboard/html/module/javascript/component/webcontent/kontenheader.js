@@ -13,12 +13,12 @@ $(document).ready(function() {
         { width: '150px', targets: 6 }, // Set width for column 7
         // Add more columnDefs as needed
       ],
-      dom: 'Bfrtip',
+      dom: 'Bfrtlip',
       // "pageLength": 7,
       scrollX: true,
       scrollY: '350px', // Set the desired height here
       buttons: [
-          'copy', 'csv', 'excel', 'pdf', 'print'
+          'copy', 'csv', 'excel', 'pdf'
       ]
     });
 });

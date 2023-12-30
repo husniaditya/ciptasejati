@@ -13,11 +13,11 @@ $(document).ready(function() {
         { width: '150px', targets: 5 }, // Set width for column 6
         // Add more columnDefs as needed
       ],
-      dom: 'Bfrtip',
+      dom: 'Bfrtlip',
       // "pageLength": 7,
       scrollX: true,
       buttons: [
-          'copy', 'csv', 'excel', 'pdf', 'print'
+          'copy', 'csv', 'excel', 'pdf'
       ]
     });
   } );

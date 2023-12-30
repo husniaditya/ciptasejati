@@ -16,11 +16,11 @@ function callTable() {
         { width: '10%', targets: 7 }, // Set width for column 6
         // Add more columnDefs as needed
       ],
-      dom: 'Bfrtip',
+      dom: 'Bfrtlip',
       // "pageLength": 7,
       scrollX: true,
       buttons: [
-          'copy', 'csv', 'excel', 'pdf', 'print'
+          'copy', 'csv', 'excel', 'pdf'
       ]
     });
   }
