@@ -13,7 +13,7 @@ if (isset($_POST["MUTASI_ID"])) {
     try {
         $MUTASI_ID = $_POST["MUTASI_ID"];
 
-        $getDataMutasi =  GetQuery("SELECT m.*,a.ANGGOTA_ID,m.CABANG_AWAL,m.CABANG_TUJUAN,m.ANGGOTA_KEY,a.ANGGOTA_NAMA,c.CABANG_DESKRIPSI CABANG_AWAL,d.DAERAH_DESKRIPSI DAERAH_AWAL,c2.CABANG_DESKRIPSI CABANG_TUJUAN,d2.DAERAH_DESKRIPSI DAERAH_TUJUAN,DATE_FORMAT(m.MUTASI_TANGGAL, '%d %M %Y') TANGGAL_EFEKTIF,
+        $getDataMutasi =  GetQuery("SELECT m.*,a.ANGGOTA_ID,m.CABANG_AWAL,m.CABANG_TUJUAN,m.ANGGOTA_KEY,a.ANGGOTA_NAMA,c.CABANG_DESKRIPSI CABANG_AWAL,d.DAERAH_DESKRIPSI DAERAH_AWAL,c2.CABANG_KEY CABANG_TUJUAN_KEY,c2.CABANG_DESKRIPSI CABANG_TUJUAN,d2.DAERAH_DESKRIPSI DAERAH_TUJUAN,DATE_FORMAT(m.MUTASI_TANGGAL, '%d %M %Y') TANGGAL_EFEKTIF,m.MUTASI_STATUS,
         CASE 
             WHEN m.MUTASI_STATUS = '0' THEN 'Menunggu' 
             WHEN m.MUTASI_STATUS = '1' THEN 'Disetujui' 
@@ -29,23 +29,48 @@ if (isset($_POST["MUTASI_ID"])) {
         while ($rowMutasi = $getDataMutasi->fetch(PDO::FETCH_ASSOC)) {
             extract($rowMutasi);
         }
-
-        $getKoordinator = GetQuery("SELECT a.ANGGOTA_NAMA,a.ANGGOTA_EMAIL FROM m_anggota a WHERE a.CABANG_KEY = '$CABANG_TUJUAN' AND a.ANGGOTA_AKSES = 'Koordinator'");
-        while ($rowKoordinator = $getKoordinator->fetch(PDO::FETCH_ASSOC)) {
-            $KOORDINATOR_TUJUAN = $rowKoordinator["ANGGOTA_NAMA"];
-        }
+        
+        $getEmailAddress = GetQuery("SELECT a.ANGGOTA_NAMA ANGGOTA_NAMA_MAIL,a.CABANG_KEY CABANG_KEY_MAIL,a.ANGGOTA_EMAIL,a.ANGGOTA_AKSES FROM t_notifikasi n
+        LEFT JOIN t_mutasi m ON n.DOKUMEN_ID = m.MUTASI_ID
+        LEFT JOIN m_anggota a ON n.NOTIFIKASI_USER = a.ANGGOTA_KEY
+        WHERE n.DOKUMEN_ID = '$MUTASI_ID'");
 
         // Example usage with attachment
         $attachmentPath = '../../../../.'.$MUTASI_FILE;
         $attachmentName = 'Formulir Mutasi Anggota '.$MUTASI_ID.'.pdf';
 
-        $toAddress = 'adityahusni90@gmail.com';
-        $toName = 'Husni Aditya';
-        $ccAddresses = ['adityahusni90@yahoo.com'];
-        $ccNames = ['Husni Aditya'];
-        $subject = 'Persetujuan Mutasi Anggota '. $MUTASI_ID;
-        $body = file_get_contents('mutasimail.php');
+        // Arrays to store CC addresses
+        $toAddress = '';
+        $toName = '';
+        $ccAddresses = [];
+        $ccNames = [];
 
+        while ($rowEmailAddress = $getEmailAddress->fetch(PDO::FETCH_ASSOC)) {
+            extract($rowEmailAddress);
+            if ($MUTASI_STATUS == 0) {
+                if ($CABANG_KEY_MAIL == $CABANG_TUJUAN_KEY && $ANGGOTA_AKSES == "Koordinator") {
+                    // To address
+                    $toAddress = $ANGGOTA_EMAIL;
+                    $toName = $ANGGOTA_NAMA_MAIL;
+                } else {
+                    // CC addresses
+                    $ccAddresses[] = $ANGGOTA_EMAIL;
+                    $ccNames[] = $ANGGOTA_NAMA_MAIL;
+                }
+            } else {
+                if ($ANGGOTA_AKSES == "User") {
+                    // To address
+                    $toAddress = $ANGGOTA_EMAIL;
+                    $toName = $ANGGOTA_NAMA_MAIL;
+                } else {
+                    // CC addresses
+                    $ccAddresses[] = $ANGGOTA_EMAIL;
+                    $ccNames[] = $ANGGOTA_NAMA_MAIL;
+                }
+            }
+        }
+
+        $subject = 'Persetujuan Mutasi Anggota ' . $MUTASI_ID;
         // Pass $MUTASI_ID to the mutasimail.php
         ob_start();
         include('mutasimail.php');

@@ -3,32 +3,61 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
 $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 $USER_CABANG = $_SESSION["LOGINCAB_CS"];
 
-$getMutasi = GetQuery("SELECT t.MUTASI_ID,daeawal.DAERAH_KEY AS DAERAH_AWAL_KEY,daeawal.DAERAH_DESKRIPSI AS DAERAH_AWAL_DES,t.CABANG_AWAL,cabawal.CABANG_DESKRIPSI AS CABANG_AWAL_DES,daetujuan.DAERAH_KEY AS DAERAH_TUJUAN_KEY,daetujuan.DAERAH_DESKRIPSI AS DAERAH_TUJUAN_DES,t.CABANG_TUJUAN,cabtujuan.CABANG_DESKRIPSI AS CABANG_TUJUAN_DES,a.ANGGOTA_KEY,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t2.TINGKATAN_NAMA,t2.TINGKATAN_SEBUTAN,t.MUTASI_DESKRIPSI,t.MUTASI_TANGGAL,t.MUTASI_STATUS,t.MUTASI_STATUS_TANGGAL,t.MUTASI_APPROVE_TANGGAL,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(t.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(t.MUTASI_TANGGAL, '%d %M %Y %H:%i') MUTASI_TGL, DATE_FORMAT(t.MUTASI_STATUS_TANGGAL, '%d %M %Y %H:%i') MUTASI_STATUS_TANGGAL, DATE_FORMAT(t.MUTASI_TANGGAL, '%d %M %Y') TANGGAL_EFEKTIF,t.MUTASI_FILE,
-CASE 
-    WHEN t.MUTASI_STATUS = '0' THEN 'Menunggu' 
-    WHEN t.MUTASI_STATUS = '1' THEN 'Disetujui' 
-    ELSE 'Ditolak' 
-END AS MUTASI_STATUS_DES,
-CASE
-	WHEN t.MUTASI_STATUS = '0' THEN 'badge badge-inverse'
-    WHEN t.MUTASI_STATUS = '1' THEN 'badge badge-success' 
-    ELSE 'badge badge-danger' 
-END AS MUTASI_BADGE,
-CASE
-	WHEN t.MUTASI_STATUS = '0' THEN 'fa-solid fa-spinner fa-spin'
-    WHEN t.MUTASI_STATUS = '1' THEN 'fa-solid fa-check' 
-    ELSE 'fa-solid fa-xmark' 
-END AS MUTASI_CLASS
-FROM t_mutasi t
-LEFT JOIN m_anggota a ON t.ANGGOTA_KEY = a.ANGGOTA_KEY
-LEFT JOIN m_anggota a2 ON t.INPUT_BY = a2.ANGGOTA_ID
-LEFT JOIN m_cabang cabawal ON t.CABANG_AWAL = cabawal.CABANG_KEY
-LEFT JOIN m_daerah daeawal ON cabawal.DAERAH_KEY = daeawal.DAERAH_KEY
-LEFT JOIN m_cabang cabtujuan ON t.CABANG_TUJUAN = cabtujuan.CABANG_KEY
-LEFT JOIN m_daerah daetujuan ON cabtujuan.DAERAH_KEY = daetujuan.DAERAH_KEY
-left join m_tingkatan t2 on a.TINGKATAN_ID = t2.TINGKATAN_ID
-WHERE t.DELETION_STATUS = 0
-ORDER BY t.MUTASI_STATUS ASC, t.MUTASI_TANGGAL DESC");
+if ($USER_AKSES == "Administrator") {
+    $getMutasi = GetQuery("SELECT t.MUTASI_ID,daeawal.DAERAH_KEY AS DAERAH_AWAL_KEY,daeawal.DAERAH_DESKRIPSI AS DAERAH_AWAL_DES,t.CABANG_AWAL,cabawal.CABANG_DESKRIPSI AS CABANG_AWAL_DES,daetujuan.DAERAH_KEY AS DAERAH_TUJUAN_KEY,daetujuan.DAERAH_DESKRIPSI AS DAERAH_TUJUAN_DES,t.CABANG_TUJUAN,cabtujuan.CABANG_DESKRIPSI AS CABANG_TUJUAN_DES,a.ANGGOTA_KEY,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t2.TINGKATAN_NAMA,t2.TINGKATAN_SEBUTAN,t.MUTASI_DESKRIPSI,t.MUTASI_TANGGAL,t.MUTASI_STATUS,t.MUTASI_STATUS_TANGGAL,t.MUTASI_APPROVE_TANGGAL,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(t.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(t.MUTASI_TANGGAL, '%d %M %Y %H:%i') MUTASI_TGL, DATE_FORMAT(t.MUTASI_STATUS_TANGGAL, '%d %M %Y %H:%i') MUTASI_STATUS_TANGGAL, DATE_FORMAT(t.MUTASI_TANGGAL, '%d %M %Y') TANGGAL_EFEKTIF,t.MUTASI_FILE,
+    CASE 
+        WHEN t.MUTASI_STATUS = '0' THEN 'Menunggu' 
+        WHEN t.MUTASI_STATUS = '1' THEN 'Disetujui' 
+        ELSE 'Ditolak' 
+    END AS MUTASI_STATUS_DES,
+    CASE
+        WHEN t.MUTASI_STATUS = '0' THEN 'badge badge-inverse'
+        WHEN t.MUTASI_STATUS = '1' THEN 'badge badge-success' 
+        ELSE 'badge badge-danger' 
+    END AS MUTASI_BADGE,
+    CASE
+        WHEN t.MUTASI_STATUS = '0' THEN 'fa-solid fa-spinner fa-spin'
+        WHEN t.MUTASI_STATUS = '1' THEN 'fa-solid fa-check' 
+        ELSE 'fa-solid fa-xmark' 
+    END AS MUTASI_CLASS
+    FROM t_mutasi t
+    LEFT JOIN m_anggota a ON t.ANGGOTA_KEY = a.ANGGOTA_KEY
+    LEFT JOIN m_anggota a2 ON t.INPUT_BY = a2.ANGGOTA_ID
+    LEFT JOIN m_cabang cabawal ON t.CABANG_AWAL = cabawal.CABANG_KEY
+    LEFT JOIN m_daerah daeawal ON cabawal.DAERAH_KEY = daeawal.DAERAH_KEY
+    LEFT JOIN m_cabang cabtujuan ON t.CABANG_TUJUAN = cabtujuan.CABANG_KEY
+    LEFT JOIN m_daerah daetujuan ON cabtujuan.DAERAH_KEY = daetujuan.DAERAH_KEY
+    left join m_tingkatan t2 on a.TINGKATAN_ID = t2.TINGKATAN_ID
+    WHERE t.DELETION_STATUS = 0
+    ORDER BY t.MUTASI_STATUS ASC, t.MUTASI_TANGGAL DESC");
+} else {
+    $getMutasi = GetQuery("SELECT t.MUTASI_ID,daeawal.DAERAH_KEY AS DAERAH_AWAL_KEY,daeawal.DAERAH_DESKRIPSI AS DAERAH_AWAL_DES,t.CABANG_AWAL,cabawal.CABANG_DESKRIPSI AS CABANG_AWAL_DES,daetujuan.DAERAH_KEY AS DAERAH_TUJUAN_KEY,daetujuan.DAERAH_DESKRIPSI AS DAERAH_TUJUAN_DES,t.CABANG_TUJUAN,cabtujuan.CABANG_DESKRIPSI AS CABANG_TUJUAN_DES,a.ANGGOTA_KEY,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t2.TINGKATAN_NAMA,t2.TINGKATAN_SEBUTAN,t.MUTASI_DESKRIPSI,t.MUTASI_TANGGAL,t.MUTASI_STATUS,t.MUTASI_STATUS_TANGGAL,t.MUTASI_APPROVE_TANGGAL,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(t.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(t.MUTASI_TANGGAL, '%d %M %Y %H:%i') MUTASI_TGL, DATE_FORMAT(t.MUTASI_STATUS_TANGGAL, '%d %M %Y %H:%i') MUTASI_STATUS_TANGGAL, DATE_FORMAT(t.MUTASI_TANGGAL, '%d %M %Y') TANGGAL_EFEKTIF,t.MUTASI_FILE,
+    CASE 
+        WHEN t.MUTASI_STATUS = '0' THEN 'Menunggu' 
+        WHEN t.MUTASI_STATUS = '1' THEN 'Disetujui' 
+        ELSE 'Ditolak' 
+    END AS MUTASI_STATUS_DES,
+    CASE
+        WHEN t.MUTASI_STATUS = '0' THEN 'badge badge-inverse'
+        WHEN t.MUTASI_STATUS = '1' THEN 'badge badge-success' 
+        ELSE 'badge badge-danger' 
+    END AS MUTASI_BADGE,
+    CASE
+        WHEN t.MUTASI_STATUS = '0' THEN 'fa-solid fa-spinner fa-spin'
+        WHEN t.MUTASI_STATUS = '1' THEN 'fa-solid fa-check' 
+        ELSE 'fa-solid fa-xmark' 
+    END AS MUTASI_CLASS
+    FROM t_mutasi t
+    LEFT JOIN m_anggota a ON t.ANGGOTA_KEY = a.ANGGOTA_KEY
+    LEFT JOIN m_anggota a2 ON t.INPUT_BY = a2.ANGGOTA_ID
+    LEFT JOIN m_cabang cabawal ON t.CABANG_AWAL = cabawal.CABANG_KEY
+    LEFT JOIN m_daerah daeawal ON cabawal.DAERAH_KEY = daeawal.DAERAH_KEY
+    LEFT JOIN m_cabang cabtujuan ON t.CABANG_TUJUAN = cabtujuan.CABANG_KEY
+    LEFT JOIN m_daerah daetujuan ON cabtujuan.DAERAH_KEY = daetujuan.DAERAH_KEY
+    left join m_tingkatan t2 on a.TINGKATAN_ID = t2.TINGKATAN_ID
+    WHERE t.DELETION_STATUS = 0 and (t.CABANG_AWAL = '$USER_CABANG' or t.CABANG_TUJUAN = '$USER_CABANG')
+    ORDER BY t.MUTASI_STATUS ASC, t.MUTASI_TANGGAL DESC");
+}
 
 $getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0");
 $getCabang = GetQuery("select * from m_cabang where DELETION_STATUS = 0");
@@ -54,11 +83,41 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
             <div class="panel-body">
                 <form method="post" class="form filterMutasiAnggota" id="filterMutasiAnggota">
                     <div class="row">
+                        <?php
+                        if ($USER_AKSES == "Administrator") {
+                            ?>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Daerah Awal</label>
+                                    <select name="DAERAH_AWAL_KEY" id="selectize-select3" required="" class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Daerah Awal --</option>
+                                        <?php
+                                        foreach ($rowd as $filterDaerah) {
+                                            extract($filterDaerah);
+                                            ?>
+                                            <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div> 
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Cabang Awal</label>
+                                    <select name="CABANG_AWAL_KEY" id="selectize-select2" required="" class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Cabang Awal --</option>
+                                    </select>
+                                </div> 
+                            </div>
+                            <?php
+                        }
+                        ?>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Daerah Tujuan</label>
-                                <select name="DAERAH_KEY" id="selectize-select3" required="" class="form-control" data-parsley-required>
-                                    <option value="">-- Pilih Daerah --</option>
+                                <select name="DAERAH_TUJUAN_KEY" id="selectize-select4" required="" class="form-control" data-parsley-required>
+                                    <option value="">-- Pilih Daerah Tujuan --</option>
                                     <?php
                                     foreach ($rowd as $filterDaerah) {
                                         extract($filterDaerah);
@@ -73,9 +132,23 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Cabang Tujuan</label>
-                                <select name="CABANG_KEY" id="selectize-select2" required="" class="form-control" data-parsley-required>
-                                    <option value="">-- Pilih Cabang --</option>
+                                <select name="CABANG_TUJUAN_KEY" id="selectize-select5" required="" class="form-control" data-parsley-required>
+                                    <option value="">-- Pilih Cabang Tujuan --</option>
                                 </select>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>ID Anggota</label>
+                                <input type="text" class="form-control" id="filterANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Input ID Anggota">
+                            </div> 
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Nama</label>
+                                <input type="text" class="form-control" id="filterANGGOTA_NAMA" name="ANGGOTA_NAMA" value="" placeholder="Input Nama">
                             </div> 
                         </div>
                         <div class="col-md-3">
@@ -103,20 +176,6 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                     <option value="1">Disetujui</option>
                                     <option value="2">Ditolak</option>
                                 </select>
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>ID Anggota</label>
-                                <input type="text" class="form-control" id="filterANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Input ID Anggota">
-                            </div> 
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>Nama</label>
-                                <input type="text" class="form-control" id="filterANGGOTA_NAMA" name="ANGGOTA_NAMA" value="" placeholder="Input Nama">
                             </div> 
                         </div>
                     </div>

@@ -36,6 +36,24 @@ function UpdateNotification(text) {
   });
 }
 
+// Info notification
+function infoNotification(text) {
+  $.gritter.add({
+    title: 'Information',
+    text: text,
+    time: 5000,
+    image: '../image/notification/info.png',
+    class_name: 'gritter-update',
+    // (function) before the gritter notice is opened
+    'before_open': function () {
+      if ($('.gritter-item-wrapper').length === 3) {
+          // Returning false prevents a new gritter from opening
+          return false;
+      }
+  }
+  });
+}
+
 // Delete notification
 function DeleteNotification(text) {
   $.gritter.add({

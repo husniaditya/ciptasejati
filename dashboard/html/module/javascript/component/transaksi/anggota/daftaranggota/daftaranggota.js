@@ -587,18 +587,28 @@ function filterAnggotaEvent() {
 
 // ----- Function to reset form ----- //
 function clearForm() {
+
+  
+  // Check if the administrator-specific elements exist
+  var isExist = $('#selectize-select3').length > 0 && $('#selectize-select2').length > 0;
+
+  if (isExist) {
+    var selectizeInstance1 = $('#selectize-select')[0].selectize;
+    var selectizeInstance2 = $('#selectize-select2')[0].selectize;
+    var selectizeInstance3 = $('#selectize-select3')[0].selectize;
+  } else {
+    var selectizeInstance1 = $('#selectize-select')[0].selectize;
+  }
+  
   // Clear the first Selectize dropdown
-  var selectizeInstance1 = $('#selectize-select')[0].selectize;
   if (selectizeInstance1) {
     selectizeInstance1.clear();
   }
   // Clear the second Selectize dropdown
-  var selectizeInstance2 = $('#selectize-select2')[0].selectize;
   if (selectizeInstance2) {
     selectizeInstance2.clear();
   }
   // Clear the third Selectize dropdown
-  var selectizeInstance3 = $('#selectize-select3')[0].selectize;
   if (selectizeInstance3) {
     selectizeInstance3.clear();
   }

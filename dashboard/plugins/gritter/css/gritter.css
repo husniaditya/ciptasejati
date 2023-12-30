@@ -71,6 +71,12 @@
   background-color: forestgreen;
   border-radius: 4px;
 }
+.gritter-item-wrapper.gritter-info {
+  position: relative;
+  margin: 0 0 10px 0;
+  background-color:#fff;
+  border-radius: 4px;
+}
 .gritter-item {
   display: table;
   table-layout: fixed;

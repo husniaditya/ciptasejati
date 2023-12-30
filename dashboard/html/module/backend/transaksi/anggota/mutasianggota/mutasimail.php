@@ -360,7 +360,7 @@
                     <td>
                       <!-- Header -->
                       <div class="header">
-                          <img src="https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo//BRD-71963/cipta-sejati-logo.jpg" alt="Your Logo">
+                          <img src="https://ciptasejatiindonesia.com/img/logo/logo_rev.png" alt="Your Logo">
                           <div class="header-text">
                             <h3>Institut Seni Bela Diri Silat <br> CIPTA SEJATI <br></h3>
                           </div>
@@ -373,12 +373,12 @@
                       <?php
                       if ($MUTASI_STATUS == 0) {
                         ?>
-                        <h3>Dear Bapak/Ibu Husni Aditya,</h3>
-                        <p>Anda mendapatkan permintaan persetujuan mutasi anggota dengan detail sebagai berikut :</p>
+                        <h3>Dear Bapak/Ibu <?= $toName; ?>,</h3>
+                        <p>Anda mendapatkan permintaan persetujuan mutasi anggota dengan detail sebagai berikut:</p>
                         <?php
                       } else {
                         ?>
-                        <h3>Dear Bapak/Ibu <?= $ANGGOTA_NAMA; ?>,</h3>
+                        <h3>Dear Bapak/Ibu <?= $toName; ?>,</h3>
                         <p>Dokumen persetujuan mutasi anggota anda telah disetujui dengan detail sebagai berikut:</p>
                         <?php
                       }
@@ -414,7 +414,17 @@
                         </tbody>
                       </table>
                       <br>
-                      <h3>Mohon untuk tidak membalas email ini dan melakukan persetujuan melalui web di bawah</h3>
+                      <?php
+                      if ($MUTASI_STATUS == 0) {
+                        ?>
+                        <h3>Mohon untuk tidak membalas email ini. Untuk melakukan persetujuan silahkan akses melalui web di bawah</h3>
+                        <?php
+                      } else {
+                        ?>
+                        <h3>Mohon untuk tidak membalas email ini</h3>
+                        <?php
+                      }
+                      ?>
                       <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                         <tbody>
                           <tr>

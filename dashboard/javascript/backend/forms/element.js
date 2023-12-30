@@ -64,6 +64,22 @@
             },
             dropdownParent: 'body'
         });
+        $('#selectize-select4').selectize({
+            create: true,
+            sortField: {
+                field: 'text',
+                direction: 'asc'
+            },
+            dropdownParent: 'body'
+        });
+        $('#selectize-select5').selectize({
+            create: true,
+            sortField: {
+                field: 'text',
+                direction: 'asc'
+            },
+            dropdownParent: 'body'
+        });
 
         $(document).ready(function () {
             // Initialize Selectize for the dropdown inside the modal
