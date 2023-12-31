@@ -36,7 +36,6 @@
 <!-- Datatable -->
 <link rel="stylesheet" href="../plugins/datatables/css/1.13.4-jquery-dataTables-min.css">
 <link rel="stylesheet" href="../plugins/datatables/css/2.3.6-buttons-dataTables-min.css">
-<link rel="stylesheet" href="../plugins/datatables/css/3.2.3-fixedHeader.dataTables-min.css">
 <!-- / Datatable -->
 
 <!-- Theme stylesheet -->
@@ -51,6 +50,11 @@
 <!-- Theme stylesheet : Font Awesome -->
 <link rel="stylesheet" href="../stylesheet/fontawesome-free/css/all.min.css">
 <!--/ Theme stylesheet : Font Awesome -->
+
+<!-- Theme stylesheet -->
+<link rel="stylesheet" href="../../css/custom.css">
+<!--/ Theme stylesheet -->
+
 
 <!-- modernizr script -->
 <script type="text/javascript" src="../plugins/modernizr/js/modernizr.js"></script>

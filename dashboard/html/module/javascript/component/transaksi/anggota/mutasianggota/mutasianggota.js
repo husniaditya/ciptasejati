@@ -184,7 +184,26 @@ function handleModalHidden() {
 
 // ----- Start of Anggota Section ----- //
 function handleForm(formId, successNotification, failedNotification, updateNotification) {
+  // Function to show the full-screen loading overlay with a progress bar
+  function showLoadingOverlay(message) {
+    var overlayHtml = '<div id="loading-overlay" class="loading-overlay"><div class="loading-spinner"></div><div class="loading-message">' + message + '</div><div class="progress-bar"><div class="progress"></div></div></div>';
+    $('body').append(overlayHtml);
+  }
+
+  // Function to update the progress bar
+  function updateProgressBar(percentage) {
+    $('.progress').css('width', percentage + '%');
+  }
+
+  // Function to hide the full-screen loading overlay
+  function hideLoadingOverlay() {
+    $('#loading-overlay').remove();
+  }
+
   $(formId).submit(function (event) {
+    // Example usage:
+    showLoadingOverlay('Data sedang diproses, mohon ditunggu.');
+    
     event.preventDefault(); // Prevent the default form submission
 
     var formData = new FormData($(this)[0]); // Create FormData object from the form
@@ -231,6 +250,12 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
             }
           });
 
+          // Hide the loading overlay after the initial processing
+          hideLoadingOverlay();
+
+          // Example usage:
+          showLoadingOverlay('Proses pembuatan dokumen dan pengiriman email...');
+
           // Save PDF to Drive and send email notification concurrently
           Promise.all([savePDFToDrive(MUTASI_ID), sendEmailNotification(MUTASI_ID)])
             .then(function (responses) {
@@ -252,19 +277,28 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
               for (const error of errors) {
                 errorNotification(error);
               }
+            })
+            .finally(function () {
+              // Hide the loading overlay after all asynchronous tasks are complete
+              hideLoadingOverlay();
             });
         } else {
           // Display error notification
           failedNotification(response);
+
+          // Hide the loading overlay in case of an error
+          hideLoadingOverlay();
         }
       },
       error: function (xhr, status, error) {
         // Handle any errors
+
+        // Hide the loading overlay in case of an error
+        hideLoadingOverlay();
       }
     });
   });
 }
-
 
 
 $(document).ready(function() {

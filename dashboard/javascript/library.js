@@ -108,6 +108,16 @@ function MailNotification(text) {
 }
 // ----- End of function to display notification ----- //
 
+// ----- Function to loading overlay ----- //
+function showLoadingOverlay() {
+  $('#loading-overlay').fadeIn();
+}
+
+function hideLoadingOverlay() {
+  $('#loading-overlay').fadeOut();
+}
+// ----- End of function to loading overlay ----- //
+
 // ----- Function to refresh map iframe ----- //
 function refreshIframe(value) {
   var iframe = document.getElementById(value);
