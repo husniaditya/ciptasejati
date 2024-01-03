@@ -317,7 +317,13 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
+                            <div class="short-div">
+                                <label>Foto Anggota </label><br>
+                                <div id="loadpic"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>Anggota</label>
@@ -366,12 +372,6 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                     <input type="text" class="form-control" id="TINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
                                 </div> 
                             </div>   
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
-                            <div class="short-div">
-                                <label>Foto Anggota </label><br>
-                                <div id="loadpic"></div>
-                            </div>
                         </div>
                     </div>
                     <hr>
@@ -440,25 +440,25 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                 <div class="modal-body">
                     <h5 class="text-center" id="viewMUTASI_STATUS_DES"></h5><br>
                     <div class="row">
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="form-group">
                                 <label>Diajukan Oleh</label>
                                 <p id="viewINPUT_BY"></p>
                             </div> 
                         </div>
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="form-group">
                                 <label>Tanggal Pengajuan</label>
                                 <p id="viewINPUT_DATE"></p>
                             </div> 
                         </div>
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="form-group">
                                 <label>Disetujui Oleh</label>
                                 <p id="viewAPPROVE_BY"></p>
                             </div> 
                         </div>
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="form-group">
                                 <label>Tanggal persetujuan</label>
                                 <p id="viewMUTASI_APP_TANGGAL"></p>
@@ -467,7 +467,13 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
+                            <div class="short-div">
+                                <label>Foto Anggota </label><br>
+                                <div id="loadpicview"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>ID - Nama Anggota</label>
@@ -504,12 +510,6 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                     <input type="text" class="form-control" id="viewTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
                                 </div> 
                             </div>   
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
-                            <div class="short-div">
-                                <label>Foto Anggota </label><br>
-                                <div id="loadpicview"></div>
-                            </div>
                         </div>
                     </div>
                     <hr>
@@ -568,7 +568,13 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
+                            <div class="short-div">
+                                <label>Foto Anggota </label><br>
+                                <div id="loadpicedit"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>Anggota</label>
@@ -617,12 +623,6 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                     <input type="text" class="form-control" id="editTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
                                 </div> 
                             </div>   
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
-                            <div class="short-div">
-                                <label>Foto Anggota </label><br>
-                                <div id="loadpicedit"></div>
-                            </div>
                         </div>
                     </div>
                     <hr>
@@ -699,25 +699,25 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="form-group">
                                 <label>Diajukan Oleh</label>
                                 <p id="appINPUT_BY"></p>
                             </div> 
                         </div>
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="form-group">
                                 <label>Tanggal Pengajuan</label>
                                 <p id="appINPUT_DATE"></p>
                             </div> 
                         </div>
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="form-group">
                                 <label>Disetujui Oleh</label>
                                 <p id="appAPPROVE_BY"></p>
                             </div> 
                         </div>
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="form-group">
                                 <label>Tanggal persetujuan</label>
                                 <p id="appMUTASI_APP_TANGGAL"></p>
@@ -726,7 +726,13 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
+                            <div class="short-div">
+                                <label>Foto Anggota </label><br>
+                                <div id="loadpicapp"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>ID - Nama Anggota</label>
@@ -763,12 +769,6 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                     <input type="text" class="form-control" id="appTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
                                 </div> 
                             </div>   
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
-                            <div class="short-div">
-                                <label>Foto Anggota </label><br>
-                                <div id="loadpicapp"></div>
-                            </div>
                         </div>
                     </div>
                     <hr>

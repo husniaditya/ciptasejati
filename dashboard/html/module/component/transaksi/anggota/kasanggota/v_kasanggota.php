@@ -237,7 +237,13 @@ $rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
+                            <div class="short-div">
+                                <label>Foto Anggota </label><br>
+                                <div id="loadpic"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>Anggota</label>
@@ -286,12 +292,6 @@ $rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
                                     <input type="text" class="form-control" id="TINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
                                 </div> 
                             </div>   
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
-                            <div class="short-div">
-                                <label>Foto Anggota </label><br>
-                                <div id="loadpic"></div>
-                            </div>
                         </div>
                     </div>
                     <hr>
@@ -344,7 +344,13 @@ $rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
+                            <div class="short-div">
+                                <label>Foto Anggota </label><br>
+                                <div id="loadpicview"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>Anggota</label>
@@ -381,12 +387,6 @@ $rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
                                     <input type="text" class="form-control" id="viewTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
                                 </div> 
                             </div>   
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
-                            <div class="short-div">
-                                <label>Foto Anggota </label><br>
-                                <div id="loadpicview"></div>
-                            </div>
                         </div>
                     </div>
                     <hr>
@@ -442,7 +442,13 @@ $rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
+                            <div class="short-div">
+                                <label>Foto Anggota </label><br>
+                                <div id="loadpicedit"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>Anggota</label>
@@ -491,12 +497,6 @@ $rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
                                     <input type="text" class="form-control" id="editTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
                                 </div> 
                             </div>   
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
-                            <div class="short-div">
-                                <label>Foto Anggota </label><br>
-                                <div id="loadpicedit"></div>
-                            </div>
                         </div>
                     </div>
                     <hr>

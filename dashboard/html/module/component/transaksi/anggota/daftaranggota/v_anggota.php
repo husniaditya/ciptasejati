@@ -246,7 +246,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
                             <div class="form-group">
                                 <!-- PUT THE SAMPLE UPLOAD PHOTO HERE -->
                                 <label>Foto Anggota </label><br>
@@ -264,7 +264,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                             <?php
                             if ($USER_AKSES == "Administrator") {
                                 ?>
@@ -447,11 +447,11 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
                             <label>Foto Anggota </label><br>
                             <div id="loadpic"></div>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>Daerah<span class="text-danger">*</span></label>
@@ -734,7 +734,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
                             <div class="form-group">
                                 <!-- PUT THE SAMPLE UPLOAD PHOTO HERE -->
                                 <label>Foto Anggota </label><br>
@@ -753,7 +753,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                             <?php
                             if ($USER_AKSES == "Administrator") {
                                 ?>

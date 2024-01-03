@@ -11,25 +11,25 @@
                 <div class="modal-body">
                     <h5 class="text-center" id="viewnotifMUTASI_STATUS_DES"></h5><br>
                     <div class="row">
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="form-group">
                                 <label>Diajukan Oleh</label>
                                 <p id="viewnotifINPUT_BY"></p>
                             </div> 
                         </div>
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="form-group">
                                 <label>Tanggal Pengajuan</label>
                                 <p id="viewnotifINPUT_DATE"></p>
                             </div> 
                         </div>
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="form-group">
                                 <label>Disetujui Oleh</label>
                                 <p id="viewnotifAPPROVE_BY"></p>
                             </div> 
                         </div>
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="form-group">
                                 <label>Tanggal persetujuan</label>
                                 <p id="viewnotifMUTASI_APP_TANGGAL"></p>
@@ -38,7 +38,13 @@
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
+                            <div class="short-div">
+                                <label>Foto Anggota </label><br>
+                                <div id="notifloadpicview"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>ID - Nama Anggota</label>
@@ -75,12 +81,6 @@
                                     <input type="text" class="form-control" id="viewnotifTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
                                 </div> 
                             </div>   
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
-                            <div class="short-div">
-                                <label>Foto Anggota </label><br>
-                                <div id="notifloadpicview"></div>
-                            </div>
                         </div>
                     </div>
                     <hr>
@@ -140,25 +140,25 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="form-group">
                                 <label>Diajukan Oleh</label>
                                 <p id="appnotifINPUT_BY"></p>
                             </div> 
                         </div>
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="form-group">
                                 <label>Tanggal Pengajuan</label>
                                 <p id="appnotifINPUT_DATE"></p>
                             </div> 
                         </div>
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="form-group">
                                 <label>Disetujui Oleh</label>
                                 <p id="appnotifAPPROVE_BY"></p>
                             </div> 
                         </div>
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="form-group">
                                 <label>Tanggal persetujuan</label>
                                 <p id="appnotifMUTASI_APP_TANGGAL"></p>
@@ -167,7 +167,13 @@
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
+                            <div class="short-div">
+                                <label>Foto Anggota </label><br>
+                                <div id="notifloadpicapp"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>ID - Nama Anggota</label>
@@ -204,12 +210,6 @@
                                     <input type="text" class="form-control" id="appnotifTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
                                 </div> 
                             </div>   
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
-                            <div class="short-div">
-                                <label>Foto Anggota </label><br>
-                                <div id="notifloadpicapp"></div>
-                            </div>
                         </div>
                     </div>
                     <hr>
@@ -269,25 +269,25 @@
                 <div class="modal-body">
                     <h5 class="text-center" id="viewnotifMUTASI_STATUS_DES"></h5><br>
                     <div class="row">
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="form-group">
                                 <label>Diajukan Oleh</label>
                                 <p id="viewnotifINPUT_BY"></p>
                             </div> 
                         </div>
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="form-group">
                                 <label>Tanggal Pengajuan</label>
                                 <p id="viewnotifINPUT_DATE"></p>
                             </div> 
                         </div>
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="form-group">
                                 <label>Disetujui Oleh</label>
                                 <p id="viewnotifAPPROVE_BY"></p>
                             </div> 
                         </div>
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="form-group">
                                 <label>Tanggal persetujuan</label>
                                 <p id="viewnotifMUTASI_APP_TANGGAL"></p>
@@ -296,7 +296,13 @@
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
+                            <div class="short-div">
+                                <label>Foto Anggota </label><br>
+                                <div id="notifloadpicview"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>ID - Nama Anggota</label>
@@ -333,12 +339,6 @@
                                     <input type="text" class="form-control" id="viewnotifTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
                                 </div> 
                             </div>   
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="center">
-                            <div class="short-div">
-                                <label>Foto Anggota </label><br>
-                                <div id="notifloadpicview"></div>
-                            </div>
                         </div>
                     </div>
                     <hr>
