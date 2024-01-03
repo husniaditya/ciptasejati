@@ -53,7 +53,6 @@ while ($rowDetail = $GetDetail->fetch(PDO::FETCH_ASSOC)) {
     $data['APPROVE_BY'] = $rowDetail["APPROVE_BY"];
     $data['MUTASI_APP_TANGGAL'] = $rowDetail["MUTASI_APP_TANGGAL"];
     $data['MUTASI_STATUS_DES'] = $rowDetail["MUTASI_STATUS_DES"];
-
 }
 
 // Convert the data array to JSON and echo it

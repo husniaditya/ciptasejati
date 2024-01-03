@@ -47,7 +47,13 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
         ?>
         <a href="#<?= $HREF; ?>" data-toggle="modal" class="media border-dotted <?= $TOGGLE; ?>" style="background-color: lavender;" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" onclick="getNotif(this)">
             <span class="media-body">
-                <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
+                <?php
+                if ($KATEGORI == "Mutasi") {
+                    ?>
+                    <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
+                    <?php
+                }
+                ?>
                 <span class="media-heading text-primary semibold"><?= $DOKUMEN_ID; ?></span>
                 <span class="media-heading text-primary semibold"><?= $SUBJECT; ?></span>
                 <span class="media-text ellipsis nm semibold"><?= $BODY; ?></span>
@@ -62,7 +68,13 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
         ?>
         <a href="#<?= $HREF; ?>" data-toggle="modal" class="media border-dotted <?= $TOGGLE; ?>" style="background-color: lavender;" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" onclick="getNotif(this)">
             <span class="media-body">
-                <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
+                <?php
+                if ($KATEGORI == "Mutasi") {
+                    ?>
+                    <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
+                    <?php
+                }
+                ?>
                 <span class="media-heading text-primary semibold"><?= $DOKUMEN_ID; ?></span>
                 <span class="media-heading text-primary semibold"><?= $SUBJECT; ?></span>
                 <span class="media-text ellipsis nm semibold"><?= $BODY; ?></span>
@@ -77,7 +89,13 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
         ?>
         <a href="#<?= $HREF; ?>" data-toggle="modal" data-toggle="modal" class="media read border-dotted <?= $TOGGLE; ?>" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" onclick="getNotif(this)">
             <span class="media-body">
-                <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
+                <?php
+                if ($KATEGORI == "Mutasi") {
+                    ?>
+                    <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
+                    <?php
+                }
+                ?>
                 <span class="media-heading"><?= $DOKUMEN_ID; ?></span>
                 <span class="media-heading"><?= $SUBJECT; ?></span>
                 <span class="media-text ellipsis nm"><?= $BODY; ?></span>
@@ -94,7 +112,13 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
             ?>
             <a href="#<?= $HREF; ?>" data-toggle="modal" data-toggle="modal" class="media border-dotted <?= $TOGGLE; ?>" style="background-color: lavender;" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" onclick="getNotif(this)">
                 <span class="media-body">
-                    <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
+                    <?php
+                    if ($KATEGORI == "Mutasi") {
+                        ?>
+                        <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
+                        <?php
+                    }
+                    ?>
                     <span class="media-heading text-primary semibold"><?= $DOKUMEN_ID; ?></span>
                     <span class="media-heading text-primary semibold"><?= $SUBJECT; ?></span>
                     <span class="media-text ellipsis nm semibold"><?= $BODY; ?></span>
@@ -109,7 +133,13 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
             ?>
             <a href="#<?= $HREF; ?>" data-toggle="modal" data-toggle="modal" class="media read border-dotted <?= $TOGGLE; ?>" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" onclick="getNotif(this)">
                 <span class="media-body">
-                    <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
+                    <?php
+                    if ($KATEGORI == "Mutasi") {
+                        ?>
+                        <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
+                        <?php
+                    }
+                    ?>
                     <span class="media-heading"><?= $DOKUMEN_ID; ?></span>
                     <span class="media-heading"><?= $SUBJECT; ?></span>
                     <span class="media-text ellipsis nm"><?= $BODY; ?></span>

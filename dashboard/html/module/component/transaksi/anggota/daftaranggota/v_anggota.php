@@ -482,11 +482,12 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                     <div class="row">
                         <div class="col-md-12">
                             <ul class="nav nav-pills nav-justified">
-                                <li class="active"><a href="#tab-informasianggota" data-toggle="tab"><i class="ico-user2 mr5"></i> Informasi Anggota</a></li>
-                                <li><a href="#tab-riwayatmutasi" data-toggle="tab"><i class="fa-solid fa-recycle"></i> Riwayat Mutasi</a></li>
-                                <li><a href="#tab-idsertifikat" data-toggle="tab"><i class="fa-regular fa-address-card"></i> ID &amp; Sertifikat</a></li>
-                                <li><a href="#tab-mutasikas" data-toggle="tab"><i class="fa-solid fa-money-bill-transfer"></i>  Mutasi Kas</a></li>
-                                <li><a href="#tab-riwayatppd" data-toggle="tab"><i class="fa-solid fa-clock-rotate-left"></i>  Riwayat PPD</a></li>
+                                <li class="active"><a href="#tab-informasianggota" data-toggle="tab">Informasi Anggota</a></li>
+                                <li><a href="#tab-riwayatmutasi" data-toggle="tab">Riwayat Mutasi</a></li>
+                                <li><a href="#tab-idsertifikat" data-toggle="tab">ID &amp; Sertifikat</a></li>
+                                <li><a href="#tab-mutasikas" data-toggle="tab">Mutasi Kas</a></li>
+                                <li><a href="#tab-riwayatppd" data-toggle="tab">Riwayat PPD</a></li>
+                                <li><a href="#tab-riwayatukt" data-toggle="tab">Riwayat UKT</a></li>
                             </ul>
                             <!--/ tab -->
                             <!-- tab content -->
@@ -596,14 +597,14 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                                     <thead>
                                                         <tr>
                                                             <th>No Dokumen</th>
-                                                            <th>ID Anggota</th>
-                                                            <th>Daerah </th>
-                                                            <th>Cabang </th>
-                                                            <th>Sabuk </th>
-                                                            <th>Tingkatan </th>
-                                                            <th>Gelar </th>
-                                                            <th>Nama</th>
-                                                            <th>Tanggal Mutasi</th>
+                                                            <th>Daerah Awal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                            <th>Cabang Awal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                            <th>Daerah Tujuan </th>
+                                                            <th>Cabang Tujuan </th>
+                                                            <th>Deskripsi &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                            <th>Tanggal Efektif</th>
+                                                            <th>Input Oleh</th>
+                                                            <th>Input Tanggal</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="riwayatmutasi">

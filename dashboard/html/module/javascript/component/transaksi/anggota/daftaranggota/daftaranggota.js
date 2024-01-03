@@ -21,7 +21,7 @@ $(document).ready(function() {
 
   $('#riwayatmutasi-table').DataTable({
     responsive: true,
-    order: [[7, 'asc']],
+    order: [],
     dom: 'Bfrtlip',
     columnDefs: [
         { width: '100px', targets: 0 }, // Set width for column 1
@@ -196,8 +196,6 @@ function validateInput(input) {
 
   input.value = inputValue;
 }
-
-
 
 // ----- Start of Anggota Section ----- //
 function handleForm(formId, successNotification, failedNotification, updateNotification) {
@@ -470,6 +468,15 @@ $(document).on("click", ".open-ViewAnggota", function () {
     data:'ANGGOTA_KEY='+key,
     success: function(data){
       $("#loadpic").html(data);
+    }
+  });
+
+  $.ajax({
+    type: "POST",
+    url: "module/ajax/transaksi/anggota/daftaranggota/aj_getmutasianggota.php",
+    data:'ANGGOTA_KEY='+key,
+    success: function(data){
+      $("#riwayatmutasi").html(data);
     }
   });
   

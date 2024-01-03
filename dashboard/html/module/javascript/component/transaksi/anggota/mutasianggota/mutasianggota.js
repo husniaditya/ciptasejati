@@ -190,16 +190,6 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
     $('body').append(overlayHtml);
   }
 
-  // Function to update the progress bar
-  function updateProgressBar(percentage) {
-    $('.progress').css('width', percentage + '%');
-  }
-
-  // Function to hide the full-screen loading overlay
-  function hideLoadingOverlay() {
-    $('#loading-overlay').remove();
-  }
-
   $(formId).submit(function (event) {
     // Example usage:
     showLoadingOverlay('Data sedang diproses, mohon ditunggu.');

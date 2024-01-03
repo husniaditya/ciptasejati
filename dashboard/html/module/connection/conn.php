@@ -49,9 +49,9 @@ try {
 
     function createKode($namaTabel, $namaKolom, $awalan, $jumlahAngka)
     {
-        global $db1;
+        global $db1, $YEAR, $MONTH;
         $angkaAkhir = 0;
-        $stmt = $db1->query("select max(right($namaKolom,$jumlahAngka)) as akhir from $namaTabel");
+        $stmt = $db1->query("select max(right($namaKolom,$jumlahAngka)) as akhir from $namaTabel where substr($namaKolom, 5, 6) = '$YEAR$MONTH'");
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             if (isset($row["akhir"])) {
                 $angkaAkhir = intval($row["akhir"]);

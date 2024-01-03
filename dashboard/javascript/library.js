@@ -114,7 +114,7 @@ function showLoadingOverlay() {
 }
 
 function hideLoadingOverlay() {
-  $('#loading-overlay').fadeOut();
+  $('#loading-overlay').remove();
 }
 // ----- End of function to loading overlay ----- //
 
