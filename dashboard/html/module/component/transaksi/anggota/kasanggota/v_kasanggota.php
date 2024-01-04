@@ -5,8 +5,8 @@ $USER_CABANG = $_SESSION["LOGINCAB_CS"];
 
 $getKas = GetQuery("SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
 CASE
-        WHEN k.KAS_JUMLAH < 0 THEN CONCAT('(', FORMAT(ABS(k.KAS_JUMLAH), 0), ')')
-        ELSE FORMAT(k.KAS_JUMLAH, 0)
+    WHEN k.KAS_JUMLAH < 0 THEN CONCAT('(', FORMAT(ABS(k.KAS_JUMLAH), 0), ')')
+    ELSE FORMAT(k.KAS_JUMLAH, 0)
 END AS FKAS_JUMLAH,
 CASE 
     WHEN k.KAS_DK = 'D' THEN 'Debit'
@@ -141,7 +141,7 @@ $rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
 <!--/ END row -->
 
 <!-- START row -->
-<div class="row"> <!-- Table Mutasi Anggota -->
+<div class="row"> <!-- Table Kas Anggota -->
     <div class="col-md-12">
         <div class="panel panel-default" id="demo">
             <div class="panel-heading">
@@ -158,18 +158,37 @@ $rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
                         <th>Nama </th>
                         <th>Tingkatan </th>
                         <th>Gelar</th>
+                        <th>Jenis </th>
                         <th>Tanggal </th>
                         <th>Kategori </th>
                         <th>Deskripsi</th>
                         <th>Jumlah (Rp)</th>
+                        <th>Saldo (Rp)</th>
                         <th>Input Oleh</th>
                         <th>Input Tanggal</th>
                     </tr>
                 </thead>
                 <tbody id="kasanggotadata">
                     <?php
-                    while ($rowMutasi = $getKas->fetch(PDO::FETCH_ASSOC)) {
-                        extract($rowMutasi);
+                    while ($rowKas = $getKas->fetch(PDO::FETCH_ASSOC)) {
+                        extract($rowKas);
+                        $getSaldo = GetQuery("SELECT 
+                            CASE
+                                WHEN SUM(KAS_JUMLAH) < 0 THEN CONCAT('(', FORMAT(ABS(SUM(KAS_JUMLAH)), 0), ')')
+                                ELSE FORMAT(SUM(KAS_JUMLAH), 0)
+                            END AS FKAS_SALDO
+                        FROM 
+                            t_kas
+                        WHERE 
+                            DELETION_STATUS = 0 
+                            AND ANGGOTA_KEY = '$ANGGOTA_KEY' 
+                            AND KAS_ID <= '$KAS_ID' 
+                            AND KAS_JENIS = '$KAS_JENIS';
+                        ");
+
+                        while ($rowSaldo = $getSaldo->fetch(PDO::FETCH_ASSOC)) {
+                            extract($rowSaldo);
+                        }
                         ?>
                         <tr>
                             <td align="center">
@@ -177,8 +196,8 @@ $rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewKasAnggota" class="open-ViewKasAnggota" style="color:#222222;" data-id="<?= $KAS_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
-                                            <li><a data-toggle="modal" href="#EditKasAnggota" class="open-EditKasAnggota" style="color:#00a5d2;" data-id="<?= $KAS_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>"><span class="ico-edit"></span> Ubah</a></li>
+                                            <li><a data-toggle="modal" href="#ViewKasAnggota" class="open-ViewKasAnggota" style="color:#222222;" data-id="<?= $KAS_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-jenis="<?= $KAS_JENIS; ?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
+                                            <li><a data-toggle="modal" href="#EditKasAnggota" class="open-EditKasAnggota" style="color:#00a5d2;" data-id="<?= $KAS_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-jenis="<?= $KAS_JENIS; ?>"><span class="ico-edit"></span> Ubah</a></li>
                                             <li class="divider"></li>
                                             <li><a href="<?= $KAS_FILE; ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
                                             <li class="divider"></li>
@@ -194,10 +213,12 @@ $rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
                             <td align="center"><?= $ANGGOTA_NAMA; ?></td>
                             <td align="center"><?= $TINGKATAN_NAMA; ?></td>
                             <td align="center"><?= $TINGKATAN_SEBUTAN; ?></td>
+                            <td align="center"><?= $KAS_JENIS; ?></td>
                             <td align="center"><?= $FKAS_TANGGAL; ?></td>
                             <td align="center"><?= $KAS_DK_DES; ?></td>
                             <td align="center"><?= $KAS_DESKRIPSI; ?></td>
                             <td align="right" style="<?= $KAS_COLOR; ?>"><?= $FKAS_JUMLAH; ?></td>
+                            <td align="right"><?= $FKAS_SALDO; ?></td>
                             <td><?= $INPUT_BY; ?></td>
                             <td><?= $INPUT_DATE; ?></td>
                         </tr>
@@ -205,21 +226,6 @@ $rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
                     }
                     ?>
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <th colspan="12" style="text-align:right">
-                            <?php
-                            foreach ($rowk as $rowKas) {
-                                extract($rowKas);
-                                ?>
-                                <b>Total Kas Anggota : Rp <?= $TOTAL; ?></b>
-                                <?php
-                            }
-                            ?>
-                        </th>
-                        <th colspan="2"></th>
-                    </tr>
-                </tfoot>
             </table>
         </div>
     </div>
@@ -296,7 +302,28 @@ $rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Jenis Kas<span class="text-danger">*</span></label>
+                                <select id="KAS_JENIS" name="KAS_JENIS" class="form-control" placeholder="Pilih Jenis..." data-parsley-required required onchange="populateSaldoAwal()">
+                                    <option value="">Pilih Jenis...</option>
+                                    <option value="Wajib">Iuran Wajib</option>
+                                    <option value="Tabungan">Tabungan</option>
+                                </select>
+                            </div> 
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Saldo Awal</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">Rp</span>
+                                    <input type="text" class="form-control text-right" id="KAS_SALDOAWAL" name="KAS_SALDOAWAL" value="" readonly>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label>Kategori<span class="text-danger">*</span></label>
                                 <select id="KAS_DK" name="KAS_DK" class="form-control" placeholder="Pilih Kategori..." data-parsley-required required>
@@ -306,12 +333,21 @@ $rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
                                 </select>
                             </div> 
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label>Jumlah<span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-addon">Rp</span>
-                                    <input type="text" class="form-control text-right" id="KAS_JUMLAH" name="KAS_JUMLAH" value="" required data-parsley-required="">
+                                    <input type="text" class="form-control text-right" id="KAS_JUMLAH" name="KAS_JUMLAH" value="" required data-parsley-required>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Saldo Akhir</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">Rp</span>
+                                    <input type="text" class="form-control text-right" id="KAS_SALDOAKHIR" name="KAS_SALDOAKHIR" value="" readonly>
                                 </div>
                             </div> 
                         </div>
@@ -391,18 +427,44 @@ $rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label>Kategori<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="viewKAS_DK" name="KAS_DK" value="" readonly>
+                                <label>Jenis Kas<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="viewKAS_JENIS" name="KAS_JENIS" value="" readonly>
                             </div> 
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label>Jumlah<span class="text-danger">*</span></label>
+                                <label>Saldo Awal</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">Rp</span>
+                                    <input type="text" class="form-control text-right" id="viewKAS_SALDOAWAL" name="KAS_SALDOAWAL" value="" readonly>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Kategori</label>
+                                <input type="text" class="form-control" id="viewKAS_DK" name="KAS_DK" value="" readonly>
+                            </div> 
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Jumlah</label>
                                 <div class="input-group">
                                     <span class="input-group-addon">Rp</span>
                                     <input type="text" class="form-control text-right" id="viewKAS_JUMLAH" name="KAS_JUMLAH" value="" readonly>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Saldo Akhir</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">Rp</span>
+                                    <input type="text" class="form-control text-right" id="viewKAS_SALDOAKHIR" name="KAS_SALDOAKHIR" value="" readonly>
                                 </div>
                             </div> 
                         </div>
@@ -501,7 +563,28 @@ $rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Jenis Kas<span class="text-danger">*</span></label>
+                                <select id="editKAS_JENIS" name="KAS_JENIS" class="form-control" placeholder="Pilih Jenis..." data-parsley-required required onchange="populateSaldoAwalEdit()">
+                                    <option value="">Pilih Jenis...</option>
+                                    <option value="Wajib">Iuran Wajib</option>
+                                    <option value="Tabungan">Tabungan</option>
+                                </select>
+                            </div> 
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Saldo Awal</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">Rp</span>
+                                    <input type="text" class="form-control text-right" id="editKAS_SALDOAWAL" name="KAS_SALDOAWAL" value="" readonly>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label>Kategori<span class="text-danger">*</span></label>
                                 <select id="editKAS_DK" name="KAS_DK" class="form-control" placeholder="Pilih Kategori..." data-parsley-required required>
@@ -511,12 +594,21 @@ $rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
                                 </select>
                             </div> 
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label>Jumlah<span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-addon">Rp</span>
                                     <input type="text" class="form-control text-right" id="editKAS_JUMLAH" name="KAS_JUMLAH" value="" required data-parsley-required="">
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Saldo Akhir</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">Rp</span>
+                                    <input type="text" class="form-control text-right" id="editKAS_SALDOAKHIR" name="KAS_SALDOAKHIR" value="" readonly>
                                 </div>
                             </div> 
                         </div>

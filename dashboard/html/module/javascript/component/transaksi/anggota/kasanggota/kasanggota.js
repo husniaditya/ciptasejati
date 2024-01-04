@@ -15,21 +15,15 @@ function callTable() {
   });
 }
 
-// Call the function when the document is ready
-$(document).ready(function() { // Function Call Table
-  callTable();
-});
-
 function populateFields() { // Funciton Populate Fields
   var selectize = $("#selectize-dropdown")[0].selectize;
-
 
   // Get the selected value
   var selectedValue = selectize.getValue();
 
   // Make an AJAX request to fetch additional data based on the selected value
   $.ajax({
-    url: 'module/ajax/transaksi/anggota/mutasianggota/aj_getdetailanggota.php',
+    url: 'module/ajax/transaksi/anggota/kasanggota/aj_getdetailanggota.php',
     method: 'POST',
     data: { ANGGOTA_KEY: selectedValue },
     success: function(data) {
@@ -88,6 +82,53 @@ function populateFieldsEdit() { // Funciton Populate Fields in Edit Modal
         }
       });
 
+    },
+    error: function(error) {
+      console.error('Error fetching data:', error);
+    }
+  });
+}
+
+function populateSaldoAwal() { // Funciton Populate Fields
+  var selectize = $("#selectize-dropdown")[0].selectize;
+
+  // Get the selected value
+  var selectedValue = selectize.getValue();
+  var jenisKas = $("#KAS_JENIS").val();
+
+  // Make an AJAX request to fetch additional data based on the selected value
+  $.ajax({
+    url: 'module/ajax/transaksi/anggota/kasanggota/aj_getsaldoawal.php',
+    method: 'POST',
+    data: { ANGGOTA_KEY: selectedValue, KAS_JENIS: jenisKas },
+    success: function(data) {
+      $("#KAS_SALDOAWAL").val(data.SALDOAWAL);
+      // Trigger the main calculation when the saldoawal is populated
+      $("#KAS_JUMLAH, #KAS_DK, #KAS_JENIS").trigger("input");
+    },
+    error: function(error) {
+      console.error('Error fetching data:', error);
+    }
+  });
+}
+
+function populateSaldoAwalEdit() { // Funciton Populate Fields
+  var selectize = $("#selectize-dropdown4")[0].selectize;
+
+  // Get the selected value
+  var selectedValue = selectize.getValue();
+  var jenisKas = $("#editKAS_JENIS").val();
+  var key = $("#editKAS_ID").val();
+
+  // Make an AJAX request to fetch additional data based on the selected value
+  $.ajax({
+    url: 'module/ajax/transaksi/anggota/kasanggota/aj_getsaldoawal.php',
+    method: 'POST',
+    data: { ANGGOTA_KEY: selectedValue, KAS_JENIS: jenisKas, KAS_ID: key },
+    success: function(data) {
+      $("#editKAS_SALDOAWAL").val(data.SALDOAWAL);
+      // Trigger the main calculation when the saldoawal is populated
+      $("#editKAS_JUMLAH, #editKAS_DK, #editKAS_JENIS").trigger("input");
     },
     error: function(error) {
       console.error('Error fetching data:', error);
@@ -289,12 +330,65 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
 
 
 $(document).ready(function() {
+  // Call the function when the document is ready
+  callTable();
   // add Anggota
   handleForm('#AddKasAnggota-form', SuccessNotification, FailedNotification, UpdateNotification);
   // edit Anggota
   handleForm('#EditKasAnggota-form', UpdateNotification, FailedNotification, UpdateNotification);
   // Approve Anggota
   handleForm('#ApproveMutasiAnggota-form', UpdateNotification, FailedNotification, UpdateNotification);
+
+  // Attach an event listener to the "Jumlah" input
+  function updateSaldoAkhir(jumlahElement, saldoAwalElement, kategoriElement, saldoAkhirElement) {
+    // Get values
+    var saldoAwal = parseFloat($(saldoAwalElement).val().replace(/\D/g, '')) || 0;
+    var jumlah = parseFloat($(jumlahElement).val().replace(/\D/g, '')) || 0;
+    var kategori = $(kategoriElement).val() || "";
+  
+    // Perform the calculation based on the selected dropdown value
+    var saldoAkhir;
+    if (kategori === "D") {
+      saldoAkhir = saldoAwal + jumlah; // Sum for "Debit"
+    } else {
+      saldoAkhir = saldoAwal - jumlah; // Subtraction for "Kredit"
+    }
+  
+    // Format the result with parentheses for negative values
+    var formattedSaldoAkhir = saldoAkhir < 0 ? '(' + Math.abs(saldoAkhir).toLocaleString() + ')' : saldoAkhir.toLocaleString();
+  
+    // Update the "Saldo Akhir" input
+    $(saldoAkhirElement).val(formattedSaldoAkhir);
+  
+    // Add red color to the text if negative
+    if (saldoAkhir < 0) {
+      $(saldoAkhirElement).css("color", "red");
+    } else {
+      $(saldoAkhirElement).css("color", ""); // Reset color to default if positive
+    }
+  }
+  
+  // Attach an event listener to the "Jumlah" input for the first modal
+  $("#KAS_JUMLAH, #KAS_DK, #KAS_JENIS").on("input change", function () {
+  updateSaldoAkhir("#KAS_JUMLAH", "#KAS_SALDOAWAL", "#KAS_DK", "#KAS_SALDOAKHIR");
+  });
+  
+  // Attach an event listener to the "Jumlah" input for the second modal
+  $("#editKAS_JUMLAH, #editKAS_DK, #editKAS_JENIS").on("input change", function () {
+    updateSaldoAkhir("#editKAS_JUMLAH", "#editKAS_SALDOAWAL", "#editKAS_DK", "#editKAS_SALDOAKHIR");
+  });
+  
+  // Additional event listener for the "change" event on dropdowns for the first modal
+  $("#KAS_DK").on("change", function () {
+    // Trigger the main calculation when the dropdown changes
+    $("#KAS_JUMLAH, #KAS_DK").trigger("input");
+  });
+  
+  // Additional event listener for the "change" event on dropdowns for the second modal
+  $("#editKAS_DK").on("change", function () {
+    // Trigger the main calculation when the dropdown changes
+    $("#editKAS_JUMLAH, #editKAS_DK").trigger("input");
+  });
 
   // DROPDOWN ADD MUTASI ANGGOTA
   // Event listener for the first dropdown change
@@ -474,12 +568,13 @@ $(document).on("click", ".open-ViewKasAnggota", function () {
   
   var key = $(this).data('id');
   var anggota = $(this).data('anggota');
+  var jenis = $(this).data('jenis');
   
   // Make an AJAX request to fetch additional data based on the selected value
   $.ajax({
     url: 'module/ajax/transaksi/anggota/kasanggota/aj_getdetailkas.php',
     method: 'POST',
-    data: { KAS_ID: key },
+    data: { KAS_ID: key, ANGGOTA_KEY: anggota, KAS_JENIS: jenis },
     success: function(data) {
       // console.log('response', data);
       // Assuming data is a JSON object with the required information
@@ -494,8 +589,13 @@ $(document).on("click", ".open-ViewKasAnggota", function () {
       $("#viewANGGOTA_IDNAMA").val(data.ANGGOTA_IDNAMA);
       $("#viewTINGKATAN_NAMA").val(data.TINGKATAN_NAMA);
       $("#viewTINGKATAN_SEBUTAN").val(data.TINGKATAN_SEBUTAN);
+      $("#viewKAS_JENIS").val(data.KAS_JENIS);
       $("#viewKAS_DK").val(data.KAS_DK_DES);
       $("#viewKAS_JUMLAH").val(data.KAS_JUMLAH);
+      $("#viewFKAS_JUMLAH").val(data.FKAS_JUMLAH);
+      $("#viewKAS_SALDO").val(data.KAS_SALDO);
+      $("#viewKAS_SALDOAKHIR").val(data.FKAS_SALDO);
+      $("#viewKAS_SALDOAWAL").val(data.SALDOAWAL);
       $("#viewKAS_DESKRIPSI").val(data.KAS_DESKRIPSI);
       $("#viewINPUT_BY").text(data.INPUT_BY);
       $("#viewINPUT_DATE").text(data.INPUT_DATE);
@@ -523,14 +623,14 @@ $(document).on("click", ".open-EditKasAnggota", function () {
   
   var key = $(this).data('id');
   var anggota = $(this).data('anggota');
+  var jenis = $(this).data('jenis');
   
   // Make an AJAX request to fetch additional data based on the selected value
   $.ajax({
     url: 'module/ajax/transaksi/anggota/kasanggota/aj_getdetailkas.php',
     method: 'POST',
-    data: { KAS_ID: key },
+    data: { KAS_ID: key, ANGGOTA_KEY: anggota, KAS_JENIS: jenis },
     success: function(data) {
-      // console.log('response', data);
       // Assuming data is a JSON object with the required information
       // Make sure the keys match the fields in your returned JSON object
 
@@ -544,8 +644,13 @@ $(document).on("click", ".open-EditKasAnggota", function () {
       $("#editANGGOTA_IDNAMA").val(data.ANGGOTA_IDNAMA);
       $("#editTINGKATAN_NAMA").val(data.TINGKATAN_NAMA);
       $("#editTINGKATAN_SEBUTAN").val(data.TINGKATAN_SEBUTAN);
+      $("#editKAS_JENIS").val(data.KAS_JENIS);
       $("#editKAS_DK").val(data.KAS_DK);
       $("#editKAS_JUMLAH").val(data.KAS_JUMLAH);
+      $("#editFKAS_JUMLAH").val(data.FKAS_JUMLAH);
+      $("#editKAS_SALDO").val(data.KAS_SALDO);
+      $("#editKAS_SALDOAKHIR").val(data.FKAS_SALDO);
+      $("#editKAS_SALDOAWAL").val(data.SALDOAWAL);
       $("#editKAS_DESKRIPSI").val(data.KAS_DESKRIPSI);
       $("#editINPUT_BY").text(data.INPUT_BY);
       $("#editINPUT_DATE").text(data.INPUT_DATE);

@@ -267,92 +267,86 @@
                     <h3 class="semibold modal-title text-inverse">Lihat Data Mutasi Anggota</h3>
                 </div>
                 <div class="modal-body">
-                    <h5 class="text-center" id="viewnotifMUTASI_STATUS_DES"></h5><br>
-                    <div class="row">
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                            <div class="form-group">
-                                <label>Diajukan Oleh</label>
-                                <p id="viewnotifINPUT_BY"></p>
-                            </div> 
-                        </div>
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                            <div class="form-group">
-                                <label>Tanggal Pengajuan</label>
-                                <p id="viewnotifINPUT_DATE"></p>
-                            </div> 
-                        </div>
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                            <div class="form-group">
-                                <label>Disetujui Oleh</label>
-                                <p id="viewnotifAPPROVE_BY"></p>
-                            </div> 
-                        </div>
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                            <div class="form-group">
-                                <label>Tanggal persetujuan</label>
-                                <p id="viewnotifMUTASI_APP_TANGGAL"></p>
-                            </div> 
-                        </div>
-                    </div>
-                    <hr>
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
                             <div class="short-div">
                                 <label>Foto Anggota </label><br>
-                                <div id="notifloadpicview"></div>
+                                <div id="notifkaspic"></div>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label>ID - Nama Anggota</label>
-                                    <input type="text" class="form-control" id="viewnotifANGGOTA_IDNAMA" name="ANGGOTA_ID" value="" readonly>
+                                    <label>Anggota</label>
+                                    <input type="text" class="form-control" id="kasviewANGGOTA_IDNAMA" name="ANGGOTA_KEY" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div hidden">
                                 <div class="form-group">
                                     <label>ID Cabang</label>
-                                    <input type="text" class="form-control" id="viewnotifCABANG_AWAL" name="CABANG_AWAL" value="" readonly>
+                                    <input type="text" class="form-control" id="kasviewCABANG_KEY" name="CABANG_KEY" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>Daerah</label>
-                                    <input type="text" class="form-control" id="viewnotifDAERAH_AWAL_DES" name="DAERAH_AWAL" value="" readonly>
+                                    <input type="text" class="form-control" id="kasviewDAERAH_DESKRIPSI" name="DAERAH_KEY" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>Cabang</label>
-                                    <input type="text" class="form-control" id="viewnotifCABANG_AWAL_DES" name="CABANG_DESKRIPSI" value="" readonly>
+                                    <input type="text" class="form-control" id="kasviewCABANG_DESKRIPSI" name="CABANG_DESKRIPSI" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>Sabuk</label>
-                                    <input type="text" class="form-control" id="viewnotifTINGKATAN_NAMA" name="TINGKATAN_ID" value="" readonly>
+                                    <input type="text" class="form-control" id="kasviewTINGKATAN_NAMA" name="TINGKATAN_ID" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>Tingkatan</label>
-                                    <input type="text" class="form-control" id="viewnotifTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
+                                    <input type="text" class="form-control" id="kasviewTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
                                 </div> 
                             </div>   
                         </div>
                     </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-md-6">
+                    <hr><div class="row">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label>Daerah Tujuan</label>
-                                <input type="text" class="form-control" id="viewnotifDAERAH_TUJUAN_DES" name="DAERAH_TUJUAN" value="" readonly>
+                                <label>Saldo Awal</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">Rp</span>
+                                    <input type="text" class="form-control text-right" id="kasviewKAS_SALDOAWAL" name="KAS_SALDOAWAL" value="" readonly>
+                                </div>
                             </div> 
                         </div>
-                        <div class="col-md-6">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label>Cabang Tujuan</label>
-                                <input type="text" class="form-control" id="viewnotifCABANG_TUJUAN_DES" name="CABANG_TUJUAN" value="" readonly>
+                                <label>Kategori</label>
+                                <input type="text" class="form-control" id="kasviewKAS_DK" name="KAS_DK" value="" readonly>
+                            </div> 
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Jumlah</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">Rp</span>
+                                    <input type="text" class="form-control text-right" id="kasviewKAS_JUMLAH" name="KAS_JUMLAH" value="" readonly>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Saldo Akhir</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">Rp</span>
+                                    <input type="text" class="form-control text-right" id="kasviewKAS_SALDOAKHIR" name="KAS_SALDOAKHIR" value="" readonly>
+                                </div>
                             </div> 
                         </div>
                     </div>
@@ -360,13 +354,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Deskripsi</label>
-                                <textarea type="text" rows="4" class="form-control" id="viewnotifMUTASI_DESKRIPSI" name="MUTASI_DESKRIPSI" value="" data-parsley-required readonly></textarea>
-                            </div> 
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Tanggal Efektif</label>
-                                <input type="text" class="form-control" id="viewnotifTANGGAL_EFEKTIF" name="MUTAS_TANGGAL" value="" readonly>
+                                <textarea type="text" rows="4" class="form-control" id="kasviewKAS_DESKRIPSI" name="KAS_DESKRIPSI" value="" readonly></textarea>
                             </div> 
                         </div>
                     </div>

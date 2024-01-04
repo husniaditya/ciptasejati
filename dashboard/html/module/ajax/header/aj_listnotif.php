@@ -6,7 +6,7 @@ $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 
 $USER_KEY = $_SESSION["LOGINKEY_CS"];
 
-$getNotif = GetQuery("SELECT n.*,a.ANGGOTA_NAMA,c.CABANG_DESKRIPSI,m.ANGGOTA_KEY,
+$getNotif = GetQuery("SELECT n.*,a.ANGGOTA_NAMA,c.CABANG_DESKRIPSI,COALESCE(m.ANGGOTA_KEY,k.ANGGOTA_KEY) as ANGGOTA_KEY, k.KAS_JENIS,
 CASE
   WHEN n.APPROVE_STATUS = 0 THEN 'Menunggu'
   WHEN n.APPROVE_STATUS = 1 THEN 'Disetujui'
@@ -37,6 +37,7 @@ CASE
 END AS difference
 FROM t_notifikasi n
 LEFT JOIN t_mutasi m ON n.DOKUMEN_ID = m.MUTASI_ID
+LEFT JOIN t_kas k ON n.DOKUMEN_ID = k.KAS_ID
 LEFT JOIN m_anggota a ON n.INPUT_BY = a.ANGGOTA_ID
 LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
 WHERE NOTIFIKASI_USER = '$USER_KEY' ORDER BY READ_STATUS ASC,INPUT_DATE DESC LIMIT 15");
@@ -45,7 +46,7 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
     extract($rowNotif);
     if ($READ_STATUS == 0 && $APPROVE_STATUS == 0 && ($USER_AKSES == "Administrator" || $USER_AKSES == "Koordinator")) {
         ?>
-        <a href="#<?= $HREF; ?>" data-toggle="modal" class="media border-dotted <?= $TOGGLE; ?>" style="background-color: lavender;" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" onclick="getNotif(this)">
+        <a href="#<?= $HREF; ?>" data-toggle="modal" class="media border-dotted <?= $TOGGLE; ?>" style="background-color: lavender;" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-jenis="<?= $KAS_JENIS; ?>" onclick="getNotif(this)">
             <span class="media-body">
                 <?php
                 if ($KATEGORI == "Mutasi") {
@@ -66,7 +67,7 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
         <?php
     } elseif ($READ_STATUS == 0 && $APPROVE_STATUS <> 0 && ($USER_AKSES == "Administrator" || $USER_AKSES == "Koordinator")) {
         ?>
-        <a href="#<?= $HREF; ?>" data-toggle="modal" class="media border-dotted <?= $TOGGLE; ?>" style="background-color: lavender;" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" onclick="getNotif(this)">
+        <a href="#<?= $HREF; ?>" data-toggle="modal" class="media border-dotted <?= $TOGGLE; ?>" style="background-color: lavender;" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-jenis="<?= $KAS_JENIS; ?>" onclick="getNotif(this)">
             <span class="media-body">
                 <?php
                 if ($KATEGORI == "Mutasi") {
@@ -87,7 +88,7 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
         <?php
     } elseif ($READ_STATUS == 1 && $APPROVE_STATUS == 0 && ($USER_AKSES == "Administrator" || $USER_AKSES == "Koordinator")) {
         ?>
-        <a href="#<?= $HREF; ?>" data-toggle="modal" data-toggle="modal" class="media read border-dotted <?= $TOGGLE; ?>" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" onclick="getNotif(this)">
+        <a href="#<?= $HREF; ?>" data-toggle="modal" data-toggle="modal" class="media read border-dotted <?= $TOGGLE; ?>" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-jenis="<?= $KAS_JENIS; ?>" onclick="getNotif(this)">
             <span class="media-body">
                 <?php
                 if ($KATEGORI == "Mutasi") {
@@ -110,7 +111,7 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
     else {
         if ($READ_STATUS == 0) {
             ?>
-            <a href="#<?= $HREF; ?>" data-toggle="modal" data-toggle="modal" class="media border-dotted <?= $TOGGLE; ?>" style="background-color: lavender;" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" onclick="getNotif(this)">
+            <a href="#<?= $HREF; ?>" data-toggle="modal" data-toggle="modal" class="media border-dotted <?= $TOGGLE; ?>" style="background-color: lavender;" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-jenis="<?= $KAS_JENIS; ?>" onclick="getNotif(this)">
                 <span class="media-body">
                     <?php
                     if ($KATEGORI == "Mutasi") {
@@ -131,7 +132,7 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
             <?php
         } else {
             ?>
-            <a href="#<?= $HREF; ?>" data-toggle="modal" data-toggle="modal" class="media read border-dotted <?= $TOGGLE; ?>" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" onclick="getNotif(this)">
+            <a href="#<?= $HREF; ?>" data-toggle="modal" data-toggle="modal" class="media read border-dotted <?= $TOGGLE; ?>" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-jenis="<?= $KAS_JENIS; ?>" onclick="getNotif(this)">
                 <span class="media-body">
                     <?php
                     if ($KATEGORI == "Mutasi") {

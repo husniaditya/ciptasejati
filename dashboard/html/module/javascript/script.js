@@ -248,3 +248,58 @@ $(document).on("click", ".open-ApproveNotifMutasi", function () {
   
   // console.log(id);
 });
+
+// View Kas Anggota
+$(document).on("click", ".open-ViewNotifKas", function () {
+  
+  var key = $(this).data('dokumen');
+  var anggota = $(this).data('anggota');
+  var jenis = $(this).data('jenis');
+  // console.log(key, anggota);
+  
+  // Make an AJAX request to fetch additional data based on the selected value
+  $.ajax({
+    url: 'module/ajax/transaksi/anggota/kasanggota/aj_getdetailkas.php',
+    method: 'POST',
+    data: { KAS_ID: key, ANGGOTA_KEY: anggota, KAS_JENIS: jenis },
+    success: function(data) {
+      // console.log('response', data);
+      // Assuming data is a JSON object with the required information
+      // Make sure the keys match the fields in your returned JSON object
+      $("#kasviewDAERAH_KEY").val(data.DAERAH_KEY);
+      $("#kasviewCABANG_KEY").val(data.CABANG_KEY);
+      $("#kasviewDAERAH_DESKRIPSI").val(data.DAERAH_DESKRIPSI);
+      $("#kasviewCABANG_DESKRIPSI").val(data.CABANG_DESKRIPSI);
+      $("#kasviewANGGOTA_ID").val(data.ANGGOTA_ID);
+      $("#kasviewANGGOTA_KEY").val(data.ANGGOTA_IDNAMA);
+      $("#kasviewANGGOTA_NAMA").val(data.ANGGOTA_NAMA);
+      $("#kasviewANGGOTA_IDNAMA").val(data.ANGGOTA_IDNAMA);
+      $("#kasviewTINGKATAN_NAMA").val(data.TINGKATAN_NAMA);
+      $("#kasviewTINGKATAN_SEBUTAN").val(data.TINGKATAN_SEBUTAN);
+      $("#kasviewKAS_DK").val(data.KAS_DK_DES);
+      $("#kasviewKAS_JUMLAH").val(data.KAS_JUMLAH);
+      $("#kasviewFKAS_JUMLAH").val(data.FKAS_JUMLAH);
+      $("#kasviewKAS_SALDO").val(data.KAS_SALDO);
+      $("#kasviewKAS_SALDOAKHIR").val(data.FKAS_SALDO);
+      $("#kasviewKAS_SALDOAWAL").val(data.SALDOAWAL);
+      $("#kasviewKAS_DESKRIPSI").val(data.KAS_DESKRIPSI);
+      $("#kasviewINPUT_BY").text(data.INPUT_BY);
+      $("#kasviewINPUT_DATE").text(data.INPUT_DATE);
+
+    },
+    error: function(error) {
+      console.error('Error fetching data:', error);
+    }
+  });
+
+  $.ajax({
+    type: "POST",
+    url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+    data:'ANGGOTA_KEY='+anggota,
+    success: function(data){
+      $("#notifkaspic").html(data);
+    }
+  });
+  
+  // console.log(id);
+});
