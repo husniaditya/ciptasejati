@@ -657,20 +657,17 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                                     <thead>
                                                         <tr>
                                                             <th>No Dokumen</th>
-                                                            <th>ID Anggota</th>
-                                                            <th>Daerah </th>
-                                                            <th>Cabang </th>
-                                                            <th>Sabuk </th>
-                                                            <th>Tingkatan </th>
-                                                            <th>Gelar </th>
-                                                            <th>Nama</th>
+                                                            <th>Jenis</th>
                                                             <th>Tanggal</th>
-                                                            <th>Debet</th>
-                                                            <th>Kredit</th>
+                                                            <th>Kategori</th>
+                                                            <th>Deskripsi &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                                                             <th>Jumlah</th>
+                                                            <th>Saldo</th>
+                                                            <th>Input Oleh</th>
+                                                            <th>Input Tanggal</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody id="mutasikas">
+                                                    <tbody id="riwayatkas">
                                                     </tbody>
                                                 </table>
                                             </div>

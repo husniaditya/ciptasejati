@@ -313,7 +313,14 @@
                             </div>   
                         </div>
                     </div>
-                    <hr><div class="row">
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Jenis Kas<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="kasviewKAS_JENIS" name="KAS_JENIS" value="" readonly>
+                            </div> 
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Saldo Awal</label>

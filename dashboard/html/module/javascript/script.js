@@ -276,6 +276,7 @@ $(document).on("click", ".open-ViewNotifKas", function () {
       $("#kasviewANGGOTA_IDNAMA").val(data.ANGGOTA_IDNAMA);
       $("#kasviewTINGKATAN_NAMA").val(data.TINGKATAN_NAMA);
       $("#kasviewTINGKATAN_SEBUTAN").val(data.TINGKATAN_SEBUTAN);
+      $("#kasviewKAS_JENIS").val(data.KAS_JENIS);
       $("#kasviewKAS_DK").val(data.KAS_DK_DES);
       $("#kasviewKAS_JUMLAH").val(data.KAS_JUMLAH);
       $("#kasviewFKAS_JUMLAH").val(data.FKAS_JUMLAH);

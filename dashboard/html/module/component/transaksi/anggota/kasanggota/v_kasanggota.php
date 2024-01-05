@@ -3,42 +3,64 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
 $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 $USER_CABANG = $_SESSION["LOGINCAB_CS"];
 
-$getKas = GetQuery("SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
-CASE
-    WHEN k.KAS_JUMLAH < 0 THEN CONCAT('(', FORMAT(ABS(k.KAS_JUMLAH), 0), ')')
-    ELSE FORMAT(k.KAS_JUMLAH, 0)
-END AS FKAS_JUMLAH,
-CASE 
-    WHEN k.KAS_DK = 'D' THEN 'Debit'
-    ELSE 'Kredit' 
-END AS KAS_DK_DES,
-CASE
-    WHEN k.KAS_DK = 'D' THEN 'color: green;'
-    ELSE 'color: red;' 
-END AS KAS_COLOR
-FROM t_kas k
-LEFT JOIN m_anggota a ON k.ANGGOTA_KEY = a.ANGGOTA_KEY
-LEFT JOIN m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID
-LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
-LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
-WHERE k.DELETION_STATUS = 0 AND a.DELETION_STATUS=0
-ORDER BY k.KAS_ID");
+if ($USER_AKSES == "Administrator") {
+    $getKas = GetQuery("SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
+    CASE
+        WHEN k.KAS_JUMLAH < 0 THEN CONCAT('(', FORMAT(ABS(k.KAS_JUMLAH), 0), ')')
+        ELSE FORMAT(k.KAS_JUMLAH, 0)
+    END AS FKAS_JUMLAH,
+    CASE 
+        WHEN k.KAS_DK = 'D' THEN 'Debit'
+        ELSE 'Kredit' 
+    END AS KAS_DK_DES,
+    CASE
+        WHEN k.KAS_DK = 'D' THEN 'color: green;'
+        ELSE 'color: red;' 
+    END AS KAS_COLOR
+    FROM t_kas k
+    LEFT JOIN m_anggota a ON k.ANGGOTA_KEY = a.ANGGOTA_KEY
+    LEFT JOIN m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID
+    LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
+    LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
+    LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
+    WHERE k.DELETION_STATUS = 0 AND a.DELETION_STATUS=0
+    ORDER BY k.KAS_ID");
+    
+    $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0");
+} else {
+    $getKas = GetQuery("SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
+    CASE
+        WHEN k.KAS_JUMLAH < 0 THEN CONCAT('(', FORMAT(ABS(k.KAS_JUMLAH), 0), ')')
+        ELSE FORMAT(k.KAS_JUMLAH, 0)
+    END AS FKAS_JUMLAH,
+    CASE 
+        WHEN k.KAS_DK = 'D' THEN 'Debit'
+        ELSE 'Kredit' 
+    END AS KAS_DK_DES,
+    CASE
+        WHEN k.KAS_DK = 'D' THEN 'color: green;'
+        ELSE 'color: red;' 
+    END AS KAS_COLOR
+    FROM t_kas k
+    LEFT JOIN m_anggota a ON k.ANGGOTA_KEY = a.ANGGOTA_KEY
+    LEFT JOIN m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID
+    LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
+    LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
+    LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
+    WHERE k.DELETION_STATUS = 0 AND a.DELETION_STATUS=0 and a.CABANG_KEY = '$USER_CABANG'
+    ORDER BY k.KAS_ID");
+
+    $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 AND CABANG_KEY = '$USER_CABANG'");
+}
 
 $getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0");
 $getCabang = GetQuery("select * from m_cabang where DELETION_STATUS = 0");
 $getTingkatan = GetQuery("select * from m_tingkatan where DELETION_STATUS = 0");
-$getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0");
-$sumKas = GetQuery("SELECT CASE
-WHEN SUM(KAS_JUMLAH) < 0 THEN CONCAT('(', FORMAT(ABS(SUM(KAS_JUMLAH)), 0), ')')
-ELSE FORMAT(SUM(KAS_JUMLAH), 0)
-END AS TOTAL FROM t_kas WHERE DELETION_STATUS = 0");
 // Fetch all rows into an array
 $rowd = $getDaerah->fetchAll(PDO::FETCH_ASSOC);
 $rows = $getCabang->fetchAll(PDO::FETCH_ASSOC);
 $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
 $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
-$rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="panel-group" id="accordion1"> <!-- Input Filter -->
@@ -52,56 +74,51 @@ $rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
         </a>
         <div id="collapseOne" class="panel-collapse collapse">
             <div class="panel-body">
-                <form method="post" class="form filterMutasiAnggota" id="filterMutasiAnggota">
+                <form method="post" class="form filterKasAnggota" id="filterKasAnggota">
                     <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>Daerah Tujuan</label>
-                                <select name="DAERAH_KEY" id="selectize-select3" required="" class="form-control" data-parsley-required>
-                                    <option value="">-- Pilih Daerah --</option>
-                                    <?php
-                                    foreach ($rowd as $filterDaerah) {
-                                        extract($filterDaerah);
-                                        ?>
-                                        <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                        <?php
+                        if ($USER_AKSES == "Administrator") {
+                            ?>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Daerah</label>
+                                    <select name="DAERAH_KEY" id="selectize-select3" class="form-control">
+                                        <option value="">-- Pilih Daerah --</option>
                                         <?php
-                                    }
-                                    ?>
-                                </select>
-                            </div> 
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>Cabang Tujuan</label>
-                                <select name="CABANG_KEY" id="selectize-select2" required="" class="form-control" data-parsley-required>
-                                    <option value="">-- Pilih Cabang --</option>
-                                </select>
-                            </div> 
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>Tingkatan</label>
-                                <select name="TINGKATAN_ID" id="selectize-select" required="" class="form-control" data-parsley-required>
-                                    <option value="">-- Pilih Tingkatan --</option>
-                                    <?php
-                                    foreach ($rowt as $filterTingkatan) {
-                                        extract($filterTingkatan);
+                                        foreach ($rowd as $filterDaerah) {
+                                            extract($filterDaerah);
+                                            ?>
+                                            <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                            <?php
+                                        }
                                         ?>
-                                        <option value="<?= $TINGKATAN_ID; ?>"><?= $TINGKATAN_NAMA; ?> - <?= $TINGKATAN_SEBUTAN; ?></option>
-                                        <?php
-                                    }
-                                    ?>
-                                </select>
+                                    </select>
+                                </div> 
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Cabang</label>
+                                    <select name="CABANG_KEY" id="selectize-select2" class="form-control">
+                                        <option value="">-- Pilih Cabang --</option>
+                                    </select>
+                                </div> 
+                            </div>
+                            <?php
+                        }
+                        ?>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>No Dokumen</label>
+                                <input type="text" class="form-control" id="filterKAS_ID" name="KAS_ID" value="" placeholder="Input No Dokumen">
                             </div> 
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>Status Mutasi</label>
-                                <select id="filterMUTASI_STATUS" name="MUTASI_STATUS" class="form-control"  data-parsley-required required>
+                                <label>Jenis Kas</label>
+                                <select id="filterKAS_JENIS" name="KAS_JENIS" class="form-control">
                                     <option value="">Tampilkan semua</option>
-                                    <option value="0">Menunggu</option>
-                                    <option value="1">Disetujui</option>
-                                    <option value="2">Ditolak</option>
+                                    <option value="Wajib">Iuran Wajib</option>
+                                    <option value="Tabungan">Tabungan</option>
                                 </select>
                             </div> 
                         </div>
@@ -117,6 +134,46 @@ $rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
                             <div class="form-group">
                                 <label>Nama</label>
                                 <input type="text" class="form-control" id="filterANGGOTA_NAMA" name="ANGGOTA_NAMA" value="" placeholder="Input Nama">
+                            </div> 
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Tingkatan</label>
+                                <select name="TINGKATAN_ID" id="selectize-select" class="form-control">
+                                    <option value="">-- Pilih Tingkatan --</option>
+                                    <?php
+                                    foreach ($rowt as $filterTingkatan) {
+                                        extract($filterTingkatan);
+                                        ?>
+                                        <option value="<?= $TINGKATAN_ID; ?>"><?= $TINGKATAN_NAMA; ?> - <?= $TINGKATAN_SEBUTAN; ?></option>
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div> 
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Kategori Kas</label>
+                                <select id="filterKAS_KATEGORI" name="KAS_KATEGORI" class="form-control">
+                                    <option value="">Tampilkan semua</option>
+                                    <option value="D">Debit</option>
+                                    <option value="K">Kredit</option>
+                                </select>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Periode</label>
+                                <input type="text" class="form-control" id="datepicker4" name="TANGGAL_AWAL" placeholder="Pilih Tanggal Awal Periode" readonly/>
+                            </div> 
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label style="visibility: hidden;">.</label>
+                                <input type="text" class="form-control" id="datepicker5" name="TANGGAL_AKHIR" placeholder="Pilih Tanggal Akhir Periode" readonly/>
                             </div> 
                         </div>
                     </div>
@@ -161,7 +218,7 @@ $rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
                         <th>Jenis </th>
                         <th>Tanggal </th>
                         <th>Kategori </th>
-                        <th>Deskripsi</th>
+                        <th>Deskripsi &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                         <th>Jumlah (Rp)</th>
                         <th>Saldo (Rp)</th>
                         <th>Input Oleh</th>
@@ -216,7 +273,7 @@ $rowk = $sumKas->fetchAll(PDO::FETCH_ASSOC);
                             <td align="center"><?= $KAS_JENIS; ?></td>
                             <td align="center"><?= $FKAS_TANGGAL; ?></td>
                             <td align="center"><?= $KAS_DK_DES; ?></td>
-                            <td align="center"><?= $KAS_DESKRIPSI; ?></td>
+                            <td><?= $KAS_DESKRIPSI; ?></td>
                             <td align="right" style="<?= $KAS_COLOR; ?>"><?= $FKAS_JUMLAH; ?></td>
                             <td align="right"><?= $FKAS_SALDO; ?></td>
                             <td><?= $INPUT_BY; ?></td>

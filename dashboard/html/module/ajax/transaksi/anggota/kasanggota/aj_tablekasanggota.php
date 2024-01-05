@@ -5,27 +5,104 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
 $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 $USER_CABANG = $_SESSION["LOGINCAB_CS"];
 
-$getKas = GetQuery("SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
-CASE
-    WHEN k.KAS_JUMLAH < 0 THEN CONCAT('(', FORMAT(ABS(k.KAS_JUMLAH), 0), ')')
-    ELSE FORMAT(k.KAS_JUMLAH, 0)
-END AS FKAS_JUMLAH,
-CASE 
-    WHEN k.KAS_DK = 'D' THEN 'Debit'
-    ELSE 'Kredit' 
-END AS KAS_DK_DES,
-CASE
-    WHEN k.KAS_DK = 'D' THEN 'color: green;'
-    ELSE 'color: red;' 
-END AS KAS_COLOR
-FROM t_kas k
-LEFT JOIN m_anggota a ON k.ANGGOTA_KEY = a.ANGGOTA_KEY
-LEFT JOIN m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID
-LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
-LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
-WHERE k.DELETION_STATUS = 0 AND a.DELETION_STATUS=0
-ORDER BY k.KAS_ID");
+if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["KAS_ID"]) || isset($_POST["KAS_JENIS"]) || isset($_POST["ANGGOTA_ID"]) || isset($_POST["ANGGOTA_NAMA"]) || isset($_POST["TINGKATAN_ID"]) || isset($_POST["KAS_DK"]) || isset($_POST["TANGGAL_AWAL"]) || isset($_POST["TANGGAL_AKHIR"])) {
+    
+    if ($USER_AKSES == "Administrator") {
+        $DAERAH_KEY = $_POST["DAERAH_KEY"];
+        $CABANG_KEY = $_POST["CABANG_KEY"];
+    } else {
+        $DAERAH_KEY = "";
+        $CABANG_KEY = $USER_CABANG;
+    }
+    $KAS_ID = $_POST["KAS_ID"];
+    $KAS_JENIS = $_POST["KAS_JENIS"];
+    $ANGGOTA_ID = $_POST["ANGGOTA_ID"];
+    $ANGGOTA_NAMA = $_POST["ANGGOTA_NAMA"];
+    $TINGKATAN_ID = $_POST["TINGKATAN_ID"];
+    $KAS_DK = $_POST["KAS_DK"];
+    $TANGGAL_AWAL = $_POST["TANGGAL_AWAL"];
+    $TANGGAL_AKHIR = $_POST["TANGGAL_AKHIR"];
+
+    $sql = "SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
+    CASE
+        WHEN k.KAS_JUMLAH < 0 THEN CONCAT('(', FORMAT(ABS(k.KAS_JUMLAH), 0), ')')
+        ELSE FORMAT(k.KAS_JUMLAH, 0)
+    END AS FKAS_JUMLAH,
+    CASE 
+        WHEN k.KAS_DK = 'D' THEN 'Debit'
+        ELSE 'Kredit' 
+    END AS KAS_DK_DES,
+    CASE
+        WHEN k.KAS_DK = 'D' THEN 'color: green;'
+        ELSE 'color: red;' 
+    END AS KAS_COLOR
+    FROM t_kas k
+    LEFT JOIN m_anggota a ON k.ANGGOTA_KEY = a.ANGGOTA_KEY
+    LEFT JOIN m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID
+    LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
+    LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
+    LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
+    WHERE k.DELETION_STATUS = 0 AND a.DELETION_STATUS=0 AND (d.DAERAH_KEY LIKE CONCAT('%','$DAERAH_KEY','%')) AND (c.CABANG_KEY LIKE CONCAT('%','$CABANG_KEY','%')) AND (k.KAS_ID LIKE CONCAT('%','$KAS_ID','%')) AND (k.KAS_JENIS LIKE CONCAT('%','$KAS_JENIS','%')) AND (a.ANGGOTA_ID LIKE CONCAT('%','$ANGGOTA_ID','%')) AND (a.ANGGOTA_NAMA LIKE CONCAT('%','$ANGGOTA_NAMA','%')) AND (t.TINGKATAN_ID LIKE CONCAT('%','$TINGKATAN_ID','%')) AND (k.KAS_DK LIKE CONCAT('%','$KAS_DK','%'))";
+
+    if ($TANGGAL_AWAL != "" && $TANGGAL_AKHIR != "") {
+        $sql .= " AND (k.KAS_TANGGAL BETWEEN '$TANGGAL_AWAL' AND '$TANGGAL_AKHIR')";
+    } elseif ($TANGGAL_AWAL != "" && $TANGGAL_AKHIR == "") {
+        $sql .= " AND (k.KAS_TANGGAL BETWEEN '$TANGGAL_AWAL' AND '$TANGGAL_AWAL')";
+    } elseif ($TANGGAL_AWAL == "" && $TANGGAL_AKHIR != "") {
+        $sql .= " AND (k.KAS_TANGGAL BETWEEN '$TANGGAL_AKHIR' AND '$TANGGAL_AKHIR')";
+    }
+    $sql .= "ORDER BY k.KAS_ID";
+
+    $getKas = GetQuery($sql);
+
+} else {
+    if ($USER_AKSES == "Administrator") {
+        $getKas = GetQuery("SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
+        CASE
+            WHEN k.KAS_JUMLAH < 0 THEN CONCAT('(', FORMAT(ABS(k.KAS_JUMLAH), 0), ')')
+            ELSE FORMAT(k.KAS_JUMLAH, 0)
+        END AS FKAS_JUMLAH,
+        CASE 
+            WHEN k.KAS_DK = 'D' THEN 'Debit'
+            ELSE 'Kredit' 
+        END AS KAS_DK_DES,
+        CASE
+            WHEN k.KAS_DK = 'D' THEN 'color: green;'
+            ELSE 'color: red;' 
+        END AS KAS_COLOR
+        FROM t_kas k
+        LEFT JOIN m_anggota a ON k.ANGGOTA_KEY = a.ANGGOTA_KEY
+        LEFT JOIN m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID
+        LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
+        LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
+        LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
+        WHERE k.DELETION_STATUS = 0 AND a.DELETION_STATUS=0
+        ORDER BY k.KAS_ID");
+    } else {
+        $getKas = GetQuery("SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
+        CASE
+            WHEN k.KAS_JUMLAH < 0 THEN CONCAT('(', FORMAT(ABS(k.KAS_JUMLAH), 0), ')')
+            ELSE FORMAT(k.KAS_JUMLAH, 0)
+        END AS FKAS_JUMLAH,
+        CASE 
+            WHEN k.KAS_DK = 'D' THEN 'Debit'
+            ELSE 'Kredit' 
+        END AS KAS_DK_DES,
+        CASE
+            WHEN k.KAS_DK = 'D' THEN 'color: green;'
+            ELSE 'color: red;' 
+        END AS KAS_COLOR
+        FROM t_kas k
+        LEFT JOIN m_anggota a ON k.ANGGOTA_KEY = a.ANGGOTA_KEY
+        LEFT JOIN m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID
+        LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
+        LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
+        LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
+        WHERE k.DELETION_STATUS = 0 AND a.DELETION_STATUS=0 and a.CABANG_KEY = '$USER_CABANG'
+        ORDER BY k.KAS_ID");
+    }
+    
+}
 
 while ($rowKas = $getKas->fetch(PDO::FETCH_ASSOC)) {
     extract($rowKas);

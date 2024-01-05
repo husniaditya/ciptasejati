@@ -50,9 +50,9 @@ if (isset($_POST["savekasanggota"])) {
         GetQuery("insert into t_kas_log select uuid(), KAS_ID, ANGGOTA_KEY, KAS_JENIS, KAS_TANGGAL, KAS_DK,KAS_JUMLAH, KAS_SALDO, KAS_DESKRIPSI, KAS_FILE, DELETION_STATUS, 'I', '$USER_ID', now() from t_kas where KAS_ID = '$KAS_ID'");
 
         GetQuery("insert into t_notifikasi
-        select uuid(),ANGGOTA_KEY,'$KAS_ID','$USER_CABANG','$USER_CABANG','Kas','ViewNotifKas','open-ViewNotifKas','Kas $KAS_JENIS Anggota', '[$KAS_DK] Kas a.n $ANGGOTA_NAMA dengan jumlah Rp $rawKAS_JUMLAH', 1, 0, '$USER_ID', NOW()
+        select uuid(),ANGGOTA_KEY,'$KAS_ID',CABANG_KEY,CABANG_KEY,'Kas','ViewNotifKas','open-ViewNotifKas','Kas $KAS_JENIS Anggota', '[$KAS_DK] Kas a.n $ANGGOTA_NAMA dengan jumlah Rp $rawKAS_JUMLAH', 1, 0, '$USER_ID', NOW()
         FROM m_anggota
-        WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN ('$USER_CABANG','$USER_CABANG') AND ANGGOTA_AKSES = 'Koordinator' OR ANGGOTA_KEY = '$ANGGOTA_KEY') AND ANGGOTA_STATUS = 0");
+        WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN (CABANG_KEY,CABANG_KEY) AND ANGGOTA_AKSES = 'Koordinator' OR ANGGOTA_KEY = '$ANGGOTA_KEY') AND ANGGOTA_STATUS = 0");
 
         $response="Success,$KAS_ID";
         echo $response;
@@ -108,9 +108,9 @@ if (isset($_POST["editkasanggota"])) {
         GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$KAS_ID'");
 
         GetQuery("insert into t_notifikasi
-        select uuid(),ANGGOTA_KEY,'$KAS_ID','$USER_CABANG','$USER_CABANG','Kas','ViewNotifKas','open-ViewNotifKas','Kas Anggota', '[$KAS_DK] Kas a.n $ANGGOTA_NAMA dengan jumlah Rp $rawKAS_JUMLAH', 1, 0, '$USER_ID', NOW()
+        select uuid(),ANGGOTA_KEY,'$KAS_ID',CABANG_KEY,CABANG_KEY,'Kas','ViewNotifKas','open-ViewNotifKas','Kas $KAS_JENIS Anggota', '[$KAS_DK] Kas a.n $ANGGOTA_NAMA dengan jumlah Rp $rawKAS_JUMLAH', 1, 0, '$USER_ID', NOW()
         FROM m_anggota
-        WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN ('$USER_CABANG','$USER_CABANG') AND ANGGOTA_AKSES = 'Koordinator' OR ANGGOTA_KEY = '$ANGGOTA_KEY') AND ANGGOTA_STATUS = 0");
+        WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN (CABANG_KEY,CABANG_KEY) AND ANGGOTA_AKSES = 'Koordinator' OR ANGGOTA_KEY = '$ANGGOTA_KEY') AND ANGGOTA_STATUS = 0");
 
         $response="Success,$KAS_ID";
         echo $response;

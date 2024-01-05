@@ -673,34 +673,42 @@ $(document).on("click", ".open-EditKasAnggota", function () {
 
 // Mutasi Anggota Filtering
 // Attach debounced event handler to form inputs
-$('.filterMutasiAnggota select, .filterMutasiAnggota input').on('change input', debounce(filterMutasiAnggotaEvent, 500));
-function filterMutasiAnggotaEvent() {
+$('.filterKasAnggota select, .filterKasAnggota input').on('change input', debounce(filterKasAnggotaEvent, 500));
+function filterKasAnggotaEvent() {
   // Your event handling code here
   const daerah = $('#selectize-select3').val();
   const cabang = $('#selectize-select2').val();
-  const tingkatan = $('#selectize-select').val();
+  const dokumen = $('#filterKAS_ID').val();
+  const jenis = $('#filterKAS_JENIS').val();
   const id = $('#filterANGGOTA_ID').val();
   const nama = $('#filterANGGOTA_NAMA').val();
-  const status = $('#filterMUTASI_STATUS').val();
+  const tingkatan = $('#selectize-select').val();
+  const kategori = $('#filterKAS_KATEGORI').val();
+  const awal = $('#datepicker4').val();
+  const akhir = $('#datepicker5').val();
 
   // Create a data object to hold the form data
   const formData = {
     DAERAH_KEY: daerah,
     CABANG_KEY: cabang,
-    TINGKATAN_ID: tingkatan,
+    KAS_ID: dokumen,
+    KAS_JENIS: jenis,
     ANGGOTA_ID: id,
     ANGGOTA_NAMA: nama,
-    MUTASI_STATUS: status
+    TINGKATAN_ID: tingkatan,
+    KAS_DK: kategori,
+    TANGGAL_AWAL: awal,
+    TANGGAL_AKHIR: akhir
   };
 
   $.ajax({
     type: "POST",
-    url: 'module/ajax/transaksi/anggota/mutasianggota/aj_tablemutasianggota.php',
+    url: 'module/ajax/transaksi/anggota/kasanggota/aj_tablekasanggota.php',
     data: formData,
     success: function(response){
       // Destroy the DataTable before updating
-      $('#mutasianggota-table').DataTable().destroy();
-      $("#mutasianggotadata").html(response);
+      $('#kasanggota-table').DataTable().destroy();
+      $("#kasanggotadata").html(response);
       // Reinitialize Sertifikat Table
       callTable();
     }
@@ -710,9 +718,16 @@ function filterMutasiAnggotaEvent() {
 
 // ----- Function to reset form ----- //
 function clearForm() {
-  var selectizeInstance1 = $('#selectize-select3')[0].selectize;
-  var selectizeInstance2 = $('#selectize-select2')[0].selectize;
-  var selectizeInstance3 = $('#selectize-select')[0].selectize;// Clear the second Selectize dropdown
+  // Check if the administrator-specific elements exist
+  var isExist = $('#selectize-select3').length > 0 && $('#selectize-select2').length > 0;
+
+  if (isExist) {
+    var selectizeInstance2 = $('#selectize-select2')[0].selectize;
+    var selectizeInstance3 = $('#selectize-select3')[0].selectize;
+  }
+  var selectizeInstance1 = $('#selectize-select')[0].selectize;
+  
+  // Clear the first Selectize dropdown
   if (selectizeInstance1) {
     selectizeInstance1.clear();
   }
@@ -725,15 +740,15 @@ function clearForm() {
     selectizeInstance3.clear();
   }
 
-  document.getElementById("filterMutasiAnggota").reset();
+  document.getElementById("filterKasAnggota").reset();
   // Call the reloadDataTable() function after inserting data to reload the DataTable
   $.ajax({
     type: 'POST',
-    url: 'module/ajax/transaksi/anggota/mutasianggota/aj_tablemutasianggota.php',
+    url: 'module/ajax/transaksi/anggota/kasanggota/aj_tablekasanggota.php',
     success: function(response) {
       // Destroy the DataTable before updating
-      $('#mutasianggota-table').DataTable().destroy();
-      $("#mutasianggotadata").html(response);
+      $('#kasanggota-table').DataTable().destroy();
+      $("#kasanggotadata").html(response);
       // Reinitialize Sertifikat Table
       callTable();
     },

@@ -13,108 +13,123 @@ function callTable() {
           'copy', 'csv', 'excel', 'pdf'
       ],
   });
+
+  $('#ViewAnggota').on('shown.bs.modal', function () {
+    // Destroy DataTable for riwayatmutasi-table if it exists
+    if ($.fn.DataTable.isDataTable('#riwayatmutasi-table')) {
+      $('#riwayatmutasi-table').DataTable().destroy();
+    }
+    if ($.fn.DataTable.isDataTable('#mutasikas-table')) {
+      $('#mutasikas-table').DataTable().destroy();
+    }
+    if ($.fn.DataTable.isDataTable('#idsertifikat-table')) {
+      $('#idsertifikat-table').DataTable().destroy();
+    }
+    if ($.fn.DataTable.isDataTable('#riwayatppd-table')) {
+      $('#riwayatppd-table').DataTable().destroy();
+    }
+
+    $('#riwayatmutasi-table').DataTable({
+      responsive: true,
+      order: [],
+      dom: 'Bfrtlip',
+      columnDefs: [
+          { width: '100px', targets: 0 }, // Set width for column 1
+          { width: '150px', targets: 1 }, // Set width for column 2
+          { width: '150px', targets: 2 }, // Set width for column 3
+          { width: '150px', targets: 3 }, // Set width for column 4
+          { width: '100px', targets: 4 }, // Set width for column 5
+          { width: '100px', targets: 5 }, // Set width for column 6
+          { width: '100px', targets: 6 }, // Set width for column 7
+          { width: '100px', targets: 7 }, // Set width for column 8
+          // Add more columnDefs as needed
+      ],
+      paging: true,
+      scrollX: true,
+      scrollY: '350px', // Set the desired height here
+      buttons: [
+          'copy', 'csv', 'excel', 'pdf'
+      ]
+    });
+
+    $('#mutasikas-table').DataTable({
+        responsive: true,
+        order: [], // Adjust the column index and order direction
+        dom: 'Bfrtlip',
+        paging: true,
+        buttons: [
+            {
+                extend: 'copy',
+                title: 'Riwayat Mutasi Kas - CIPTA SEJATI',
+            },
+            {
+                extend: 'csv',
+                title: 'Riwayat Mutasi Kas - CIPTA SEJATI',
+            },
+            {
+                extend: 'excel',
+                title: 'Riwayat Mutasi Kas - CIPTA SEJATI',
+            },
+            {
+                extend: 'pdf',
+                title: 'Riwayat Mutasi Kas - CIPTA SEJATI'
+            }
+        ]
+    });
+    
+    $('#idsertifikat-table').DataTable({
+      responsive: true,
+      order: [[9, 'asc']],
+      dom: 'Bfrtlip',
+      columnDefs: [
+          { width: '100px', targets: 0 }, // Set width for column 1
+          { width: '150px', targets: 1 }, // Set width for column 2
+          { width: '150px', targets: 2 }, // Set width for column 3
+          { width: '150px', targets: 3 }, // Set width for column 4
+          { width: '100px', targets: 4 }, // Set width for column 5
+          { width: '100px', targets: 5 }, // Set width for column 6
+          { width: '100px', targets: 6 }, // Set width for column 7
+          { width: '100px', targets: 7 }, // Set width for column 8
+          { width: '100px', targets: 8 }, // Set width for column 9
+          { width: '100px', targets: 9 }, // Set width for column 10
+          // Add more columnDefs as needed
+      ],
+      paging: true,
+      scrollX: true,
+      scrollY: '350px', // Set the desired height here
+      buttons: [
+          'copy', 'csv', 'excel', 'pdf'
+      ]
+    });
+
+    $('#riwayatppd-table').DataTable({
+      responsive: true,
+      order: [[7, 'asc']],
+      dom: 'Bfrtlip',
+      columnDefs: [
+          { width: '100px', targets: 0 }, // Set width for column 1
+          { width: '150px', targets: 1 }, // Set width for column 2
+          { width: '150px', targets: 2 }, // Set width for column 3
+          { width: '150px', targets: 3 }, // Set width for column 4
+          { width: '100px', targets: 4 }, // Set width for column 5
+          { width: '100px', targets: 5 }, // Set width for column 6
+          { width: '100px', targets: 6 }, // Set width for column 7
+          { width: '100px', targets: 7 }, // Set width for column 8
+          // Add more columnDefs as needed
+      ],
+      paging: true,
+      scrollX: true,
+      scrollY: '350px', // Set the desired height here
+      buttons: [
+          'copy', 'csv', 'excel', 'pdf'
+      ]
+    });
+  });
 }
 
 // Call the function when the document is ready
 $(document).ready(function() {
   callTable();
-
-  $('#riwayatmutasi-table').DataTable({
-    responsive: true,
-    order: [],
-    dom: 'Bfrtlip',
-    columnDefs: [
-        { width: '100px', targets: 0 }, // Set width for column 1
-        { width: '150px', targets: 1 }, // Set width for column 2
-        { width: '150px', targets: 2 }, // Set width for column 3
-        { width: '150px', targets: 3 }, // Set width for column 4
-        { width: '100px', targets: 4 }, // Set width for column 5
-        { width: '100px', targets: 5 }, // Set width for column 6
-        { width: '100px', targets: 6 }, // Set width for column 7
-        { width: '100px', targets: 7 }, // Set width for column 8
-        // Add more columnDefs as needed
-    ],
-    paging: true,
-    scrollX: true,
-    scrollY: '350px', // Set the desired height here
-    buttons: [
-        'copy', 'csv', 'excel', 'pdf'
-    ]
-  });
-
-  $('#idsertifikat-table').DataTable({
-    responsive: true,
-    order: [[9, 'asc']],
-    dom: 'Bfrtlip',
-    columnDefs: [
-        { width: '100px', targets: 0 }, // Set width for column 1
-        { width: '150px', targets: 1 }, // Set width for column 2
-        { width: '150px', targets: 2 }, // Set width for column 3
-        { width: '150px', targets: 3 }, // Set width for column 4
-        { width: '100px', targets: 4 }, // Set width for column 5
-        { width: '100px', targets: 5 }, // Set width for column 6
-        { width: '100px', targets: 6 }, // Set width for column 7
-        { width: '100px', targets: 7 }, // Set width for column 8
-        { width: '100px', targets: 8 }, // Set width for column 9
-        { width: '100px', targets: 9 }, // Set width for column 10
-        // Add more columnDefs as needed
-    ],
-    paging: true,
-    scrollX: true,
-    scrollY: '350px', // Set the desired height here
-    buttons: [
-        'copy', 'csv', 'excel', 'pdf'
-    ]
-  });
-
-  $('#mutasikas-table').DataTable({
-    responsive: true,
-    order: [[7, 'asc']],
-    dom: 'Bfrtlip',
-    columnDefs: [
-        { width: '100px', targets: 0 }, // Set width for column 1
-        { width: '150px', targets: 1 }, // Set width for column 2
-        { width: '150px', targets: 2 }, // Set width for column 3
-        { width: '150px', targets: 3 }, // Set width for column 4
-        { width: '100px', targets: 4 }, // Set width for column 5
-        { width: '100px', targets: 5 }, // Set width for column 6
-        { width: '100px', targets: 6 }, // Set width for column 7
-        { width: '100px', targets: 7 }, // Set width for column 8
-        { width: '100px', targets: 8 }, // Set width for column 9
-        { width: '100px', targets: 9 }, // Set width for column 10
-        { width: '100px', targets: 10 }, // Set width for column 11
-        // Add more columnDefs as needed
-    ],
-    paging: true,
-    scrollX: true,
-    scrollY: '350px', // Set the desired height here
-    buttons: [
-        'copy', 'csv', 'excel', 'pdf'
-    ]
-  });
-
-  $('#riwayatppd-table').DataTable({
-    responsive: true,
-    order: [[7, 'asc']],
-    dom: 'Bfrtlip',
-    columnDefs: [
-        { width: '100px', targets: 0 }, // Set width for column 1
-        { width: '150px', targets: 1 }, // Set width for column 2
-        { width: '150px', targets: 2 }, // Set width for column 3
-        { width: '150px', targets: 3 }, // Set width for column 4
-        { width: '100px', targets: 4 }, // Set width for column 5
-        { width: '100px', targets: 5 }, // Set width for column 6
-        { width: '100px', targets: 6 }, // Set width for column 7
-        { width: '100px', targets: 7 }, // Set width for column 8
-        // Add more columnDefs as needed
-    ],
-    paging: true,
-    scrollX: true,
-    scrollY: '350px', // Set the desired height here
-    buttons: [
-        'copy', 'csv', 'excel', 'pdf'
-    ]
-  });
 });
 
 function previewImage(input) {
@@ -480,6 +495,15 @@ $(document).on("click", ".open-ViewAnggota", function () {
     }
   });
   
+  $.ajax({
+    type: "POST",
+    url: "module/ajax/transaksi/anggota/daftaranggota/aj_getmutasikas.php",
+    data:'ANGGOTA_KEY='+key,
+    success: function(data){
+      $("#riwayatkas").html(data);
+    }
+  });
+  
   // console.log(id);
 });
 
@@ -544,11 +568,15 @@ $(document).on("click", ".open-EditAnggota", function () {
   });
 
   
-  $(".modal-body #selectize-dropdown4")[0].selectize.setValue(daerahkey);
-  // Wait for the options in the second dropdown to be populated before setting its value
-  setTimeout(function () {
-      $(".modal-body #selectize-dropdown5")[0].selectize.setValue(cabangkey);
-  }, 200); // You may need to adjust the delay based on your application's behavior
+  var isExist = $('#selectize-dropdown4').length > 0 && $('#selectize-dropdown5').length > 0;
+
+  if (isExist) {
+    $(".modal-body #selectize-dropdown4")[0].selectize.setValue(daerahkey);
+    // Wait for the options in the second dropdown to be populated before setting its value
+    setTimeout(function () {
+        $(".modal-body #selectize-dropdown5")[0].selectize.setValue(cabangkey);
+    }, 200); // You may need to adjust the delay based on your application's behavior
+  }
 });
 
 // Anggota Filtering
@@ -594,8 +622,6 @@ function filterAnggotaEvent() {
 
 // ----- Function to reset form ----- //
 function clearForm() {
-
-  
   // Check if the administrator-specific elements exist
   var isExist = $('#selectize-select3').length > 0 && $('#selectize-select2').length > 0;
 
