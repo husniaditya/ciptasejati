@@ -40,7 +40,7 @@ if (isset($_POST["savekasanggota"])) {
         $KAS_JUMLAH = ($KAS_DK == "D") ? (float)$cleanedKAS_JUMLAH : -(float)$cleanedKAS_JUMLAH;
         $KAS_SALDO = ($KAS_DK == "D") ? (float)$SALDO_AWAL + (float)$cleanedKAS_JUMLAH : (float)$SALDO_AWAL -(float)$cleanedKAS_JUMLAH;
         
-        $getNamaAnggota = GetQuery("select a.ANGGOTA_NAMA, c.CABANG_DESKRIPSI from m_anggota a left join m_cabang c on a.CABANG_KEY = c.CABANG_KEY where a.ANGGOTA_KEY = '$ANGGOTA_KEY'");
+        $getNamaAnggota = GetQuery("select a.ANGGOTA_NAMA, a.CABANG_KEY, c.CABANG_DESKRIPSI from m_anggota a left join m_cabang c on a.CABANG_KEY = c.CABANG_KEY where a.ANGGOTA_KEY = '$ANGGOTA_KEY'");
         while ($rowNamaAnggota = $getNamaAnggota->fetch(PDO::FETCH_ASSOC)) {
             extract($rowNamaAnggota);
         }
@@ -52,7 +52,7 @@ if (isset($_POST["savekasanggota"])) {
         GetQuery("insert into t_notifikasi
         select uuid(),ANGGOTA_KEY,'$KAS_ID',CABANG_KEY,CABANG_KEY,'Kas','ViewNotifKas','open-ViewNotifKas','Kas $KAS_JENIS', '[$KAS_DK] Kas a.n $ANGGOTA_NAMA dengan jumlah Rp $rawKAS_JUMLAH', 1, 0, '$USER_ID', NOW()
         FROM m_anggota
-        WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN (CABANG_KEY,CABANG_KEY) AND ANGGOTA_AKSES = 'Koordinator' OR ANGGOTA_KEY = '$ANGGOTA_KEY') AND ANGGOTA_STATUS = 0");
+        WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN (CABANG_KEY,CABANG_KEY) AND (ANGGOTA_AKSES = 'Koordinator' AND CABANG_KEY = '$CABANG_KEY') OR ANGGOTA_KEY = '$ANGGOTA_KEY') AND ANGGOTA_STATUS = 0");
 
         $response="Success,$KAS_ID";
         echo $response;
@@ -96,7 +96,7 @@ if (isset($_POST["editkasanggota"])) {
         $KAS_JUMLAH = ($KAS_DK == "D") ? (float)$cleanedKAS_JUMLAH : -(float)$cleanedKAS_JUMLAH;
         $KAS_SALDO = ($KAS_DK == "D") ? (float)$SALDO_AWAL + (float)$cleanedKAS_JUMLAH : (float)$SALDO_AWAL -(float)$cleanedKAS_JUMLAH;
         
-        $getNamaAnggota = GetQuery("select a.ANGGOTA_NAMA, c.CABANG_DESKRIPSI from m_anggota a left join m_cabang c on a.CABANG_KEY = c.CABANG_KEY where a.ANGGOTA_KEY = '$ANGGOTA_KEY'");
+        $getNamaAnggota = GetQuery("select a.ANGGOTA_NAMA, a.CABANG_KEY, c.CABANG_DESKRIPSI from m_anggota a left join m_cabang c on a.CABANG_KEY = c.CABANG_KEY where a.ANGGOTA_KEY = '$ANGGOTA_KEY'");
         while ($rowNamaAnggota = $getNamaAnggota->fetch(PDO::FETCH_ASSOC)) {
             extract($rowNamaAnggota);
         }
@@ -110,7 +110,7 @@ if (isset($_POST["editkasanggota"])) {
         GetQuery("insert into t_notifikasi
         select uuid(),ANGGOTA_KEY,'$KAS_ID',CABANG_KEY,CABANG_KEY,'Kas','ViewNotifKas','open-ViewNotifKas','Kas $KAS_JENIS', '[$KAS_DK] Kas a.n $ANGGOTA_NAMA dengan jumlah Rp $rawKAS_JUMLAH', 1, 0, '$USER_ID', NOW()
         FROM m_anggota
-        WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN (CABANG_KEY,CABANG_KEY) AND ANGGOTA_AKSES = 'Koordinator' OR ANGGOTA_KEY = '$ANGGOTA_KEY') AND ANGGOTA_STATUS = 0");
+        WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN (CABANG_KEY,CABANG_KEY) AND (ANGGOTA_AKSES = 'Koordinator' AND CABANG_KEY = '$CABANG_KEY') OR ANGGOTA_KEY = '$ANGGOTA_KEY') AND ANGGOTA_STATUS = 0");
 
         $response="Success,$KAS_ID";
         echo $response;

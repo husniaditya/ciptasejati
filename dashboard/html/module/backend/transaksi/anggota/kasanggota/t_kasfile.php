@@ -7,10 +7,10 @@ $USER_NAMA = $_SESSION["LOGINNAME_CS"];
 // Include the main TCPDF library (search for installation path).
 require_once('../../../../../assets/tcpdf/tcpdf.php');
 
-if ($_POST["KAS_ID"]) {
-    $KAS_ID = $_POST["KAS_ID"];
+if (isset($_POST['id'])) {
+    $KAS_ID = $_POST["id"];
 
-    $getData = GetQuery("SELECT k.*,a.ANGGOTA_NAMA,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,c.CABANG_SEKRETARIAT,a2.ANGGOTA_NAMA INPUT_BY, DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
+    $getData = GetQuery("SELECT k.*,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_AKSES,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,c.CABANG_SEKRETARIAT,a2.ANGGOTA_ID INPUT_BY_ID,a2.ANGGOTA_NAMA INPUT_BY,a2.ANGGOTA_AKSES INPUT_AKSES, DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y') INPUT_DATE,
     CASE
         WHEN k.KAS_JUMLAH < 0 THEN CONCAT('(', FORMAT(ABS(k.KAS_JUMLAH), 0), ')')
         ELSE FORMAT(k.KAS_JUMLAH, 0)
@@ -24,18 +24,56 @@ if ($_POST["KAS_ID"]) {
     LEFT JOIN m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID
     LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-    WHERE k.KAS_ID = 'KAS-202401-003'");
+    WHERE k.KAS_ID = '$KAS_ID'");
 
     try {
         while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
             extract($data);
+
+            $getSaldo = GetQuery("SELECT
+                IFNULL(SALDOAWAL, 0) AS SALDOAWAL,
+                IFNULL(SALDOAKHIR, 0) AS SALDOAKHIR
+            FROM (
+                SELECT
+                    CASE
+                        WHEN SUM(KAS_JUMLAH) < 0 THEN CONCAT('(', FORMAT(ABS(SUM(KAS_JUMLAH)), 0), ')')
+                        ELSE FORMAT(SUM(KAS_JUMLAH), 0)
+                    END AS SALDOAWAL
+                FROM
+                    t_kas
+                WHERE
+                    DELETION_STATUS = 0
+                    AND ANGGOTA_KEY = '$ANGGOTA_KEY'
+                    AND KAS_JENIS = '$KAS_JENIS'
+                    AND KAS_ID < '$KAS_ID'
+            ) AS Subquery1
+            CROSS JOIN (
+                SELECT
+                    CASE
+                        WHEN SUM(KAS_JUMLAH) < 0 THEN CONCAT('(', FORMAT(ABS(SUM(KAS_JUMLAH)), 0), ')')
+                        ELSE FORMAT(SUM(KAS_JUMLAH), 0)
+                    END AS SALDOAKHIR
+                FROM
+                    t_kas
+                WHERE
+                    DELETION_STATUS = 0
+                    AND ANGGOTA_KEY = '$ANGGOTA_KEY'
+                    AND KAS_JENIS = '$KAS_JENIS'
+                    AND KAS_ID <= '$KAS_ID'
+            ) AS Subquery2");
+
+            while ($rowSaldo = $getSaldo->fetch(PDO::FETCH_ASSOC)) {
+                extract($rowSaldo);
+            }
+
+            $getSaldoAwal = GetQuery("SELECT FORMAT(IFNULL(SUM(KAS_JUMLAH),0), 0) AS SALDOAWAL FROM t_kas WHERE DELETION_STATUS = 0 AND ANGGOTA_KEY = '$ANGGOTA_KEY' AND KAS_JENIS = '$KAS_JENIS' AND KAS_ID < '$KAS_ID'");
     
             // Extend the TCPDF class to create custom Header and Footer
             class MYPDF extends TCPDF {
     
                 //Page header
                 public function Header() {
-                    global $DAERAH_DESKRIPSI,$CABANG_DESKRIPSI, $CABANG_SEKRETARIAT;
+                    global $DAERAH_DESKRIPSI,$CABANG_DESKRIPSI, $CABANG_SEKRETARIAT, $KAS_JENIS, $KAS_ID, $FKAS_TANGGAL, $ANGGOTA_ID, $ANGGOTA_NAMA, $SALDOAWAL;
                 
                     // Logo
                     $image_file = K_PATH_IMAGES.'/../../../../../../img/logo/logo_rev.png';
@@ -68,13 +106,51 @@ if ($_POST["KAS_ID"]) {
                     $this->Ln(-1);
                     // Draw a horizontal line under the header
                     $this->Line(10, $this->GetY() + 2, $pageWidth - 10, $this->GetY() + 2);
+                    $this->Ln(5);
+                    $this->SetFont('helvetica', 'BU', 13);
+                    $this->Cell($pageWidth-15,10,"Formulir Kas " .$KAS_JENIS,0,0,"C");
+                    $this->Ln(20);
+                    $this->SetFont('times', 'B', 11); // Set font for body
+                    $this->Cell(35,5,"ID Anggota",0,0,"L");
+                    $this->Cell(5,5,":",0,0,"L");
+                    $this->Cell(30,5,$ANGGOTA_ID,0,0,"L");
+                    $this->Ln();
+                    $this->Cell(35,5,"Nama Anggota",0,0,"L");
+                    $this->Cell(5,5,":",0,0,"L");
+                    $this->Cell(30,5,$ANGGOTA_NAMA,0,0,"L");
+                    $this->Ln(15);
+                    // Header Row
+                    $this->Cell(30, 10, "", 'LTR', 0, "C");
+                    $this->Cell(35, 10, "", 'LTR', 0, "C");
+                    $this->Cell(100, 10, "Tabungan", 1, 0, "C");
+                    $this->Cell(25, 10, "", 'LTR', 0, "C");
+                    $this->Ln();
+
+                    // Subheader Row
+                    $this->Cell(30, 5, "Tanggal", 'LR', 0, "C");
+                    $this->Cell(35, 5, "No Dokumen", 'LR', 0, "C");
+                    $this->Cell(15, 5, "Jenis", 1, 0, "C");
+                    $this->Cell(25, 5, "Jumlah (Rp)", 1, 0, "C");
+                    $this->Cell(30, 5, "Saldo Awal (Rp)", 1, 0, "C");
+                    $this->Cell(30, 5, "Saldo Akhir (Rp)", 1, 0, "C");
+                    $this->Cell(25, 5, "TTD", 'LR', 0, "C");
+                    $this->Ln();
+                    $this->Cell(30, 10, "", 'LR', 0, "C");
+                    $this->Cell(35, 10, "", 'LR', 0, "C");
+                    $this->Cell(15, 10, "", 'LR', 0, "C");
+                    $this->Cell(25, 10, "", 'LR', 0, "C");
+                    $this->Cell(30, 10, $SALDOAWAL .' ', 'LR', 0, "R");
+                    $this->Cell(30, 10, "", 'LR', 0, "C");
+                    $this->Cell(25, 10, "", 'LR', 0, "C");
+                    $this->Ln();
     
                 }
-    
+
+                
                 // Page footer
                 public function Footer() {
-                    global $USER_NAMA, $CABANG_TUJUAN_DES, $MUTASI_APPROVE_TANGGAL, $INPUT_BY, $INPUT_BY_ID, $APPROVE_BY, $APPROVE_BY_ID, $INPUT_AKSES, $APPROVE_AKSES, $CABANG_AWAL_DES, $DATENOW, $INPUT_DATE;
-    
+                    global $USER_NAMA, $CABANG_DESKRIPSI, $ANGGOTA_ID, $INPUT_BY, $INPUT_BY_ID, $APPROVE_BY, $ANGGOTA_NAMA, $INPUT_AKSES, $ANGGOTA_AKSES, $ANGOTA_NAMA, $DATENOW, $INPUT_DATE;
+
                     // set style for barcode
                     $style = array(
                         'border' => true,
@@ -91,25 +167,25 @@ if ($_POST["KAS_ID"]) {
                     $pageWidth = $this->getPageWidth();
                     $this->SetFont('times', '', 12); // Set font for body
                     // Draw a horizontal line under the header
-                    $this->Cell(10,5,$CABANG_AWAL_DES.', '.$INPUT_DATE,0,0,"L");
-                    $this->Cell(170,5,$CABANG_TUJUAN_DES.', '.$MUTASI_APPROVE_TANGGAL,0,0,"R");
+                    $this->Cell(10,5,$CABANG_DESKRIPSI.', '.$INPUT_DATE,0,0,"L");
+                    $this->Cell(170,5,$CABANG_DESKRIPSI.', '.$INPUT_DATE,0,0,"R");
                     $this->Ln();
                     $this->Cell(10,5,"Diajukan Oleh,",0,0,"L");
-                    $this->Cell(170,5,"Disetujui Oleh,",0,0,"R");
+                    $this->Cell(170,5,"Diinput Oleh,",0,0,"R");
                     $this->Ln();
                     // QRCODE,H : QR-CODE Best error correction
-                    $this->write2DBarcode($INPUT_BY_ID.' - '.$INPUT_BY, 'QRCODE,H', 15, 240, 25, 25, $style, 'N');
-                    if ($APPROVE_BY) {
-                        $this->write2DBarcode($APPROVE_BY_ID.' - '.$APPROVE_BY, 'QRCODE,H', 160, 240, 25, 25, $style, 'N');
+                    $this->write2DBarcode($ANGGOTA_ID.' - '.$ANGOTA_NAMA, 'QRCODE,H', 15, 240, 25, 25, $style, 'N');
+                    if ($INPUT_BY) {
+                        $this->write2DBarcode($INPUT_BY_ID.' - '.$INPUT_BY, 'QRCODE,H', 160, 240, 25, 25, $style, 'N');
                     }
                     $this->Ln(3);
                     $this->SetFont('times', 'U', 12); // Set font for body
-                    $this->Cell(10,5,$INPUT_BY,0,0,"L");
-                    $this->Cell(170,5,$APPROVE_BY,0,0,"R");
+                    $this->Cell(10,5,$ANGGOTA_NAMA,0,0,"L");
+                    $this->Cell(170,5,$INPUT_BY,0,0,"R");
                     $this->Ln();
                     $this->SetFont('times', '', 12); // Set font for body
-                    $this->Cell(10,5,$INPUT_AKSES .' - '.$CABANG_AWAL_DES,0,0,"L");
-                    $this->Cell(170,5,$APPROVE_AKSES.' - '.$CABANG_TUJUAN_DES,0,0,"R");
+                    $this->Cell(10,5,$ANGGOTA_AKSES .' - '.$CABANG_DESKRIPSI,0,0,"L");
+                    $this->Cell(170,5,$INPUT_AKSES.' - '.$CABANG_DESKRIPSI,0,0,"R");
                     $this->Ln(10);
                     $this->Line(10, $this->GetY() + 2, $pageWidth - 10, $this->GetY() + 2);
                     $this->Ln(1);
@@ -129,7 +205,7 @@ if ($_POST["KAS_ID"]) {
             // set document information
             $pdf->SetCreator(PDF_CREATOR);
             $pdf->SetAuthor('Cipta Sejati Indonesia');
-            $pdf->SetTitle($MUTASI_ID. ' Mutasi Anggota ' . $ANGGOTA_NAMA . '  ' . $TANGGAL_EFEKTIF);
+            $pdf->SetTitle($KAS_ID. ' Kas ' . $KAS_JENIS . ' ' . $ANGGOTA_NAMA . '  ' . $FKAS_TANGGAL);
     
             $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
     
@@ -140,114 +216,46 @@ if ($_POST["KAS_ID"]) {
             // ---------------------------------------------------------
     
             // add a page
-            $pdf->AddPage();
-            // Get the width of the page
-            $pageWidth = $pdf->getPageWidth();
-    
-            // set some text to print
-            $pdf->Ln(30);// Set font for title
-            $pdf->SetFont('helvetica', 'BU', 13);
-            $pdf->Cell($pageWidth-15,10,"Formulir Mutasi Anggota",0,0,"C");
-            $pdf->Ln(15);
-            $pdf->SetFont('times', '', 12); // Set font for body
-            $pdf->Cell(35,5,"Nomor Dokumen",0,0,"L");
-            $pdf->Cell(5,5,":",0,0,"L");
-            $pdf->Cell(30,5,$MUTASI_ID,0,0,"L");
-            
-            
-            if ($MUTASI_STATUS == 0) {
-                $pdf->Image('../../../../../assets/images/statusapproval/Pending.png', 140, 50, 50, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-            } elseif ($MUTASI_STATUS == 1) {
-                $pdf->Image('../../../../../assets/images/statusapproval/Approved.png', 140, 50, 50, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-            } else {
-                $pdf->Image('../../../../../assets/images/statusapproval/Rejected.png', 140, 50, 50, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-            }
-    
-            $pdf->Ln(10);
-            $pdf->Cell(35,5,"Tanggal Pengajuan",0,0,"L");
-            $pdf->Cell(5,5,":",0,0,"L");
-            $pdf->Cell(30,5,$INPUT_DATE,0,0,"L");
-            $pdf->Ln();
-            $pdf->Cell(35,5,"Tanggal Approval",0,0,"L");
-            $pdf->Cell(5,5,":",0,0,"L");
-            $pdf->Cell(30,5,$MUTASI_APPROVE_TANGGAL,0,0,"L");
-            $pdf->Ln();
-            $pdf->Cell(35,5,"Tangal Efektif",0,0,"L");
-            $pdf->Cell(5,5,":",0,0,"L");
-            $pdf->Cell(30,5,$TANGGAL_EFEKTIF,0,0,"L");
-            $pdf->Ln();
-            $pdf->Cell(35,5,"Status Dokumen",0,0,"L");
-            $pdf->Cell(5,5,":",0,0,"L");
-            $pdf->Cell(30,5,$MUTASI_STATUS_DES,0,0,"L");
-            $pdf->Ln(15);
-            $pdf->SetFont('times','',12);
-            $pdf->Cell(20,5,"Yang bertanda tangan di bawah ini: ",0,0,"L");
-            $pdf->Ln(10);
-            $pdf->Cell(10,5,"",0,0,"L");
-            $pdf->Cell(30,5,"ID Anggota",0,0,"L");
-            $pdf->Cell(5,5,":",0,0,"L");
-            $pdf->Cell(30,5,$ANGGOTA_ID,0,0,"L");
-            $pdf->Ln();
-            $pdf->Cell(10,5,"",0,0,"L");
-            $pdf->Cell(30,5,"Nama",0,0,"L");
-            $pdf->Cell(5,5,":",0,0,"L");
-            $pdf->Cell(30,5,$ANGGOTA_NAMA,0,0,"L");
-            $pdf->Ln();
-            $pdf->Cell(10,5,"",0,0,"L");
-            $pdf->Cell(30,5,"Asal Cabang",0,0,"L");
-            $pdf->Cell(5,5,":",0,0,"L");
-            $pdf->Cell(30,5,$CABANG_AWAL_DES." - ".$DAERAH_AWAL_DES,0,0,"L");
-            $pdf->Ln();
-            $pdf->Cell(10,5,"",0,0,"L");
-            $pdf->Cell(30,5,"Tingkatan",0,0,"L");
-            $pdf->Cell(5,5,":",0,0,"L");
-            $pdf->Cell(30,5,$TINGKATAN_NAMA." - ".$TINGKATAN_SEBUTAN,0,0,"L");
-            $pdf->Ln(10);
-            $pdf->Cell(20,5,"Telah pindah tempat cabang ke: ",0,0,"L");
-            $pdf->Ln(10);
-            $pdf->Cell(10,5,"",0,0,"L");
-            $pdf->Cell(30,5,"Cabang Tujuan",0,0,"L");
-            $pdf->Cell(5,5,":",0,0,"L");
-            $pdf->Cell(30,5,$CABANG_TUJUAN_DES." - ".$DAERAH_TUJUAN_DES,0,0,"L");
-            $pdf->Ln();
-            $pdf->Cell(10,5,"",0,0,"L");
-            $pdf->Cell(30,5,"Alamat Cabang",0,0,"L");
-            $pdf->Cell(5,5,":",0,0,"L");
-            $pdf->MultiCell(120,5,$CABANG_TUJUAN_SEKRETARIAT, 0, 'L', false, 1, '', '', true);
-            $pdf->Ln(2);
-            $pdf->Cell(10,5,"",0,0,"L");
-            $pdf->Cell(30,5,"Deskripsi Mutasi",0,0,"L");
-            $pdf->Cell(5,5,":",0,0,"L");
-            $pdf->MultiCell(120,5,$MUTASI_DESKRIPSI, 0, 'L', false, 1, '', '', true);
-            $pdf->Ln(10);
-            $pdf->MultiCell(180,5,"Keputusan ini atas kesepakatan bersama antar dua belah pihak dan akan efektif per tanggal ".$TANGGAL_EFEKTIF.". Dimohon anggota menyelesaikan urusan dengan baik di cabang lama dan menyiapkan segala sesuatunya dengan baik ke cabang yang baru.", 0, 'L', false, 1, '', '', true);
+            $pdf->AddPage('PDF_PAGE_FORMAT', 'A4');;
+
+            $pdf->SetFont('times', '', 11); // Set font for body
+
+            $pdf->Ln(96.5);
+            $pdf->Cell(30,15,$INPUT_DATE,1,0,"C");
+            $pdf->Cell(35,15,$KAS_ID,1,0,"C");
+            $pdf->Cell(15,15,$KAS_DK_DES,1,0,"C");
+            $pdf->Cell(25,15,$FKAS_JUMLAH,1,0,"R");
+            $pdf->Cell(30,15,'',1,0,"R");
+            $pdf->SetFont('times', 'B', 11); // Set font for body
+            $pdf->Cell(30,15,$SALDOAKHIR,1,0,"R");
+            $pdf->Cell(25,15,'',1,0,"C");
+            $pdf->Ln(40);
+            $pdf->SetFont('times', '', 11); // Set font for body
+            $pdf->MultiCell(190,5,"Dengan ini, laporan kas harian kami disusun sebagai refleksi akurat dari transaksi keuangan yang tercatat hari ini. Semoga laporan ini bermanfaat sebagai panduan yang jelas dan dapat diandalkan untuk melacak arus kas perusahaan. Terima kasih atas perhatian dan kerja sama semua pihak dalam menjaga keteraturan dan keakuratan catatan keuangan kami.", 0, 'J', false, 1, '', '', true);     
             $pdf->Ln(5);
-            $pdf->MultiCell(180,5,"Demikian formulir mutasi anggota ini disampaikan dengan sebenarnya untuk digunakan sebagaimana mestinya.", 0, 'J', false, 1, '', '', true);
-            
+            $pdf->MultiCell(190,5,"Demikian formulir kas anggota ini disampaikan dengan sebenarnya untuk digunakan sebagaimana mestinya. Kami berharap agar ke depannya, manajemen keuangan perusahaan dapat terus ditingkatkan demi mencapai tujuan dan pertumbuhan yang lebih baik. \n", 0, 'J', false, 1, '', '', true);
     
-            // ---------------------------------------------------------
-            GetQuery("update t_mutasi set MUTASI_FILE = './assets/report/mutasi/$CABANG_AWAL_DES/$MUTASI_ID Mutasi Anggota $ANGGOTA_NAMA  $TANGGAL_EFEKTIF.pdf' where MUTASI_ID = '$MUTASI_ID'");
-    
-            $pdfFilePath = '../../../../../assets/report/mutasi/'.$CABANG_AWAL_DES;
-    
+            GetQuery("update t_kas set KAS_FILE = './assets/report/kas/$CABANG_DESKRIPSI/$KAS_ID Kas $KAS_JENIS $ANGGOTA_NAMA $FKAS_TANGGAL.pdf' where KAS_ID = '$KAS_ID'");
+
+            $pdfFilePath = '../../../../../assets/report/kas/'.$CABANG_DESKRIPSI;
+
             // Create directory if not exists
             if (!file_exists($pdfFilePath)) {
                 mkdir($pdfFilePath, 0777, true);
             }
-    
-            //Close and output PDF document
-            $pdf->Output(__DIR__ .'/'.$pdfFilePath.'/'.$MUTASI_ID. ' Mutasi Anggota ' . $ANGGOTA_NAMA . '  ' . $TANGGAL_EFEKTIF.'.pdf', 'F');
-    
-            //============================================================+
-            // END OF FILE
-            //============================================================+
 
+            //Close and output PDF document
+            $pdf->Output(__DIR__ .'/'.$pdfFilePath.'/'.$KAS_ID. ' Kas ' . $KAS_JENIS . ' ' . $ANGGOTA_NAMA . '  ' . $FKAS_TANGGAL.'.pdf', 'F');
+            $pdf->Output($KAS_ID. ' Kas ' . $KAS_JENIS . ' ' . $ANGGOTA_NAMA . ' ' . $FKAS_TANGGAL.'.pdf', 'I');
+
+            
             $response = "Success";
             echo $response;
         }
     } catch (\Throwable $th) {
         //throw $th;
+        $response =  "Caught Exception: " . $th->getMessage();
+        echo $response;
     }
 }
-echo "Success";
 ?>

@@ -190,7 +190,7 @@ function savePDFToDrive(ID) { // Function Save PDF to Drive
     $.ajax({
       type: 'POST',
       url: 'module/backend/transaksi/anggota/kasanggota/t_kasfile.php',
-      data: { ID: ID },
+      data: { id : ID },
       success: function(response) {
         // Check the response from the server
         resolve(response);
@@ -207,7 +207,7 @@ function sendEmailNotification(ID) { // Function Send Email Notification
     $.ajax({
       type: 'POST',
       url: 'module/backend/transaksi/anggota/kasanggota/t_kasmail.php',
-      data: { ID: ID },
+      data: { id: ID },
       success: function(response) {
         // Check the response from the server
         resolve(response);
@@ -240,7 +240,7 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
     // Manually add the button title or ID to the serialized data
     formData.append(buttonId, 'edit');
 
-    var ID; // Declare MUTASI_ID here to make it accessible in the outer scope
+    var ID; // Declare ID here to make it accessible in the outer scope
 
     $.ajax({
       type: 'POST',
@@ -252,7 +252,7 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
         // Split the response into parts using a separator (assuming a dot in this case)
         var parts = response.split(',');
         var successMessage = parts[0];
-        ID = parts[1]; // Assign value to MUTASI_ID
+        ID = parts[1]; // Assign value to ID
 
         // Check the response from the server
         if (successMessage === 'Success') {

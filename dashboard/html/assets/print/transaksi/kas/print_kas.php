@@ -10,7 +10,7 @@ require_once('../../../tcpdf/tcpdf.php');
 if (isset($_GET['id'])) {
     $KAS_ID = $_GET["id"];
 
-    $getData = GetQuery("SELECT k.*,a.ANGGOTA_ID,a.ANGGOTA_NAMA,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,c.CABANG_SEKRETARIAT,a2.ANGGOTA_ID INPUT_BY_ID,a2.ANGGOTA_NAMA INPUT_BY,a2.ANGGOTA_AKSES INPUT_AKSES, DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y') INPUT_DATE,
+    $getData = GetQuery("SELECT k.*,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_AKSES,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,c.CABANG_SEKRETARIAT,a2.ANGGOTA_ID INPUT_BY_ID,a2.ANGGOTA_NAMA INPUT_BY,a2.ANGGOTA_AKSES INPUT_AKSES, DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y') INPUT_DATE,
     CASE
         WHEN k.KAS_JUMLAH < 0 THEN CONCAT('(', FORMAT(ABS(k.KAS_JUMLAH), 0), ')')
         ELSE FORMAT(k.KAS_JUMLAH, 0)
@@ -73,7 +73,7 @@ if (isset($_GET['id'])) {
     
                 //Page header
                 public function Header() {
-                    global $DAERAH_DESKRIPSI,$CABANG_DESKRIPSI, $CABANG_SEKRETARIAT, $KAS_JENIS, $KAS_ID, $FKAS_TANGGAL, $ANGGOTA_ID, $ANGGOTA_NAMA, $FKAS_JUMLAH, $KAS_DK_DES, $INPUT_BY, $INPUT_BY_ID, $INPUT_AKSES, $DATENOW, $INPUT_DATE;
+                    global $DAERAH_DESKRIPSI,$CABANG_DESKRIPSI, $CABANG_SEKRETARIAT, $KAS_JENIS, $ANGGOTA_ID, $ANGGOTA_NAMA, $SALDOAWAL;
                 
                     // Logo
                     $image_file = K_PATH_IMAGES.'/../../../../../../img/logo/logo_rev.png';
@@ -110,7 +110,7 @@ if (isset($_GET['id'])) {
                     $this->SetFont('helvetica', 'BU', 13);
                     $this->Cell($pageWidth-15,10,"Formulir Kas " .$KAS_JENIS,0,0,"C");
                     $this->Ln(20);
-                    $this->SetFont('times', '', 11); // Set font for body
+                    $this->SetFont('times', 'B', 11); // Set font for body
                     $this->Cell(35,5,"ID Anggota",0,0,"L");
                     $this->Cell(5,5,":",0,0,"L");
                     $this->Cell(30,5,$ANGGOTA_ID,0,0,"L");
@@ -119,24 +119,38 @@ if (isset($_GET['id'])) {
                     $this->Cell(5,5,":",0,0,"L");
                     $this->Cell(30,5,$ANGGOTA_NAMA,0,0,"L");
                     $this->Ln(15);
-                    $this->Cell(35,10,"Tanggal",1,0,"C");
-                    $this->Cell(35,10,"No Dokumen",1,0,"C");
-                    $this->Cell(90,5,"Tabungan",1,0,"C");
-                    $this->Cell(25,10,"TTD",1,0,"C");
+                    // Header Row
+                    $this->Cell(30, 10, "", 'LTR', 0, "C");
+                    $this->Cell(35, 10, "", 'LTR', 0, "C");
+                    $this->Cell(100, 10, "Tabungan", 1, 0, "C");
+                    $this->Cell(25, 10, "", 'LTR', 0, "C");
                     $this->Ln();
-                    $this->Cell(35,5,"",1,0,"C");
-                    $this->Cell(35,5,"",1,0,"C");
-                    $this->Cell(25,5,"Jenis",1,0,"C");
-                    $this->Cell(30,5,"Jumlah",1,0,"C");
-                    $this->Cell(35,5,"Saldo Akhir",1,0,"C");
-                    $this->Cell(25,5,"",1,0,"C");
+
+                    // Subheader Row
+                    $this->Cell(30, 5, "Tanggal", 'LR', 0, "C");
+                    $this->Cell(35, 5, "No Dokumen", 'LR', 0, "C");
+                    $this->Cell(15, 5, "Jenis", 1, 0, "C");
+                    $this->Cell(25, 5, "Jumlah (Rp)", 1, 0, "C");
+                    $this->Cell(30, 5, "Saldo Awal (Rp)", 1, 0, "C");
+                    $this->Cell(30, 5, "Saldo Akhir (Rp)", 1, 0, "C");
+                    $this->Cell(25, 5, "TTD", 'LR', 0, "C");
+                    $this->Ln();
+                    $this->Cell(30, 10, "", 'LR', 0, "C");
+                    $this->Cell(35, 10, "", 'LR', 0, "C");
+                    $this->Cell(15, 10, "", 'LR', 0, "C");
+                    $this->Cell(25, 10, "", 'LR', 0, "C");
+                    $this->Cell(30, 10, $SALDOAWAL .' ', 'LR', 0, "R");
+                    $this->Cell(30, 10, "", 'LR', 0, "C");
+                    $this->Cell(25, 10, "", 'LR', 0, "C");
+                    $this->Ln();
     
                 }
-    
+
+                
                 // Page footer
                 public function Footer() {
-                    global $CABANG_DESKRIPSI, $USER_NAMA, $INPUT_BY, $INPUT_BY_ID, $INPUT_AKSES, $DATENOW, $INPUT_DATE;
-    
+                    global $USER_NAMA, $CABANG_DESKRIPSI, $ANGGOTA_ID, $INPUT_BY, $INPUT_BY_ID, $APPROVE_BY, $ANGGOTA_NAMA, $INPUT_AKSES, $ANGGOTA_AKSES, $ANGOTA_NAMA, $DATENOW, $INPUT_DATE;
+
                     // set style for barcode
                     $style = array(
                         'border' => true,
@@ -154,17 +168,24 @@ if (isset($_GET['id'])) {
                     $this->SetFont('times', '', 12); // Set font for body
                     // Draw a horizontal line under the header
                     $this->Cell(10,5,$CABANG_DESKRIPSI.', '.$INPUT_DATE,0,0,"L");
+                    $this->Cell(170,5,$CABANG_DESKRIPSI.', '.$INPUT_DATE,0,0,"R");
                     $this->Ln();
-                    $this->Cell(10,5,"Diinput Oleh,",0,0,"L");
+                    $this->Cell(10,5,"Diajukan Oleh,",0,0,"L");
+                    $this->Cell(170,5,"Diinput Oleh,",0,0,"R");
                     $this->Ln();
                     // QRCODE,H : QR-CODE Best error correction
-                    $this->write2DBarcode($INPUT_BY_ID.' - '.$INPUT_BY, 'QRCODE,H', 15, 240, 25, 25, $style, 'N');
+                    $this->write2DBarcode($ANGGOTA_ID.' - '.$ANGOTA_NAMA, 'QRCODE,H', 15, 240, 25, 25, $style, 'N');
+                    if ($INPUT_BY) {
+                        $this->write2DBarcode($INPUT_BY_ID.' - '.$INPUT_BY, 'QRCODE,H', 160, 240, 25, 25, $style, 'N');
+                    }
                     $this->Ln(3);
                     $this->SetFont('times', 'U', 12); // Set font for body
-                    $this->Cell(10,5,$INPUT_BY,0,0,"L");
+                    $this->Cell(10,5,$ANGGOTA_NAMA,0,0,"L");
+                    $this->Cell(170,5,$INPUT_BY,0,0,"R");
                     $this->Ln();
                     $this->SetFont('times', '', 12); // Set font for body
-                    $this->Cell(10,5,$INPUT_AKSES .' - '.$CABANG_DESKRIPSI,0,0,"L");
+                    $this->Cell(10,5,$ANGGOTA_AKSES .' - '.$CABANG_DESKRIPSI,0,0,"L");
+                    $this->Cell(170,5,$INPUT_AKSES.' - '.$CABANG_DESKRIPSI,0,0,"R");
                     $this->Ln(10);
                     $this->Line(10, $this->GetY() + 2, $pageWidth - 10, $this->GetY() + 2);
                     $this->Ln(1);
@@ -195,11 +216,36 @@ if (isset($_GET['id'])) {
             // ---------------------------------------------------------
     
             // add a page
-            $pdf->AddPage();
-            // Get the width of the page
-            $pageWidth = $pdf->getPageWidth();
+            $pdf->AddPage('PDF_PAGE_FORMAT', 'A4');;
+
+            $pdf->SetFont('times', '', 11); // Set font for body
+
+            $pdf->Ln(96.5);
+            $pdf->Cell(30,15,$INPUT_DATE,1,0,"C");
+            $pdf->Cell(35,15,$KAS_ID,1,0,"C");
+            $pdf->Cell(15,15,$KAS_DK_DES,1,0,"C");
+            $pdf->Cell(25,15,$FKAS_JUMLAH,1,0,"R");
+            $pdf->Cell(30,15,'',1,0,"R");
+            $pdf->SetFont('times', 'B', 11); // Set font for body
+            $pdf->Cell(30,15,$SALDOAKHIR,1,0,"R");
+            $pdf->Cell(25,15,'',1,0,"C");
+            $pdf->Ln(40);
+            $pdf->SetFont('times', '', 11); // Set font for body
+            $pdf->MultiCell(190,5,"Dengan ini, laporan kas harian kami disusun sebagai refleksi akurat dari transaksi keuangan yang tercatat hari ini. Semoga laporan ini bermanfaat sebagai panduan yang jelas dan dapat diandalkan untuk melacak arus kas perusahaan. Terima kasih atas perhatian dan kerja sama semua pihak dalam menjaga keteraturan dan keakuratan catatan keuangan kami.", 0, 'J', false, 1, '', '', true);     
+            $pdf->Ln(5);
+            $pdf->MultiCell(190,5,"Demikian formulir kas anggota ini disampaikan dengan sebenarnya untuk digunakan sebagaimana mestinya. Kami berharap agar ke depannya, manajemen keuangan perusahaan dapat terus ditingkatkan demi mencapai tujuan dan pertumbuhan yang lebih baik. \n", 0, 'J', false, 1, '', '', true);
     
-            
+            GetQuery("update t_kas set KAS_FILE = './assets/report/kas/$CABANG_DESKRIPSI/$KAS_ID Kas $KAS_JENIS $ANGGOTA_NAMA $TANGGAL_EFEKTIF.pdf' where KAS_ID = '$KAS_ID'");
+
+            $pdfFilePath = '../../../report/kas/'.$CABANG_DESKRIPSI;
+
+            // Create directory if not exists
+            if (!file_exists($pdfFilePath)) {
+                mkdir($pdfFilePath, 0777, true);
+            }
+
+            //Close and output PDF document
+            $pdf->Output(__DIR__ .'/'.$pdfFilePath.'/'.$KAS_ID. ' Kas ' . $KAS_JENIS . ' ' . $ANGGOTA_NAMA . '  ' . $FKAS_TANGGAL.'.pdf', 'F');
             $pdf->Output($KAS_ID. ' Kas ' . $KAS_JENIS . ' ' . $ANGGOTA_NAMA . '  ' . $FKAS_TANGGAL.'.pdf', 'I');
         }
     } catch (\Throwable $th) {
