@@ -25,7 +25,7 @@ if (isset($_POST["savemutasianggota"])) {
             $CABANG_AWAL = $USER_CABANG;
         }
         
-        $getNamaAnggota = GetQuery("select ANGGOTA_NAMA from m_anggota where ANGGOTA_KEY = '$ANGGOTA_KEY'");
+        $getNamaAnggota = GetQuery("select a.ANGGOTA_NAMA,c.CABANG_DESKRIPSI from m_anggota a LEFT JOIN m_cabang c on a.CABANG_KEY = c.CABANG_KEY where a.ANGGOTA_KEY = '$ANGGOTA_KEY'");
         while ($rowNamaAnggota = $getNamaAnggota->fetch(PDO::FETCH_ASSOC)) {
             extract($rowNamaAnggota);
         }
@@ -71,7 +71,9 @@ if (isset($_POST["editmutasianggota"])) {
         $ANGGOTA_KEY = $_POST["ANGGOTA_KEY"];
         $MUTASI_DESKRIPSI = $_POST["MUTASI_DESKRIPSI"];
         $MUTASI_TANGGAL = $_POST["MUTASI_TANGGAL"];
-        $CABANG_DESKRIPSI = $_POST["CABANG_DESKRIPSI"];
+        if ($USER_AKSES <> "Administrator") {
+            $CABANG_DESKRIPSI = $_POST["CABANG_DESKRIPSI"];
+        }
         $MUTASI_FILE = "";
         if ($USER_AKSES == "Administrator") {
             $CABANG_AWAL = $_POST["CABANG_AWAL"];
@@ -79,7 +81,7 @@ if (isset($_POST["editmutasianggota"])) {
             $CABANG_AWAL = $USER_CABANG;
         }
         
-        $getNamaAnggota = GetQuery("select ANGGOTA_NAMA from m_anggota where ANGGOTA_KEY = '$ANGGOTA_KEY'");
+        $getNamaAnggota = GetQuery("select a.ANGGOTA_NAMA,c.CABANG_DESKRIPSI from m_anggota a LEFT JOIN m_cabang c on a.CABANG_KEY = c.CABANG_KEY where a.ANGGOTA_KEY = '$ANGGOTA_KEY'");
         while ($rowNamaAnggota = $getNamaAnggota->fetch(PDO::FETCH_ASSOC)) {
             extract($rowNamaAnggota);
         }

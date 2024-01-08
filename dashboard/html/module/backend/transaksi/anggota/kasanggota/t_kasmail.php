@@ -25,7 +25,7 @@ if (isset($_POST["id"])) {
         FROM t_kas k
         LEFT JOIN m_anggota a ON k.ANGGOTA_KEY = a.ANGGOTA_KEY
         LEFT JOIN m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID
-        LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
+        LEFT JOIN m_cabang c ON k.CABANG_KEY = c.CABANG_KEY
         LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
         WHERE k.KAS_ID = '$KAS_ID'");
         while ($rowMutasi = $getMail->fetch(PDO::FETCH_ASSOC)) {
@@ -75,7 +75,7 @@ if (isset($_POST["id"])) {
 
         // Example usage with attachment
         $attachmentPath = '../../../../.'.$KAS_FILE;
-        $attachmentName = 'Formulir Mutasi Anggota '.$KAS_ID.'.pdf';
+        $attachmentName = 'Formulir Kas Anggota '.$KAS_ID.'.pdf';
 
         // Arrays to store CC addresses
         $toAddress = '';

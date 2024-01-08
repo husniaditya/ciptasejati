@@ -287,7 +287,7 @@ $(document).ready(function() {
         $.ajax({
             url: 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php',
             method: 'POST',
-            data: { daerah_id: selectedDaerah },
+            data: { id: selectedDaerah },
             dataType: 'json', // Specify the expected data type as JSON
             success: function (data) {
                 // Clear options in the second dropdown
@@ -319,7 +319,7 @@ $('#selectize-dropdown4').change(function () {
   $.ajax({
       url: 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php',
       method: 'POST',
-      data: { daerah_id: selectedDaerah },
+      data: { id: selectedDaerah },
       dataType: 'json',
       success: function (data) {
           // Clear options in the second dropdown
@@ -356,7 +356,7 @@ $('#selectize-dropdown4').change(function () {
         $.ajax({
             url: 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php',
             method: 'POST',
-            data: { daerah_id: selectedDaerah },
+            data: { id: selectedDaerah },
             dataType: 'json', // Specify the expected data type as JSON
             success: function (data) {
                 // Clear options in the second dropdown
@@ -491,7 +491,10 @@ $(document).on("click", ".open-ViewAnggota", function () {
     url: "module/ajax/transaksi/anggota/daftaranggota/aj_getmutasianggota.php",
     data:'ANGGOTA_KEY='+key,
     success: function(data){
+      // Destroy the DataTable before updating
+      $('#riwayatmutasi-table').DataTable().destroy();
       $("#riwayatmutasi").html(data);
+      // Reinitialize Sertifikat Table
     }
   });
   
@@ -500,7 +503,10 @@ $(document).on("click", ".open-ViewAnggota", function () {
     url: "module/ajax/transaksi/anggota/daftaranggota/aj_getmutasikas.php",
     data:'ANGGOTA_KEY='+key,
     success: function(data){
+      // Destroy the DataTable before updating
+      $('#mutasikas-table').DataTable().destroy();
       $("#riwayatkas").html(data);
+      // Reinitialize Sertifikat Table
     }
   });
   

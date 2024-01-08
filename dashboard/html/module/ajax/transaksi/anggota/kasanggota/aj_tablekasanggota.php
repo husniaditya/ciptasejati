@@ -39,7 +39,7 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
     FROM t_kas k
     LEFT JOIN m_anggota a ON k.ANGGOTA_KEY = a.ANGGOTA_KEY
     LEFT JOIN m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID
-    LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
+    LEFT JOIN m_cabang c ON k.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
     WHERE k.DELETION_STATUS = 0 AND a.DELETION_STATUS=0 AND (d.DAERAH_KEY LIKE CONCAT('%','$DAERAH_KEY','%')) AND (c.CABANG_KEY LIKE CONCAT('%','$CABANG_KEY','%')) AND (k.KAS_ID LIKE CONCAT('%','$KAS_ID','%')) AND (k.KAS_JENIS LIKE CONCAT('%','$KAS_JENIS','%')) AND (a.ANGGOTA_ID LIKE CONCAT('%','$ANGGOTA_ID','%')) AND (a.ANGGOTA_NAMA LIKE CONCAT('%','$ANGGOTA_NAMA','%')) AND (t.TINGKATAN_ID LIKE CONCAT('%','$TINGKATAN_ID','%')) AND (k.KAS_DK LIKE CONCAT('%','$KAS_DK','%'))";
@@ -73,7 +73,7 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
         FROM t_kas k
         LEFT JOIN m_anggota a ON k.ANGGOTA_KEY = a.ANGGOTA_KEY
         LEFT JOIN m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID
-        LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
+        LEFT JOIN m_cabang c ON k.CABANG_KEY = c.CABANG_KEY
         LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
         LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
         WHERE k.DELETION_STATUS = 0 AND a.DELETION_STATUS=0

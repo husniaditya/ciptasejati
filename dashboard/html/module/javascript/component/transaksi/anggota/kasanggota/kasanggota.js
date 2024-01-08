@@ -35,6 +35,11 @@ function populateFields() { // Funciton Populate Fields
       $("#CABANG_DESKRIPSI").val(data.CABANG_DESKRIPSI);
       $("#TINGKATAN_ID").val(data.TINGKATAN_NAMA);
       $("#TINGKATAN_SEBUTAN").val(data.TINGKATAN_SEBUTAN);
+      
+      $("#KAS_JENIS").val("");
+      $("#KAS_DK").val("");
+      $("#KAS_JUMLAH").val("");
+      populateSaldoAwal();
 
       $.ajax({
         type: "POST",
@@ -72,6 +77,11 @@ function populateFieldsEdit() { // Funciton Populate Fields in Edit Modal
       $("#editCABANG_AWAL_DES").val(data.CABANG_DESKRIPSI);
       $("#editTINGKATAN_NAMA").val(data.TINGKATAN_NAMA);
       $("#editTINGKATAN_SEBUTAN").val(data.TINGKATAN_SEBUTAN);
+      
+      $("#editKAS_JENIS").val("");
+      $("#editKAS_DK").val("");
+      $("#editKAS_JUMLAH").val("");
+      populateSaldoAwalEdit();
 
       $.ajax({
         type: "POST",
@@ -140,11 +150,32 @@ function resetPreview() { // Function Reset Preview Dropdown Value
   var selectizeInstance = $('#selectize-dropdown')[0].selectize;
   var selectizeInstance4 = $('#selectize-dropdown4')[0].selectize;
 
+  var isExist = $('#selectize-dropdown9').length > 0 && $('#selectize-dropdown10').length > 0 && $('#selectize-dropdown11').length > 0 && $('#selectize-dropdown12').length > 0;
+
+  if (isExist) {
+    var selectizeInstance9 = $('#selectize-dropdown9')[0].selectize;
+    var selectizeInstance10 = $('#selectize-dropdown10')[0].selectize;
+    var selectizeInstance11 = $('#selectize-dropdown11')[0].selectize;
+    var selectizeInstance12 = $('#selectize-dropdown12')[0].selectize;
+  }
+
   if (selectizeInstance) {
     selectizeInstance.clear();
   }
   if (selectizeInstance4) {
     selectizeInstance4.clear();
+  }
+  if (selectizeInstance9) {
+    selectizeInstance9.clear();
+  }
+  if (selectizeInstance10) {
+    selectizeInstance10.clear();
+  }
+  if (selectizeInstance11) {
+    selectizeInstance11.clear();
+  }
+  if (selectizeInstance12) {
+    selectizeInstance12.clear();
   }
 }
 
@@ -475,42 +506,54 @@ $(document).ready(function() {
   });
 
   // Event listener for the first dropdown change
-  $('#selectize-select3').change(function() {
-    // Initialize Selectize on the first dropdown
-    var selectizeSelect3 = $('#selectize-select3').selectize();
-    
-    // Get the Selectize instance
-    var selectizeInstance = selectizeSelect3[0].selectize;
+  function initializeDropdownChange(param, mainDropdownId, dependentDropdownId) {
+    // Initialize Selectize on the main dropdown
+    var mainDropdown = $('#' + mainDropdownId).selectize();
+    var mainSelectizeInstance = mainDropdown[0].selectize;
 
-    // Event listener for the first dropdown change
-    selectizeInstance.on('change', function (selectedDaerah) {
-        // Make an AJAX request to fetch data for the second dropdown based on the selected value
+    // Event listener for the main dropdown change
+    mainSelectizeInstance.on('change', function (selectedValue) {
+        // Determine the appropriate URL based on the parameter
+        var ajaxUrl = (param === 'daerah') ? 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php' : 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistanggota.php';
+
+        // Make an AJAX request to fetch data for the dependent dropdown based on the selected value
         $.ajax({
-            url: 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php',
-            method: 'POST',
-            data: { daerah_id: selectedDaerah },
-            dataType: 'json', // Specify the expected data type as JSON
-            success: function (data) {
-                // Clear options in the second dropdown
-                var selectizeSelect2 = $('#selectize-select2').selectize();
-                var selectizeInstance2 = selectizeSelect2[0].selectize;
-                selectizeInstance2.clearOptions();
+          url: ajaxUrl,
+          method: 'POST',
+          data: { id: selectedValue },
+          dataType: 'json',
+          success: function (data) {
+              // Clear options in the dependent dropdown
+              var dependentDropdown = $('#' + dependentDropdownId).selectize();
+              var dependentSelectizeInstance = dependentDropdown[0].selectize;
+              dependentSelectizeInstance.clearOptions();
 
-                // Add new options to the second dropdown
-                selectizeInstance2.addOption(data);
+              // Add new options to the dependent dropdown
+              dependentSelectizeInstance.addOption(data);
 
-                // Update the value of the second dropdown
-                selectizeInstance2.setValue('');
+              // Update the value of the dependent dropdown
+              dependentSelectizeInstance.setValue('');
 
-                // Refresh the Selectize instance to apply changes
-                // selectizeInstance2.refreshOptions();
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching cabang data:', status, error);
-            }
-        });
+              // Refresh the Selectize instance to apply changes
+              // dependentSelectizeInstance.refreshOptions();
+          },
+          error: function(xhr, status, error) {
+              console.error('Error fetching data:', status, error);
+          }
+      });
     });
-  });
+  }
+
+  var isAdmin = $('#selectize-dropdown9').length > 0 && $('#selectize-dropdown10').length > 0 && $('#selectize-dropdown11').length > 0 && $('#selectize-dropdown12').length > 0;
+
+  if (isAdmin) {
+    // Call the function for your specific dropdown IDs
+    initializeDropdownChange('daerah', 'selectize-dropdown9', 'selectize-dropdown10');
+    initializeDropdownChange('cabang', 'selectize-dropdown10', 'selectize-dropdown');
+    initializeDropdownChange('daerah', 'selectize-dropdown11', 'selectize-dropdown12');
+    initializeDropdownChange('cabang', 'selectize-dropdown12', 'selectize-dropdown4');
+    // Add more calls if you have additional dropdowns
+  }
 });
 
 // Delete Anggota
@@ -639,21 +682,51 @@ $(document).on("click", ".open-EditKasAnggota", function () {
       $("#editCABANG_KEY").val(data.CABANG_KEY);
       $("#editDAERAH_DESKRIPSI").val(data.DAERAH_DESKRIPSI);
       $("#editCABANG_DESKRIPSI").val(data.CABANG_DESKRIPSI);
-      $(".modal-body #selectize-dropdown4")[0].selectize.setValue(anggota);
+      // $(".modal-body #selectize-dropdown4")[0].selectize.setValue(anggota);
       $("#editANGGOTA_NAMA").val(data.ANGGOTA_NAMA);
       $("#editANGGOTA_IDNAMA").val(data.ANGGOTA_IDNAMA);
       $("#editTINGKATAN_NAMA").val(data.TINGKATAN_NAMA);
       $("#editTINGKATAN_SEBUTAN").val(data.TINGKATAN_SEBUTAN);
-      $("#editKAS_JENIS").val(data.KAS_JENIS);
-      $("#editKAS_DK").val(data.KAS_DK);
       $("#editKAS_JUMLAH").val(data.KAS_JUMLAH);
       $("#editFKAS_JUMLAH").val(data.FKAS_JUMLAH);
       $("#editKAS_SALDO").val(data.KAS_SALDO);
-      $("#editKAS_SALDOAKHIR").val(data.FKAS_SALDO);
-      $("#editKAS_SALDOAWAL").val(data.SALDOAWAL);
       $("#editKAS_DESKRIPSI").val(data.KAS_DESKRIPSI);
       $("#editINPUT_BY").text(data.INPUT_BY);
       $("#editINPUT_DATE").text(data.INPUT_DATE);
+
+      // Check if the administrator-specific elements exist
+      var isExist = $('#selectize-dropdown11').length > 0 && $('#selectize-dropdown12').length > 0;
+
+      if (isExist) {
+        $(".modal-body #selectize-dropdown11")[0].selectize.setValue(data.DAERAH_KEY);
+        // Wait for the options in the second dropdown to be populated before setting its value
+        setTimeout(function () {
+        $(".modal-body #selectize-dropdown12")[0].selectize.setValue(data.CABANG_KEY);
+        }, 100); // You may need to adjust the delay based on your application's behavior
+        setTimeout(function () {
+        $(".modal-body #selectize-dropdown4")[0].selectize.setValue(anggota);
+        }, 300); // You may need to adjust the delay based on your application's behavior
+        setTimeout(function () {
+        $("#editKAS_JENIS").val(data.KAS_JENIS);
+        }, 400); // You may need to adjust the delay based on your application's behavior
+        setTimeout(function () {
+          $("#editKAS_SALDOAWAL").val(data.SALDOAWAL);
+          $("#editKAS_DK").val(data.KAS_DK);
+          $("#editKAS_JUMLAH").val(data.KAS_JUMLAH);
+          $("#editKAS_SALDOAKHIR").val(data.FKAS_SALDO);
+        }, 500); // You may need to adjust the delay based on your application's behavior
+      } else {
+        $(".modal-body #selectize-dropdown4")[0].selectize.setValue(anggota);
+        setTimeout(function () {
+          $("#editKAS_JENIS").val(data.KAS_JENIS);
+        }, 100); // You may need to adjust the delay based on your application's behavior
+        setTimeout(function () {
+          $("#editKAS_SALDOAWAL").val(data.SALDOAWAL);
+          $("#editKAS_DK").val(data.KAS_DK);
+          $("#editKAS_JUMLAH").val(data.KAS_JUMLAH);
+          $("#editKAS_SALDOAKHIR").val(data.FKAS_SALDO);
+        }, 200); // You may need to adjust the delay based on your application's behavior
+      }
       
     },
     error: function(error) {

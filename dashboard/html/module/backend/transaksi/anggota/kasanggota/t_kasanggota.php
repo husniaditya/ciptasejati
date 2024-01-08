@@ -45,9 +45,9 @@ if (isset($_POST["savekasanggota"])) {
             extract($rowNamaAnggota);
         }
 
-        GetQuery("insert into t_kas select '$KAS_ID','$ANGGOTA_KEY', '$KAS_JENIS', now(), '$KAS_DK','$KAS_JUMLAH', '$KAS_SALDO','$KAS_DESKRIPSI', null, 0, '$USER_ID', now()");
+        GetQuery("insert into t_kas select '$KAS_ID','$CABANG_KEY','$ANGGOTA_KEY', '$KAS_JENIS', now(), '$KAS_DK','$KAS_JUMLAH', '$KAS_SALDO','$KAS_DESKRIPSI', null, 0, '$USER_ID', now()");
 
-        GetQuery("insert into t_kas_log select uuid(), KAS_ID, ANGGOTA_KEY, KAS_JENIS, KAS_TANGGAL, KAS_DK,KAS_JUMLAH, KAS_SALDO, KAS_DESKRIPSI, KAS_FILE, DELETION_STATUS, 'I', '$USER_ID', now() from t_kas where KAS_ID = '$KAS_ID'");
+        GetQuery("insert into t_kas_log select uuid(), KAS_ID, CABANG_KEY, ANGGOTA_KEY, KAS_JENIS, KAS_TANGGAL, KAS_DK,KAS_JUMLAH, KAS_SALDO, KAS_DESKRIPSI, KAS_FILE, DELETION_STATUS, 'I', '$USER_ID', now() from t_kas where KAS_ID = '$KAS_ID'");
 
         GetQuery("insert into t_notifikasi
         select uuid(),ANGGOTA_KEY,'$KAS_ID',CABANG_KEY,CABANG_KEY,'Kas','ViewNotifKas','open-ViewNotifKas','Kas $KAS_JENIS', '[$KAS_DK] Kas a.n $ANGGOTA_NAMA dengan jumlah Rp $rawKAS_JUMLAH', 1, 0, '$USER_ID', NOW()
@@ -101,9 +101,9 @@ if (isset($_POST["editkasanggota"])) {
             extract($rowNamaAnggota);
         }
 
-        $test = GetQuery("update t_kas set ANGGOTA_KEY = '$ANGGOTA_KEY', KAS_DK = '$KAS_DK', KAS_JUMLAH = '$KAS_JUMLAH', KAS_SALDO = '$KAS_SALDO', KAS_DESKRIPSI = '$KAS_DESKRIPSI', INPUT_BY = '$USER_ID', INPUT_DATE = now() where KAS_ID = '$KAS_ID'");
+        $test = GetQuery("update t_kas set CABANG_KEY = '$CABANG_KEY', ANGGOTA_KEY = '$ANGGOTA_KEY', KAS_DK = '$KAS_DK', KAS_JUMLAH = '$KAS_JUMLAH', KAS_SALDO = '$KAS_SALDO', KAS_DESKRIPSI = '$KAS_DESKRIPSI', INPUT_BY = '$USER_ID', INPUT_DATE = now() where KAS_ID = '$KAS_ID'");
 
-        GetQuery("insert into t_kas_log select uuid(), KAS_ID, ANGGOTA_KEY, KAS_JENIS, KAS_TANGGAL, KAS_DK,KAS_JUMLAH, KAS_SALDO, KAS_DESKRIPSI, KAS_FILE, DELETION_STATUS, 'U', '$USER_ID', now() from t_kas where KAS_ID = '$KAS_ID'");
+        GetQuery("insert into t_kas_log select uuid(), KAS_ID, CABANG_KEY, ANGGOTA_KEY, KAS_JENIS, KAS_TANGGAL, KAS_DK,KAS_JUMLAH, KAS_SALDO, KAS_DESKRIPSI, KAS_FILE, DELETION_STATUS, 'U', '$USER_ID', now() from t_kas where KAS_ID = '$KAS_ID'");
 
         GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$KAS_ID'");
 

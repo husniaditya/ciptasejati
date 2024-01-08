@@ -1,7 +1,7 @@
 <?php
 require_once("../../../../../module/connection/conn.php");
 
-$DAERAH_KEY = $_POST["daerah_id"];
+$DAERAH_KEY = $_POST["id"];
 
 $getListCab = GetQuery("SELECT * FROM m_cabang WHERE DELETION_STATUS = 0 AND DAERAH_KEY = '$DAERAH_KEY' order by CABANG_DESKRIPSI asc");
 

@@ -63,7 +63,7 @@ if ($USER_AKSES == "Administrator") {
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 and CABANG_KEY = '$USER_CABANG'");
 }
 
-$getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0");
+$getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0 order by DAERAH_DESKRIPSI asc");
 $getCabang = GetQuery("select * from m_cabang where DELETION_STATUS = 0");
 $getTingkatan = GetQuery("select * from m_tingkatan where DELETION_STATUS = 0");
 // Fetch all rows into an array
@@ -327,22 +327,70 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <?php
+                            if ($USER_AKSES == "Administrator") {
+                                ?>
+                                <div class="short-div">
+                                    <div class="form-group">
+                                        <label>Daerah<span class="text-danger">*</span></label>
+                                        <div id="selectize-wrapper9" style="position: relative;">
+                                            <select name="DAERAH_KEY" id="selectize-dropdown9" required="" class="form-control" data-parsley-required>
+                                                <option value="">-- Pilih Daerah --</option>
+                                                <?php
+                                                foreach ($rowd as $rowDaerah) {
+                                                    extract($rowDaerah);
+                                                    ?>
+                                                    <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="short-div">
+                                    <div class="form-group">
+                                        <label>Cabang<span class="text-danger">*</span></label>
+                                        <div id="selectize-wrapper10" style="position: relative;">
+                                            <select name="CABANG_KEY" id="selectize-dropdown10" required="" class="form-control" data-parsley-required>
+                                                <option value="">-- Pilih Cabang --</option>]
+                                            </select>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <?php
+                            }
+                            ?>
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>Anggota</label>
-                                    <div id="selectize-wrapper" style="position: relative;">
-                                        <select name="ANGGOTA_KEY" id="selectize-dropdown" required="" class="form-control" onchange="populateFields()" data-parsley-required>
-                                            <option value="">-- Pilih Anggota --</option>
-                                            <?php
-                                            foreach ($rowa as $rowAnggota) {
-                                                extract($rowAnggota);
-                                                ?>
-                                                <option value="<?= $ANGGOTA_KEY; ?>"><?= $ANGGOTA_ID; ?> - <?= $ANGGOTA_NAMA; ?></option>
+                                    <?php
+                                    if ($USER_AKSES == "Administrator") {
+                                        ?>
+                                        <div id="selectize-wrapper" style="position: relative;">
+                                            <select name="ANGGOTA_KEY" id="selectize-dropdown" required="" class="form-control" onchange="populateFields()" data-parsley-required>
+                                                <option value="">-- Pilih Anggota --</option>
+                                            </select>
+                                        </div>
+                                        <?php
+                                    } else {
+                                        ?>
+                                        <div id="selectize-wrapper" style="position: relative;">
+                                            <select name="ANGGOTA_KEY" id="selectize-dropdown" required="" class="form-control" onchange="populateFields()" data-parsley-required>
+                                                <option value="">-- Pilih Anggota --</option>
                                                 <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
+                                                foreach ($rowa as $rowAnggota) {
+                                                    extract($rowAnggota);
+                                                    ?>
+                                                    <option value="<?= $ANGGOTA_KEY; ?>"><?= $ANGGOTA_ID; ?> - <?= $ANGGOTA_NAMA; ?></option>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <?php
+                                    }
+                                    ?>
                                 </div> 
                             </div>
                             <div class="short-div hidden">
@@ -351,18 +399,24 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                     <input type="text" class="form-control" id="CABANG_AWAL" name="CABANG_AWAL" value="" readonly>
                                 </div> 
                             </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Daerah</label>
-                                    <input type="text" class="form-control" id="DAERAH_AWAL" name="DAERAH_AWAL" value="" readonly>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Cabang</label>
-                                    <input type="text" class="form-control" id="CABANG_DESKRIPSI" name="CABANG_DESKRIPSI" value="" readonly>
-                                </div> 
-                            </div>
+                            <?php
+                            if ($USER_AKSES <> "Administrator") {
+                                ?>
+                                <div class="short-div">
+                                    <div class="form-group">
+                                        <label>Daerah</label>
+                                        <input type="text" class="form-control" id="DAERAH_AWAL" name="DAERAH_AWAL" value="" readonly>
+                                    </div> 
+                                </div>
+                                <div class="short-div">
+                                    <div class="form-group">
+                                        <label>Cabang</label>
+                                        <input type="text" class="form-control" id="CABANG_DESKRIPSI" name="CABANG_DESKRIPSI" value="" readonly>
+                                    </div> 
+                                </div>
+                                <?php
+                            }
+                            ?>
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>Sabuk</label>
@@ -578,40 +632,87 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Anggota</label>
-                                    <div id="selectize-wrapper4" style="position: relative;">
-                                        <select name="ANGGOTA_KEY" id="selectize-dropdown4" required="" class="form-control" onchange="populateFieldsEdit()" data-parsley-required>
-                                            <option value="">-- Pilih Anggota --</option>
-                                            <?php
-                                            foreach ($rowa as $rowAnggota) {
-                                                extract($rowAnggota);
-                                                ?>
-                                                <option value="<?= $ANGGOTA_KEY; ?>"><?= $ANGGOTA_ID; ?> - <?= $ANGGOTA_NAMA; ?></option>
+                            <?php
+                            if ($USER_AKSES == "Administrator") {
+                                ?>
+                                <div class="short-div">
+                                    <div class="form-group">
+                                        <label>Daerah<span class="text-danger">*</span></label>
+                                        <div id="selectize-wrapper11" style="position: relative;">
+                                            <select name="DAERAH_KEY" id="selectize-dropdown11" required="" class="form-control" data-parsley-required>
+                                                <option value="">-- Pilih Daerah --</option>
                                                 <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
+                                                foreach ($rowd as $rowDaerah) {
+                                                    extract($rowDaerah);
+                                                    ?>
+                                                    <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="short-div">
+                                    <div class="form-group">
+                                        <label>Cabang<span class="text-danger">*</span></label>
+                                        <div id="selectize-wrapper12" style="position: relative;">
+                                            <select name="CABANG_KEY" id="selectize-dropdown12" required="" class="form-control" data-parsley-required>
+                                                <option value="">-- Pilih Cabang --</option>]
+                                            </select>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="short-div">
+                                    <div class="form-group">
+                                        <label>Anggota</label>
+                                        <div id="selectize-wrapper4" style="position: relative;">
+                                            <select name="ANGGOTA_KEY" id="selectize-dropdown4" required="" class="form-control" onchange="populateFieldsEdit()" data-parsley-required>
+                                                <option value="">-- Pilih Anggota --</option>
+                                            </select>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <?php
+                            } else {
+                                ?>
+                                <div class="short-div">
+                                    <div class="form-group">
+                                        <label>Anggota</label>
+                                        <div id="selectize-wrapper4" style="position: relative;">
+                                            <select name="ANGGOTA_KEY" id="selectize-dropdown4" required="" class="form-control" onchange="populateFieldsEdit()" data-parsley-required>
+                                                <option value="">-- Pilih Anggota --</option>
+                                                <?php
+                                                foreach ($rowa as $rowAnggota) {
+                                                    extract($rowAnggota);
+                                                    ?>
+                                                    <option value="<?= $ANGGOTA_KEY; ?>"><?= $ANGGOTA_ID; ?> - <?= $ANGGOTA_NAMA; ?></option>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="short-div">
+                                    <div class="form-group">
+                                        <label>Daerah</label>
+                                        <input type="text" class="form-control" id="editDAERAH_AWAL_DES" name="DAERAH_AWAL" value="" readonly>
+                                    </div> 
+                                </div>
+                                <div class="short-div">
+                                    <div class="form-group">
+                                        <label>Cabang</label>
+                                        <input type="text" class="form-control" id="editCABANG_AWAL_DES" name="CABANG_DESKRIPSI" value="" readonly>
+                                    </div> 
+                                </div>
+                                <?php
+                            }
+                            ?>
                             <div class="short-div hidden">
                                 <div class="form-group">
                                     <label>ID Cabang</label>
                                     <input type="text" class="form-control" id="editCABANG_AWAL" name="CABANG_AWAL" value="" readonly>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Daerah</label>
-                                    <input type="text" class="form-control" id="editDAERAH_AWAL_DES" name="DAERAH_AWAL" value="" readonly>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Cabang</label>
-                                    <input type="text" class="form-control" id="editCABANG_AWAL_DES" name="CABANG_DESKRIPSI" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
