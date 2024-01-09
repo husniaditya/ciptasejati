@@ -131,7 +131,7 @@ if (isset($_POST["EVENT_ACTION"])) {
     
         GetQuery("update t_kas set DELETION_STATUS = 1 where KAS_ID = '$KAS_ID'");
 
-        GetQuery("insert into t_kas_log select uuid(),KAS_ID,ANGGOTA_KEY, KAS_TANGGAL, KAS_DK, KAS_JUMLAH, KAS_DESKRIPSI,KAS_FILE, DELETION_STATUS, 'D', '$USER_ID', now() from t_kas where KAS_ID = '$KAS_ID'");
+        GetQuery("insert into t_kas_log select uuid(), KAS_ID, CABANG_KEY, ANGGOTA_KEY, KAS_JENIS, KAS_TANGGAL, KAS_DK,KAS_JUMLAH, KAS_SALDO, KAS_DESKRIPSI, KAS_FILE, DELETION_STATUS, 'I', '$USER_ID', now() from t_kas where KAS_ID = '$KAS_ID'");
         
         $response="Success";
         echo $response;

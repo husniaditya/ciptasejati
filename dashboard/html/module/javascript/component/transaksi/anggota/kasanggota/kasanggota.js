@@ -421,71 +421,27 @@ $(document).ready(function() {
     $("#editKAS_JUMLAH, #editKAS_DK").trigger("input");
   });
 
-  // DROPDOWN ADD MUTASI ANGGOTA
-  // Event listener for the first dropdown change
-  $('#selectize-dropdown2').change(function() {
-      // Initialize Selectize on the first dropdown
-    var selectizedropdown = $('#selectize-dropdown2').selectize(); // GetDaerah Dropdown
-    var cabangkey = $('#CABANG_AWAL').val(); // Get Cabang Awal
-    
-    // Get the Selectize instance
-    var selectizeInstance = selectizedropdown[0].selectize;
-
-    // Event listener for the first dropdown change
-    selectizeInstance.on('change', function (selectedDaerah) {
-        // Make an AJAX request to fetch data for the second dropdown based on the selected value
-        $.ajax({
-            url: 'module/ajax/transaksi/anggota/mutasianggota/aj_getlistcabangtujuan.php',
-            method: 'POST',
-            data: { daerah_id: selectedDaerah, cabang_key: cabangkey },
-            dataType: 'json', // Specify the expected data type as JSON
-            success: function (data) {
-                // Clear options in the second dropdown
-                var selectizedropdown3 = $('#selectize-dropdown3').selectize();
-                var selectizeInstance2 = selectizedropdown3[0].selectize;
-                selectizeInstance2.clearOptions();
-
-                // Add new options to the second dropdown
-                selectizeInstance2.addOption(data);
-
-                // Update the value of the second dropdown
-                selectizeInstance2.setValue('');
-
-                // Refresh the Selectize instance to apply changes
-                // selectizeInstance2.refreshOptions();
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching cabang data:', status, error);
-            }
-        });
-
-        // console.log(selectedDaerah, cabangkey);
-    });
-  });
-
-  // DROPDOWN Edit MUTASI ANGGOTA
-  // Event listener for the first dropdown change
-  $('#selectize-dropdown5').change(function() {
+  // DROPDOWN KAS ANGGOTA
+  // Event listener for the daerah awal dropdown change
+  $('#selectize-select3').change(function() {
     // Initialize Selectize on the first dropdown
-    var selectizedropdown = $('#selectize-dropdown5').selectize(); // GetDaerah Dropdown
-    var cabangkey = $('#editCABANG_AWAL').val(); // Get Cabang Awal
+    var selectizeSelect3 = $('#selectize-select3').selectize();
     
     // Get the Selectize instance
-    var selectizeInstance = selectizedropdown[0].selectize;
+    var selectizeInstance = selectizeSelect3[0].selectize;
 
     // Event listener for the first dropdown change
     selectizeInstance.on('change', function (selectedDaerah) {
         // Make an AJAX request to fetch data for the second dropdown based on the selected value
         $.ajax({
-            url: 'module/ajax/transaksi/anggota/mutasianggota/aj_getlistcabangtujuan.php',
+            url: 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php',
             method: 'POST',
-            data: { daerah_id: selectedDaerah, cabang_key: cabangkey },
+            data: { id: selectedDaerah },
             dataType: 'json', // Specify the expected data type as JSON
             success: function (data) {
                 // Clear options in the second dropdown
-
-                var selectizedropdown3 = $('#selectize-dropdown6').selectize();
-                var selectizeInstance2 = selectizedropdown3[0].selectize;
+                var selectizeSelect2 = $('#selectize-select2').selectize();
+                var selectizeInstance2 = selectizeSelect2[0].selectize;
                 selectizeInstance2.clearOptions();
 
                 // Add new options to the second dropdown
@@ -493,6 +449,7 @@ $(document).ready(function() {
 
                 // Update the value of the second dropdown
                 selectizeInstance2.setValue('');
+
                 // Refresh the Selectize instance to apply changes
                 // selectizeInstance2.refreshOptions();
             },
@@ -500,11 +457,8 @@ $(document).ready(function() {
                 console.error('Error fetching cabang data:', status, error);
             }
         });
-
-        // console.log(selectedDaerah, cabangkey);
     });
   });
-
   // Event listener for the first dropdown change
   function initializeDropdownChange(param, mainDropdownId, dependentDropdownId) {
     // Initialize Selectize on the main dropdown
