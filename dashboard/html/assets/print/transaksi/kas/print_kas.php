@@ -73,7 +73,7 @@ if (isset($_GET['id'])) {
     
                 //Page header
                 public function Header() {
-                    global $DAERAH_DESKRIPSI,$CABANG_DESKRIPSI, $CABANG_SEKRETARIAT, $KAS_JENIS, $ANGGOTA_ID, $ANGGOTA_NAMA, $SALDOAWAL;
+                    global $DAERAH_DESKRIPSI,$CABANG_DESKRIPSI, $CABANG_SEKRETARIAT, $KAS_JENIS, $KAS_ID, $FKAS_TANGGAL, $ANGGOTA_ID, $ANGGOTA_NAMA, $SALDOAWAL;
                 
                     // Logo
                     $image_file = K_PATH_IMAGES.'/../../../../../../img/logo/logo_rev.png';
@@ -235,9 +235,9 @@ if (isset($_GET['id'])) {
             $pdf->Ln(5);
             $pdf->MultiCell(190,5,"Demikian formulir kas anggota ini disampaikan dengan sebenarnya untuk digunakan sebagaimana mestinya. Kami berharap agar ke depannya, manajemen keuangan perusahaan dapat terus ditingkatkan demi mencapai tujuan dan pertumbuhan yang lebih baik. \n", 0, 'J', false, 1, '', '', true);
     
-            GetQuery("update t_kas set KAS_FILE = './assets/report/kas/$CABANG_DESKRIPSI/$KAS_ID Kas $KAS_JENIS $ANGGOTA_NAMA $TANGGAL_EFEKTIF.pdf' where KAS_ID = '$KAS_ID'");
+            GetQuery("update t_kas set KAS_FILE = './assets/report/kas/$CABANG_DESKRIPSI/$KAS_ID Kas $KAS_JENIS $ANGGOTA_NAMA $FKAS_TANGGAL.pdf' where KAS_ID = '$KAS_ID'");
 
-            $pdfFilePath = '../../../report/kas/'.$CABANG_DESKRIPSI;
+            $pdfFilePath = '../../../../../assets/report/kas/'.$CABANG_DESKRIPSI;
 
             // Create directory if not exists
             if (!file_exists($pdfFilePath)) {
@@ -245,11 +245,16 @@ if (isset($_GET['id'])) {
             }
 
             //Close and output PDF document
-            $pdf->Output(__DIR__ .'/'.$pdfFilePath.'/'.$KAS_ID. ' Kas ' . $KAS_JENIS . ' ' . $ANGGOTA_NAMA . '  ' . $FKAS_TANGGAL.'.pdf', 'F');
-            $pdf->Output($KAS_ID. ' Kas ' . $KAS_JENIS . ' ' . $ANGGOTA_NAMA . '  ' . $FKAS_TANGGAL.'.pdf', 'I');
+            $pdf->Output($KAS_ID. ' Kas ' . $KAS_JENIS . ' ' . $ANGGOTA_NAMA . ' ' . $FKAS_TANGGAL.'.pdf', 'I');
+
+            
+            $response = "Success";
+            echo $response;
         }
     } catch (\Throwable $th) {
         //throw $th;
+        $response =  "Caught Exception: " . $th->getMessage();
+        echo $response;
     }
 }
 ?>

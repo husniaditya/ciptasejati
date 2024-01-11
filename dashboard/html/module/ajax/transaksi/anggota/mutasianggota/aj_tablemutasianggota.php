@@ -129,7 +129,7 @@ while ($rowMutasi = $getMutasi->fetch(PDO::FETCH_ASSOC)) {
                             }
                         }
                         ?>
-                        <li><a href="<?= $MUTASI_FILE; ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
+                        <li><a href="assets/print/transaksi/mutasi/print_mutasi.php?id=<?=$MUTASI_ID; ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
                         <?php
                         if ($MUTASI_STATUS == 0 && ($USER_AKSES == "Administrator" || $USER_AKSES == "Koordinator")) {
                             if ($USER_AKSES == "Administrator") {
