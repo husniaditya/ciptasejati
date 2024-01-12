@@ -693,14 +693,14 @@ $(document).on("click", ".open-EditMutasiAnggota", function () {
         // Wait for the options in the second dropdown to be populated before setting its value
         setTimeout(function () {
         $(".modal-body #selectize-dropdown12")[0].selectize.setValue(cabangawal);
-        }, 100); // You may need to adjust the delay based on your application's behavior
+        }, 200); // You may need to adjust the delay based on your application's behavior
         setTimeout(function () {
         $(".modal-body #selectize-dropdown4")[0].selectize.setValue(anggota);
-        }, 200); // You may need to adjust the delay based on your application's behavior
+        }, 350); // You may need to adjust the delay based on your application's behavior
         // Wait for the options in the second dropdown to be populated before setting its value
         setTimeout(function () {
           $(".modal-body #selectize-dropdown5")[0].selectize.setValue(daerahtujuan);
-        }, 200); // You may need to adjust the delay based on your application's behavior
+        }, 450); // You may need to adjust the delay based on your application's behavior
         setTimeout(function () {
           $(".modal-body #selectize-dropdown6")[0].selectize.setValue(cabangtujuan);
         }, 600); // You may need to adjust the delay based on your application's behavior

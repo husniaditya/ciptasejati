@@ -158,11 +158,11 @@ if ($_POST["MUTASI_ID"]) {
             
             
             if ($MUTASI_STATUS == 0) {
-                $pdf->Image('../../../../../assets/images/statusapproval/Pending.png', 140, 50, 50, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+                $pdf->Image('../../../../../../assets/images/statusapproval/Pending.png', 140, 50, 50, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
             } elseif ($MUTASI_STATUS == 1) {
-                $pdf->Image('../../../../../assets/images/statusapproval/Approved.png', 140, 50, 50, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+                $pdf->Image('../../../../../../assets/images/statusapproval/Approved.png', 140, 50, 50, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
             } else {
-                $pdf->Image('../../../../../assets/images/statusapproval/Rejected.png', 140, 50, 50, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+                $pdf->Image('../../../../../../assets/images/statusapproval/Rejected.png', 140, 50, 50, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
             }
     
             $pdf->Ln(10);
@@ -228,7 +228,7 @@ if ($_POST["MUTASI_ID"]) {
             
     
             // ---------------------------------------------------------
-            GetQuery("update t_mutasi set MUTASI_FILE = './assets/report/mutasi/$CABANG_AWAL_DES/$MUTASI_ID Mutasi Anggota $ANGGOTA_NAMA  $TANGGAL_EFEKTIF.pdf' where MUTASI_ID = '$MUTASI_ID'");
+            GetQuery("update t_mutasi set MUTASI_FILE = './assets/report/mutasi/$CABANG_AWAL_DES/$MUTASI_ID Mutasi Anggota $ANGGOTA_NAMA $TANGGAL_EFEKTIF.pdf' where MUTASI_ID = '$MUTASI_ID'");
     
             $pdfFilePath = '../../../../../assets/report/mutasi/'.$CABANG_AWAL_DES;
     
@@ -238,7 +238,7 @@ if ($_POST["MUTASI_ID"]) {
             }
     
             //Close and output PDF document
-            $pdf->Output(__DIR__ .'/'.$pdfFilePath.'/'.$MUTASI_ID. ' Mutasi Anggota ' . $ANGGOTA_NAMA . '  ' . $TANGGAL_EFEKTIF.'.pdf', 'F');
+            $pdf->Output(__DIR__ .'/'.$pdfFilePath.'/'.$MUTASI_ID. ' Mutasi Anggota ' . $ANGGOTA_NAMA . ' ' . $TANGGAL_EFEKTIF.'.pdf', 'F');
     
             //============================================================+
             // END OF FILE
