@@ -17,7 +17,6 @@ if (isset($_POST["savemutasianggota"])) {
         $ANGGOTA_KEY = $_POST["ANGGOTA_KEY"];
         $MUTASI_DESKRIPSI = $_POST["MUTASI_DESKRIPSI"];
         $MUTASI_TANGGAL = $_POST["MUTASI_TANGGAL"];
-        $CABANG_DESKRIPSI = $_POST["CABANG_DESKRIPSI"];
         $MUTASI_FILE = "";
         if ($USER_AKSES == "Administrator") {
             $CABANG_AWAL = $_POST["CABANG_AWAL"];
