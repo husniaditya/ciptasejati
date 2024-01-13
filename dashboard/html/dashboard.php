@@ -13,7 +13,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
 <html class="backend">
     <!-- START Head -->
     <head>
-        <?php include 'module/head.php'; ?>
+        <?php include 'module/head.php';?>
     </head>
     <!--/ END Head -->
 
@@ -45,7 +45,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
 
                 
                 <!-- START view -->
-                
+                <?php include 'module/component/dashboard/v_dashboard.php';?>
                 <!--/ END view -->
                 
             </div>
@@ -62,9 +62,10 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
             <?php include 'module/footer.php';?>
         </footer>
         <!--/ END Template Footer -->
-
+        
         <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
         <?php include 'module/js.php';?>
+        <script type="text/javascript" src="module/javascript/component/dashboard/dataanggota.js"></script>
         <!--/ END JAVASCRIPT SECTION -->
     </body>
     <!--/ END Body -->

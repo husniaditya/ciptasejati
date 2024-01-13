@@ -36,5 +36,14 @@
 <script type="text/javascript" src="../plugins/datatables/js/3.2.3-dataTables.fixedHeader-min.js"></script>
 <!-- / Datatable -->
 
+<!-- Highcharts -->
+<script type="text/javascript" src="../javascript/backend/highcharts/highcharts.js"></script>
+<script type="text/javascript" src="../javascript/backend/highcharts/modules/data.js"></script>
+<script type="text/javascript" src="../javascript/backend/highcharts/modules/drilldown.js"></script>
+<script type="text/javascript" src="../javascript/backend/highcharts/modules/exporting.js"></script>
+<script type="text/javascript" src="../javascript/backend/highcharts/modules/export-data.js"></script>
+<script type="text/javascript" src="../javascript/backend/highcharts/modules/accessibility.js"></script>
+<!-- / Highcharts -->
+
 
 <!--/ END JAVASCRIPT SECTION -->
