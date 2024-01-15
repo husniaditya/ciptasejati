@@ -1,21 +1,21 @@
 
-var AnggotaChart; // Declare chart as a global variable
+var TingkatanChart; // Declare chart as a global variable
 
 // Use AJAX to fetch initial data from the server
 $.ajax({
-    url: './module/ajax/dashboard/anggota/aj_dashanggota.php',
+    url: './module/ajax/dashboard/tingkatan/aj_dashtingkatan.php',
     method: 'POST',
     dataType: 'json',
     success: function (initialData) {
-        initializeAnggotaChart(initialData);
+        initializeTingkatanChart(initialData);
     },
     error: function (error) {
         console.log('Error fetching data:', error);
     }
 });
 
-function initializeAnggotaChart(initialData) {
-    AnggotaChart = Highcharts.chart('anggotaChart', {
+function initializeTingkatanChart(initialData) {
+    TingkatanChart = Highcharts.chart('tingkatanChart', {
         chart: {
             type: 'column',
             events: {
@@ -23,17 +23,22 @@ function initializeAnggotaChart(initialData) {
                     if (!e.seriesOptions) {
                         var chart = this;
                         $.ajax({
-                            url: './module/ajax/dashboard/anggota/aj_drilldownanggota.php',
+                            url: './module/ajax/dashboard/tingkatan/aj_drilldowntingkatan.php',
                             method: 'POST',
                             data: { drilldownId: e.point.drilldown },
                             dataType: 'json',
                             success: function (drilldownData) {
+                                // console.log('Got drilldown data:', drilldownData);
                                 chart.addSeriesAsDrilldown(e.point, {
                                     colorByPoint: true,
-                                    name: 'Cabang',
+                                    name: 'Daerah',
                                     id: e.point.drilldown,
                                     data: drilldownData.map(function (drilldownEntry) {
-                                        return [drilldownEntry.cabang, drilldownEntry.cabang_anggota];
+                                        return {
+                                            name: drilldownEntry.daerah,
+                                            y: drilldownEntry.daerah_anggota,
+                                            drilldown: drilldownEntry.drilldown // Third-level drilldown ID
+                                        };
                                     })
                                 });
                             },
@@ -50,7 +55,7 @@ function initializeAnggotaChart(initialData) {
         },
         title: {
             align: 'center',
-            text: '<span style="font-size:16px">Data Keanggotaan</span>'
+            text: '<span style="font-size:16px">Data Tingkatan</span>'
         },
         subtitle: {
             align: 'center',
@@ -71,7 +76,7 @@ function initializeAnggotaChart(initialData) {
         },
         yAxis: {
             title: {
-                text: '<span style="font-size:10px">Total Keanggotaan</span>'
+                text: '<span style="font-size:10px">Total Tingkatan</span>'
             },
             labels: {
                 style: {
@@ -96,12 +101,12 @@ function initializeAnggotaChart(initialData) {
             pointFormat: '<span style="color:{point.color};font-size:12px">{point.name} : <b>{point.y}</b> Anggota</span><br/>'
         },
         series: [{
-            name: 'Daerah',
+            name: 'Tingkatan',
             colorByPoint: true,
             data: initialData.map(function (entry) {
                 return {
-                    name: entry.daerah,
-                    y: entry.daerah_anggota,
+                    name: entry.tingkatan,
+                    y: entry.tingkatan_anggota,
                     drilldown: entry.drilldown
                 };
             })

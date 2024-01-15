@@ -66,6 +66,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
         <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
         <?php include 'module/js.php';?>
         <script type="text/javascript" src="module/javascript/component/dashboard/dataanggota.js"></script>
+        <script type="text/javascript" src="module/javascript/component/dashboard/datatingkatan.js"></script>
         <!--/ END JAVASCRIPT SECTION -->
     </body>
     <!--/ END Body -->
