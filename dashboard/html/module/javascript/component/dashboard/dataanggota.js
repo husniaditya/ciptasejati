@@ -1,16 +1,59 @@
-$(function () {
-    // Create the chart
-    $('#container').highcharts({
+var chart; // Declare chart as a global variable
+
+// Use AJAX to fetch initial data from the server
+$.ajax({
+    url: './module/ajax/dashboard/anggota/aj_dashanggota.php',
+    method: 'POST',
+    dataType: 'json',
+    success: function (initialData) {
+        initializeChart(initialData);
+    },
+    error: function (error) {
+        console.log('Error fetching data:', error);
+    }
+});
+
+function initializeChart(initialData) {
+    chart = Highcharts.chart('container', {
         chart: {
-            type: 'column'
+            type: 'column',
+            events: {
+                drilldown: function (e) {
+                    if (!e.seriesOptions) {
+                        var chart = this;
+                        $.ajax({
+                            url: './module/ajax/dashboard/anggota/aj_drilldownanggota.php',
+                            method: 'POST',
+                            data: { drilldownId: e.point.drilldown },
+                            dataType: 'json',
+                            success: function (drilldownData) {
+                                chart.addSeriesAsDrilldown(e.point, {
+                                    colorByPoint: true,
+                                    name: 'Cabang',
+                                    id: e.point.drilldown,
+                                    data: drilldownData.map(function (drilldownEntry) {
+                                        return [drilldownEntry.cabang, drilldownEntry.cabang_anggota];
+                                    })
+                                });
+                            },
+                            error: function (error) {
+                                console.log('Error fetching drilldown data:', error);
+                            }
+                        });
+                    }
+                },
+                drillup: function () {
+                    // No need to remove the series manually
+                }
+            }
         },
         title: {
             align: 'center',
-            text: 'Data Keanggotaan'
+            text: '<span style="font-size:16px">Data Keanggotaan</span>'
         },
         subtitle: {
             align: 'center',
-            text: 'Klik untuk melihat detail data'
+            text: '<span style="font-size:12px">Klik kolom grafik untuk melihat detail data</span>'
         },
         accessibility: {
             announceNewData: {
@@ -22,9 +65,8 @@ $(function () {
         },
         yAxis: {
             title: {
-                text: 'Jumlah Keanggotaan'
+                text: '<span style="font-size:10px">Total Keanggotaan</span>'
             }
-    
         },
         legend: {
             enabled: false
@@ -34,65 +76,36 @@ $(function () {
                 borderWidth: 0,
                 dataLabels: {
                     enabled: true,
-                    format: '{point.y:.1f}%'
-                }
+                    format: '<span style="font-size:10px">{point.y}</span>'
+                },
             }
         },
-    
         tooltip: {
             headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> Anggota<br/>'
         },
         series: [{
-            name: 'Browsers',
+            name: 'Daerah',
             colorByPoint: true,
-            data: [{
-                name: 'Microsoft Internet Explorer',
-                y: 56.33,
-                drilldown: 'Microsoft Internet Explorer'
-            }, {
-                name: 'Chrome',
-                y: 24.03,
-                drilldown: 'Chrome'
-            }]
+            data: initialData.map(function (entry) {
+                return {
+                    name: entry.daerah,
+                    y: entry.daerah_anggota,
+                    drilldown: entry.drilldown
+                };
+            })
         }],
         drilldown: {
-            series: [{
-                name: 'Microsoft Internet Explorer',
-                id: 'Microsoft Internet Explorer',
-                colorByPoint: true,
-                data: [
-                    {
-                    name: 'M1',
-                    y: 22,
-                    drilldown: 'M1'
-                    },
-                    {
-                    name: 'M2',
-                    y: 30,
-                    drilldown: 'M2'
-                    },
-                ]
-            }, {
-                name: 'Chrome',
-                id: 'Chrome',
-                colorByPoint: true,
-                data: [
-                    [
-                        'v40.0',5
-                    ]
-                ]
-            }, {
-                id: 'M1',
-                data: [
-                    [
-                        'v8.0',17.2
-                    ],
-                    [
-                        '1.0',25.2
-                    ]
-                ]
-            }]
+            breadcrumbs: {
+                position: {
+                    align: 'left'
+                }
+            },
+            activeDataLabelStyle: {
+                color: '#000000'
+            },
+            series: []
         }
+        // Add any other options specific to your implementation here
     });
-});
+}
