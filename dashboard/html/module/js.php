@@ -38,6 +38,7 @@
 
 <!-- Highcharts -->
 <script type="text/javascript" src="../javascript/backend/highcharts/highcharts.js"></script>
+<script type="text/javascript" src="../javascript/backend/highcharts/themes/sand-signika.js"></script>
 <script type="text/javascript" src="../javascript/backend/highcharts/modules/data.js"></script>
 <script type="text/javascript" src="../javascript/backend/highcharts/modules/drilldown.js"></script>
 <script type="text/javascript" src="../javascript/backend/highcharts/modules/exporting.js"></script>

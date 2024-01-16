@@ -7,7 +7,7 @@ $.ajax({
     method: 'POST',
     dataType: 'json',
     success: function (initialData) {
-        console.log('Got initial data:', initialData);
+        // console.log('Got initial data:', initialData);
         initializeTingkatanChart(initialData);
     },
     error: function (error) {
@@ -29,14 +29,15 @@ function initializeTingkatanChart(initialData) {
                             data: { drilldownId: e.point.drilldown },
                             dataType: 'json',
                             success: function (drilldownData) {
-                                console.log('Got drilldown data:', drilldownData);
+                                // console.log('Got drilldown data:', drilldownData);
                                 chart.addSeriesAsDrilldown(e.point, {
                                     colorByPoint: true,
                                     name: e.point.name,
                                     id: e.point.drilldown,
                                     data: drilldownData.map(function (drilldownEntry) {
-                                        console.log('drilldownEntry:', drilldownEntry);
+                                        // console.log('drilldownEntry:', drilldownEntry);
                                         return {
+                                            colorByPoint: true,
                                             name: drilldownEntry.name,
                                             y: drilldownEntry.y,
                                             drilldown: drilldownEntry.drilldown,
@@ -78,7 +79,7 @@ function initializeTingkatanChart(initialData) {
         },
         yAxis: {
             title: {
-                text: '<span style="font-size:10px">Total Tingkatan</span>'
+                text: '<span style="font-size:10px">Total Keanggotaan</span>'
             },
             labels: {
                 style: {

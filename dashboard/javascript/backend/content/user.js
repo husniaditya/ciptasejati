@@ -29,7 +29,7 @@ $(document).ready(function() {
           }
         }
       });
-      console.log(formData);
+      // console.log(formData);
     });
   });
   // ----- End of Change Password Section ----- //

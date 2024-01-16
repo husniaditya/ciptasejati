@@ -67,6 +67,9 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
         <?php include 'module/js.php';?>
         <script type="text/javascript" src="module/javascript/component/dashboard/dataanggota.js"></script>
         <script type="text/javascript" src="module/javascript/component/dashboard/datatingkatan.js"></script>
+        <script type="text/javascript" src="module/javascript/component/dashboard/dataaktivitas.js"></script>
+        <script type="text/javascript" src="module/javascript/component/dashboard/pieaktivitas.js"></script>
+        <script type="text/javascript" src="module/javascript/component/dashboard/dashboard.js"></script>
         <!--/ END JAVASCRIPT SECTION -->
     </body>
     <!--/ END Body -->
