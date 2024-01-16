@@ -7,6 +7,7 @@ $.ajax({
     method: 'POST',
     dataType: 'json',
     success: function (initialData) {
+        console.log('Got initial data:', initialData);
         initializeTingkatanChart(initialData);
     },
     error: function (error) {
@@ -28,16 +29,17 @@ function initializeTingkatanChart(initialData) {
                             data: { drilldownId: e.point.drilldown },
                             dataType: 'json',
                             success: function (drilldownData) {
-                                // console.log('Got drilldown data:', drilldownData);
+                                console.log('Got drilldown data:', drilldownData);
                                 chart.addSeriesAsDrilldown(e.point, {
                                     colorByPoint: true,
-                                    name: 'Daerah',
+                                    name: e.point.name,
                                     id: e.point.drilldown,
                                     data: drilldownData.map(function (drilldownEntry) {
+                                        console.log('drilldownEntry:', drilldownEntry);
                                         return {
-                                            name: drilldownEntry.daerah,
-                                            y: drilldownEntry.daerah_anggota,
-                                            drilldown: drilldownEntry.drilldown // Third-level drilldown ID
+                                            name: drilldownEntry.name,
+                                            y: drilldownEntry.y,
+                                            drilldown: drilldownEntry.drilldown,
                                         };
                                     })
                                 });
