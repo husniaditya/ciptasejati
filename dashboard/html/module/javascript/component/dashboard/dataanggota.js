@@ -28,12 +28,19 @@ function initializeAnggotaChart(initialData) {
                             data: { drilldownId: e.point.drilldown },
                             dataType: 'json',
                             success: function (drilldownData) {
+                                // console.log('Got drilldown data:', drilldownData);
                                 chart.addSeriesAsDrilldown(e.point, {
                                     colorByPoint: true,
                                     name: 'Cabang',
                                     id: e.point.drilldown,
                                     data: drilldownData.map(function (drilldownEntry) {
-                                        return [drilldownEntry.cabang, drilldownEntry.cabang_anggota];
+                                        // console.log('drilldownEntry:', drilldownEntry);
+                                        return {
+                                            colorByPoint: true,
+                                            name: drilldownEntry.name,
+                                            y: drilldownEntry.y,
+                                            drilldown: drilldownEntry.drilldown,
+                                        };
                                     })
                                 });
                             },

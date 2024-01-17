@@ -17,6 +17,9 @@
 <br>
 <div class="row">
     <div class="col-md-6">
+        <div id="pieAktivitasChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    </div>
+    <div class="col-md-6">
         <div class="panel panel-default" id="demo">
             <div class="panel-heading">
                 <h3 class="panel-title">Jadwal Kegiatan Mendatang</h3>
@@ -84,9 +87,6 @@
                 </tbody>
             </table>
         </div>
-    </div>
-    <div class="col-md-6">
-        <div id="pieAktivitasChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
     </div>
 </div>
 <br><br><br>

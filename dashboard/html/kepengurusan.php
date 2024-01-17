@@ -38,14 +38,14 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
                 <!-- Page Header -->
                 <div class="page-header page-header-block">
                     <div class="page-header-section">
-                        <h4 class="title semibold">Data Anggota</h4>
+                        <h4 class="title semibold">Data Kepengurusan</h4>
                     </div>
                     <div class="page-header-section">
                         <!-- Toolbar -->
                         <div class="toolbar">
                             <ol class="breadcrumb breadcrumb-transparent nm">
                                 <li><a href="javascript:void(0);">Master</a></li>
-                                <li class="active">Anggota</li>
+                                <li class="active">Kepengurusan</li>
                             </ol>
                         </div>
                         <!--/ Toolbar -->
@@ -53,7 +53,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
                 </div>
                 <!-- Page Header -->
 
-                <?php include 'module/component/v_anggota.php';?>
+                <?php include 'module/component/transaksi/kepengurusan/v_kepengurusan.php';?>
             </div>
         </section>
             <!--/ END Template Container -->
@@ -70,7 +70,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
 
         <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
         <?php include 'module/js.php';?>
-        <script type="text/javascript" src="../javascript/backend/content/anggota.js"></script>
+        <script type="text/javascript" src="module/javascript/component/transaksi/kepengurusan/kepengurusan.js"></script>
         <!--/ END JAVASCRIPT SECTION -->
     </body>
     <!--/ END Body -->

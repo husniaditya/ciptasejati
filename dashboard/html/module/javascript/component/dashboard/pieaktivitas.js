@@ -78,7 +78,7 @@ Highcharts.chart('pieAktivitasChart', {
         type: 'pie'
     },
     title: {
-        text: 'Komposisi Aktivitas CIPTA SEJATI',
+        text: 'Komposisi Pendidikan dan Latihan CIPTA SEJATI',
         align: 'left',
         style: {
             fontSize:'18px'
@@ -92,7 +92,8 @@ Highcharts.chart('pieAktivitasChart', {
         }
     },
     tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.2f}%</b>'
+        headerFormat: '<span style="font-size:12px">{series.name}</span><br>',
+        pointFormat: '<span style="font-size:12px;color:{point.color};">{point.name}: <b>{point.percentage:.2f}%</b></span>'
     },
     accessibility: {
         point: {
@@ -113,22 +114,23 @@ Highcharts.chart('pieAktivitasChart', {
     },
     series: [{
         // Disable mouse tracking on load, enable after custom animation
+        name: 'Pendidikan dan Latihan',
         enableMouseTracking: false,
         animation: {
             duration: 2000
         },
         colorByPoint: true,
         data: [{
-            name: 'Pembukaan Pusat Daya',
+            name: 'Materi',
             y: 21.3
         }, {
-            name: 'Ujian Kenaikan Tingkat',
+            name: 'Latihan Fisik',
             y: 18.7
         }, {
-            name: 'Latihan Gabungan',
+            name: 'Latihan Spiritual',
             y: 20.2
         }, {
-            name: 'Pendidikan dan Latihan',
+            name: 'Latihan Teknik',
             y: 14.2
         }]
     }]
