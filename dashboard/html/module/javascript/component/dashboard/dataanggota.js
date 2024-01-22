@@ -31,7 +31,7 @@ function initializeAnggotaChart(initialData) {
                                 // console.log('Got drilldown data:', drilldownData);
                                 chart.addSeriesAsDrilldown(e.point, {
                                     colorByPoint: true,
-                                    name: 'Cabang',
+                                    name: e.point.name,
                                     id: e.point.drilldown,
                                     data: drilldownData.map(function (drilldownEntry) {
                                         // console.log('drilldownEntry:', drilldownEntry);
@@ -82,7 +82,7 @@ function initializeAnggotaChart(initialData) {
             },
             labels: {
                 style: {
-                    fontSize:'10px'
+                    fontSize:'11px'
                 }
             }
         },

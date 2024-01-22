@@ -83,7 +83,7 @@ function initializeTingkatanChart(initialData) {
             },
             labels: {
                 style: {
-                    fontSize:'10px'
+                    fontSize:'11px'
                 }
             }
         },

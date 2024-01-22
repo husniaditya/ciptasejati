@@ -1,5 +1,4 @@
 Highcharts.chart('aktivitasChart', {
-
     title: {
         text: 'Aktivitas CIPTA SEJATI',
         align: 'left',
@@ -18,13 +17,26 @@ Highcharts.chart('aktivitasChart', {
 
     yAxis: {
         title: {
-            text: 'Jumlah Aktivitas'
+            text: 'Jumlah Aktivitas',
+            style: {
+                fontSize:'11px'
+            }
+        },
+        labels: {
+            style: {
+                fontSize:'11px'
+            }
         }
     },
 
     xAxis: {
         accessibility: {
             rangeDescription: 'Range: 2010 to 2020'
+        },
+        labels: {
+            style: {
+                fontSize:'12px'
+            }
         }
     },
 
@@ -43,31 +55,34 @@ Highcharts.chart('aktivitasChart', {
         }
     },
 
+    tooltip: {
+		headerFormat: '<span style="font-size: 14px">{point.key}</span><br/>',
+        style: {
+            fontSize:'12px'
+        }
+    },
     plotOptions: {
         series: {
             label: {
-                connectorAllowed: false
+                connectorAllowed: false,
             },
-            pointStart: 2010
+            pointStart: 2014,
         }
     },
 
-    series: [{
+    series: [
+        {
         name: 'Pembukaan Pusat Daya',
-        data: [43934, 48656, 65165, 81827, 112143, 142383,
-            171533, 165174, 155157, 161454, 154610]
+        data: [Math.floor(Math.random() * (200 - 100 + 1)) + 100, Math.floor(Math.random() * (200 - 100 + 1)) + 100, Math.floor(Math.random() * (200 - 100 + 1)) + 100, Math.floor(Math.random() * (200 - 100 + 1)) + 100, Math.floor(Math.random() * (200 - 100 + 1)) + 100, Math.floor(Math.random() * (200 - 100 + 1)) + 100, Math.floor(Math.random() * (200 - 100 + 1)) + 100, Math.floor(Math.random() * (200 - 100 + 1)) + 100, Math.floor(Math.random() * (200 - 100 + 1)) + 100, Math.floor(Math.random() * (200 - 100 + 1)) + 100, 2]
     }, {
         name: 'Ujian Kenaikan Tingkat',
-        data: [24916, 37941, 29742, 29851, 32490, 30282,
-            38121, 36885, 33726, 34243, 31050]
+        data: [Math.floor(Math.random() * (100 - 50 + 1)) + 50, Math.floor(Math.random() * (100 - 50 + 1)) + 50, Math.floor(Math.random() * (100 - 50 + 1)) + 50, Math.floor(Math.random() * (100 - 50 + 1)) + 50, Math.floor(Math.random() * (100 - 50 + 1)) + 50, Math.floor(Math.random() * (100 - 50 + 1)) + 50, Math.floor(Math.random() * (100 - 50 + 1)) + 50, Math.floor(Math.random() * (100 - 50 + 1)) + 50, Math.floor(Math.random() * (100 - 50 + 1)) + 50, Math.floor(Math.random() * (100 - 50 + 1)) + 50, 5]
     }, {
         name: 'Latihan Gabungan',
-        data: [11744, 30000, 16005, 19771, 20185, 24377,
-            32147, 30912, 29243, 29213, 25663]
+        data: [Math.floor(Math.random() * (75 - 25 + 1)) + 25, Math.floor(Math.random() * (75 - 25 + 1)) + 25, Math.floor(Math.random() * (75 - 25 + 1)) + 25, Math.floor(Math.random() * (75 - 25 + 1)) + 25, Math.floor(Math.random() * (75 - 25 + 1)) + 25, Math.floor(Math.random() * (75 - 25 + 1)) + 25, Math.floor(Math.random() * (75 - 25 + 1)) + 25, Math.floor(Math.random() * (75 - 25 + 1)) + 25, Math.floor(Math.random() * (75 - 25 + 1)) + 25, Math.floor(Math.random() * (75 - 25 + 1)) + 25, 2]
     }, {
         name: 'Pendidikan dan Latihan',
-        data: [null, null, null, null, null, null, null,
-            null, 11164, 11218, 10077]
+        data: [Math.floor(Math.random() * (200 - 150 + 1)) + 150, Math.floor(Math.random() * (200 - 150 + 1)) + 150, Math.floor(Math.random() * (200 - 150 + 1)) + 150, Math.floor(Math.random() * (200 - 150 + 1)) + 150, Math.floor(Math.random() * (200 - 150 + 1)) + 150, Math.floor(Math.random() * (200 - 150 + 1)) + 150, Math.floor(Math.random() * (200 - 150 + 1)) + 150, Math.floor(Math.random() * (200 - 150 + 1)) + 150, Math.floor(Math.random() * (200 - 150 + 1)) + 150, Math.floor(Math.random() * (200 - 150 + 1)) + 150, 7]
     },],
 
     responsive: {
