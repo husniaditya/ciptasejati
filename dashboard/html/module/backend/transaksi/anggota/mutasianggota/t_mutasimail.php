@@ -30,7 +30,7 @@ if (isset($_POST["MUTASI_ID"])) {
             extract($rowMutasi);
         }
         
-        $getEmailAddress = GetQuery("SELECT a.ANGGOTA_NAMA ANGGOTA_NAMA_MAIL,a.CABANG_KEY CABANG_KEY_MAIL,a.ANGGOTA_EMAIL,a.ANGGOTA_AKSES FROM t_notifikasi n
+        $getEmailAddress = GetQuery("SELECT a.ANGGOTA_KEY KEY_MAIL,a.ANGGOTA_NAMA ANGGOTA_NAMA_MAIL,a.CABANG_KEY CABANG_KEY_MAIL,a.ANGGOTA_EMAIL,a.ANGGOTA_AKSES FROM t_notifikasi n
         LEFT JOIN t_mutasi m ON n.DOKUMEN_ID = m.MUTASI_ID
         LEFT JOIN m_anggota a ON n.NOTIFIKASI_USER = a.ANGGOTA_KEY
         WHERE n.DOKUMEN_ID = '$MUTASI_ID'");
@@ -58,7 +58,7 @@ if (isset($_POST["MUTASI_ID"])) {
                     $ccNames[] = $ANGGOTA_NAMA_MAIL;
                 }
             } else {
-                if ($ANGGOTA_AKSES == "User") {
+                if ($ANGGOTA_KEY == $KEY_MAIL) {
                     // To address
                     $toAddress = $ANGGOTA_EMAIL;
                     $toName = $ANGGOTA_NAMA_MAIL;

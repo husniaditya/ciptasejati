@@ -38,14 +38,15 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
                 <!-- Page Header -->
                 <div class="page-header page-header-block">
                     <div class="page-header-section">
-                        <h4 class="title semibold">Data Anggota</h4>
+                        <h4 class="title semibold">Data Pembukaan Pusat Daya</h4>
                     </div>
                     <div class="page-header-section">
                         <!-- Toolbar -->
                         <div class="toolbar">
                             <ol class="breadcrumb breadcrumb-transparent nm">
-                                <li><a href="javascript:void(0);">Master</a></li>
-                                <li class="active">Anggota</li>
+                                <li><a href="javascript:void(0);">Transaksi</a></li>
+                                <li><a href="javascript:void(0);">Aktivitas</a></li>
+                                <li class="active">Pembukaan Pusat Daya</li>
                             </ol>
                         </div>
                         <!--/ Toolbar -->
@@ -53,7 +54,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
                 </div>
                 <!-- Page Header -->
 
-                <?php include 'module/component/v_anggota.php';?>
+                <?php include 'module/component/transaksi/aktivitas/ppd/v_ppd.php';?>
             </div>
         </section>
             <!--/ END Template Container -->

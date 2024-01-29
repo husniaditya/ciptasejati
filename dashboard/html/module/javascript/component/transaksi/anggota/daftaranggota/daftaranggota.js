@@ -12,6 +12,8 @@ function callTable() {
       buttons: [
           'copy', 'csv', 'excel', 'pdf'
       ],
+      // processing: true,
+      // serverSide: true
   });
 
   $('#ViewAnggota').on('shown.bs.modal', function () {
@@ -439,6 +441,7 @@ $(document).on("click", ".open-ViewAnggota", function () {
   var daerahdes = $(this).data('daerahdes');
   var cabangkey = $(this).data('cabangkey');
   var cabangdes = $(this).data('cabangdes');
+  var ranting = $(this).data('ranting');
   var tingkatanid = $(this).data('tingkatanid');
   var tingkatannama = $(this).data('tingkatannama');
   var ktp = $(this).data('ktp');
@@ -461,6 +464,7 @@ $(document).on("click", ".open-ViewAnggota", function () {
   $(".modal-body #viewANGGOTA_ID").val(anggotaid);
   $(".modal-body #viewDAERAH_KEY").val(daerahdes);
   $(".modal-body #viewCABANG_KEY").val(cabangdes);
+  $(".modal-body #viewANGGOTA_RANTING").val(ranting);
   $(".modal-body #viewTINGKATAN_ID").val(tingkatannama);
   $(".modal-body #viewANGGOTA_KTP").val(ktp);
   $(".modal-body #viewANGGOTA_NAMA").val(nama);
@@ -528,6 +532,7 @@ $(document).on("click", ".open-EditAnggota", function () {
   var daerahdes = $(this).data('daerahdes');
   var cabangkey = $(this).data('cabangkey');
   var cabangdes = $(this).data('cabangdes');
+  var ranting = $(this).data('ranting');
   var tingkatanid = $(this).data('tingkatanid');
   var tingkatannama = $(this).data('tingkatannama');
   var ktp = $(this).data('ktp');
@@ -549,6 +554,7 @@ $(document).on("click", ".open-EditAnggota", function () {
   $(".modal-body #editANGGOTA_KEY").val(key);
   $(".modal-body #editANGGOTA_ID").val(anggotaid);
   $(".modal-body #selectize-dropdown6")[0].selectize.setValue(tingkatanid);
+  $(".modal-body #editANGGOTA_RANTING").val(ranting);
   $(".modal-body #editANGGOTA_KTP").val(ktp);
   $(".modal-body #editANGGOTA_NAMA").val(nama);
   $(".modal-body #editANGGOTA_ALAMAT").val(alamat);
@@ -558,7 +564,7 @@ $(document).on("click", ".open-EditAnggota", function () {
   $(".modal-body #datepicker46").val(tanggallahir);
   $(".modal-body #editANGGOTA_HP").val(hp);
   $(".modal-body #editANGGOTA_EMAIL").val(email);
-  $(".modal-body #datepicker45").val(join);
+  $(".modal-body #editANGGOTA_JOIN").val(join);
   $(".modal-body #datepicker47").val(resign);
   $(".modal-body #editANGGOTA_AGAMA").val(agama);
   $(".modal-body #editANGGOTA_AKSES").val(akses);

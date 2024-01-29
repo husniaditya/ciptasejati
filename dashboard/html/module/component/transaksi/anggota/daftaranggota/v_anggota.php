@@ -13,7 +13,7 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
-    WHERE a.CABANG_KEY = '$USER_CABANG'");
+    WHERE a.CABANG_KEY = '$USER_CABANG' and a.ANGGOTA_AKSES != 'Administrator'");
 }
 
 $getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0");
@@ -162,6 +162,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                         <th>ID Anggota</th>
                         <th>Daerah </th>
                         <th>Cabang </th>
+                        <th>Ranting </th>
                         <th>Sabuk </th>
                         <th>Tingkatan </th>
                         <th>Gelar </th>
@@ -190,12 +191,12 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                         <?php
                                         if ($_SESSION['VIEW_DaftarAnggota'] == "Y") {
                                             ?>
-                                            <li><a data-toggle="modal" href="#ViewAnggota" class="open-ViewAnggota" style="color:#222222;" data-key="<?= $ANGGOTA_KEY; ?>" data-id="<?= $ANGGOTA_ID; ?>" data-shortid="<?= $SHORT_ID; ?>" data-daerahkey="<?= $DAERAH_KEY;?>" data-daerahdes="<?= $DAERAH_DESKRIPSI;?>" data-cabangkey="<?= $CABANG_KEY; ?>" data-cabangdes="<?= $CABANG_DESKRIPSI; ?>" data-tingkatanid=<?= $TINGKATAN_ID; ?> data-tingkatannama="<?= $TINGKATAN_NAMA; ?>" data-ktp="<?= $ANGGOTA_KTP; ?>" data-nama="<?= $ANGGOTA_NAMA; ?>" data-alamat="<?= $ANGGOTA_ALAMAT;?>" data-pekerjaan="<?= $ANGGOTA_PEKERJAAN; ?>" data-agama="<?= $ANGGOTA_AGAMA; ?>" data-kelamin="<?= $ANGGOTA_KELAMIN; ?>" data-tempatlahir="<?= $ANGGOTA_TEMPAT_LAHIR; ?>" data-tanggallahir="<?= $ANGGOTA_TANGGAL_LAHIR; ?>" data-hp="<?= $ANGGOTA_HP; ?>" data-email="<?= $ANGGOTA_EMAIL; ?>" data-pic="<?= $ANGGOTA_PIC; ?>" data-join="<?= $ANGGOTA_JOIN; ?>" data-resign="<?= $ANGGOTA_RESIGN; ?>" data-akses="<?= $ANGGOTA_AKSES; ?>" data-status="<?= $ANGGOTA_STATUS; ?>" data-statusdes="<?= $STATUS_DES; ?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
+                                            <li><a data-toggle="modal" href="#ViewAnggota" class="open-ViewAnggota" style="color:#222222;" data-key="<?= $ANGGOTA_KEY; ?>" data-id="<?= $ANGGOTA_ID; ?>" data-shortid="<?= $SHORT_ID; ?>" data-daerahkey="<?= $DAERAH_KEY;?>" data-daerahdes="<?= $DAERAH_DESKRIPSI;?>" data-cabangkey="<?= $CABANG_KEY; ?>" data-cabangdes="<?= $CABANG_DESKRIPSI; ?>" data-tingkatanid=<?= $TINGKATAN_ID; ?> data-tingkatannama="<?= $TINGKATAN_NAMA; ?>" data-ktp="<?= $ANGGOTA_KTP; ?>" data-nama="<?= $ANGGOTA_NAMA; ?>" data-alamat="<?= $ANGGOTA_ALAMAT;?>" data-pekerjaan="<?= $ANGGOTA_PEKERJAAN; ?>" data-agama="<?= $ANGGOTA_AGAMA; ?>" data-kelamin="<?= $ANGGOTA_KELAMIN; ?>" data-tempatlahir="<?= $ANGGOTA_TEMPAT_LAHIR; ?>" data-tanggallahir="<?= $ANGGOTA_TANGGAL_LAHIR; ?>" data-hp="<?= $ANGGOTA_HP; ?>" data-email="<?= $ANGGOTA_EMAIL; ?>" data-pic="<?= $ANGGOTA_PIC; ?>" data-join="<?= $ANGGOTA_JOIN; ?>" data-resign="<?= $ANGGOTA_RESIGN; ?>" data-akses="<?= $ANGGOTA_AKSES; ?>" data-status="<?= $ANGGOTA_STATUS; ?>" data-statusdes="<?= $STATUS_DES; ?>" data-ranting="<?= $ANGGOTA_RANTING; ?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
                                             <?php
                                         }
                                         if ($_SESSION['EDIT_DaftarAnggota'] == "Y") {
                                             ?>
-                                            <li><a data-toggle="modal" href="#EditAnggota" class="open-EditAnggota" style="color:cornflowerblue;" data-key="<?= $ANGGOTA_KEY; ?>" data-id="<?= $ANGGOTA_ID; ?>" data-shortid="<?= $SHORT_ID; ?>" data-daerahkey="<?= $DAERAH_KEY;?>" data-daerahdes="<?= $DAERAH_DESKRIPSI;?>" data-cabangkey="<?= $CABANG_KEY; ?>" data-cabangdes="<?= $CABANG_DESKRIPSI; ?>" data-tingkatanid=<?= $TINGKATAN_ID; ?> data-tingkatannama="<?= $TINGKATAN_NAMA; ?>" data-ktp="<?= $ANGGOTA_KTP; ?>" data-nama="<?= $ANGGOTA_NAMA; ?>" data-alamat="<?= $ANGGOTA_ALAMAT;?>" data-pekerjaan="<?= $ANGGOTA_PEKERJAAN; ?>" data-agama="<?= $ANGGOTA_AGAMA; ?>" data-kelamin="<?= $ANGGOTA_KELAMIN; ?>" data-tempatlahir="<?= $ANGGOTA_TEMPAT_LAHIR; ?>" data-tanggallahir="<?= $ANGGOTA_TANGGAL_LAHIR; ?>" data-hp="<?= $ANGGOTA_HP; ?>" data-email="<?= $ANGGOTA_EMAIL; ?>" data-pic="<?= $ANGGOTA_PIC; ?>" data-join="<?= $ANGGOTA_JOIN; ?>" data-resign="<?= $ANGGOTA_RESIGN; ?>" data-akses="<?= $ANGGOTA_AKSES; ?>" data-status="<?= $ANGGOTA_STATUS; ?>" data-statusdes="<?= $STATUS_DES; ?>"><span class="ico-edit"></span> Ubah</a></li>
+                                            <li><a data-toggle="modal" href="#EditAnggota" class="open-EditAnggota" style="color:cornflowerblue;" data-key="<?= $ANGGOTA_KEY; ?>" data-id="<?= $ANGGOTA_ID; ?>" data-shortid="<?= $SHORT_ID; ?>" data-daerahkey="<?= $DAERAH_KEY;?>" data-daerahdes="<?= $DAERAH_DESKRIPSI;?>" data-cabangkey="<?= $CABANG_KEY; ?>" data-cabangdes="<?= $CABANG_DESKRIPSI; ?>" data-tingkatanid=<?= $TINGKATAN_ID; ?> data-tingkatannama="<?= $TINGKATAN_NAMA; ?>" data-ktp="<?= $ANGGOTA_KTP; ?>" data-nama="<?= $ANGGOTA_NAMA; ?>" data-alamat="<?= $ANGGOTA_ALAMAT;?>" data-pekerjaan="<?= $ANGGOTA_PEKERJAAN; ?>" data-agama="<?= $ANGGOTA_AGAMA; ?>" data-kelamin="<?= $ANGGOTA_KELAMIN; ?>" data-tempatlahir="<?= $ANGGOTA_TEMPAT_LAHIR; ?>" data-tanggallahir="<?= $ANGGOTA_TANGGAL_LAHIR; ?>" data-hp="<?= $ANGGOTA_HP; ?>" data-email="<?= $ANGGOTA_EMAIL; ?>" data-pic="<?= $ANGGOTA_PIC; ?>" data-join="<?= $ANGGOTA_JOIN; ?>" data-resign="<?= $ANGGOTA_RESIGN; ?>" data-akses="<?= $ANGGOTA_AKSES; ?>" data-status="<?= $ANGGOTA_STATUS; ?>" data-statusdes="<?= $STATUS_DES; ?>" data-ranting="<?= $ANGGOTA_RANTING; ?>"><span class="ico-edit"></span> Ubah</a></li>
                                             <?php
                                         }
                                         if ($_SESSION['DELETE_DaftarAnggota'] == "Y") {
@@ -212,6 +213,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                             <td><?= $ANGGOTA_ID; ?></td>
                             <td align="center"><?= $DAERAH_DESKRIPSI; ?></td>
                             <td align="center"><?= $CABANG_DESKRIPSI; ?></td>
+                            <td align="center"><?= $ANGGOTA_RANTING; ?></td>
                             <td align="center"><?= $TINGKATAN_NAMA; ?></td>
                             <td align="center"><?= $TINGKATAN_SEBUTAN; ?></td>
                             <td align="center"><?= $TINGKATAN_GELAR; ?></td>
@@ -301,6 +303,12 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                             ?>
                             <div class="short-div">
                                 <div class="form-group">
+                                    <label>Ranting</label><span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="ANGGOTA_RANTING" name="ANGGOTA_RANTING" value="" data-parsley-required required>
+                                </div> 
+                            </div>
+                            <div class="short-div">
+                                <div class="form-group">
                                     <label>Tingkatan<span class="text-danger">*</span></label>
                                     <div id="selectize-wrapper2" style="position: relative;">
                                         <select name="TINGKATAN_ID" id="selectize-dropdown2" required="" class="form-control" data-parsley-required>
@@ -320,7 +328,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>No Urut Anggota<span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" minlength="3" maxlength="3" oninput="validateInput(this)" required id="ANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Inputkan 3 digit nomor urut keanggotaan" data-parsley-required>
+                                    <input type="text" class="form-control" minlength="3" maxlength="3" oninput="validateInput(this)" required id="ANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Inputkan 3 digit nomor urut keanggotaan" data-parsley-required>
                                     <div id="warning-message" style="color: red;"></div>
                                 </div>
                             </div>
@@ -462,6 +470,12 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                 <div class="form-group">
                                     <label>Cabang<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="viewCABANG_KEY" name="CABANG_KEY" value="" data-parsley-required readonly>
+                                </div> 
+                            </div>
+                            <div class="short-div">
+                                <div class="form-group">
+                                    <label>Ranting</label><span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="viewANGGOTA_RANTING" name="ANGGOTA_RANTING" value="" data-parsley-required readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
@@ -787,6 +801,12 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                             ?>
                             <div class="short-div">
                                 <div class="form-group">
+                                    <label>Ranting</label><span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="editANGGOTA_RANTING" name="ANGGOTA_RANTING" value="" data-parsley-required required>
+                                </div> 
+                            </div>
+                            <div class="short-div">
+                                <div class="form-group">
                                     <label>Tingkatan<span class="text-danger">*</span></label>
                                     <div id="selectize-wrapper6" style="position: relative;">
                                         <select name="TINGKATAN_ID" id="selectize-dropdown6" required="" class="form-control" data-parsley-required>
@@ -806,7 +826,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>No Urut Anggota<span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" minlength="3" maxlength="3" oninput="validateInput(this)" required id="editANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Inputkan 3 digit nomor urut keanggotaan" data-parsley-required>
+                                    <input type="text" class="form-control" minlength="3" maxlength="3" oninput="validateInput(this)" required id="editANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Inputkan 3 digit nomor urut keanggotaan" data-parsley-required readonly>
                                     <div id="warning-message-edit" style="color: red;"></div>
                                 </div>
                             </div>
@@ -817,7 +837,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Tanggal Bergabung</label><span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="datepicker45" name="ANGGOTA_JOIN" placeholder="Pilih tanggal" readonly data-parsley-required required/>
+                                <input type="text" class="form-control" id="editANGGOTA_JOIN" name="ANGGOTA_JOIN" value="" data-parsley-required readonly>
                             </div> 
                         </div>
                         <div class="col-md-6">

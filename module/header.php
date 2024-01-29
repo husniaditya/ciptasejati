@@ -2,11 +2,16 @@
     <div class="border-bottom-light">
         <div class="header-container container container-xl-custom">
             <div class="header-row py-4">
-                <div class="header-column">
+                <div class="header-column text-center">
                     <div class="header-row">
                         <div class="header-logo m-0">
                             <a href="index.php">
-                                <img alt="Cipta Sejati Indonesia" width="270" height="41" src="img/demos/renewable-energy/logo.png"></a>
+                                <img alt="Cipta Sejati Indonesia" width="43" height="43" src="img/demos/renewable-energy/logo.png">
+                            </a>
+                        </div>
+                        &nbsp;
+                        <div class="m-0">
+                            <h5 class="my-auto">CIPTA SEJATI INDONESIA</h5>
                         </div>
                     </div>
                 </div>

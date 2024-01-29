@@ -662,13 +662,13 @@ $(document).on("click", ".open-EditKasAnggota", function () {
         }, 300); // You may need to adjust the delay based on your application's behavior
         setTimeout(function () {
         $("#editKAS_JENIS").val(data.KAS_JENIS);
-        }, 400); // You may need to adjust the delay based on your application's behavior
+        }, 500); // You may need to adjust the delay based on your application's behavior
         setTimeout(function () {
           $("#editKAS_SALDOAWAL").val(data.SALDOAWAL);
           $("#editKAS_DK").val(data.KAS_DK);
           $("#editKAS_JUMLAH").val(data.KAS_JUMLAH);
           $("#editKAS_SALDOAKHIR").val(data.FKAS_SALDO);
-        }, 500); // You may need to adjust the delay based on your application's behavior
+        }, 600); // You may need to adjust the delay based on your application's behavior
       } else {
         $(".modal-body #selectize-dropdown4")[0].selectize.setValue(anggota);
         setTimeout(function () {

@@ -20,11 +20,11 @@ function loadAndRefresh() {
     $('#loadnotif').load('./module/ajax/header/aj_loadnotif.php');
     $('#listnotif').load('./module/ajax/header/aj_listnotif.php');
 
-    // Set up an interval to refresh content every 5 seconds
+    // Set up an interval to refresh content every 9 seconds
     setInterval(function() {
         $('#loadnotif').load('./module/ajax/header/aj_loadnotif.php');
         $('#listnotif').load('./module/ajax/header/aj_listnotif.php');
-    }, 5000);
+    }, 9000);
 }
 
 // Call the function when the document is ready

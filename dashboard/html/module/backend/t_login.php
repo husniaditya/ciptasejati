@@ -17,7 +17,7 @@ if(isset($_POST["login"]))
     left join m_anggota a on u.ANGGOTA_KEY = a.ANGGOTA_KEY 
     LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
-    where a.ANGGOTA_ID='$USERNAME'");
+    where a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0 AND a.ANGGOTA_ID='$USERNAME'");
     while ($rowUser = $GetUser->fetch(PDO::FETCH_ASSOC)) {
         extract($rowUser);
     }
