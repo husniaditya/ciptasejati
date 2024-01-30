@@ -23,6 +23,7 @@
         <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
         <!-- Application and vendor script : mandatory -->
         <?php include('module/js.php'); ?>
+        <script type="text/javascript" src="module/javascript/component/daftar.js"></script>
         <!--/ Plugins and page level script : optional -->
         <!--/ END JAVASCRIPT SECTION -->
     </body>

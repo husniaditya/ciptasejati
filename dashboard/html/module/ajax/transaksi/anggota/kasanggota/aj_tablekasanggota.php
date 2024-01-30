@@ -23,7 +23,7 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
     $TANGGAL_AWAL = $_POST["TANGGAL_AWAL"];
     $TANGGAL_AKHIR = $_POST["TANGGAL_AKHIR"];
 
-    $sql = "SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
+    $sql = "SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_RANTING,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
     CASE
         WHEN k.KAS_JUMLAH < 0 THEN CONCAT('(', FORMAT(ABS(k.KAS_JUMLAH), 0), ')')
         ELSE FORMAT(k.KAS_JUMLAH, 0)
@@ -57,7 +57,7 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
 
 } else {
     if ($USER_AKSES == "Administrator") {
-        $getKas = GetQuery("SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
+        $getKas = GetQuery("SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_RANTING,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
         CASE
             WHEN k.KAS_JUMLAH < 0 THEN CONCAT('(', FORMAT(ABS(k.KAS_JUMLAH), 0), ')')
             ELSE FORMAT(k.KAS_JUMLAH, 0)
@@ -142,8 +142,6 @@ while ($rowKas = $getKas->fetch(PDO::FETCH_ASSOC)) {
             </form>
         </td>
         <td><?= $KAS_ID; ?></td>
-        <td align="center"><?= $DAERAH_DESKRIPSI; ?></td>
-        <td align="center"><?= $CABANG_DESKRIPSI; ?></td>
         <td align="center"><?= $ANGGOTA_ID; ?></td>
         <td align="center"><?= $ANGGOTA_NAMA; ?></td>
         <td align="center"><?= $TINGKATAN_NAMA; ?></td>
@@ -151,9 +149,12 @@ while ($rowKas = $getKas->fetch(PDO::FETCH_ASSOC)) {
         <td align="center"><?= $KAS_JENIS; ?></td>
         <td align="center"><?= $FKAS_TANGGAL; ?></td>
         <td align="center"><?= $KAS_DK_DES; ?></td>
-        <td align="center"><?= $KAS_DESKRIPSI; ?></td>
+        <td><?= $KAS_DESKRIPSI; ?></td>
         <td align="right" style="<?= $KAS_COLOR; ?>"><?= $FKAS_JUMLAH; ?></td>
         <td align="right"><?= $FKAS_SALDO; ?></td>
+        <td align="center"><?= $ANGGOTA_RANTING; ?></td>
+        <td align="center"><?= $CABANG_DESKRIPSI; ?></td>
+        <td align="center"><?= $DAERAH_DESKRIPSI; ?></td>
         <td><?= $INPUT_BY; ?></td>
         <td><?= $INPUT_DATE; ?></td>
     </tr>

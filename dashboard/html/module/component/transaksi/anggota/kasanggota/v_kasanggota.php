@@ -4,7 +4,7 @@ $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 $USER_CABANG = $_SESSION["LOGINCAB_CS"];
 
 if ($USER_AKSES == "Administrator") {
-    $getKas = GetQuery("SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
+    $getKas = GetQuery("SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_RANTING,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
     CASE
         WHEN k.KAS_JUMLAH < 0 THEN CONCAT('(', FORMAT(ABS(k.KAS_JUMLAH), 0), ')')
         ELSE FORMAT(k.KAS_JUMLAH, 0)
@@ -209,8 +209,6 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     <tr>
                         <th></th>
                         <th>No Dokumen</th>
-                        <th>Daerah</th>
-                        <th>Cabang</th>
                         <th>ID Anggota </th>
                         <th>Nama </th>
                         <th>Tingkatan </th>
@@ -221,6 +219,9 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         <th>Deskripsi &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                         <th>Jumlah (Rp)</th>
                         <th>Saldo (Rp)</th>
+                        <th>Ranting</th>
+                        <th>Cabang</th>
+                        <th>Daerah</th>
                         <th>Input Oleh</th>
                         <th>Input Tanggal</th>
                     </tr>
@@ -264,8 +265,6 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                 </form>
                             </td>
                             <td><?= $KAS_ID; ?></td>
-                            <td align="center"><?= $DAERAH_DESKRIPSI; ?></td>
-                            <td align="center"><?= $CABANG_DESKRIPSI; ?></td>
                             <td align="center"><?= $ANGGOTA_ID; ?></td>
                             <td align="center"><?= $ANGGOTA_NAMA; ?></td>
                             <td align="center"><?= $TINGKATAN_NAMA; ?></td>
@@ -276,6 +275,9 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                             <td><?= $KAS_DESKRIPSI; ?></td>
                             <td align="right" style="<?= $KAS_COLOR; ?>"><?= $FKAS_JUMLAH; ?></td>
                             <td align="right"><?= $FKAS_SALDO; ?></td>
+                            <td align="center"><?= $ANGGOTA_RANTING; ?></td>
+                            <td align="center"><?= $CABANG_DESKRIPSI; ?></td>
+                            <td align="center"><?= $DAERAH_DESKRIPSI; ?></td>
                             <td><?= $INPUT_BY; ?></td>
                             <td><?= $INPUT_DATE; ?></td>
                         </tr>

@@ -598,10 +598,10 @@ function filterAnggotaEvent() {
   // Your event handling code here
   const daerah = $('#selectize-select3').val();
   const cabang = $('#selectize-select2').val();
+  const ranting = $('#filterANGGOTA_RANTING').val();
   const id = $('#filterANGGOTA_ID').val();
   const nama = $('#filterANGGOTA_NAMA').val();
-  const ktp = $('#filterANGGOTA_KTP').val();
-  const hp = $('#filterANGGOTA_HP').val();
+  const akses = $('#filterANGGOTA_AKSES').val();
   const tingkatan = $('#selectize-select').val();
   const status = $('#filterANGGOTA_STATUS').val();
 
@@ -609,10 +609,10 @@ function filterAnggotaEvent() {
   const formData = {
     DAERAH_KEY: daerah,
     CABANG_KEY: cabang,
+    ANGGOTA_RANTING: ranting,
     ANGGOTA_ID: id,
     ANGGOTA_NAMA: nama,
-    ANGGOTA_KTP: ktp,
-    ANGGOTA_HP: hp,
+    ANGGOTA_AKSES: akses,
     TINGKATAN_ID: tingkatan,
     ANGGOTA_STATUS: status
   };

@@ -87,7 +87,6 @@ if (isset($_POST["savedaftaranggota"])) {
             if ($COUNT_ID > 0) {
                 $response = "ID Anggota sudah terdaftar";
                 echo $response;
-                die(0);
             } else {
 
                 GetQuery("insert into m_anggota select uuid(), '$ANGGOTA_ID', '$CABANG_KEY', '$ANGGOTA_RANTING', '$TINGKATAN_ID', '$ANGGOTA_KTP', '$ANGGOTA_NAMA', '$ANGGOTA_ALAMAT', '$ANGGOTA_AGAMA', '$ANGGOTA_PEKERJAAN', '$ANGGOTA_KELAMIN', '$ANGGOTA_TEMPAT_LAHIR', '$ANGGOTA_TANGGAL_LAHIR', '$ANGGOTA_HP', '$ANGGOTA_EMAIL', '$idCardFileDestination', '$ANGGOTA_JOIN', null, '$ANGGOTA_AKSES', '0', '0', '$USER_ID', now()");

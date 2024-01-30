@@ -70,6 +70,12 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                         ?>
                         <div class="col-md-3">
                             <div class="form-group">
+                                <label>Ranting</label>
+                                <input type="text" class="form-control" id="filterANGGOTA_RANTING" name="ANGGOTA_RANTING" value="" placeholder="Input Lokasi Ranting">
+                            </div> 
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
                                 <label>Tingkatan</label>
                                 <select name="TINGKATAN_ID" id="selectize-select" required="" class="form-control" data-parsley-required>
                                     <option value="">-- Pilih Tingkatan --</option>
@@ -84,14 +90,14 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                 </select>
                             </div> 
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>ID Anggota</label>
                                 <input type="text" class="form-control" id="filterANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Input ID Anggota">
                             </div> 
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Nama</label>
@@ -100,14 +106,13 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>KTP</label>
-                                <input type="text" class="form-control" id="filterANGGOTA_KTP" name="ANGGOTA_KTP" value="" placeholder="Input KTP">
-                            </div> 
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>No HP</label>
-                                <input type="text" class="form-control" id="filterANGGOTA_HP" name="ANGGOTA_HP" value="" placeholder="Input Nomor HP">
+                                <label>User Akses</label>
+                                <select id="filterANGGOTA_AKSES" name="ANGGOTA_AKSES" class="form-control"  data-parsley-required required>
+                                    <option value="">Tampilkan semua</option>
+                                    <option value="User">User</option>
+                                    <option value="Koordinator">Koordinator</option>
+                                    <option value="Pengurus">Pengurus</option>
+                                </select>
                             </div> 
                         </div>
                         <div class="col-md-3">
@@ -160,18 +165,18 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                     <tr>
                         <th></th>
                         <th>ID Anggota</th>
-                        <th>Daerah </th>
-                        <th>Cabang </th>
-                        <th>Ranting </th>
+                        <th>Nama</th>
+                        <th>TTL</th>
+                        <th>L/P</th>
                         <th>Sabuk </th>
                         <th>Tingkatan </th>
                         <th>Gelar </th>
                         <th>KTP</th>
-                        <th>Nama</th>
-                        <th>L/P</th>
-                        <th>TTL</th>
                         <th>No HP</th>
                         <th>Email</th>
+                        <th>Ranting </th>
+                        <th>Cabang </th>
+                        <th>Daerah </th>
                         <th>Tgl Bergabung</th>
                         <th>Status Anggota</th>
                         <th>Tgl Resign</th>
@@ -211,18 +216,18 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                 </form>
                             </td>
                             <td><?= $ANGGOTA_ID; ?></td>
-                            <td align="center"><?= $DAERAH_DESKRIPSI; ?></td>
-                            <td align="center"><?= $CABANG_DESKRIPSI; ?></td>
-                            <td align="center"><?= $ANGGOTA_RANTING; ?></td>
+                            <td><?= $ANGGOTA_NAMA; ?></td>
+                            <td><?= $ANGGOTA_TEMPAT_LAHIR; ?> <br> <?= $TGL_LAHIR; ?></td>
+                            <td align="center"><?= $ANGGOTA_KELAMIN; ?></td>
                             <td align="center"><?= $TINGKATAN_NAMA; ?></td>
                             <td align="center"><?= $TINGKATAN_SEBUTAN; ?></td>
                             <td align="center"><?= $TINGKATAN_GELAR; ?></td>
                             <td align="center"><?= $ANGGOTA_KTP; ?></td>
-                            <td><?= $ANGGOTA_NAMA; ?></td>
-                            <td align="center"><?= $ANGGOTA_KELAMIN; ?></td>
-                            <td><?= $ANGGOTA_TEMPAT_LAHIR; ?> <br> <?= $TGL_LAHIR; ?></td>
                             <td><?= $ANGGOTA_HP; ?></td>
                             <td><?= $ANGGOTA_EMAIL; ?></td>
+                            <td align="center"><?= $ANGGOTA_RANTING; ?></td>
+                            <td align="center"><?= $CABANG_DESKRIPSI; ?></td>
+                            <td align="center"><?= $DAERAH_DESKRIPSI; ?></td>
                             <td><?= $TGL_JOIN; ?></td>
                             <td><?= $STATUS_DES; ?></td>
                             <td><?= $TGL_RESIGN; ?></td>

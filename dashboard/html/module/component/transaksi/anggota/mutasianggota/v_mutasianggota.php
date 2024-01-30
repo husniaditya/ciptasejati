@@ -214,12 +214,12 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     <tr>
                         <th></th>
                         <th>No Dokumen</th>
-                        <th>Daerah Awal </th>
-                        <th>Cabang Awal </th>
                         <th>ID Anggota </th>
                         <th>Nama </th>
                         <th>Tingkatan </th>
                         <th>Gelar</th>
+                        <th>Daerah Awal </th>
+                        <th>Cabang Awal </th>
                         <th>Daerah Tujuan </th>
                         <th>Cabang Tujuan </th>
                         <th>Deskripsi &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
@@ -286,12 +286,12 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                 </form>
                             </td>
                             <td><?= $MUTASI_ID; ?> <br> <span class="<?= $MUTASI_BADGE; ?>"><i class="<?= $MUTASI_CLASS; ?>"></i> <?= $MUTASI_STATUS_DES; ?></span></td>
-                            <td align="center"><?= $DAERAH_AWAL_DES; ?></td>
-                            <td align="center"><?= $CABANG_AWAL_DES; ?></td>
                             <td align="center"><?= $ANGGOTA_ID; ?></td>
                             <td align="center"><?= $ANGGOTA_NAMA; ?></td>
                             <td align="center"><?= $TINGKATAN_NAMA; ?></td>
                             <td align="center"><?= $TINGKATAN_SEBUTAN; ?></td>
+                            <td align="center"><?= $DAERAH_AWAL_DES; ?></td>
+                            <td align="center"><?= $CABANG_AWAL_DES; ?></td>
                             <td align="center"><?= $DAERAH_TUJUAN_DES; ?></td>
                             <td align="center"><?= $CABANG_TUJUAN_DES; ?></td>
                             <td><?= $MUTASI_DESKRIPSI; ?></td>

@@ -24,7 +24,7 @@ function loadAndRefresh() {
     setInterval(function() {
         $('#loadnotif').load('./module/ajax/header/aj_loadnotif.php');
         $('#listnotif').load('./module/ajax/header/aj_listnotif.php');
-    }, 9000);
+    }, 7000);
 }
 
 // Call the function when the document is ready
