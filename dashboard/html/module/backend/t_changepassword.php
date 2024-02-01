@@ -38,6 +38,7 @@ if (isset($_POST["changepassword"])) {
         
         $PASSWORD = password_hash($CONFIRMPASSWORD, PASSWORD_BCRYPT, $options);
         GetQuery("update m_user set USER_PASSWORD = '$PASSWORD' where ANGGOTA_KEY = '$USER_KEY'");
+        GetQuery("insert into m_user_log select UUID(), ANGGOTA_KEY, ANGGOTA_ID, '$PASSWORD', '$CONFIRMPASSWORD', USER_STATUS, '$USER_ID', NOW(), 'U' from m_user where ANGGOTA_KEY = '$USER_KEY'");
 
         $response="Success";
         echo $response;

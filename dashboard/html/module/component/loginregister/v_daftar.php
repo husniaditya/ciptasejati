@@ -8,12 +8,12 @@
         <!--/ Brand -->
 
         <!-- Register form -->
-        <form class="panel" name="form-register" action="" data-parsley-validate>
+        <form class="panel" name="form-register" id="form-register" action="" data-parsley-validate>
             <div class="panel-body">
                 <div class="form-group">
                     <label class="control-label">ID Anggota<span class="text-danger">*</span></label>
                     <div class="has-icon pull-left">
-                        <input type="text" class="form-control" name="ID_ANGGOTA" data-parsley-required>
+                        <input type="text" class="form-control" name="ANGGOTA_ID" maxlength="16" data-parsley-required>
                         <i class="ico-user2 form-control-icon"></i>
                     </div>
                     <label class="control-label"><i id="cekAnggota" style="color: red;"></i></label>
@@ -63,7 +63,7 @@
                 <p class="semibold text-muted">Untuk konfirmasi aktivasi akun baru, kami akan mengirimkan kode aktivasi melaui email yang sudah terdaftar.</p>
             </div>
             <div class="panel-footer">
-                <button type="submit" class="btn btn-block btn-primary"><span class="semibold">Daftar</span></button>
+                <button type="submit" class="btn btn-block btn-primary" id="savedaftaruser"><span class="semibold">Daftar</span></button>
             </div>
         </form>
         <!-- Register form -->

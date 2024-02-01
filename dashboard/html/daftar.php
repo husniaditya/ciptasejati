@@ -1,3 +1,7 @@
+<?php 
+require_once ("./module/connection/conn.php");
+
+?>
 <!DOCTYPE html>
 <html class="backend">
     <!-- START Head -->
@@ -13,7 +17,7 @@
             <!-- START Template Container -->
             <section class="container">
                 <!-- START row -->
-                <?php include 'module/component/v_daftar.php';?>
+                <?php include 'module/component/loginregister/v_daftar.php';?>
                 <!--/ END row -->
             </section>
             <!--/ END Template Container -->
@@ -23,7 +27,7 @@
         <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
         <!-- Application and vendor script : mandatory -->
         <?php include('module/js.php'); ?>
-        <script type="text/javascript" src="module/javascript/component/daftar.js"></script>
+        <script type="text/javascript" src="module/javascript/component/loginregister/daftar.js"></script>
         <!--/ Plugins and page level script : optional -->
         <!--/ END JAVASCRIPT SECTION -->
     </body>
