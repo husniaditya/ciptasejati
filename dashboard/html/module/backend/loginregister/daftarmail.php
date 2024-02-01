@@ -371,24 +371,22 @@
                   <tr>
                     <td class="wrapper">
                         <h3>Dear Bapak/Ibu <?= $toName; ?>,</h3>
-                        <p>Selamat datang di Institut Seni Bela Diri Silat <b>CIPTA SEJATI</b> yang mengajarkan “tenaga dalam”, juga dikenal dengan istilah Prana atau Chi (Ki). Diantara manfaat terpenting bagi peserta latih adalah dapat meningkatkan dan memelihara kesehatan, pengobatan diri sendiri dan orang lain (bidang kesehatan).</p>
-                        <br>
                         <p>Terima kasih telah mendaftar sebagai anggota Cipta Sejati. Untuk melanjutkan proses pendaftaran, silahkan klik tombol di bawah ini untuk melakukan konfirmasi akun.</p>
-                      <table role="presentation" border="1" cellpadding="1" cellspacing="2" class="table-body">
-                        <tbody>
-                            <tr>
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                            <tbody>
+                              <tr>
                                 <td align="left">
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                     <tbody>
-                                    <tr>
-                                        <td> <a href="http://localhost/ciptasejati/dashboard/html/aktivasiakun.php?token=<?= $ANGGOTA_KEY; ?>" target="_blank">Konfirmasi Akun</a> </td>
-                                    </tr>
+                                      <tr>
+                                        <td> <a href="https://ciptasejatiindonesia.com/dashboard/html/aktivasiakun.php?token=<?= $ANGGOTA_KEY; ?>" target="_blank">Konfirmasi Akun</a> </td>
+                                      </tr>
                                     </tbody>
-                                </table>
+                                  </table>
                                 </td>
-                            </tr>
-                        </tbody>
-                      </table>
+                              </tr>
+                            </tbody>
+                          </table>
                       <br>
                         <h3>Mohon untuk tidak membalas email ini. Untuk melakukan pengecekan silahkan akses melalui web di bawah</h3>
                     </td>

@@ -5,6 +5,7 @@ function sendEmailNotification(ID) { // Function Send Email Notification
       url: 'module/backend/loginregister/t_maildaftar.php',
       data: { id: ID },
       success: function(response) {
+        console.log(response);
         // Check the response from the server
         resolve(response);
       },
@@ -124,6 +125,7 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
           var parts = response.split(',');
           var successMessage = parts[0];
           ID = parts[1]; // Assign value to ID
+          console.log(response);
   
           // Check the response from the server
           if (successMessage === 'Success') {
@@ -136,28 +138,26 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
             // Example usage:
             showLoadingOverlay('Proses pembuatan dokumen dan pengiriman email...');
   
-            // Save PDF to Drive and send email notification concurrently
-            Promise.all(sendEmailNotification(ID))
-              .then(function (responses) {
-                const emailResponse = responses;
-  
-                if (emailResponse === 'Success') {
-                  MailNotification('Email pemberitahuan berhasil dikirimkan!');
-                } else {
-                  failedNotification(emailResponse);
-                }
-              })
-              .catch(function (errors) {
-                // Handle errors
-                for (const error of errors) {
-                  errorNotification(error);
-                }
-              })
-              .finally(function () {
-                // Hide the loading overlay after all asynchronous tasks are complete
-                hideLoadingOverlay();
-                document.getElementById("form-register").reset();
-              });
+            // Send email notification concurrently
+            Promise.all([sendEmailNotification(ID)])
+            .then(function (responses) {
+              const emailResponse = responses[0];
+
+              if (emailResponse === 'Success') {
+                MailNotification('Email pemberitahuan berhasil dikirimkan!');
+              } else {
+                failedNotification(emailResponse);
+              }
+            })
+            .catch(function (error) {
+              // Handle the single error
+              errorNotification(error);
+            })
+            .finally(function () {
+              // Hide the loading overlay after all asynchronous tasks are complete
+              hideLoadingOverlay();
+              document.getElementById("form-register").reset();
+            });
           } else {
             // Display error notification
             failedNotification(response);
