@@ -38,14 +38,14 @@
                     <label class="control-label">Daerah</label>
                     <input type="text" class="form-control" id="DAERAH_KEY" name="DAERAH_KEY" readonly>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="passwordbaru">
                     <label class="control-label">Password<span class="text-danger">*</span></label>
                     <div class="has-icon pull-left">
                         <input type="password" class="form-control checkpassword" name="NEWPASSWORD" id="NEWPASSWORD" data-parsley-required>
                         <i class="ico-key2 form-control-icon"></i>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="konfirmasi">
                     <label class="control-label">Konfirmasi Password<span class="text-danger">*</span></label>
                     <div class="has-icon pull-left">
                         <input type="password" class="form-control checkpassword" name="CONFIRMPASSWORD" id="CONFIRMPASSWORD" data-parsley-required>
