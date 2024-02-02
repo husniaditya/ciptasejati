@@ -371,7 +371,7 @@
                   <tr>
                     <td class="wrapper">
                         <h3>Dear Bapak/Ibu <?= $toName; ?>,</h3>
-                        <p>Terima kasih telah mendaftar sebagai anggota Cipta Sejati. Untuk melanjutkan proses pendaftaran, silahkan klik tombol di bawah ini untuk melakukan konfirmasi akun.</p>
+                        <p>Terima kasih telah mendaftar sebagai anggota Cipta Sejati. Untuk melanjutkan proses pendaftaran, silahkan klik tombol di bawah ini untuk melakukan verifikasi akun.</p>
                         <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                             <tbody>
                               <tr>
@@ -379,7 +379,7 @@
                                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                     <tbody>
                                       <tr>
-                                        <td> <a href="https://ciptasejatiindonesia.com/dashboard/html/aktivasiakun.php?token=<?= $ANGGOTA_KEY; ?>" target="_blank">Konfirmasi Akun</a> </td>
+                                        <td> <a href="https://ciptasejatiindonesia.com/dashboard/html/aktivasiakun.php?token=<?= $ANGGOTA_KEY; ?>" target="_blank">Verifikasi Akun</a> </td>
                                       </tr>
                                     </tbody>
                                   </table>
@@ -388,7 +388,7 @@
                             </tbody>
                           </table>
                       <br>
-                        <h3>Mohon untuk tidak membalas email ini. Untuk melakukan pengecekan silahkan akses melalui web di bawah</h3>
+                        <h3>Mohon untuk tidak membalas email ini.</h3>
                     </td>
                   </tr>
 

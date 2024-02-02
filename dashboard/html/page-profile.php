@@ -53,7 +53,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
                 </div>
                 <!-- Page Header -->
 
-			    <?php include 'module/component/master/page-profile/v_page-profile.php'; ?>
+			    <?php include 'module/component/page-profile/v_page-profile.php'; ?>
             </div>
             <!--/ END Template Container -->
 
@@ -71,15 +71,8 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
         <!--/ END Template Footer -->
 
         <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
-        <!-- Application and vendor script : mandatory -->
-        <script type="text/javascript" src="../javascript/vendor.js"></script>
-        <script type="text/javascript" src="../javascript/core.js"></script>
-        <script type="text/javascript" src="../javascript/backend/app.js"></script>
-        <!--/ Application and vendor script : mandatory -->
-
-        <!-- Plugins and page level script : optional -->
-		<script type="text/javascript" src="../javascript/pace.min.js"></script>
-        <!--/ Plugins and page level script : optional -->
+        <?php include 'module/js.php';?>
+        <script type="text/javascript" src="module/javascript/component/page-profile/profile.js"></script>
         <!--/ END JAVASCRIPT SECTION -->
     </body>
     <!--/ END Body -->
