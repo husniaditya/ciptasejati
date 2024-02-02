@@ -148,6 +148,8 @@ function fetchDataAndPopulateForm(value1, value2) {
             $("#ANGGOTA_RANTING").val(data.ANGGOTA_RANTING);
             $("#CABANG_DESKRIPSI").val(data.CABANG_DESKRIPSI);
             $("#DAERAH_DESKRIPSI").val(data.DAERAH_DESKRIPSI);
+            $("#ANGGOTA_JOIN").val(data.ANGGOTA_JOIN);
+            $("#ANGGOTA_RESIGN").val(data.ANGGOTA_RESIGN);
             $("#ANGGOTA_EMAIL").val(data.ANGGOTA_EMAIL);
             $("#ANGGOTA_HP").val(data.ANGGOTA_HP);
         },
@@ -183,6 +185,45 @@ function fetchDataAndPopulateForm(value1, value2) {
     });
 }
 
+function handleForm(formId, successNotification, failedNotification, updateNotification) {
+    $(formId).submit(function (event) {
+      
+        var anggotaKey = document.getElementById('JANGGOTA_KEY').innerHTML;
+        var cabangKey = document.getElementById('JCABANG_KEY').innerHTML;
+
+        event.preventDefault(); // Prevent the default form submission
+
+        var formData = new FormData($(this)[0]); // Create FormData object from the form
+        var buttonId = $(event.originalEvent.submitter).attr('id'); // Retrieve button ID);
+
+        // Manually add the button title or ID to the serialized data
+        formData.append(buttonId, 'edit');
+
+        $.ajax({
+        type: 'POST',
+        url: 'module/backend/page-profile/t_page-profile.php',
+        data: formData,
+        processData: false, // Prevent jQuery from processing the data
+        contentType: false, // Prevent jQuery from setting content type
+        success: function (response) {
+            // Check the response from the server
+            if (response === 'Success') {
+            // Display success notification
+            successNotification('Data berhasil diubah!');
+            fetchDataAndPopulateForm(anggotaKey,cabangKey);
+            } else {
+            // Display error notification
+            failedNotification(response);
+            }
+        },
+        error: function (xhr, status, error) {
+            // Display error notification
+            failedNotification('Terjadi kesalahan saat mengirim data!');
+        }
+        });
+    });
+}
+
 
 $(document).ready(function() {
     var anggotaKey = document.getElementById('JANGGOTA_KEY').innerHTML;
@@ -190,4 +231,5 @@ $(document).ready(function() {
     // Call the function when needed
     fetchDataAndPopulateForm(anggotaKey,cabangKey);
     callTable()
+    handleForm('#EditProfile-form', SuccessNotification, FailedNotification, UpdateNotification);
 });

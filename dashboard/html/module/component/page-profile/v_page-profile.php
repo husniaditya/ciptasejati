@@ -6,7 +6,7 @@
             <!-- figure with progress -->
             <ul class="list-table">
                 <li style="width:70px;">
-                    <img class="img-circle img-bordered" id="ANGGOTA_PIC" src="" alt="" width="65px">
+                    <img class="img-circle img-bordered" id="ANGGOTA_PIC" src="" alt="" style="text-align: center;overflow: hidden;position: relative;width: 65px;height: 65px;border-radius: 50%;">
                 </li>
                 <li class="text-left">
                     <span class="semibold ellipsis mt0 pull-left"><?= $_SESSION["LOGINIDUS_CS"];?></span>
@@ -65,7 +65,7 @@
                 <!-- tab-pane: profile -->
                 <div class="tab-pane active" id="profile">
                     <!-- form profile -->
-                    <form class="panel form-horizontal form-bordered" name="form-profile">
+                    <form class="panel form-horizontal form-bordered" name="form-profile" id="EditProfile-form">
                         <div class="panel-body pt0 pb0">
                             <div class="form-group header bgcolor-default">
                                 <div class="col-md-12">
@@ -82,7 +82,7 @@
                                         </div>
                                     </div>
                                     <div class="btn-group">
-                                    <input type="file" name="ANGGOTA_PIC_UPLOAD" id="ANGGOTA_PIC_UPLOAD" accept="image/*" onchange="previewImageedit(this);" /> 
+                                    <input type="file" name="ANGGOTA_PIC[]" id="ANGGOTA_PIC" accept="image/*" onchange="previewImageedit(this);" /> 
                                     </div>
                                 </div>
                             </div>
@@ -146,7 +146,7 @@
                             </div>
                         </div>
                         <div class="panel-footer">
-                            <button type="submit" name="saveprofilakun" class="btn btn-primary btn-rounded btn-outline"><i class="fa-regular fa-floppy-disk"></i> Simpan Profil</button>
+                            <button type="submit" name="submit" id="saveprofilakun" class="btn btn-primary btn-rounded btn-outline"><i class="fa-regular fa-floppy-disk"></i> Simpan Profil</button>
                         </div>
                     </form>
                     <!--/ form profile -->
@@ -193,6 +193,18 @@
                                 <label class="col-sm-3 control-label">Daerah</label>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control" name="DAERAH_DESKRIPSI" id="DAERAH_DESKRIPSI" value="" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Tanggal Bergabung</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" name="ANGGOTA_JOIN" id="ANGGOTA_JOIN" value="" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Tanggal Resign</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" name="ANGGOTA_RESIGN" id="ANGGOTA_RESIGN" value="" readonly>
                                 </div>
                             </div>
                             <div class="form-group">

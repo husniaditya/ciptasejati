@@ -4,7 +4,7 @@ require_once ("../../connection/conn.php");
 $ANGGOTA_KEY = $_POST["ANGGOTA_KEY"];
 $CABANG_KEY = $_POST["CABANG_KEY"];
 
-$GetDetail = GetQuery("SELECT a.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,
+$GetDetail = GetQuery("SELECT a.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,DATE_FORMAT(a.ANGGOTA_JOIN, '%d %M %Y') ANGGOTA_JOIN,DATE_FORMAT(a.ANGGOTA_RESIGN, '%d %M %Y') ANGGOTA_RESIGN,
 CASE
     WHEN SUM(k.KAS_JUMLAH) < 0 THEN CONCAT('(', FORMAT(ABS(SUM(k.KAS_JUMLAH)), 0), ')')
     ELSE FORMAT(SUM(k.KAS_JUMLAH), 0)
@@ -41,6 +41,8 @@ while ($detail = $GetDetail->fetch(PDO::FETCH_ASSOC)) {
     
     // Set the values for the array of data Member
     $data['ANGGOTA_ID'] = $detail["ANGGOTA_ID"];
+    $data['ANGGOTA_JOIN'] = $detail["ANGGOTA_JOIN"];
+    $data['ANGGOTA_RESIGN'] = $detail["ANGGOTA_RESIGN"];
     $data['TINGKATAN'] = $detail["TINGKATAN_NAMA"] . " - " . $detail["TINGKATAN_SEBUTAN"];
     $data['ANGGOTA_RANTING'] = $detail["ANGGOTA_RANTING"];
     $data['CABANG_DESKRIPSI'] = $detail["CABANG_DESKRIPSI"];
