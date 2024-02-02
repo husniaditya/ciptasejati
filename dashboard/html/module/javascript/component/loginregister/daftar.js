@@ -36,8 +36,6 @@ $(document).ready(function () {
     // Hide the button
     var resendButton = document.getElementById('resendemail');
     var daftarButton = document.getElementById('savedaftaruser');
-    var passwordbaru = document.getElementById('passwordbaru');
-    var konfirmasi = document.getElementById('konfirmasi');
     resendButton.style.display = 'none';
     daftarButton.style.display = 'block';
 
@@ -71,11 +69,7 @@ $(document).ready(function () {
                 if (data.ANGGOTA_REMARKS === 'ID Anggota belum melakukan verifikasi!') {
                   daftarButton.style.display = 'none';
                   resendButton.style.display = 'block';
-                  passwordbaru.style.display = 'none';
-                  konfirmasi.style.display = 'none';
                 } else {
-                  daftarButton.style.display = 'block';
-                  passwordbaru.style.display = 'block';
                   konfirmasi.style.display = 'block';
                   resendButton.style.display = 'none';
                 }
