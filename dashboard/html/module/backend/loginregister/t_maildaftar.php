@@ -26,8 +26,8 @@ if (isset($_POST["id"])) {
         // CC addresses
         $ccAddresses[] = 'adityahusni90@gmail.com';
         $ccNames[] = 'Husni Aditya A';
-        // $ccAddresses[] = 'agus.riyanto.ckp@gmail.com';
-        // $ccNames[] = 'AGUS RIYANTO';
+        $ccAddresses[] = 'agus.riyanto.ckp@gmail.com';
+        $ccNames[] = 'AGUS RIYANTO';
 
         $subject = 'Verifikasi Pendaftaran Anggota Cipta Sejati Indonesia';
         // Pass $MUTASI_ID to the mutasimail.php

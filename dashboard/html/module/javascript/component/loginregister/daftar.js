@@ -70,7 +70,7 @@ $(document).ready(function () {
                   daftarButton.style.display = 'none';
                   resendButton.style.display = 'block';
                 } else {
-                  konfirmasi.style.display = 'block';
+                  daftarButton.style.display = 'block';
                   resendButton.style.display = 'none';
                 }
             },
