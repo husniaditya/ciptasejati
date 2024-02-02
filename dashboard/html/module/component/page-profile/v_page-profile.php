@@ -146,7 +146,7 @@
                             </div>
                         </div>
                         <div class="panel-footer">
-                            <button type="submit" class="btn btn-primary btn-rounded btn-outline"><i class="fa-regular fa-floppy-disk"></i> Simpan Profil</button>
+                            <button type="submit" name="saveprofilakun" class="btn btn-primary btn-rounded btn-outline"><i class="fa-regular fa-floppy-disk"></i> Simpan Profil</button>
                         </div>
                     </form>
                     <!--/ form profile -->

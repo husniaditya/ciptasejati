@@ -127,7 +127,6 @@ function fetchDataAndPopulateForm(value1, value2) {
         method: 'POST',
         data: { ANGGOTA_KEY: anggotaKey, CABANG_KEY: cabangKey },
         success: function(data) {
-            // console.log('Data:', data);
             // Set the values of the Profile form fields
             $("#ANGGOTA_NAMA").val(data.ANGGOTA_NAMA);
             $("#ANGGOTA_PIC").attr("src", data.ANGGOTA_PIC);
@@ -162,7 +161,6 @@ function fetchDataAndPopulateForm(value1, value2) {
         url: "module/ajax/transaksi/anggota/daftaranggota/aj_getmutasianggota.php",
         data:'ANGGOTA_KEY='+anggotaKey,
         success: function(data){
-            console.log('response mutasi ', anggotaKey, data);
             $("#riwayatmutasi").html(data);
             // Reinitialize Sertifikat Table
         },
@@ -176,7 +174,6 @@ function fetchDataAndPopulateForm(value1, value2) {
         url: "module/ajax/transaksi/anggota/daftaranggota/aj_getmutasikas.php",
         data:'ANGGOTA_KEY='+anggotaKey,
         success: function(data){
-            console.log('response kas ', anggotaKey, data);
             $("#riwayatkas").html(data);
             // Reinitialize Sertifikat Table
         },

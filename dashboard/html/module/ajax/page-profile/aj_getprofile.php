@@ -4,24 +4,22 @@ require_once ("../../connection/conn.php");
 $ANGGOTA_KEY = $_POST["ANGGOTA_KEY"];
 $CABANG_KEY = $_POST["CABANG_KEY"];
 
-$GetDetail = GetQuery("SELECT a.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN FROM m_anggota a
+$GetDetail = GetQuery("SELECT a.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,
+CASE
+    WHEN SUM(k.KAS_JUMLAH) < 0 THEN CONCAT('(', FORMAT(ABS(SUM(k.KAS_JUMLAH)), 0), ')')
+    ELSE FORMAT(SUM(k.KAS_JUMLAH), 0)
+END AS KAS_ANGGOTA
+FROM m_anggota a
 LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
 LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
 LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
+LEFT JOIN t_kas k ON a.ANGGOTA_KEY = k.ANGGOTA_KEY
 WHERE a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0 AND  a.ANGGOTA_KEY = '$ANGGOTA_KEY'");
 
 $data = array();
 
 while ($detail = $GetDetail->fetch(PDO::FETCH_ASSOC)) {
     extract($detail);
-
-    $GetKas = GetQuery("SELECT SUM(KAS_JUMLAH) AS KAS_ANGGOTA 
-    FROM t_kas 
-    WHERE ANGGOTA_KEY = '$ANGGOTA_KEY'");
-
-    while ($kas = $GetKas->fetch(PDO::FETCH_ASSOC)) {
-        extract($kas);
-    }
     
     // Set the values for the array of data Profile
     $data['ANGGOTA_NAMA'] = $detail["ANGGOTA_NAMA"];
@@ -39,7 +37,7 @@ while ($detail = $GetDetail->fetch(PDO::FETCH_ASSOC)) {
     $data['DAERAH_KEY'] = $detail["DAERAH_DESKRIPSI"];
     $data['ANGGOTA_EMAIL'] = $detail["ANGGOTA_EMAIL"];
     // Handle the case where KAS_ANGGOTA is NULL
-    $data['KAS_ANGGOTA'] = isset($kas['KAS_ANGGOTA']) ? $kas['KAS_ANGGOTA'] : 0;
+    $data['KAS_ANGGOTA'] = isset($detail['KAS_ANGGOTA']) ? $detail['KAS_ANGGOTA'] : 0;
     
     // Set the values for the array of data Member
     $data['ANGGOTA_ID'] = $detail["ANGGOTA_ID"];
