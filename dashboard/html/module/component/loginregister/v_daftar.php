@@ -64,6 +64,7 @@
             </div>
             <div class="panel-footer">
                 <button type="submit" class="btn btn-block btn-primary" id="savedaftaruser"><span class="semibold">Daftar</span></button>
+                <button type="submit" class="btn btn-block btn-success" id="resendemail"><span class="semibold">Kirim ulang email verifikasi</span><span id="countdown" style="display:none;"></span></button>
             </div>
         </form>
         <!-- Register form -->

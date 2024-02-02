@@ -33,6 +33,12 @@ function debounce(func, wait, immediate) {
 }
 
 $(document).ready(function () {
+    // Hide the button
+    var resendButton = document.getElementById('resendemail');
+    var daftarButton = document.getElementById('savedaftaruser');
+    resendButton.style.display = 'none';
+    daftarButton.style.display = 'block';
+
     // AJAX function to be called
     function performAjaxCall(value) {
         // Make an AJAX request to fetch additional data based on the selected value
@@ -58,6 +64,14 @@ $(document).ready(function () {
                   $('#cekAnggota').text('');
                 } else {
                   $('#cekAnggota').text(data.ANGGOTA_REMARKS);
+                }
+
+                if (data.ANGGOTA_REMARKS === 'ID Anggota belum melakukan verifikasi!') {
+                  daftarButton.style.display = 'none';
+                  resendButton.style.display = 'block';
+                } else {
+                  daftarButton.style.display = 'block';
+                  resendButton.style.display = 'none';
                 }
             },
             error: function(error) {
@@ -90,6 +104,31 @@ $(document).ready(function () {
         debouncedAjaxCall(formattedValue);
     });
 });
+
+function disableButton() {
+  // Disable the button
+  document.getElementById('resendemail').disabled = true;
+
+  // Show the countdown element
+  var countdownElement = document.getElementById('countdown');
+  countdownElement.style.display = 'inline';
+
+  // Set the initial countdown value
+  var countdownValue = 15;
+
+  // Update the countdown every second
+  var countdownInterval = setInterval(function() {
+    countdownValue -= 1;
+    countdownElement.textContent = '(' + countdownValue + 'detik)';
+
+    // Enable the button and hide the countdown when the countdown reaches 0
+    if (countdownValue <= 0) {
+      clearInterval(countdownInterval);
+      document.getElementById('resendemail').disabled = false;
+      countdownElement.style.display = 'none';
+    }
+  }, 1000); // Update every 1 second
+}
 
 
 // ----- Start of Anggota Section ----- //
@@ -130,7 +169,7 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
           // Check the response from the server
           if (successMessage === 'Success') {
             // Display success notification
-            successNotification('Akun berhasil dibuat, mohon cek email anda untuk konfirmasi akun!');
+            successNotification('Akun berhasil dibuat, mohon cek email anda untuk verifikasi akun!');
   
             // Hide the loading overlay after the initial processing
             hideLoadingOverlay();
@@ -144,7 +183,7 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
               const emailResponse = responses[0];
 
               if (emailResponse === 'Success') {
-                MailNotification('Email pemberitahuan berhasil dikirimkan!');
+                MailNotification('Email verifikasi berhasil dikirimkan!');
               } else {
                 failedNotification(emailResponse);
               }
@@ -154,9 +193,13 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
               errorNotification(error);
             })
             .finally(function () {
+              disableButton();
               // Hide the loading overlay after all asynchronous tasks are complete
               hideLoadingOverlay();
-              document.getElementById("form-register").reset();
+              // document.getElementById("form-register").reset();
+              // Show the button
+              var resendButton = document.getElementById('resendemail');
+              resendButton.style.display = 'block';
             });
           } else {
             // Display error notification
