@@ -77,8 +77,8 @@
                                 <label class="col-sm-3 control-label">Foto</label>
                                 <div class="col-sm-9">
                                     <div class="btn-group pr5">
-                                        <div id="preview-container" style="text-align: center;overflow: hidden;position: relative;width: 50px;height: 50px;border-radius: 50%;">
-                                            <img class="img-circle img-bordered" id="preview-image" src="" alt="" width="50px" >
+                                        <div id="preview-container">
+                                            <img class="img-circle img-bordered" id="preview-image" src="" alt="" style="text-align: center;overflow: hidden;position: relative;width: 50px;height: 50px;">
                                         </div>
                                     </div>
                                     <div class="btn-group">

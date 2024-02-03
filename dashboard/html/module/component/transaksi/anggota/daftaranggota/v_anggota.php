@@ -258,7 +258,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                 <!-- PUT THE SAMPLE UPLOAD PHOTO HERE -->
                                 <label>Foto Anggota </label><br>
                                 <div id="preview-container">
-                                    <img id="preview-image" src="#" alt="Preview" style="max-width: 250px; max-height: 250px;" />
+                                    <img id="preview-image" src="#" alt="Preview" style="width: 300px; height: 300px;text-align: center;overflow: hidden;position: relative; object-fit:contain" />
                                 </div>
                                 <br>
                                 <div>
@@ -754,9 +754,9 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                             <div class="form-group">
                                 <!-- PUT THE SAMPLE UPLOAD PHOTO HERE -->
                                 <label>Foto Anggota </label><br>
-                                <div id="loadpicedit" style="display: block;"></div>
+                                <div id="loadpicedit"></div>
                                 <div id="preview-container-edit">
-                                    <img id="preview-image-edit" src="#" alt="Preview" style="max-width: 250px; max-height: 250px;" />
+                                    <img id="preview-image-edit" src="#" alt="Preview" style="width: 300px; height: 300px;text-align: center;overflow: hidden;position: relative; object-fit:contain" />
                                 </div>
                                 <br>
                                 <div>
