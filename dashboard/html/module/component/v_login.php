@@ -19,12 +19,16 @@ include "module/backend/t_login.php";
                 <div class="panel-body">
                     <div class="form-group">
                         <div class="form-stack has-icon pull-left">
-                            <input name="username" type="text" class="form-control input-lg" placeholder="Username" data-parsley-errors-container="#error-container" data-parsley-error-message="Please fill in your username" data-parsley-required>
+                            <input name="username" type="text" class="form-control input-lg" placeholder="ID Anggota" data-parsley-errors-container="#error-container" data-parsley-error-message="Please fill in your username" data-parsley-required>
                             <i class="ico-user2 form-control-icon"></i>
                         </div>
                         <div class="form-stack has-icon pull-left">
-                            <input name="password" type="password" class="form-control input-lg" placeholder="Password" data-parsley-errors-container="#error-container" data-parsley-error-message="Please fill in your password" data-parsley-required>
-                            <i class="ico-lock2 form-control-icon"></i>
+                            <input name="password" id="NEWPASSWORD" type="password" class="form-control input-lg" placeholder="Password" data-parsley-errors-container="#error-container" data-parsley-error-message="Please fill in your password" data-parsley-required>
+                            <div class="input-group-append form-control-icon" onclick="togglePassword('NEWPASSWORD')">
+                                <span class="input-group-text toggle-password">
+                                    <i class="fas fa-lock form-control-icon"></i>
+                                </span>
+                            </div>
                         </div>
                     </div>
 

@@ -1,10 +1,23 @@
 
 function callTable() {
+    // Destroy DataTable for riwayatmutasi-table if it exists
+    if ($.fn.DataTable.isDataTable('#riwayatmutasi-table')) {
+      $('#riwayatmutasi-table').DataTable().destroy();
+    }
+    if ($.fn.DataTable.isDataTable('#mutasikas-table')) {
+      $('#mutasikas-table').DataTable().destroy();
+    }
+    if ($.fn.DataTable.isDataTable('#idsertifikat-table')) {
+      $('#idsertifikat-table').DataTable().destroy();
+    }
+    if ($.fn.DataTable.isDataTable('#riwayatppd-table')) {
+      $('#riwayatppd-table').DataTable().destroy();
+    }
 
     $('#riwayatmutasi-table').DataTable({
     responsive: true,
     order: [],
-    dom: 'Bfrtlip',
+    dom: 'Bfrtip',
     columnDefs: [
         { width: '100px', targets: 0 }, // Set width for column 1
         { width: '150px', targets: 1 }, // Set width for column 2
@@ -27,7 +40,7 @@ function callTable() {
     $('#mutasikas-table').DataTable({
         responsive: true,
         order: [], // Adjust the column index and order direction
-        dom: 'Bfrtlip',
+        dom: 'Bfrtip',
         paging: true,
         scrollX: true,
         scrollY: '350px', // Set the desired height here
@@ -54,7 +67,7 @@ function callTable() {
     $('#idsertifikat-table').DataTable({
     responsive: true,
     order: [[9, 'asc']],
-    dom: 'Bfrtlip',
+    dom: 'Bfrtip',
     columnDefs: [
         { width: '100px', targets: 0 }, // Set width for column 1
         { width: '150px', targets: 1 }, // Set width for column 2
@@ -79,7 +92,7 @@ function callTable() {
     $('#riwayatppd-table').DataTable({
     responsive: true,
     order: [[7, 'asc']],
-    dom: 'Bfrtlip',
+    dom: 'Bfrtip',
     columnDefs: [
         { width: '100px', targets: 0 }, // Set width for column 1
         { width: '150px', targets: 1 }, // Set width for column 2
@@ -163,8 +176,11 @@ function fetchDataAndPopulateForm(value1, value2) {
         url: "module/ajax/transaksi/anggota/daftaranggota/aj_getmutasianggota.php",
         data:'ANGGOTA_KEY='+anggotaKey,
         success: function(data){
-            $("#riwayatmutasi").html(data);
-            // Reinitialize Sertifikat Table
+        // Destroy the DataTable before updating
+        $('#riwayatmutasi-table').DataTable().destroy();
+        $("#riwayatmutasi").html(data);
+        // Reinitialize Sertifikat Table
+        callTable();
         },
         error: function(error) {
             console.error('AJAX error:', error);
@@ -176,8 +192,11 @@ function fetchDataAndPopulateForm(value1, value2) {
         url: "module/ajax/transaksi/anggota/daftaranggota/aj_getmutasikas.php",
         data:'ANGGOTA_KEY='+anggotaKey,
         success: function(data){
+            // Destroy the DataTable before updating
+            $('#mutasikas-table').DataTable().destroy();
             $("#riwayatkas").html(data);
             // Reinitialize Sertifikat Table
+            callTable();
         },
         error: function(error) {
             console.error('AJAX error:', error);

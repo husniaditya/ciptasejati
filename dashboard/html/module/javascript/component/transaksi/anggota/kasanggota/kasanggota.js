@@ -656,7 +656,7 @@ $(document).on("click", ".open-EditKasAnggota", function () {
         // Wait for the options in the second dropdown to be populated before setting its value
         setTimeout(function () {
         $(".modal-body #selectize-dropdown12")[0].selectize.setValue(data.CABANG_KEY);
-        }, 100); // You may need to adjust the delay based on your application's behavior
+        }, 200); // You may need to adjust the delay based on your application's behavior
         setTimeout(function () {
         $(".modal-body #selectize-dropdown4")[0].selectize.setValue(anggota);
         }, 300); // You may need to adjust the delay based on your application's behavior
@@ -673,13 +673,13 @@ $(document).on("click", ".open-EditKasAnggota", function () {
         $(".modal-body #selectize-dropdown4")[0].selectize.setValue(anggota);
         setTimeout(function () {
           $("#editKAS_JENIS").val(data.KAS_JENIS);
-        }, 100); // You may need to adjust the delay based on your application's behavior
+        }, 200); // You may need to adjust the delay based on your application's behavior
         setTimeout(function () {
           $("#editKAS_SALDOAWAL").val(data.SALDOAWAL);
           $("#editKAS_DK").val(data.KAS_DK);
           $("#editKAS_JUMLAH").val(data.KAS_JUMLAH);
           $("#editKAS_SALDOAKHIR").val(data.FKAS_SALDO);
-        }, 200); // You may need to adjust the delay based on your application's behavior
+        }, 300); // You may need to adjust the delay based on your application's behavior
       }
       
     },

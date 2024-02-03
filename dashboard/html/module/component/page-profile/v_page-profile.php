@@ -31,13 +31,13 @@
             <ul class="nav nav-section nav-justified mt15">
                 <li>
                     <div class="section">
-                        <h4 class="nm semibold" id="CABANG_DESKRIPSI2"></h4>
+                        <h5 class="nm semibold" id="CABANG_DESKRIPSI2"></h5>
                         <p class="nm text-muted">Cabang</p>
                     </div>
                 </li>
                 <li>
                     <div class="section">
-                        <h4 class="nm semibold" id="KAS_ANGGOTA"></h4>
+                        <h5 class="nm semibold" id="KAS_ANGGOTA"></h5>
                         <p class="nm text-muted">Saldo Kas</p>
                     </div>
                 </li>
@@ -49,10 +49,10 @@
             <ul class="list-group list-group-tabs">
                 <li class="list-group-item active"><a href="#profile" data-toggle="tab"><i class="ico-user2 mr5"></i> Profil Pengguna</a></li>
                 <li class="list-group-item"><a href="#account" data-toggle="tab"><i class="ico-archive2 mr5"></i> Informasi Keanggotaan</a></li>
-                <li class="list-group-item"><a href="#mutasi" data-toggle="tab"><i class="fa-solid fa-recycle"></i> Riwayat Mutasi</a></li>
                 <li class="list-group-item"><a href="#idsertifikat" data-toggle="tab"><i class="fa-regular fa-address-card"></i> ID &amp; Sertifikat</a></li>
                 <li class="list-group-item"><a href="#mutasikas" data-toggle="tab"><i class="fa-solid fa-money-bill-transfer"></i> Mutasi Kas</a></li>
                 <li class="list-group-item"><a href="#riwayatppd" data-toggle="tab"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat PPD</a></li>
+                <li class="list-group-item"><a href="#mutasi" data-toggle="tab"><i class="fa-solid fa-recycle"></i> Riwayat Mutasi</a></li>
             </ul>
             <!-- tab menu -->
         </div>

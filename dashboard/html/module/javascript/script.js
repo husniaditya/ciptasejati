@@ -15,6 +15,21 @@ $(document).on('keyup','.checkpassword',function(){
         // console.log(newpassword, confirmpassword);
 });
 
+function togglePassword(passwordId) {
+  var passwordInput = document.getElementById(passwordId);
+  var icon = passwordInput.closest('.has-icon').querySelector(".toggle-password i");
+
+  if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      icon.classList.remove("fa-lock");
+      icon.classList.add("fa-unlock-alt");
+  } else {
+      passwordInput.type = "password";
+      icon.classList.remove("fa-unlock-alt");
+      icon.classList.add("fa-lock");
+  }
+}
+
 function loadAndRefresh() {
     // Load content initially when the document is ready
     $('#loadnotif').load('./module/ajax/header/aj_loadnotif.php');

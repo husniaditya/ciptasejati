@@ -13,7 +13,7 @@
                 <div class="form-group">
                     <label class="control-label">ID Anggota<span class="text-danger">*</span></label>
                     <div class="has-icon pull-left">
-                        <input type="text" class="form-control" name="ANGGOTA_ID" maxlength="16" data-parsley-required>
+                        <input type="text" class="form-control" name="ANGGOTA_ID" maxlength="16" placeholder="ID Anggota" data-parsley-required>
                         <i class="ico-user2 form-control-icon"></i>
                     </div>
                     <label class="control-label"><i id="cekAnggota" style="color: red;"></i></label>
@@ -40,16 +40,25 @@
                 </div>
                 <div class="form-group" id="passwordbaru">
                     <label class="control-label">Password<span class="text-danger">*</span></label>
-                    <div class="has-icon pull-left">
-                        <input type="password" class="form-control checkpassword" name="NEWPASSWORD" id="NEWPASSWORD" data-parsley-required>
-                        <i class="ico-key2 form-control-icon"></i>
+                    <div class="has-icon pull-left input-group">
+                        <input type="password" class="form-control checkpassword" name="NEWPASSWORD" id="NEWPASSWORD" placeholder="Password" data-parsley-required>
+                        <div class="input-group-append form-control-icon" onclick="togglePassword('NEWPASSWORD')">
+                            <span class="input-group-text toggle-password">
+                                <i class="fas fa-lock fa-lg form-control-icon"></i>
+                            </span>
+                        </div>
                     </div>
                 </div>
+
                 <div class="form-group" id="konfirmasi">
                     <label class="control-label">Konfirmasi Password<span class="text-danger">*</span></label>
-                    <div class="has-icon pull-left">
-                        <input type="password" class="form-control checkpassword" name="CONFIRMPASSWORD" id="CONFIRMPASSWORD" data-parsley-required>
-                        <i class="ico-asterisk form-control-icon"></i>
+                    <div class="has-icon pull-left input-group">
+                        <input type="password" class="form-control checkpassword" name="CONFIRMPASSWORD" id="CONFIRMPASSWORD" placeholder="Konfirmasi Password" data-parsley-required>
+                        <div class="input-group-append form-control-icon" onclick="togglePassword('CONFIRMPASSWORD')">
+                            <span class="input-group-text toggle-password">
+                                <i class="fas fa-lock fa-lg form-control-icon"></i>
+                            </span>
+                        </div>
                     </div>
                     <div id="passwordcheck"></div><br>
                 </div>
