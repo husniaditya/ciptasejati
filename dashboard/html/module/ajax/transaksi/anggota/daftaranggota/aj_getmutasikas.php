@@ -50,6 +50,9 @@ if (isset($_POST['ANGGOTA_KEY'])) {
 
         ?>
         <tr>
+            <td align="center">
+                <a href="assets/print/transaksi/kas/print_kas.php?id=<?=$KAS_ID; ?>" target="_blank" style="color: #00b1e1;"><i class="fa-solid fa-print"></i> Cetak</a>
+            </td>
             <td><?= $KAS_ID; ?></td>
             <td align="center"><?= $KAS_JENIS; ?></td>
             <td align="center"><?= $FKAS_TANGGAL; ?></td>

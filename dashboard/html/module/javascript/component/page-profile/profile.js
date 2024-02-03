@@ -27,6 +27,7 @@ function callTable() {
         { width: '100px', targets: 5 }, // Set width for column 6
         { width: '100px', targets: 6 }, // Set width for column 7
         { width: '100px', targets: 7 }, // Set width for column 8
+        { width: '100px', targets: 8 }, // Set width for column 9
         // Add more columnDefs as needed
     ],
     paging: true,
@@ -144,6 +145,7 @@ function fetchDataAndPopulateForm(value1, value2) {
             $("#ANGGOTA_NAMA").val(data.ANGGOTA_NAMA);
             $("#ANGGOTA_PIC").attr("src", data.ANGGOTA_PIC);
             $("#preview-image").attr("src", data.ANGGOTA_PIC);
+            $("#profileImage").attr("src", data.ANGGOTA_PIC);
             $("#ANGGOTA_TEMPAT_LAHIR").val(data.ANGGOTA_TEMPAT_LAHIR);
             $("#datepicker44").val(data.ANGGOTA_TANGGAL_LAHIR);
             $("#ANGGOTA_AGAMA").val(data.ANGGOTA_AGAMA);
