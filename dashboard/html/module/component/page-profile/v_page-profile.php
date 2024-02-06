@@ -65,7 +65,7 @@
                 <!-- tab-pane: profile -->
                 <div class="tab-pane active" id="profile">
                     <!-- form profile -->
-                    <form class="panel form-horizontal form-bordered" name="form-profile" id="EditProfile-form">
+                    <form method="post" class="panel form-horizontal form-bordered" name="form-profile" id="EditProfile-form"  data-parsley-validate>
                         <div class="panel-body pt0 pb0">
                             <div class="form-group header bgcolor-default">
                                 <div class="col-md-12">
@@ -89,16 +89,16 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Nama</label>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control" name="ANGGOTA_NAMA" id="ANGGOTA_NAMA" value="">
+                                    <input type="text" class="form-control" name="ANGGOTA_NAMA" id="ANGGOTA_NAMA" value="" data-parsley-required data-parsley-maxlength="50">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Tempat &amp; Tanggal Lahir</label>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control" name="ANGGOTA_TEMPAT_LAHIR" id="ANGGOTA_TEMPAT_LAHIR" value="">
+                                    <input type="text" class="form-control" name="ANGGOTA_TEMPAT_LAHIR" id="ANGGOTA_TEMPAT_LAHIR" value="" data-parsley-required>
                                 </div>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control" id="datepicker44" name="ANGGOTA_TANGGAL_LAHIR" value="" readonly/>
+                                    <input type="text" class="form-control" id="datepicker44" name="ANGGOTA_TANGGAL_LAHIR" value="" readonly data-parsley-required/>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -128,20 +128,20 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">KTP</label>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control" name="ANGGOTA_KTP" id="ANGGOTA_KTP" value="" readonly>
+                                    <input type="text" class="form-control" name="ANGGOTA_KTP" id="ANGGOTA_KTP" value="" readonly data-parsley-required>
                                     <p class="help-block">Hubungi koordinator untuk merubah data ini.</p>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Alamat</label>
                                 <div class="col-sm-5">
-                                    <textarea type="text" rows="3" class="form-control" id="ANGGOTA_ALAMAT" name="ANGGOTA_ALAMAT" value=""></textarea>
+                                    <textarea type="text" rows="3" class="form-control" id="ANGGOTA_ALAMAT" name="ANGGOTA_ALAMAT" value="" data-parsley-required></textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Pekerjaan</label>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control" name="ANGGOTA_PEKERJAAN" id="ANGGOTA_PEKERJAAN" value="">
+                                    <input type="text" class="form-control" name="ANGGOTA_PEKERJAAN" id="ANGGOTA_PEKERJAAN" value="" data-parsley-required>
                                 </div>
                             </div>
                         </div>

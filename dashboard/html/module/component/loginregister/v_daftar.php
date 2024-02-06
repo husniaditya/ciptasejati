@@ -41,7 +41,7 @@
                 <div class="form-group" id="passwordbaru">
                     <label class="control-label">Password<span class="text-danger">*</span></label>
                     <div class="has-icon pull-left input-group">
-                        <input type="password" class="form-control checkpassword" name="NEWPASSWORD" id="NEWPASSWORD" placeholder="Password" data-parsley-required>
+                        <input type="password" class="form-control checkpassword" name="NEWPASSWORD" id="NEWPASSWORD" placeholder="Password" data-parsley-required data-parsley-minlength="8" data-parsley-pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" data-parsley-trigger="keyup" data-parsley-error-message="Password must be at least 8 characters long and contain at least one symbol, one uppercase letter, and one number">
                         <div class="input-group-append form-control-icon" onclick="togglePassword('NEWPASSWORD')">
                             <span class="input-group-text toggle-password">
                                 <i class="fas fa-lock fa-lg form-control-icon"></i>

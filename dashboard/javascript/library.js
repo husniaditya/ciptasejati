@@ -145,6 +145,8 @@ $(document).ready(function() {
   // Clear form fields when the modal is hidden
   $('.modal').on('hidden.bs.modal', function() {
     $(this).find('form')[0].reset();
+    var text = document.getElementById('passwordcheck');
+    text.style.display = 'none';
   });
 });
 // ----- End of Clear form fields when the modal is hidden ----- //
@@ -161,8 +163,14 @@ $(document).ready(function() {
     // Manually add the button name or ID to the serialized data
     formData += '&' + encodeURIComponent(buttonId) + '=' + encodeURIComponent('clicked');
 
+    var password = document.getElementById('NEWPASSWORD');
+    var pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-    $.ajax({
+    if (!pattern.test(password.value)) {
+      // Display error notification
+      return;
+    } else {
+      $.ajax({
       type: 'POST',
       url: 'module/backend/t_changepassword.php',
       data: formData,
@@ -181,6 +189,7 @@ $(document).ready(function() {
         }
       }
     });
+    }
     // console.log(formData);
   });
 });

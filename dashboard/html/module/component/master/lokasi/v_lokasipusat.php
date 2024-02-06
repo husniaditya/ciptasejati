@@ -124,7 +124,7 @@ if ($_SESSION["ADD_LokasiPusat"] == "Y") {
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Map Link<span class="text-danger">*</span></label>
-                                <textarea type="text" rows="5" class="form-control" id="PUSAT_MAP" name="PUSAT_MAP" value="" onkeyup="getMapsAdd(this.value)" onClick="getMapsAdd(this.value)" data-parsley-required></textarea>
+                                <textarea type="text" rows="5" class="form-control" id="PUSAT_MAP" name="PUSAT_MAP" value="" onkeyup="getMapsAdd(this.value)" onClick="getMapsAdd(this.value)" data-parsley-required data-parsley-type="url"></textarea>
                             </div> 
                         </div>
                     </div>
@@ -270,7 +270,7 @@ if ($_SESSION["ADD_LokasiPusat"] == "Y") {
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Map Link<span class="text-danger">*</span></label>
-                                <textarea type="text" rows="5" class="form-control" id="editPUSAT_MAP" name="PUSAT_MAP" value="" onkeyup="getMapsEdit(this.value)" onClick="getMapsEdit(this.value)" data-parsley-required></textarea>
+                                <textarea type="text" rows="5" class="form-control" id="editPUSAT_MAP" name="PUSAT_MAP" value="" onkeyup="getMapsEdit(this.value)" onClick="getMapsEdit(this.value)" data-parsley-required data-parsley-type="url"></textarea>
                             </div> 
                         </div>
                     </div>

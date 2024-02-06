@@ -1,6 +1,6 @@
 
 <div id="ChangePassword" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="changepassword-form" method="post" class="form form-horizontal form-striped" data-parsley-validate>
+    <form id="changepassword-form" class="form form-horizontal form-striped" action="" data-parsley-validate>
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header text-center">
@@ -29,7 +29,7 @@
                             <label class="control-label col-sm-4">Password Baru<span class="text-danger">*</span></label>
                             <div class="col-sm-8">
                                 <div class="form-stack has-icon pull-left">
-                                    <input name="NEWPASSWORD" id="NEWPASSWORD" type="password" class="form-control checkpassword" required data-parsley-required>
+                                    <input type="password" class="form-control checkpassword" name="NEWPASSWORD" id="NEWPASSWORD" data-parsley-required data-parsley-minlength="8" data-parsley-pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" data-parsley-trigger="keyup" data-parsley-error-message="Password must be at least 8 characters long and contain at least one symbol, one uppercase letter, and one number">
                                     <div class="input-group-append form-control-icon" onclick="togglePassword('NEWPASSWORD')">
                                         <span class="input-group-text toggle-password">
                                             <i class="fas fa-lock fa-lg form-control-icon"></i>

@@ -352,7 +352,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Nama</label><span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="ANGGOTA_NAMA" name="ANGGOTA_NAMA" value="" data-parsley-required required>
+                                <input type="text" class="form-control" id="ANGGOTA_NAMA" name="ANGGOTA_NAMA" value="" data-parsley-required data-parsley-maxlength="50" required>
                             </div> 
                         </div>
                         <div class="col-md-3">
@@ -398,7 +398,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>KTP</label><span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="ANGGOTA_KTP" name="ANGGOTA_KTP" value="" placeholder="Inputkan no KTP" data-parsley-required required>
+                                <input type="text" class="form-control" id="ANGGOTA_KTP" name="ANGGOTA_KTP" value="" placeholder="Inputkan no KTP" data-parsley-required data-parsley-type="number" required>
                             </div> 
                         </div>
                         <div class="col-md-6">
@@ -418,7 +418,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>No HP</label><span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="ANGGOTA_HP" name="ANGGOTA_HP" value="" data-parsley-required required>
+                                <input type="text" class="form-control" id="ANGGOTA_HP" name="ANGGOTA_HP" value="" data-parsley-required data-parsley-type="number" required>
                             </div> 
                         </div>
                     </div>
@@ -426,7 +426,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Email</label><span class="text-danger">*</span></label>
-                                <input type="email" class="form-control" id="ANGGOTA_EMAIL" name="ANGGOTA_EMAIL" data-parsley-required required/>
+                                <input type="email" class="form-control" id="ANGGOTA_EMAIL" name="ANGGOTA_EMAIL" data-parsley-required data-parsley-type="email" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -862,7 +862,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Nama</label><span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="editANGGOTA_NAMA" name="ANGGOTA_NAMA" value="" data-parsley-required required>
+                                <input type="text" class="form-control" id="editANGGOTA_NAMA" name="ANGGOTA_NAMA" value="" data-parsley-required data-parsley-maxlength="50" required>
                             </div> 
                         </div>
                         <div class="col-md-3">
@@ -908,7 +908,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>KTP</label><span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="editANGGOTA_KTP" name="ANGGOTA_KTP" value="" placeholder="Inputkan no KTP" data-parsley-required required>
+                                <input type="text" class="form-control" id="editANGGOTA_KTP" name="ANGGOTA_KTP" value="" placeholder="Inputkan no KTP" data-parsley-required data-parsley-type="number" required>
                             </div> 
                         </div>
                         <div class="col-md-6">
@@ -928,7 +928,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>No HP</label><span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="editANGGOTA_HP" name="ANGGOTA_HP" value="" data-parsley-required required>
+                                <input type="text" class="form-control" id="editANGGOTA_HP" name="ANGGOTA_HP" value="" data-parsley-required data-parsley-type="number" required>
                             </div> 
                         </div>
                     </div>
@@ -936,7 +936,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Email</label><span class="text-danger">*</span></label>
-                                <input type="email" class="form-control" id="editANGGOTA_EMAIL" name="ANGGOTA_EMAIL" data-parsley-required required/>
+                                <input type="email" class="form-control" id="editANGGOTA_EMAIL" name="ANGGOTA_EMAIL" data-parsley-required data-parsley-type="email" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
