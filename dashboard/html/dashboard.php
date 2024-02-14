@@ -69,6 +69,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
         <script type="text/javascript" src="module/javascript/component/dashboard/datatingkatan.js"></script>
         <script type="text/javascript" src="module/javascript/component/dashboard/dataaktivitas.js"></script>
         <script type="text/javascript" src="module/javascript/component/dashboard/pieaktivitas.js"></script>
+        <script type="text/javascript" src="module/javascript/component/dashboard/datastatus.js"></script>
         <script type="text/javascript" src="module/javascript/component/dashboard/dashboard.js"></script>
         <!--/ END JAVASCRIPT SECTION -->
     </body>

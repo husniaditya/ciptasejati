@@ -18,6 +18,11 @@
         <div id="pieAktivitasChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
     </div>
     <div class="col-md-6" style="margin-top: 20px;">
+        <div id="statusChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6" style="margin-top: 20px;">
         <div class="panel panel-default" id="demo">
             <div class="panel-heading">
                 <h3 class="panel-title">Jadwal Kegiatan Mendatang</h3>
