@@ -172,7 +172,7 @@ $(document).ready(function() {
     } else {
       $.ajax({
       type: 'POST',
-      url: 'module/backend/t_changepassword.php',
+      url: 'module/backend/loginregister/t_changepassword.php',
       data: formData,
       success: function(response) {
         // Check the response from the server

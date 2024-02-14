@@ -13,7 +13,7 @@
             <!-- START Template Container -->
             <section class="container">
                 <!-- START row -->
-                <?php include 'module/component/v_lupapassword.php';?>
+                <?php include 'module/component/loginregister/v_lupapassword.php';?>
                 <!--/ END row -->
             </section>
             <!--/ END Template Container -->
@@ -23,6 +23,7 @@
         <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
         <!-- Application and vendor script : mandatory -->
         <?php include('module/js.php'); ?>
+        <script type="text/javascript" src="module/javascript/component/loginregister/lupapassword.js"></script>
         <!--/ Plugins and page level script : optional -->
         <!--/ END JAVASCRIPT SECTION -->
     </body>

@@ -42,12 +42,12 @@ if (isset($_POST["saveprofilakun"])) {
                 $idCardFileDestination = "./assets/images/daftaranggota/".$CABANG_DESKRIPSI."/".$ANGGOTA_NAMA."_".$lastAnggotaId."/" . $idCardFileName;
 
                 GetQuery("update m_anggota set ANGGOTA_PIC = '$idCardFileDestination' where ANGGOTA_KEY = '$USER_KEY'");
+
+                $_SESSION['LOGINPP_CS'] = $idCardFileDestination;
             }
         }
 
         GetQuery("UPDATE m_anggota set ANGGOTA_NAMA = '$ANGGOTA_NAMA', ANGGOTA_TEMPAT_LAHIR = '$ANGGOTA_TEMPAT_LAHIR', ANGGOTA_TANGGAL_LAHIR = '$ANGGOTA_TANGGAL_LAHIR', ANGGOTA_AGAMA = '$ANGGOTA_AGAMA', ANGGOTA_KELAMIN = '$ANGGOTA_KELAMIN', ANGGOTA_ALAMAT = '$ANGGOTA_ALAMAT', ANGGOTA_PEKERJAAN = '$ANGGOTA_PEKERJAAN' where ANGGOTA_KEY = '$USER_KEY'");
-        
-        $_SESSION['LOGINPP_CS'] = $idCardFileDestination;
 
         $response="Success";
         echo $response;

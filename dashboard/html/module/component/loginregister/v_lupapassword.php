@@ -7,37 +7,31 @@
         </div>
         <!--/ Brand -->
 
-        <!-- Register form -->
-        <form class="panel" name="form-register" action="">
+        <!-- Reset form -->
+        <form class="panel" name="form-reset" id="form-reset" action="" data-parsley-validate>
             <div class="panel-body">
                 <div class="form-group">
-                    <label class="control-label">ID Anggota</label>
+                    <label class="control-label">ID Anggota<span class="text-danger">*</span></label>
                     <div class="has-icon pull-left">
-                        <input type="text" class="form-control" name="ID_ANGGOTA" data-parsley-required>
+                        <input type="text" class="form-control" name="ANGGOTA_ID" id="ANGGOTA_ID" maxlength="16" placeholder="Masukkan ID Anggota" data-parsley-required>
                         <i class="ico-user2 form-control-icon"></i>
                     </div>
+                    <label class="control-label"><i id="cekAnggota" style="color: red;"></i></label>
                 </div>
             </div>
             <hr class="nm">
             <div class="panel-body">
-                <p class="semibold text-muted">Untuk konfirmasi reset password akun, kami membutuhkan email dan nomor HP untuk mengirimkan kode aktivasi.</p>
+                <p class="semibold text-muted text-justify">Password sementara akan dikirimkan melalui email anda yang sudah terdaftar. Dimohon untuk segera mengganti password setelah login ke dalam web</p>
                 <div class="form-group">
-                    <label class="control-label">No HP</label>
+                    <label class="control-label">Email<span class="text-danger">*</span></label>
                     <div class="has-icon pull-left">
-                        <input type="password" class="form-control" name="retype-password" data-parsley-equalto="input[name=password]">
-                        <i class="ico-phone2 form-control-icon"></i>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Email</label>
-                    <div class="has-icon pull-left">
-                        <input type="email" class="form-control" name="email" placeholder="you@mail.com">
+                        <input type="email" class="form-control" name="ANGGOTA_EMAIL" id="ANGGOTA_EMAIL" readonly  data-parsley-required>
                         <i class="ico-envelop form-control-icon"></i>
                     </div>
                 </div>
             </div>
             <div class="panel-footer">
-                <button type="submit" class="btn btn-block btn-primary"><span class="semibold">Kirim Kode Aktivasi</span></button>
+                <button type="submit" class="btn btn-block btn-primary" id="sendemail"><span class="semibold">Kirim Kode Reset Password</span><span id="countdown" style="display:none;"></span></button>
             </div>
         </form>
         <!-- Register form -->
