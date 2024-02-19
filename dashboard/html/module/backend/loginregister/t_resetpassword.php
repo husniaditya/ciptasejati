@@ -15,7 +15,7 @@ if (isset($_POST["sendemail"])) {
         $getEmail = GetQuery("SELECT a.ANGGOTA_EMAIL
         FROM m_anggota a
         INNER JOIN m_user u on a.ANGGOTA_ID = u.ANGGOTA_ID
-        WHERE a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0 AND a.ANGGOTA_ID = '$ANGGOTA_ID'");
+        WHERE a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0 and u.USER_STATUS = 0 AND a.ANGGOTA_ID = '$ANGGOTA_ID'");
 
         if ($getEmail->rowCount() > 0) {
             while ($dataEmail = $getEmail->fetch(PDO::FETCH_ASSOC)) {

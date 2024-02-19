@@ -1,6 +1,8 @@
 <?php
 require_once("../../../../module/connection/conn.php");
 
+$USER_CABANG = $_SESSION['LOGINCAB_CS'];
+
 // Fetch data from the database
 $getStatus = GetQuery("SELECT 
     t.TINGKATAN_NAMA,
@@ -11,7 +13,7 @@ $getStatus = GetQuery("SELECT
     LEFT JOIN 
     m_anggota a ON a.TINGKATAN_ID = t.TINGKATAN_ID 
     WHERE 
-    t.DELETION_STATUS = 0 AND a.DELETION_STATUS = 0 AND a.ANGGOTA_AKSES <> 'Administrator'
+    t.DELETION_STATUS = 0 AND a.DELETION_STATUS = 0 AND a.ANGGOTA_AKSES <> 'Administrator' and a.CABANG_KEY = '$USER_CABANG'
     GROUP BY 
     t.TINGKATAN_NAMA
     ORDER BY t.TINGKATAN_LEVEL"
