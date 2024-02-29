@@ -6,7 +6,7 @@ ORDER BY c.CHANGELOG_DATE desc");
 ?>
 <div id="ChangeLog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form id="ChangeLog-form" class="form form-horizontal form-striped" action="" data-parsley-validate>
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
@@ -18,14 +18,14 @@ ORDER BY c.CHANGELOG_DATE desc");
                         <table class="table table-striped table-bordered" id="logversi-table">
                             <thead>
                                 <tr>
-                                    <th>Versi</th>
-                                    <th>Deskripsi</th>
+                                    <th>Versi </th>
+                                    <th>Deskripsi </th>
                                     <th>Tanggal Versi</th>
                                     <th>Input Oleh</th>
                                     <th>Input Tanggal</th>
                                 </tr>
                             </thead>
-                            <tbody id="logversidata">
+                            <tbody>
                                 <?php
                                 while($rowVersi = $GetVersi->fetch(PDO::FETCH_ASSOC)) {
                                     extract($rowVersi);
@@ -33,7 +33,7 @@ ORDER BY c.CHANGELOG_DATE desc");
                                     <tr>
                                         <td align="center"><b><?= $CHANGELOG_VERSI; ?></b></td>
                                         <td>
-                                            <b><?= $CHANGELOG_HEADER; ?><br></b>
+                                            <b><?= $CHANGELOG_HEADER; ?></b><br>
                                             <?php
                                             $DetailVersi = GetQuery("SELECT * FROM d_changelog WHERE CHANGELOG_ID = '$CHANGELOG_ID'");
                                             while($rowDetailVersi = $DetailVersi->fetch(PDO::FETCH_ASSOC)) {

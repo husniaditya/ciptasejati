@@ -137,8 +137,35 @@ function handleNotif(formId, successNotification, failedNotification, updateNoti
   
   
 $(document).ready(function() {
-// Approve Anggota
-handleNotif('#ApproveNotifMutasi-form', UpdateNotification, FailedNotification, UpdateNotification);
+
+  $('#ChangeLog').on('shown.bs.modal', function () {
+    if ($.fn.DataTable.isDataTable('#logversi-table')) {
+      $('#logversi-table').DataTable().destroy();
+    }
+
+    $('#logversi-table').DataTable({
+      responsive: true,
+      order: [],
+      dom: 'frtip',
+      columnDefs: [
+        { width: '10%', targets: 0 }, // Set width for column 1
+        { width: '50%', targets: 1 }, // Set width for column 2
+        { width: '20%', targets: 2 }, // Set width for column 3
+        { width: '20%', targets: 3 }, // Set width for column 4
+        { width: '20%', targets: 4 }, // Set width for column 5
+        // Add more columnDefs as needed
+      ],
+      pageLength: 5,
+      scrollY: '350px', // Set the desired height here
+      scrollCollapse: true, // Enable vertical scrolling
+      initComplete: function(settings, json) {
+        $('#ChangeLog').modal('handleUpdate');
+      }
+    });
+  });
+
+  // Approve Anggota
+  handleNotif('#ApproveNotifMutasi-form', UpdateNotification, FailedNotification, UpdateNotification);
 });
 
 function getNotif(obj) {
@@ -319,3 +346,4 @@ $(document).on("click", ".open-ViewNotifKas", function () {
   
   // console.log(id);
 });
+
