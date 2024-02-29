@@ -16,8 +16,10 @@ while ($rowDetail = $GetDetail->fetch(PDO::FETCH_ASSOC)) {
     $data['DAERAH_DESKRIPSI'] = $rowDetail["DAERAH_DESKRIPSI"];
     $data['CABANG_KEY'] = $rowDetail["CABANG_KEY"];
     $data['CABANG_DESKRIPSI'] = $rowDetail["CABANG_DESKRIPSI"];
+    $data['TINGKATAN_ID'] = $rowDetail["TINGKATAN_ID"];
     $data['TINGKATAN_NAMA'] = $rowDetail["TINGKATAN_NAMA"];
     $data['TINGKATAN_SEBUTAN'] = $rowDetail["TINGKATAN_SEBUTAN"];
+    $data['ANGGOTA_RANTING'] = $rowDetail["ANGGOTA_RANTING"];
 }
 
 // Convert the data array to JSON and echo it

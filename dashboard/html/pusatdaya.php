@@ -71,7 +71,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
 
         <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
         <?php include 'module/js.php';?>
-        <script type="text/javascript" src="../javascript/backend/content/anggota.js"></script>
+        <script type="text/javascript" src="module/javascript/component/transaksi/aktivitas/ppd/ppd.js"></script>
         <!--/ END JAVASCRIPT SECTION -->
     </body>
     <!--/ END Body -->

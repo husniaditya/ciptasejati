@@ -7,7 +7,7 @@ function fetchDataAndUpdateChart() {
         url: './module/ajax/dashboard/anggota/aj_statusanggota.php',
         method: 'POST',
         success: function(data) {
-            console.log('Got data:', data);
+            // console.log('Got data:', data);
             // Update xAxis categories
             statusChart.xAxis[0].setCategories(data.xAxisCategories);
 
