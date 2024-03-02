@@ -29,6 +29,7 @@ if(isset($_POST["login"]))
         $_SESSION["LOGINCAB_CS"] = $CABANG_KEY;
         $_SESSION["LOGINPP_CS"] = $ANGGOTA_PIC;
         $_SESSION["LOGINAKS_CS"] = $ANGGOTA_AKSES;
+        $_SESSION["LOGINTING_CS"] = $TINGKATAN_ID;
 
         $aksesMenu = GetQuery("SELECT u.MENU_ID,u.USER_AKSES,TRIM(REPLACE(m.MENU_NAMA, ' ', '')) as MASTER,`VIEW`,`ADD`,`EDIT`,APPROVE,`DELETE`,`PRINT` 
         FROM m_menuakses u 

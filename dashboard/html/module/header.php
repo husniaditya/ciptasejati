@@ -55,6 +55,7 @@
                 <span class="meta">
                     <span class="icon"><i class="fa-regular fa-bell fa-lg"></i></span>
                     <span class="label label-danger" id="loadnotif"></span>
+                </span>
             </a>
 
             <!-- Dropdown menu -->
@@ -85,7 +86,15 @@
                 <li><a href="page-profile.php"><span class="icon"><i class="fa-solid fa-user-check"></i></span> Akun Saya</a></li>
                 <li><a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-ChangePassword" href="#ChangePassword"><span class="icon"><i class="fa-solid fa-key"></i></span> Ubah Password</a></li>
                 <li><a href="assets/dataterpusat/panduan/Panduan Aplikasi Cipta Sejati.pdf" target="_blank"><span class="icon"><i class="ico-book2"></i></span> Buku Panduan</a></li>
-                <li><a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-ChangeLog" href="#ChangeLog"><span class="icon"><i class="fa-solid fa-list-check"></i></span> Log Perubahan Versi</a></li>
+                <li style="position: relative;">
+                    <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-ChangeLog" href="#ChangeLog">
+                        <span class="icon"><i class="fa-solid fa-list-check"></i></span> 
+                        <span style="position: absolute; top: -10px; right: 5px; font-size: 9px; padding: 2px 4px;" class="label label-primary">Baru</span> <!-- Adjusted label box size -->
+                        Log Perubahan Versi
+                    </a>
+                </li>
+
+
                 <li class="divider"></li>
                 <li><a href="logout.php"><span class="icon"><i class="ico-exit"></i></span> Sign Out</a></li>
             </ul>

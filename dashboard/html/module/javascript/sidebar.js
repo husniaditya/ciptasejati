@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
       addInClassToSubmenu('laporan');
       addInClassToSubmenu('lappengurus');
     }
-    if (currentPage === 'lapdaftaranggota.php' || currentPage === 'lapidanggota.php' || currentPage === 'lapkasanggota.php') {
+    if (currentPage === 'lapdaftaranggota.php' || currentPage === 'lapmutasianggota.php' || currentPage === 'lapkasanggota.php') {
       addInClassToSubmenu('laporan');
       addInClassToSubmenu('lapanggota');
     }

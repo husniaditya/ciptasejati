@@ -38,7 +38,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
                 <!-- Page Header -->
                 <div class="page-header page-header-block">
                     <div class="page-header-section">
-                        <h4 class="title semibold">Laporan Data Anggota</h4>
+                        <h4 class="title semibold">Laporan Data Kas Anggota</h4>
                     </div>
                     <div class="page-header-section">
                         <!-- Toolbar -->
@@ -46,7 +46,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
                             <ol class="breadcrumb breadcrumb-transparent nm">
                                 <li><a href="javascript:void(0);">Laporan</a></li>
                                 <li class="active">Laporan Anggota</li>
-                                <li class="active">Daftar Anggota</li>
+                                <li class="active">Kas Anggota</li>
                             </ol>
                         </div>
                         <!--/ Toolbar -->
@@ -54,7 +54,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
                 </div>
                 <!-- Page Header -->
 
-                <?php include 'module/component/laporan/anggota/daftaranggota/v_laporananggota.php';?>
+                <?php include 'module/component/laporan/anggota/kasanggota/v_laporankas.php';?>
             </div>
         </section>
             <!--/ END Template Container -->
@@ -71,7 +71,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
 
         <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
         <?php include 'module/js.php';?>
-        <script type="text/javascript" src="module/javascript/component/laporan/anggota/daftaranggota/laporananggota.js"></script>
+        <script type="text/javascript" src="module/javascript/component/laporan/anggota/kasanggota/laporankas.js"></script>
         <!--/ END JAVASCRIPT SECTION -->
     </body>
     <!--/ END Body -->

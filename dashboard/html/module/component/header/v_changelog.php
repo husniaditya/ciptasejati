@@ -31,7 +31,16 @@ ORDER BY c.CHANGELOG_DATE desc");
                                     extract($rowVersi);
                                     ?>
                                     <tr>
-                                        <td align="center"><b><?= $CHANGELOG_VERSI; ?></b></td>
+                                        <td align="center"><b><?= $CHANGELOG_VERSI; ?>
+                                            <?php
+                                            if($CHANGELOG_STATUS == "1") {
+                                                ?>
+                                                <br><span class="label label-primary">Baru</span>
+                                                <?php
+                                            }
+                                            ?>
+                                            </b>
+                                        </td>
                                         <td>
                                             <b><?= $CHANGELOG_HEADER; ?></b><br>
                                             <?php

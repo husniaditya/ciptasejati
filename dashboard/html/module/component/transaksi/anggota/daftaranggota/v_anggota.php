@@ -106,10 +106,10 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>User Akses</label>
+                                <label>Akses Pengguna</label>
                                 <select id="filterANGGOTA_AKSES" name="ANGGOTA_AKSES" class="form-control"  data-parsley-required required>
                                     <option value="">Tampilkan semua</option>
-                                    <option value="User">User</option>
+                                    <option value="User">Anggota</option>
                                     <option value="Koordinator">Koordinator</option>
                                     <option value="Pengurus">Pengurus</option>
                                 </select>
