@@ -48,11 +48,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   
     // MenuID: Admin
-    if (currentPage === 'profil.php' || currentPage === 'visimisi.php' || currentPage === 'warnalambang.php') {
+    if (currentPage === 'profil.php' || currentPage === 'visimisi.php' || currentPage === 'warnalambang.php' || currentPage === 'mediasosial.php') {
       addInClassToSubmenu('admin');
       addInClassToSubmenu('profil');
     }
-    if (currentPage === 'user.php' || currentPage === 'menu.php' || currentPage === 'mediasosial.php') {
+    if (currentPage === 'user.php' || currentPage === 'menu.php') {
       addInClassToSubmenu('admin');
     }
     if (currentPage === 'kontenheader.php' || currentPage === 'kontenfooter.php' || currentPage === 'kontententang.php' || currentPage === 'kontenblog.php' || currentPage === 'kontenhubungi.php') {

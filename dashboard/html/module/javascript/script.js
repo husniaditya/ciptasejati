@@ -156,6 +156,7 @@ $(document).ready(function() {
         // Add more columnDefs as needed
       ],
       pageLength: 5,
+      scrollX: true, // Enable horizontal scrolling
       scrollY: '350px', // Set the desired height here
       scrollCollapse: true, // Enable vertical scrolling
       initComplete: function(settings, json) {
