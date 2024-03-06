@@ -6,14 +6,6 @@ function callTable() {
       responsive: true,
       order: [[1, 'asc']],
       dom: 'Bfrtlip',
-      columnDefs: [
-          { width: '100px', targets: 0 }, // Set width for column 1
-          { width: '250px', targets: 2 }, // Set width for column 2
-          { width: '350px', targets: 3 }, // Set width for column 3
-          { width: '250px', targets: 4 }, // Set width for column 4
-          { width: '250px', targets: 5 }, // Set width for column 5
-          // Add more columnDefs as needed
-      ],
       scrollX: true,
       scrollY: '350px', // Set the desired height here
       buttons: [
@@ -107,14 +99,17 @@ $(document).on("click", ".open-EditProfil", function () {
     method: 'POST',
     data: { PROFIL_ID: key },
     success: function(data) {
-      // console.log(data);
+      console.log(data);
       // Assuming data is a JSON object with the required information
       // Make sure the keys match the fields in your returned JSON object
 
       $("#PROFIL_ID").val(data.PROFIL_ID);
       $("#PROFIL_NAMA").val(data.PROFIL_NAMA);
       $("#PROFIL_SEJARAH").val(data.PROFIL_SEJARAH);
-      $("#PROFIL_TELP").val(data.PROFIL_TELP);
+      $("#PROFIL_TELP_1").val(data.PROFIL_TELP_1);
+      $("#PROFIL_TELP_2").val(data.PROFIL_TELP_2);
+      $("#PROFIL_EMAIL_1").val(data.PROFIL_EMAIL_1);
+      $("#PROFIL_EMAIL_2").val(data.PROFIL_EMAIL_2);
       $("#preview-image").attr("src", data.PROFIL_LOGO);
       
     },

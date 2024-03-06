@@ -92,6 +92,7 @@ $rowMedia = $getMedia->fetchAll(PDO::FETCH_ASSOC);
                             <div class="form-group">
                                 <label for="MEDIA_ICON">Icon Media Sosial</label>
                                 <input type="text" class="form-control" required id="MEDIA_ICON" name="MEDIA_ICON" value="">
+                                <small style="color:gray">Untuk referensi icon bisa klik <a href="https://fontawesome.com/search?o=r&m=free&f=brands" target="_blank">di sini</a></small>
                             </div> 
                         </div>
                     </div>
@@ -139,6 +140,7 @@ $rowMedia = $getMedia->fetchAll(PDO::FETCH_ASSOC);
                             <div class="form-group">
                                 <label for="MEDIA_ICON">Icon Media Sosial</label>
                                 <input type="text" class="form-control" required id="editMEDIA_ICON" name="MEDIA_ICON" value="">
+                                <small style="color:gray">Untuk referensi icon bisa klik <a href="https://fontawesome.com/search?o=r&m=free&f=brands" target="_blank">di sini</a></small>
                             </div> 
                         </div>
                     </div>

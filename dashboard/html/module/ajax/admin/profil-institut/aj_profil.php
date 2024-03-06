@@ -13,7 +13,10 @@ while ($Profil = $getProfil->fetch(PDO::FETCH_ASSOC)) {
     $data['PROFIL_LOGO'] = $Profil["PROFIL_LOGO"];
     $data['PROFIL_NAMA'] = $Profil["PROFIL_NAMA"];
     $data['PROFIL_SEJARAH'] = $Profil["PROFIL_SEJARAH"];
-    $data['PROFIL_TELP'] = $Profil["PROFIL_TELP"];
+    $data['PROFIL_TELP_1'] = $Profil["PROFIL_TELP_1"];
+    $data['PROFIL_TELP_2'] = $Profil["PROFIL_TELP_2"];
+    $data['PROFIL_EMAIL_1'] = $Profil["PROFIL_EMAIL_1"];
+    $data['PROFIL_EMAIL_2'] = $Profil["PROFIL_EMAIL_2"];
 }
 
 // Return data as JSON

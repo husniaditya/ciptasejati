@@ -15,11 +15,13 @@ $getProfil = GetQuery("select * from c_profil");
                 <thead>
                     <tr>
                         <th></th>
-                        <th class="hidden">Institut ID</th>
                         <th>Logo</th>
                         <th>Nama Institut </th>
-                        <th>Telp </th>
                         <th>Sejarah </th>
+                        <th>Telp 1</th>
+                        <th>Telp 2</th>
+                        <th>Email 1</th>
+                        <th>Email 2</th>
                     </tr>
                 </thead>
                 <tbody id="profildata">
@@ -38,11 +40,13 @@ $getProfil = GetQuery("select * from c_profil");
                                     </div>
                                 </form>
                             </td>
-                            <td class="hidden"><?= $PROFIL_ID; ?></td>
                             <td align="center"><img src="<?= $PROFIL_LOGO; ?>" alt="A sample image" width="100" height="100"></td>
                             <td><?= $PROFIL_NAMA; ?></td>
-                            <td align="center"><i class="fa-solid fa-phone"></i> <?= $PROFIL_TELP; ?></td>
-                            <td><?= substr_replace($PROFIL_SEJARAH, '...', 200); ?></td>
+                            <td><?= substr_replace($PROFIL_SEJARAH, '...', 100); ?></td>
+                            <td align="center"><i class="fa-solid fa-phone"></i> <br> <?= $PROFIL_TELP_1; ?></td>
+                            <td align="center"><i class="fa-solid fa-phone"></i> <br> <?= $PROFIL_TELP_2; ?></td>
+                            <td align="center"><i class="fa-solid fa-envelope"></i> <br> <?= $PROFIL_EMAIL_1; ?></td>
+                            <td align="center"><i class="fa-solid fa-envelope"></i> <br> <?= $PROFIL_EMAIL_2; ?></td>
                         </tr>
                         <?php
                     }
@@ -58,7 +62,7 @@ $getProfil = GetQuery("select * from c_profil");
 
 <div id="EditProfil" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form id="EditProfil-form" method="post" class="form" data-parsley-validate>
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
@@ -73,8 +77,8 @@ $getProfil = GetQuery("select * from c_profil");
                             </div>
                         </div>
                         <!-- Logo Preview -->
-                        <div class="col-md-1">
-                            <div id="preview-container">
+                        <div class="col-md-2">
+                            <div id="preview-container" class="text-right">
                                 <img class="img-circle img-bordered" id="preview-image" src="" alt="" style="text-align: center;overflow: hidden;position: relative;width: 60px;height: 60px;">
                             </div>
                         </div>
@@ -94,10 +98,32 @@ $getProfil = GetQuery("select * from c_profil");
                                 <input type="text" class="form-control" id="PROFIL_NAMA" name="PROFIL_NAMA" value="" data-parsley-required/>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="PROFIL_TELP">No Telp<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="PROFIL_TELP" name="PROFIL_TELP" value="" data-parsley-required>
+                                <label for="PROFIL_TELP_1">No Telp 1<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="PROFIL_TELP_1" name="PROFIL_TELP_1" value="" data-parsley-required data-parsley-type="number">
+                            </div> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="PROFIL_TELP_2">No Telp 2<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="PROFIL_TELP_2" name="PROFIL_TELP_2" value="" data-parsley-required data-parsley-type="number">
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="PROFIL_EMAIL_1">Email 1<span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="PROFIL_EMAIL_1" name="PROFIL_EMAIL_1" value="" data-parsley-required data-parsley-type="email">
+                            </div> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="PROFIL_EMAIL_2">Email 2<span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="PROFIL_EMAIL_2" name="PROFIL_EMAIL_2" value="" data-parsley-required data-parsley-type="email">
                             </div> 
                         </div>
                     </div>
@@ -105,14 +131,14 @@ $getProfil = GetQuery("select * from c_profil");
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="PROFIL_SEJARAH">Sejarah<span class="text-danger">*</span></label>
-                                <textarea rows="8" class="form-control" id="PROFIL_SEJARAH" name="PROFIL_SEJARAH" value="" data-parsley-required></textarea>
+                                <textarea rows="5" class="form-control" id="PROFIL_SEJARAH" name="PROFIL_SEJARAH" value="" data-parsley-required></textarea>
                             </div> 
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Tutup</button>
-                    <button type="submit" name="submit" id="editprofil" class="submit btn btn-primary btn-outline mb5 btn-rounded"><span class="ico-save"></span> Simpan</button>
+                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Close</button>
+                    <button type="submit" name="submit" id="editprofil" class="submit btn btn-primary btn-outline mb5 btn-rounded"><span class="ico-save"></span> Save</button>
                 </div>
             </div>
         </div>

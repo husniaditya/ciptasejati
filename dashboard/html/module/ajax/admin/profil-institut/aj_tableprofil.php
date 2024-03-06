@@ -17,11 +17,13 @@ while ($rowProfile = $getProfil->fetch(PDO::FETCH_ASSOC)) {
                 </div>
             </form>
         </td>
-        <td class="hidden"><?= $PROFIL_ID; ?></td>
         <td align="center"><img src="<?= $PROFIL_LOGO; ?>" alt="A sample image" width="100" height="100"></td>
         <td><?= $PROFIL_NAMA; ?></td>
-        <td align="center"><i class="fa-solid fa-phone"></i> <?= $PROFIL_TELP; ?></td>
-        <td><?= substr_replace($PROFIL_SEJARAH, '...', 200); ?></td>
+        <td><?= substr_replace($PROFIL_SEJARAH, '...', 100); ?></td>
+        <td align="center"><i class="fa-solid fa-phone"></i> <br> <?= $PROFIL_TELP_1; ?></td>
+        <td align="center"><i class="fa-solid fa-phone"></i> <br> <?= $PROFIL_TELP_2; ?></td>
+        <td align="center"><i class="fa-solid fa-envelope"></i> <br> <?= $PROFIL_EMAIL_1; ?></td>
+        <td align="center"><i class="fa-solid fa-envelope"></i> <br> <?= $PROFIL_EMAIL_2; ?></td>
     </tr>
     <?php
 }
