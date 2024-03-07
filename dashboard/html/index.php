@@ -1,6 +1,6 @@
 <?php 
 require_once ("./module/connection/conn.php");
-include "module/backend/t_login.php";
+include "module/backend/loginregister/t_login.php";
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +16,7 @@ include "module/backend/t_login.php";
         <!-- START Template Main -->
         <section id="main" role="main">
             <!-- START Template Container -->
-            <?php include 'module/component/v_login.php';?>
+            <?php include 'module/component/loginregister/v_login.php';?>
             <!--/ END Template Container -->
         </section>
         <!--/ END Template Main -->
