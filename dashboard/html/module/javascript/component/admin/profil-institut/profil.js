@@ -99,7 +99,7 @@ $(document).on("click", ".open-EditProfil", function () {
     method: 'POST',
     data: { PROFIL_ID: key },
     success: function(data) {
-      console.log(data);
+      // console.log(data);
       // Assuming data is a JSON object with the required information
       // Make sure the keys match the fields in your returned JSON object
 

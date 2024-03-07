@@ -44,7 +44,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
                         <!-- Toolbar -->
                         <div class="toolbar">
                             <ol class="breadcrumb breadcrumb-transparent nm">
-                                <li><a href="javascript:void(0);">Master</a></li>
+                                <li><a href="javascript:void(0);">Menu Admin</a></li>
                                 <li class="active">User</li>
                             </ol>
                         </div>
@@ -53,7 +53,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
                 </div>
                 <!-- Page Header -->
 
-                <?php include 'module/component/v_user.php';?>
+                <?php include 'module/component/admin/user/v_user.php';?>
             </div>
         </section>
             <!--/ END Template Container -->
@@ -70,6 +70,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
 
         <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
         <?php include 'module/js.php';?>
+        <script type="text/javascript" src="module/javascript/component/admin/user/user.js"></script>
         <!--/ END JAVASCRIPT SECTION -->
     </body>
     <!--/ END Body -->
