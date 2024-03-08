@@ -250,11 +250,7 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
             type: 'POST',
             url: 'module/ajax/transaksi/anggota/mutasianggota/aj_tablemutasianggota.php',
             success: function (response) {
-              // Destroy the DataTable before updating
-              $('#mutasianggota-table').DataTable().destroy();
-              $("#mutasianggotadata").html(response);
-              // Reinitialize Sertifikat Table
-              callTable();
+              filterMutasiAnggotaEvent(); // Call the filterMutasiAnggotaEvent() function to refresh the data
             },
             error: function (xhr, status, error) {
               // Handle any errors

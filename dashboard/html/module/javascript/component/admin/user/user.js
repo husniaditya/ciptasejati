@@ -113,7 +113,7 @@ $(document).on("click", ".open-EditUser", function () {
 });
 
 // Delete Media Sosial
-function deletemedia(value1,value2) {
+function deleteuser(value1,value2) {
   // Ask for confirmation
   if (confirm("Apakah anda yakin untuk menghapus data ini?")) {
     // Create the data object

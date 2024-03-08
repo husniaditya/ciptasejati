@@ -298,11 +298,7 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
             type: 'POST',
             url: 'module/ajax/transaksi/anggota/kasanggota/aj_tablekasanggota.php',
             success: function (response) {
-              // Destroy the DataTable before updating
-              $('#kasanggota-table').DataTable().destroy();
-              $("#kasanggotadata").html(response);
-              // Reinitialize Sertifikat Table
-              callTable();
+              filterKasAnggotaEvent(); // Call the filter function to update the table
             },
             error: function (xhr, status, error) {
               // Handle any errors

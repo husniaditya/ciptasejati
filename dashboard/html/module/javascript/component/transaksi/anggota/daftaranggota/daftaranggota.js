@@ -246,10 +246,8 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
             url: 'module/ajax/transaksi/anggota/daftaranggota/aj_tableanggota.php',
             success: function(response) {
               // Destroy the DataTable before updating
-              $('#anggota-table').DataTable().destroy();
-              $("#anggotadata").html(response);
+              filterAnggotaEvent();
               // Reinitialize Sertifikat Table
-              callTable();
             },
             error: function(xhr, status, error) {
               // Handle any errors
