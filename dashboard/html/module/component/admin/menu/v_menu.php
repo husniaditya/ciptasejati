@@ -107,14 +107,14 @@ ORDER BY m.USER_AKSES,m.MENU_ID");
                                     ?>
                                     <label class="switch switch-primary">
                                         <input type="checkbox" checked disabled>
-                                        <span class="switch" disabled></span>
+                                        <span class="switch"></span>
                                     </label>
                                     <?php
                                 } else {
                                     ?>
                                     <label class="switch switch-primary">
                                         <input type="checkbox" disabled>
-                                        <span class="switch" disabled></span>
+                                        <span class="switch"></span>
                                     </label>
                                     <?php
                                 }
@@ -127,14 +127,14 @@ ORDER BY m.USER_AKSES,m.MENU_ID");
                                     ?>
                                     <label class="switch switch-primary">
                                         <input type="checkbox" checked disabled>
-                                        <span class="switch" disabled></span>
+                                        <span class="switch"></span>
                                     </label>
                                     <?php
                                 } else {
                                     ?>
                                     <label class="switch switch-primary">
                                         <input type="checkbox" disabled>
-                                        <span class="switch" disabled></span>
+                                        <span class="switch"></span>
                                     </label>
                                     <?php
                                 }
@@ -147,14 +147,14 @@ ORDER BY m.USER_AKSES,m.MENU_ID");
                                     ?>
                                     <label class="switch switch-primary">
                                         <input type="checkbox" checked disabled>
-                                        <span class="switch" disabled></span>
+                                        <span class="switch"></span>
                                     </label>
                                     <?php
                                 } else {
                                     ?>
                                     <label class="switch switch-primary">
                                         <input type="checkbox" disabled>
-                                        <span class="switch" disabled></span>
+                                        <span class="switch"></span>
                                     </label>
                                     <?php
                                 }
@@ -167,14 +167,14 @@ ORDER BY m.USER_AKSES,m.MENU_ID");
                                     ?>
                                     <label class="switch switch-primary">
                                         <input type="checkbox" checked disabled>
-                                        <span class="switch" disabled></span>
+                                        <span class="switch"></span>
                                     </label>
                                     <?php
                                 } else {
                                     ?>
                                     <label class="switch switch-primary">
                                         <input type="checkbox" disabled>
-                                        <span class="switch" disabled></span>
+                                        <span class="switch"></span>
                                     </label>
                                     <?php
                                 }
@@ -187,14 +187,14 @@ ORDER BY m.USER_AKSES,m.MENU_ID");
                                     ?>
                                     <label class="switch switch-primary">
                                         <input type="checkbox" checked disabled>
-                                        <span class="switch" disabled></span>
+                                        <span class="switch"></span>
                                     </label>
                                     <?php
                                 } else {
                                     ?>
                                     <label class="switch switch-primary">
                                         <input type="checkbox" disabled>
-                                        <span class="switch" disabled></span>
+                                        <span class="switch"></span>
                                     </label>
                                     <?php
                                 }
@@ -207,14 +207,14 @@ ORDER BY m.USER_AKSES,m.MENU_ID");
                                     ?>
                                     <label class="switch switch-primary">
                                         <input type="checkbox" checked disabled>
-                                        <span class="switch" disabled></span>
+                                        <span class="switch"></span>
                                     </label>
                                     <?php
                                 } else {
                                     ?>
                                     <label class="switch switch-primary">
                                         <input type="checkbox" disabled>
-                                        <span class="switch" disabled></span>
+                                        <span class="switch"></span>
                                     </label>
                                     <?php
                                 }

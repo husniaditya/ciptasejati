@@ -1,10 +1,15 @@
-
+<?php
+$getLogo = GetQuery("SELECT PROFIL_LOGO FROM c_profil");
+while ($rowLogo = $getLogo->fetch(PDO::FETCH_ASSOC)) {
+    extract($rowLogo);
+}
+?>
 <!-- START navbar header -->
 <div class="navbar-header">
     <!-- Brand -->
     <a class="navbar-brand" href="javascript:void(0);">
-        <span class="logo-figure-nav"></span>
-        <span class="logo-text-nav"></span>
+        <span class="logo-figure-nav" style="background-image: url(<?= $PROFIL_LOGO; ?>);"></span>
+        <span class="logo-text-nav" style="background-image: url(<?= $PROFIL_LOGO; ?>);"></span>
     </a>
     <!--/ Brand -->
 </div>

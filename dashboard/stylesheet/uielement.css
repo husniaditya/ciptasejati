@@ -15134,12 +15134,12 @@ hr {
   #header.navbar .navbar-header {
     background-color: #ffffff;
   }
-  #header.navbar .navbar-header > .navbar-brand > .logo-figure-nav {
+  /* #header.navbar .navbar-header > .navbar-brand > .logo-figure-nav {
     background-image: url("../image/logo/logo-figure-inverse.png");
   }
   #header.navbar .navbar-header > .navbar-brand > .logo-text-nav {
-    background-image: url("../image/logo/logo-text-inverse.png");
-  }
+    background-image: url("../image/logo/logo-figure-inverse.png");
+  } */
 }
 .sidebar {
   background-color: #ffffff;

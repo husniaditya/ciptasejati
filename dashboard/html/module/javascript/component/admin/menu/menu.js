@@ -104,42 +104,12 @@ $(document).on("click", ".open-EditMenu", function () {
       $("#MENU_NAMA").val(data.MENU_NAMA);
       $("#USER_AKSES").val(data.USER_AKSES);
 
-      // Set the VIEW value of the switch based on the data
-      if (data.VIEW === 'Y') {
-        $('#VIEW').prop('checked', true); // Switch on
-      } else {
-        $('#VIEW').prop('checked', false); // Switch off
+      // Iterate over the keys of the data object for checkboxes and set the switch state
+      for (let key in data) {
+        // Set the switch based on the value of data[key]
+        $('#' + key).prop('checked', data[key] === 'Y');
       }
-      // Set the ADD value of the switch based on the data
-      if (data.ADD === 'Y') {
-        $('#ADD').prop('checked', true); // Switch on
-      } else {
-        $('#ADD').prop('checked', false); // Switch off
-      }
-      // Set the EDIT value of the switch based on the data
-      if (data.EDIT === 'Y') {
-        $('#EDIT').prop('checked', true); // Switch on
-      } else {
-        $('#EDIT').prop('checked', false); // Switch off
-      }
-      // Set the DELETE value of the switch based on the data
-      if (data.DELETE === 'Y') {
-        $('#DELETE').prop('checked', true); // Switch on
-      } else {
-        $('#DELETE').prop('checked', false); // Switch off
-      }
-      // Set the APPROVE value of the switch based on the data
-      if (data.APPROVE === 'Y') {
-        $('#APPROVE').prop('checked', true); // Switch on
-      } else {
-        $('#APPROVE').prop('checked', false); // Switch off
-      }
-      // Set the PRINT value of the switch based on the data
-      if (data.PRINT === 'Y') {
-        $('#PRINT').prop('checked', true); // Switch on
-      } else {
-        $('#PRINT').prop('checked', false); // Switch off
-      }
+
       
     },
     error: function(error) {
