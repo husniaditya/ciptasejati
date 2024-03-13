@@ -29,8 +29,9 @@ if (isset($_POST["editprofil"])) {
 
                 // Re-initialize the variable for database
                 $logoFileDestination = "./assets/images/logo/Logo." . $logoFileExtension;
+                $logoFileDestinationWeb = "./dashboard/html/assets/images/logo." . $logoFileExtension;
 
-                GetQuery("UPDATE c_profil SET PROFIL_LOGO = '$logoFileDestination' WHERE PROFIL_ID = '$PROFIL_ID'");
+                GetQuery("UPDATE c_profil SET PROFIL_LOGO = '$logoFileDestination', PROFIL_LOGO_WEB = '$logoFileDestinationWeb' WHERE PROFIL_ID = '$PROFIL_ID'");
             }
         }
 

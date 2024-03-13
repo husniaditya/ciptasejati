@@ -1,3 +1,8 @@
+<?php 
+require_once ("./dashboard/html/module/connection/conn.php");
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>

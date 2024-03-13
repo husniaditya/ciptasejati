@@ -1,3 +1,11 @@
+<?php
+$getProfil = GetQuery("SELECT * FROM c_profil");
+while ($rowProfil = $getProfil->fetch(PDO::FETCH_ASSOC)) {
+    extract($rowProfil);
+}
+$getMedia = GetQuery("SELECT * FROM c_mediasosial");
+?>
+
 <div class="header-body border-0 box-shadow-none">
     <div class="border-bottom-light">
         <div class="header-container container container-xl-custom">
@@ -6,7 +14,7 @@
                     <div class="header-row">
                         <div class="header-logo m-0">
                             <a href="index.php">
-                                <img alt="Cipta Sejati Indonesia" width="43" height="43" src="img/demos/renewable-energy/logo.png">
+                                <img alt="Cipta Sejati Indonesia" width="43" height="43" src="<?= $PROFIL_LOGO_WEB; ?>">
                             </a>
                         </div>
                         &nbsp;
@@ -19,19 +27,23 @@
                     <div class="hstack gap-4 ps-4 py-2 font-weight-semi-bold">
                         <div class="d-none d-lg-inline-block">
                             <ul class="nav nav-pills me-1">
-                                <li class="nav-item pe-2 mx-1">
-                                    <a href="http://www.facebook.com/" target="_blank" title="Facebook" class="text-color-dark text-color-hover-primary text-2"><i class="fab fa-facebook-f"></i></a>
-                                </li>
-                                <li class="nav-item px-2 mx-1">
-                                    <a href="http://www.instagram.com/" target="_blank" title="Instagram" class="text-color-dark text-color-hover-primary text-2"><i class="fab fa-instagram"></i></a>
-                                </li>
+                                <?php
+                                while ($rowMedia = $getMedia->fetch(PDO::FETCH_ASSOC)) {
+                                    extract($rowMedia);
+                                    ?>
+                                    <li class="nav-item pe-2 mx-2">
+                                        <a href="<?= $MEDIA_LINK; ?>" target="_blank" title="Facebook" class="text-color-dark text-color-hover-primary text-2"><i class="<?= $MEDIA_ICON; ?>"></i></a>
+                                    </li>
+                                    <?php
+                                }
+                                ?>
                             </ul>
                         </div>
                         <div class="vr opacity-2 d-none d-lg-inline-block"></div>
                         <div>
                             <a href="tel:0123456789" class="d-flex align-items-center text-decoration-none text-color-dark text-color-hover-primary font-weight-semibold ms-1">
                                 <i class="icon icon-phone text-color-primary text-4-5 me-2"></i>
-                                800-123-4567
+                                <?= $PROFIL_TELP_1; ?>
                             </a>
                         </div>
                     </div>
