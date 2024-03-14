@@ -1,19 +1,25 @@
+<?php
 
+$getPusat = GetQuery("SELECT * FROM m_pusat");
+while ($rowPusat = $getPusat->fetch(PDO::FETCH_ASSOC)) {
+    extract($rowPusat);
+}
+$getMedia = GetQuery("SELECT * FROM c_mediasosial");
+?>
 <div class="container container-xl-custom pt-5 pb-3">
     <div class="row pt-5">
         <div class="col-md-6 col-lg-3">
             <h3 class="mb-3 text-4-5 text-color-light">Kantor Pusat</h3>							
-            <p class="text-3 text-color-grey mb-0">Jl. Pembanguan Ujung No.10, Kuin Cerucuk<br>Kec. Banjarmasin<br>Kota Banjarmasin, Kalimantan Selatan 70128
-									</p>
+            <p class="text-3 text-color-grey mb-0"><?= $PUSAT_SEKRETARIAT; ?></p>
         </div>
         <div class="col-md-6 col-lg-3 mt-4 mt-md-0">
             <h3 class="mb-3 text-4-5 text-color-light">Hubungi Kami</h3>							
-            <a href="tel:0123456789" class="d-flex align-items-center text-decoration-none text-info text-color-hover-light font-weight-medium ms-1">
+            <a href="tel:<?= $PROFIL_TELP_1; ?>" class="d-flex align-items-center text-decoration-none text-info text-color-hover-light font-weight-medium ms-1">
                 <i class="icon icon-phone text-info text-4-5 me-2"></i>
-                800-123-4567
+                <?= $PROFIL_TELP_1; ?>
             </a>
-            <a class="d-flex align-items-center text-decoration-none text-info text-color-hover-light font-weight-medium ms-1" href="mailto:you@domain.com"><i class="fa-regular fa-envelope text-info text-4-5 me-2"></i>you@domain.com</a>
-            <a class="d-flex align-items-center text-decoration-none text-info text-color-hover-light font-weight-medium ms-1" href="mailto:you@domain.com"> <i class="fa-regular fa-envelope text-info text-4-5 me-2"></i> you2@domain.com</a>
+            <a class="d-flex align-items-center text-decoration-none text-info text-color-hover-light font-weight-medium ms-1" href="mailto:<?= $PROFIL_EMAIL_1; ?>"><i class="fa-regular fa-envelope text-info text-4-5 me-2"></i><?= $PROFIL_EMAIL_1; ?></a>
+            <a class="d-flex align-items-center text-decoration-none text-info text-color-hover-light font-weight-medium ms-1" href="mailto:<?= $PROFIL_EMAIL_2; ?>"> <i class="fa-regular fa-envelope text-info text-4-5 me-2"></i><?= $PROFIL_EMAIL_2; ?></a>
         </div>
         <div class="col-md-6 col-lg-4 mt-4 mt-lg-0">
             <h3 class="mb-3 text-4-5 text-color-light">Halaman</h3>
@@ -28,16 +34,18 @@
         <div class="col-md-6 col-lg-2 mt-4 mt-lg-0">
             <h3 class="mb-3 text-4-5 text-color-light">Ikuti Kami</h3>
             <ul class="social-icons social-icons-clean social-icons-medium">
-                <li class="social-icons-facebook">
-                    <a href="http://www.facebook.com/" target="_blank" title="Facebook">
-                        <i class="fab fa-facebook-f text-color-light"></i>
-                    </a>
-                </li>
-                <li class="social-icons-instagram">
-                    <a href="http://www.instagram.com/" target="_blank" title="Instagram">
-                        <i class="fab fa-instagram text-color-light"></i>
-                    </a>
-                </li>
+                <?php
+                foreach ($getMedia as $rowMedia) {
+                    extract($rowMedia);
+                    ?>
+                    <li class="social-icons-skype">
+                        <a href="<?= $MEDIA_LINK; ?>" target="_blank" title="<?= $MEDIA_DESKRIPSI; ?>">
+                            <i class="<?= $MEDIA_ICON; ?> text-color-light"></i>
+                        </a>
+                    </li>
+                <?php
+                }
+                ?>
             </ul>
         </div>
     </div>
