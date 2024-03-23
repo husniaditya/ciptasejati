@@ -47,7 +47,42 @@ if (targetDropdownHeaderUrls.includes(currentPath)) {
     
 
 // Map Initial Locations
+// Initialize and add the map
+let map;
 
+// Data Map Pusat menu Hubungi
+var pusat = [
+    { lat: -3.3063120100780785, lng: 114.56921894055016, title: "Pusat" },
+    // Add more locations as needed
+];
+
+async function initMap() {
+    // Request needed libraries.
+    //@ts-ignore
+    const { Map } = await google.maps.importLibrary("maps");
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+    // The map, centered at the initial location
+    map = new Map(document.getElementById("googlemaps"), {
+        zoom: 17, // Adjust the initial zoom level as needed
+        center: pusat[0], // Center the map at the first location
+        mapId: "DEMO_MAP_ID",
+    });
+
+    // Add markers for each location
+    pusat.forEach(location => {
+        const marker = new AdvancedMarkerElement({
+            map: map,
+            position: location,
+            title: location.title,
+        });
+    });
+}
+// Call the function to initialize the map Pusat Hubungi
+initMap();
+
+
+// Data Map Cabang
 var cabang = [];
 
 // Perform AJAX request
@@ -77,10 +112,6 @@ xhr.onerror = function() {
     console.error("AJAX request failed.");
 };
 xhr.send();
-
-
-// Initialize and add the map
-let map;
 
 async function initCabang() {
     // Check if Google Maps API script is loaded
@@ -112,10 +143,8 @@ async function initCabang() {
     }
 }
 
-// Call the function to initialize the map
+// Call the function to initialize the map Cabang
 initCabang();
-
-
 
 
 

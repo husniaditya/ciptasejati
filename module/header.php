@@ -14,7 +14,7 @@ $getMedia = GetQuery("SELECT * FROM c_mediasosial");
                     <div class="header-row">
                         <div class="header-logo m-0">
                             <a href="index.php">
-                                <img alt="Cipta Sejati Indonesia" width="43" height="43" src="<?= $PROFIL_LOGO_WEB; ?>">
+                                <img alt="Cipta Sejati Indonesia" width="43" height="43" src="./dashboard/html/<?= $PROFIL_LOGO; ?>">
                             </a>
                         </div>
                         &nbsp;
