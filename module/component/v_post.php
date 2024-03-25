@@ -70,7 +70,7 @@ if (isset($_GET['id'])) {
                                     <hr class="my-5">
 
                                     <div class="post-block post-author">
-                                        <h3 class="text-color-dark text-capitalize font-weight-bold text-5 m-0 mb-3">Pengarang</h3>
+                                        <h3 class="text-color-dark text-capitalize font-weight-bold text-5 m-0 mb-3">Penulis</h3>
                                         <div class="img-thumbnail img-thumbnail-no-borders d-block pb-3">
                                             <img src="./dashboard/html/<?= $ANGGOTA_PIC; ?>" class="rounded-circle" alt="" style="text-align: center;overflow: hidden;position: relative;width: 100px;height: 100px;">
                                         </div>

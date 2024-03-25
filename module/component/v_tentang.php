@@ -1,8 +1,5 @@
 <?php
 $getProfil = GetQuery("SELECT * FROM c_profil");
-foreach ($getProfil as $profil) {
-    extract($profil);
-}
 $getWarnaLambang = GetQuery("SELECT * FROM c_warnalambang GROUP BY WLAMBANG_KATEGORI ORDER BY WLAMBANG_KATEGORI");
 $getVisi = GetQuery("SELECT * FROM c_visimisi WHERE VISIMISI_KATEGORI = 'Visi' ORDER BY VISIMISI_DESKRIPSI");
 $getMisi = GetQuery("SELECT * FROM c_visimisi WHERE VISIMISI_KATEGORI = 'Misi' ORDER BY VISIMISI_DESKRIPSI");
@@ -11,6 +8,19 @@ FROM m_anggota a
 LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
 LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
 WHERE t.TINGKATAN_LEVEL BETWEEN 9 and 13 AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0");
+$getVisiPic = GetQuery("SELECT SUBSTRING(CMS_VISIMISI_PIC, 2) CMS_VISIMISI_PIC FROM cms_visimisi WHERE CMS_VISIMISI_KATEGORI = 'Visi'");
+$getMisiPic = GetQuery("SELECT SUBSTRING(CMS_VISIMISI_PIC, 2) CMS_VISIMISI_PIC FROM cms_visimisi WHERE CMS_VISIMISI_KATEGORI = 'Misi'");
+
+$warna = $getWarnaLambang->fetchAll(PDO::FETCH_ASSOC);
+$visi = $getVisi->fetchAll(PDO::FETCH_ASSOC);
+$misi = $getMisi->fetchAll(PDO::FETCH_ASSOC);
+$guruBesar = $getGuru->fetchAll(PDO::FETCH_ASSOC);
+$visiPic = $getVisiPic->fetchAll(PDO::FETCH_ASSOC);
+$misiPic = $getMisiPic->fetchAll(PDO::FETCH_ASSOC);
+
+while ($rowProfil = $getProfil->fetch(PDO::FETCH_ASSOC)) {
+    extract($rowProfil);
+}
 ?>
 <div role="main" class="main">
 
@@ -130,8 +140,8 @@ WHERE t.TINGKATAN_LEVEL BETWEEN 9 and 13 AND a.ANGGOTA_STATUS = 0 AND a.DELETION
     <div class="container container-xl-custom p-relative z-index-1 custom-el-pos-1">
         <div class="row">
             <?php
-            foreach ($getWarnaLambang as $warnaLambang) {
-                extract($warnaLambang);
+            foreach ($warna as $getWarnaLambang) {
+                extract($getWarnaLambang);
                 ?>
                 <div class="col-lg-4">
                     <div class="card border-0 bg-color-light box-shadow-1 box-shadow-1-hover anim-hover-translate-top-10px transition-3ms">
@@ -141,8 +151,8 @@ WHERE t.TINGKATAN_LEVEL BETWEEN 9 and 13 AND a.ANGGOTA_STATUS = 0 AND a.DELETION
                             <ul>
                                 <?php
                                 $getWarnaLambangDetail = GetQuery("SELECT * FROM c_warnalambang WHERE WLAMBANG_KATEGORI = '$WLAMBANG_KATEGORI' ORDER BY WLAMBANG_DESKRIPSI");
-                                foreach ($getWarnaLambangDetail as $warnaLambangDetail) {
-                                    extract($warnaLambangDetail);
+                                while ($rowWarnaLambangDetail = $getWarnaLambangDetail->fetch(PDO::FETCH_ASSOC)) {
+                                    extract($rowWarnaLambangDetail);
                                     ?>
                                     <li><?= $WLAMBANG_DESKRIPSI; ?></li>
                                     <?php
@@ -167,8 +177,15 @@ WHERE t.TINGKATAN_LEVEL BETWEEN 9 and 13 AND a.ANGGOTA_STATUS = 0 AND a.DELETION
     <div class="container-fluid bg-color-grey">
         <div class="row">
             <div class="col-lg-6 p-0">
-                <section class="parallax section section-parallax h-100 m-0" data-plugin-parallax data-plugin-options="{'speed': 1.5, 'horizontalPosition': '100%'}" data-image-src="img/demos/renewable-energy/backgrounds/parallax-1.jpg">
-                </section>
+                <?php
+                foreach ($visiPic as $dataVisiPic) {
+                    extract($dataVisiPic);
+                    ?>
+                    <section class="parallax section section-parallax h-100 m-0" data-plugin-parallax data-plugin-options="{'speed': 1.5, 'horizontalPosition': '100%'}" data-image-src="dashboard/html<?= $CMS_VISIMISI_PIC; ?>" style="text-align: center;overflow: hidden;position: relative;height: 605; width: 987">
+                    </section>
+                <?php
+                }
+                ?>
             </div>
             <div class="col-lg-6 p-0">
                 <div class="h-100 m-0">
@@ -178,8 +195,8 @@ WHERE t.TINGKATAN_LEVEL BETWEEN 9 and 13 AND a.ANGGOTA_STATUS = 0 AND a.DELETION
                                 <h3 class="mb-3">VISI</h3>
                                 <ul>
                                     <?php
-                                    foreach ($getVisi as $visi) {
-                                        extract($visi);
+                                    foreach ($visi as $getVisi) {
+                                        extract($getVisi);
                                         ?>
                                         <li class="mb-0"><?= $VISIMISI_DESKRIPSI; ?></li>
                                         <?php
@@ -201,8 +218,8 @@ WHERE t.TINGKATAN_LEVEL BETWEEN 9 and 13 AND a.ANGGOTA_STATUS = 0 AND a.DELETION
                                 <h3 class="mb-3">MISI</h3>
                                 <ul>
                                     <?php
-                                    foreach ($getMisi as $misi) {
-                                        extract($misi);
+                                    foreach ($misi as $getMisi) {
+                                        extract($getMisi);
                                         ?>
                                         <li class="mb-0"><?= $VISIMISI_DESKRIPSI; ?></li>
                                         <?php
@@ -215,8 +232,15 @@ WHERE t.TINGKATAN_LEVEL BETWEEN 9 and 13 AND a.ANGGOTA_STATUS = 0 AND a.DELETION
                 </div>
             </div>
             <div class="col-lg-6 order-1 order-lg-2 p-0">
-                <section class="parallax section section-parallax custom-parallax-bg-pos-left custom-sec-left h-100 m-0" data-plugin-parallax data-plugin-options="{'speed': 1.5, 'horizontalPosition': '100%'}" data-image-src="img/demos/renewable-energy/backgrounds/parallax-2.jpg">
-                </section>
+                <?php
+                foreach ($misiPic as $dataMisiPic) {
+                    extract($dataMisiPic);
+                    ?>
+                    <section class="parallax section section-parallax h-100 m-0" data-plugin-parallax data-plugin-options="{'speed': 1.5, 'horizontalPosition': '100%'}" data-image-src="dashboard/html<?= $CMS_VISIMISI_PIC; ?>" style="text-align: center;overflow: hidden;position: relative;height: 605; width: 987">
+                    </section>
+                <?php
+                }
+                ?>
             </div>
         </div>
     </div>
@@ -269,8 +293,8 @@ WHERE t.TINGKATAN_LEVEL BETWEEN 9 and 13 AND a.ANGGOTA_STATUS = 0 AND a.DELETION
                     <div class="carousel-half-full-width-wrapper carousel-half-full-width-right">
                         <div class="owl-carousel owl-theme carousel-half-full-width-right nav-style-1 nav-dark nav-font-size-lg mb-0" data-plugin-options="{'responsive': {'0': {'items': 1}, '768': {'items': 3}, '992': {'items': 3}, '1200': {'items': 3}}, 'loop': true, 'nav': true, 'dots': false, 'margin': 20}">
                             <?php
-                            foreach ($getGuru as $guruBesar) {
-                                extract($guruBesar);
+                            foreach ($guruBesar as $getGuru) {
+                                extract($getGuru);
                                 ?>
                                 <div class="p-relative">
                                     <span class="thumb-info thumb-info-swap-content anim-hover-inner-wrapper rounded">

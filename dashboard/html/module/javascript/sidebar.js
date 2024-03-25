@@ -64,6 +64,11 @@ document.addEventListener('DOMContentLoaded', function () {
       addInClassToSubmenu('manajemenkonten');
       addInClassToSubmenu('beranda');
     }
+    if (currentPage === 'tentangsejarah.php' || currentPage === 'tentangvisimisi.php') {
+      addInClassToSubmenu('admin');
+      addInClassToSubmenu('manajemenkonten');
+      addInClassToSubmenu('tentangkami');
+    }
   
     // Function to set the active class for all level3 items in sub-menus
     function setActiveLevelItems(currentPage) {

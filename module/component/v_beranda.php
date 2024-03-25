@@ -10,6 +10,10 @@ FROM m_anggota a
 LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
 LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
 WHERE t.TINGKATAN_LEVEL BETWEEN 6 AND 9 AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0");
+$getListBlog = GetQuery("SELECT c.*, CASE WHEN c.DELETION_STATUS = 0 THEN 'Aktif' ELSE 'Tidak Aktif' END BLOG_STATUS, DATE_FORMAT(c.INPUT_DATE, '%d %M %Y') INPUT_DATE, a.ANGGOTA_NAMA INPUT_BY
+FROM c_blog c
+LEFT JOIN m_anggota a ON c.INPUT_BY = a.ANGGOTA_ID
+WHERE c.DELETION_STATUS = 0 ORDER BY INPUT_DATE DESC limit 10");
 
 ?>
 
@@ -256,7 +260,7 @@ WHERE t.TINGKATAN_LEVEL BETWEEN 6 AND 9 AND a.ANGGOTA_STATUS = 0 AND a.DELETION_
                 </div>
                 <div class="col-lg-8">
                     <div class="carousel-half-full-width-wrapper carousel-half-full-width-right">
-                        <div class="owl-carousel owl-theme carousel-half-full-width-right nav-style-1 nav-dark nav-font-size-lg mb-0" data-plugin-options="{'responsive': {'0': {'items': 1}, '768': {'items': 3}, '992': {'items': 3}, '1200': {'items': 3}}, 'loop': true, 'nav': true, 'dots': false, 'margin': 20}">
+                        <div class="owl-carousel owl-theme carousel-half-full-width-right nav-style-1 nav-dark nav-font-size-lg mb-0" data-plugin-options="{'responsive': {'1200': {'items': 3}}, 'loop': true, 'nav': true, 'dots': false, 'margin': 20}">
                             <?php
                             while ($rowKoordinator = $getKoordinator->fetch(PDO::FETCH_ASSOC)) {
                                 extract($rowKoordinator);
@@ -431,30 +435,28 @@ WHERE t.TINGKATAN_LEVEL BETWEEN 6 AND 9 AND a.ANGGOTA_STATUS = 0 AND a.DELETION_
                 </div>
             </div>
             <div class="row pt-2">
-                <div class="col-lg-6">
-                    <div class="row align-items-center p-relative">
-                        <div class="col-lg-6">
-                            <img src="img/demos/renewable-energy/blog/post-thumb-1.jpg" class="img-fluid rounded" alt="Lorem Ipsum Dolor" />
-                        </div>
-                        <div class="col-lg-6 mt-4 mt-lg-0">
-                            <span class="d-block text-color-grey font-weight-semibold positive-ls-2 text-1 text-uppercase">10 Jan 2023 | John Doe</span>
-                            <h4 class="font-weight-bold text-5 text-color-hover-primary mb-2">Lorem ipsum dolor sit a met, consectetur</h4>
-                            <p class="text-3 mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit quisque rutrum pellentesqu... </p>
-                            <a href="post.php" class="btn btn-arrow-effect-1 ws-nowrap text-danger text-2 bg-transparent border-0 px-0 text-uppercase stretched-link">Read More <i class="fas fa-arrow-right ms-2"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 mt-5 mt-lg-0">
-                    <div class="row align-items-center p-relative">
-                        <div class="col-lg-6">
-                            <img src="img/demos/renewable-energy/blog/post-thumb-2.jpg" class="img-fluid rounded" alt="Lorem Ipsum Dolor" />
-                        </div>
-                        <div class="col-lg-6 mt-4 mt-lg-0">
-                            <span class="d-block text-color-grey font-weight-semibold positive-ls-2 text-1 text-uppercase">10 Jan 2023 | John Doe</span>
-                            <h4 class="font-weight-bold text-5 text-color-hover-primary mb-2">Lorem ipsum dolor sit a met, consectetur</h4>
-                            <p class="text-3 mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit quisque rutrum pellentesqu... </p>
-                            <a href="post.php" class="btn btn-arrow-effect-1 ws-nowrap text-danger text-2 bg-transparent border-0 px-0 text-uppercase stretched-link">Read More <i class="fas fa-arrow-right ms-2"></i></a>
-                        </div>
+                <div class="carousel-half-full-width-wrapper carousel-half-full-width-right">
+                    <div class="owl-carousel owl-theme carousel-half-full-width-right nav-style-1 nav-dark nav-font-size-lg mb-0" data-plugin-options="{'responsive': {'1200': {'items': 2}}, 'loop': true, 'nav': true, 'dots': false, 'margin': 20}">
+                        <?php
+                        while ($rowBlog = $getListBlog->fetch(PDO::FETCH_ASSOC)) {
+                            extract($rowBlog);
+                            ?>
+                            <div class="col-lg-12 mt-5 mt-lg-0">
+                                <div class="row align-items-center p-relative">
+                                    <div class="col-lg-6">
+                                        <img src="./dashboard/html/<?= $BLOG_IMAGE; ?>" class="img-fluid rounded" alt="" style="text-align: center;overflow: hidden;position: relative;height: 190; width:336"/>
+                                    </div>
+                                    <div class="col-lg-6 mt-4 mt-lg-0">
+                                        <span class="d-block text-color-grey font-weight-semibold positive-ls-2 text-1 text-uppercase"><?= $INPUT_DATE; ?> | <?= $INPUT_BY; ?></span>
+                                        <h4 class="font-weight-bold text-5 text-color-hover-primary mb-2"><?= $BLOG_TITLE; ?></h4>
+                                        <p class="text-3 mb-2"><?= substr_replace($BLOG_MESSAGE, '...', 100); ?></p>
+                                        <a href="post.php?id=<?= $BLOG_ID; ?>" class="btn btn-arrow-effect-1 ws-nowrap text-danger text-2 bg-transparent border-0 px-0 text-uppercase stretched-link">Lihat Lebih Banyak <i class="fas fa-arrow-right ms-2"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
