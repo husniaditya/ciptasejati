@@ -152,11 +152,13 @@ $(document).on("click", ".open-ViewTingkatGelar", function () {
   var tingkatansebutan = $(this).data('sebutan');
   var tingkatanlevel = $(this).data('level');
   var tingkatanstatus = $(this).data('status');
+  var tingkatansertifikat = $(this).data('sertifikat');
   $(".modal-body #viewTINGKATAN_NAMA").val( tingatannama );
   $(".modal-body #viewTINGKATAN_GELAR").val( tingkatangelar );
   $(".modal-body #viewTINGKATAN_SEBUTAN").val(tingkatansebutan);
   $(".modal-body #viewTINGKATAN_LEVEL").val( tingkatanlevel );
   $(".modal-body #viewTINGKATAN_STATUS").val( tingkatanstatus );
+  $(".modal-body #viewTINGKATAN_SERTIFIKAT").val( tingkatansertifikat );
   
   // console.log(tingatannama);
 });
@@ -169,6 +171,7 @@ $(document).on("click", ".open-EditTingkatGelar", function () {
   var tingkatansebutan = $(this).data('sebutan');
   var tingkatanlevel = $(this).data('level');
   var tingkatanstatus = $(this).data('status');
+  var tingkatansertifikat = $(this).data('sertifikat');
 
   // Set the values in the modal input fields
   $(".modal-body #editTINGKATAN_ID").val(tingkatanid);
@@ -177,6 +180,7 @@ $(document).on("click", ".open-EditTingkatGelar", function () {
   $(".modal-body #editTINGKATAN_SEBUTAN").val(tingkatansebutan);
   $(".modal-body #editTINGKATAN_LEVEL").val(tingkatanlevel);
   $(".modal-body #editTINGKATAN_STATUS").val(tingkatanstatus);
+  $(".modal-body #editTINGKATAN_SERTIFIKAT").val( tingkatansertifikat );
 
   // console.log(tingkatanstatus);
 });

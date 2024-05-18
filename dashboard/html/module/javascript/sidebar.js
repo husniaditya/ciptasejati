@@ -69,6 +69,12 @@ document.addEventListener('DOMContentLoaded', function () {
       addInClassToSubmenu('manajemenkonten');
       addInClassToSubmenu('tentangkami');
     }
+    
+    // MenuID: Persetujuan
+    if (currentPage === 'pusatdayaapprovalpelatih.php' || currentPage === 'pusatdayaapprovalguru.php') {
+      addInClassToSubmenu('persetujuan');
+      addInClassToSubmenu('persetujuanppd');
+    }
   
     // Function to set the active class for all level3 items in sub-menus
     function setActiveLevelItems(currentPage) {

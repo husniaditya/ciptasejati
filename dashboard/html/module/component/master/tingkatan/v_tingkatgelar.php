@@ -34,6 +34,7 @@ if ($_SESSION["ADD_TingkatandanGelar"] == "Y") {
                         <th>Sabuk</th>
                         <th>Tingkatan</th>
                         <th>Gelar</th>
+                        <th>Sertifikat</th>
                         <th>Level</th>
                         <th>Status</th>
                         <th>Input Oleh</th>
@@ -54,12 +55,12 @@ if ($_SESSION["ADD_TingkatandanGelar"] == "Y") {
                                             <?php
                                             if ($_SESSION["VIEW_TingkatandanGelar"] == "Y") {
                                                 ?>
-                                                <li><a data-toggle="modal" href="#ViewTingkatGelar" class="open-ViewTingkatGelar" style="color:#222222;" data-nama="<?= $TINGKATAN_NAMA; ?>" data-sebutan="<?= $TINGKATAN_SEBUTAN; ?>" data-gelar="<?= $TINGKATAN_GELAR;?>" data-level="<?= $TINGKATAN_LEVEL; ?>" data-status="<?= $TINGKATAN_STATUS; ?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
+                                                <li><a data-toggle="modal" href="#ViewTingkatGelar" class="open-ViewTingkatGelar" style="color:#222222;" data-nama="<?= $TINGKATAN_NAMA; ?>" data-sebutan="<?= $TINGKATAN_SEBUTAN; ?>" data-gelar="<?= $TINGKATAN_GELAR;?>" data-level="<?= $TINGKATAN_LEVEL; ?>" data-sertifikat="<?= $TINGKATAN_SERTIFIKAT; ?>" data-status="<?= $TINGKATAN_STATUS; ?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
                                                 <?php
                                             }
                                             if ($_SESSION["EDIT_TingkatandanGelar"] == "Y") {
                                                 ?>
-                                                <li><a data-toggle="modal" href="#EditTingkatGelar" class="open-EditTingkatGelar" style="color:cornflowerblue;" data-id="<?= $TINGKATAN_ID; ?>" data-nama="<?= $TINGKATAN_NAMA; ?>" data-sebutan="<?= $TINGKATAN_SEBUTAN; ?>" data-gelar="<?= $TINGKATAN_GELAR;?>" data-level="<?= $TINGKATAN_LEVEL; ?>" data-status="<?= $DELETION_STATUS; ?>"><span class="ico-edit"></span> Ubah</a></li>
+                                                <li><a data-toggle="modal" href="#EditTingkatGelar" class="open-EditTingkatGelar" style="color:cornflowerblue;" data-id="<?= $TINGKATAN_ID; ?>" data-nama="<?= $TINGKATAN_NAMA; ?>" data-sebutan="<?= $TINGKATAN_SEBUTAN; ?>" data-gelar="<?= $TINGKATAN_GELAR;?>" data-level="<?= $TINGKATAN_LEVEL; ?>" data-sertifikat="<?= $TINGKATAN_SERTIFIKAT; ?>" data-status="<?= $DELETION_STATUS; ?>"><span class="ico-edit"></span> Ubah</a></li>
                                                 <?php
                                             }
                                             if ($_SESSION["DELETE_TingkatandanGelar"] == "Y") {
@@ -77,6 +78,7 @@ if ($_SESSION["ADD_TingkatandanGelar"] == "Y") {
                             <td><?= $TINGKATAN_NAMA; ?></td>
                             <td><?= $TINGKATAN_SEBUTAN; ?></td>
                             <td align="center"><?= $TINGKATAN_GELAR; ?></td>
+                            <td align="center"><?= $TINGKATAN_SERTIFIKAT; ?></td>
                             <td align="center"><?= $TINGKATAN_LEVEL; ?></td>
                             <td align="center"><?= $TINGKATAN_STATUS; ?></td>
                             <td><?= $ANGGOTA_NAMA; ?></td>
@@ -130,6 +132,14 @@ if ($_SESSION["ADD_TingkatandanGelar"] == "Y") {
                             </div> 
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Sertifikat<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="TINGKATAN_SERTIFIKAT" name="TINGKATAN_SERTIFIKAT" value="" required data-parsley-required>
+                            </div> 
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Cancel</button>
@@ -174,6 +184,14 @@ if ($_SESSION["ADD_TingkatandanGelar"] == "Y") {
                             <div class="form-group">
                                 <label>Tingkatan Level<span class="text-danger">*</span></label></label>
                                 <input type="text" class="form-control" id="viewTINGKATAN_LEVEL" name="TINGKATAN_LEVEL" readonly value="" required data-parsley-required>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Sertifikat<span class="text-danger">*</span></label></label>
+                                <input type="text" class="form-control" id="viewTINGKATAN_SERTIFIKAT" name="TINGKATAN_SERTIFIKAT" readonly value="" required data-parsley-required>
                             </div> 
                         </div>
                         <div class="col-md-6">
@@ -238,6 +256,12 @@ if ($_SESSION["ADD_TingkatandanGelar"] == "Y") {
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Sertifikat<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editTINGKATAN_SERTIFIKAT" name="TINGKATAN_SERTIFIKAT" value="" required data-parsley-required>
+                            </div> 
+                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Status<span class="text-danger">*</span></label>

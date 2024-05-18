@@ -153,10 +153,6 @@
             // Initialize Selectize for the dropdown inside the modal
             $('#selectize-dropdown8').selectize({
                 create: true,
-                sortField: {
-                    field: 'text',
-                    direction: 'asc'
-                },
                 dropdownParent: '#selectize-wrapper8'
             });
         });

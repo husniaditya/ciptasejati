@@ -32,7 +32,7 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
     LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID = t2.TINGKATAN_ID
-    WHERE p.DELETION_STATUS = 0
+    WHERE p.DELETION_STATUS = 0 AND p.PPD_APPROVE_GURU = 0
     ORDER BY p.PPD_TANGGAL DESC");
 
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0");
@@ -65,7 +65,7 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
     LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID = t2.TINGKATAN_ID
-    WHERE p.DELETION_STATUS = 0 AND p.CABANG_KEY = '$USER_CABANG'
+    WHERE p.DELETION_STATUS = 0 AND p.CABANG_KEY = '$USER_CABANG' AND p.PPD_APPROVE_PELATIH = 0
     ORDER BY p.PPD_TANGGAL DESC");
 
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 and CABANG_KEY = '$USER_CABANG'");
@@ -203,14 +203,6 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 <hr>
-<!-- START row -->
-<div class="row"> <!-- Add Data Button -->
-    <div class="col-lg-12">
-        <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddPPD btn btn-inverse btn-outline mb5 btn-rounded" href="#AddPPD"><i class="ico-plus2"></i> Tambah Data Pembukaan Pusat Daya</a>
-    </div>
-</div>
-<br>
-<!--/ END row -->
 
 <!-- START row -->
 <div class="row"> <!-- Table PPD -->
@@ -261,8 +253,9 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                                 <?php
                                             }
                                             ?>
+                                            <li><a href="assets/print/transaksi/mutasi/print_mutasi.php?id=<?=$PPD_ID; ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
                                             <li class="divider"></li>
-                                            <li><a href="#" onclick="eventppd('<?= $PPD_ID;?>','delete')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
+                                            <li><a href="#" onclick="eventmutasi('<?= $PPD_ID;?>','delete')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
                                         </ul>
                                     </div>
                                 </form>
@@ -299,137 +292,6 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
 </div>
 <br><br>
 <!--/ END row -->
-
-<div id="AddPPD" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="AddPPD-form" method="post" class="form" data-parsley-validate>
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header text-center">
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-inverse">Tambah Data PPD Anggota</h3>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
-                            <div class="short-div">
-                                <label>Foto Anggota </label><br>
-                                <div id="loadpic"></div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                        <?php
-                        if ($USER_AKSES == "Administrator") {
-                            ?>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Daerah<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper9" style="position: relative;">
-                                        <select name="DAERAH_KEY" id="selectize-dropdown9" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Daerah --</option>
-                                            <?php
-                                            foreach ($rowd as $rowDaerah) {
-                                                extract($rowDaerah);
-                                                ?>
-                                                <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Cabang<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper10" style="position: relative;">
-                                        <select name="CABANG_KEY" id="selectize-dropdown10" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Cabang --</option>]
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <?php
-                        }
-                        ?>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Tanggal</label><span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="datepicker4" name="PPD_TANGGAL" placeholder="Pilih tanggal" readonly required data-parsley-required/>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Jenis PPD<span class="text-danger">*</span></label>
-                                    <select id="PPD_JENIS" name="PPD_JENIS" class="form-control" placeholder="-- Pilih Jenis PPD --" data-parsley-required required>
-                                        <option value="">-- Pilih Jenis PPD --</option>
-                                        <option value="0">Kenaikan</option>
-                                        <option value="1">Ulang</option>
-                                    </select>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Tingkatan Lanjutan<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper2" style="position: relative;">
-                                        <select name="TINGKATAN_ID" id="selectize-dropdown2" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Tingkatan --</option>
-                                            <?php
-                                            foreach ($rowt as $rowTingkatan) {
-                                                extract($rowTingkatan);
-                                                ?>
-                                                <option value="<?= $TINGKATAN_ID; ?>"><?= $TINGKATAN_NAMA; ?> - <?= $TINGKATAN_SEBUTAN; ?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Pilih Anggota<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper4" style="position: relative;">
-                                        <select name="ANGGOTA_KEY" id="selectize-dropdown4" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Anggota --</option>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Lokasi Cabang PPD<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper8" style="position: relative;">
-                                        <select name="PPD_LOKASI" id="selectize-dropdown8" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Cabang --</option>
-                                            <?php
-                                            foreach ($rowPPDCabang as $rowCabang) {
-                                                extract($rowCabang);
-                                                ?>
-                                                <option value="<?= $CABANG_KEY; ?>"><?= $CABANG_DESKRIPSI; ?> - <?= $DAERAH_DESKRIPSI; ?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Deskripsi<span class="text-danger">*</span></label>
-                                    <textarea type="text" rows="4" class="form-control" id="MUTASI_DESKRIPSI" name="PPD_DESKRIPSI" value="" data-parsley-required required></textarea>
-                                </div> 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Cancel</button>
-                    <button type="submit" name="submit" id="saveppd" class="submit btn btn-primary btn-outline mb5 btn-rounded"><span class="ico-save"></span> Save</button>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
 
 <div id="ViewPPD" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form id="ViewPPD-form" method="post" class="form" data-parsley-validate>
@@ -511,137 +373,137 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
     </form>
 </div>
 
-<div id="EditPPD" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="EditPPD-form" method="post" class="form" data-parsley-validate>
+<div id="ApproveMutasiAnggota" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form id="ApproveMutasiAnggota-form" method="post" class="form" data-parsley-validate>
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-inverse">Ubah Data PPD Anggota</h3>
+                    <h3 class="semibold modal-title text-inverse">Persetujuan Data Mutasi Anggota</h3>
                 </div>
                 <div class="modal-body">
+                    <h5 class="text-center" id="appMUTASI_STATUS_DES"></h5><br>
+                    <div class="row hidden">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>ID Mutasi</label>
+                                <input type="text" class="form-control" id="appPPD_ID" name="PPD_ID" value="" readonly>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
+                            <div class="form-group">
+                                <label>Diajukan Oleh</label>
+                                <p id="appINPUT_BY"></p>
+                            </div> 
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-xs-3">
+                            <div class="form-group">
+                                <label>Tanggal Pengajuan</label>
+                                <p id="appINPUT_DATE"></p>
+                            </div> 
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-xs-3">
+                            <div class="form-group">
+                                <label>Disetujui Oleh</label>
+                                <p id="appAPPROVE_BY"></p>
+                            </div> 
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-xs-3">
+                            <div class="form-group">
+                                <label>Tanggal persetujuan</label>
+                                <p id="appMUTASI_APP_TANGGAL"></p>
+                            </div> 
+                        </div>
+                    </div>
+                    <hr>
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
                             <div class="short-div">
                                 <label>Foto Anggota </label><br>
-                                <div id="loadpicedit"></div>
+                                <div id="loadpicapp"></div>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="short-div">
+                                <div class="form-group">
+                                    <label>ID - Nama Anggota</label>
+                                    <input type="text" class="form-control" id="appANGGOTA_IDNAMA" name="ANGGOTA_ID" value="" readonly>
+                                </div> 
+                            </div>
                             <div class="short-div hidden">
                                 <div class="form-group">
-                                    <label>ID</label><span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="editPPD_ID" name="PPD_ID" readonly required data-parsley-required/>
-                                </div> 
-                            </div>
-                        <?php
-                        if ($USER_AKSES == "Administrator") {
-                            ?>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Daerah<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper3" style="position: relative;">
-                                        <select name="DAERAH_KEY" id="selectize-dropdown3" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Daerah --</option>
-                                            <?php
-                                            foreach ($rowd as $rowDaerah) {
-                                                extract($rowDaerah);
-                                                ?>
-                                                <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
+                                    <label>ID Cabang</label>
+                                    <input type="text" class="form-control" id="appCABANG_AWAL" name="CABANG_AWAL" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label>Cabang<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper5" style="position: relative;">
-                                        <select name="CABANG_KEY" id="selectize-dropdown5" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Cabang --</option>]
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <?php
-                        }
-                        ?>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Tanggal</label><span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="datepicker41" name="PPD_TANGGAL" placeholder="Pilih tanggal" readonly required data-parsley-required/>
+                                    <label>Daerah</label>
+                                    <input type="text" class="form-control" id="appDAERAH_AWAL_DES" name="DAERAH_AWAL" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label>Jenis PPD<span class="text-danger">*</span></label>
-                                    <select id="editPPD_JENIS" name="PPD_JENIS" class="form-control" placeholder="-- Pilih Jenis PPD --" data-parsley-required required>
-                                        <option value="">-- Pilih Jenis PPD --</option>
-                                        <option value="0">Kenaikan</option>
-                                        <option value="1">Ulang</option>
-                                    </select>
+                                    <label>Cabang</label>
+                                    <input type="text" class="form-control" id="appCABANG_AWAL_DES" name="CABANG_DESKRIPSI" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label>Tingkatan Lanjutan<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper6" style="position: relative;">
-                                        <select name="TINGKATAN_ID" id="selectize-dropdown6" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Tingkatan --</option>
-                                            <?php
-                                            foreach ($rowt as $rowTingkatan) {
-                                                extract($rowTingkatan);
-                                                ?>
-                                                <option value="<?= $TINGKATAN_ID; ?>"><?= $TINGKATAN_NAMA; ?> - <?= $TINGKATAN_SEBUTAN; ?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
+                                    <label>Sabuk</label>
+                                    <input type="text" class="form-control" id="appTINGKATAN_NAMA" name="TINGKATAN_ID" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label>Pilih Anggota<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper7" style="position: relative;">
-                                        <select name="ANGGOTA_KEY" id="selectize-dropdown7" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Anggota --</option>
-                                        </select>
-                                    </div>
+                                    <label>Tingkatan</label>
+                                    <input type="text" class="form-control" id="appTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
                                 </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Lokasi Cabang PPD<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper11" style="position: relative;">
-                                        <select name="PPD_LOKASI" id="selectize-dropdown11" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Cabang --</option>
-                                            <?php
-                                            foreach ($rowPPDCabang as $rowCabang) {
-                                                extract($rowCabang);
-                                                ?>
-                                                <option value="<?= $CABANG_KEY; ?>"><?= $CABANG_DESKRIPSI; ?> - <?= $DAERAH_DESKRIPSI; ?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Deskripsi<span class="text-danger">*</span></label>
-                                    <textarea type="text" rows="4" class="form-control" id="editPPD_DESKRIPSI" name="PPD_DESKRIPSI" value="" data-parsley-required required></textarea>
-                                </div> 
-                            </div>
+                            </div>   
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Daerah Tujuan</label>
+                                <input type="text" class="form-control" id="appDAERAH_TUJUAN_DES" name="DAERAH_TUJUAN" value="" readonly>
+                            </div> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Cabang Tujuan</label>
+                                <input type="text" class="form-control" id="appCABANG_TUJUAN_DES" name="CABANG_TUJUAN" value="" readonly>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Deskripsi</label>
+                                <textarea type="text" rows="4" class="form-control" id="appMUTASI_DESKRIPSI" name="MUTASI_DESKRIPSI" value="" data-parsley-required readonly></textarea>
+                            </div> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Tanggal Efektif</label>
+                                <input type="text" class="form-control" id="appTANGGAL_EFEKTIF" name="MUTAS_TANGGAL" value="" readonly>
+                            </div> 
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Cancel</button>
-                    <button type="submit" name="submit" id="updateppd" class="submit btn btn-primary btn-outline mb5 btn-rounded"><span class="ico-save"></span> Save</button>
+                    <div class="row">
+                        <div class="col-md-6 text-left">
+                            <button type="submit" name="submit" id="approvemutasianggota" class="submit btn btn-success mb5 btn-rounded"><i class="fa-regular fa-square-check"></i> Setuju</button>
+                            <button type="submit" name="submit" id="rejectmutasianggota" class="submit btn btn-danger mb5 btn-rounded"><i class="fa-regular fa-rectangle-xmark"></i> Tolak</button>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <button type="button" class="btn btn-inverse btn-outline mb5 btn-rounded next" data-dismiss="modal"><span class="ico-cancel"></span> Close</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

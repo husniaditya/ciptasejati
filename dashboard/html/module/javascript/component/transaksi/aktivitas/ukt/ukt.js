@@ -2,7 +2,7 @@
 
 // Mutasi Anggota Table
 function callTable() {
-  $('#ppd-table').DataTable({
+  $('#ukt-table').DataTable({
       responsive: true,
       order: [],
       dom: 'Bfrtlip',
@@ -20,28 +20,120 @@ $(document).ready(function() { // Function Call Table
   callTable();
 });
 
+function populateFields() { // Funciton Populate Fields
+  var selectize = $("#selectize-dropdown")[0].selectize;
+  // Clear the second Selectize dropdown
+  var selectizeInstance2 = $('#selectize-dropdown2')[0].selectize;
+  var selectizeInstance3 = $('#selectize-dropdown3')[0].selectize;
+  if (selectizeInstance2) {
+    selectizeInstance2.clear();
+  }
+  if (selectizeInstance3) {
+    selectizeInstance3.clear();
+  }
+
+
+  // Get the selected value
+  var selectedValue = selectize.getValue();
+
+  // Make an AJAX request to fetch additional data based on the selected value
+  $.ajax({
+    url: 'module/ajax/transaksi/anggota/mutasianggota/aj_getdetailanggota.php',
+    method: 'POST',
+    data: { ANGGOTA_KEY: selectedValue },
+    success: function(data) {
+      // console.log('response', data);
+      // Assuming data is a JSON object with the required information
+      // Make sure the keys match the fields in your returned JSON object
+      $("#DAERAH_AWAL").val(data.DAERAH_DESKRIPSI);
+      $("#CABANG_AWAL").val(data.CABANG_KEY);
+      $("#CABANG_DESKRIPSI").val(data.CABANG_DESKRIPSI);
+      $("#TINGKATAN_ID").val(data.TINGKATAN_ID);
+      $("#TINGKATAN_NAMA").val(data.TINGKATAN_NAMA);
+      $("#TINGKATAN_SEBUTAN").val(data.TINGKATAN_SEBUTAN);
+      $("#ANGGOTA_RANTING").val(data.ANGGOTA_RANTING);
+
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+        data:'ANGGOTA_KEY='+selectedValue,
+        success: function(data){
+          $("#loadpic").html(data);
+        }
+      });
+
+    },
+    error: function(error) {
+      console.error('Error fetching data:', error);
+    }
+  });
+}
+
+function populateFieldsEdit() { // Funciton Populate Fields in Edit Modal
+  var selectize = $("#selectize-dropdown4")[0].selectize;
+  // Clear the second Selectize dropdown
+  var selectizeInstance2 = $('#selectize-dropdown5')[0].selectize;
+  var selectizeInstance3 = $('#selectize-dropdown6')[0].selectize;
+  if (selectizeInstance2) {
+    selectizeInstance2.clear();
+  }
+  if (selectizeInstance3) {
+    selectizeInstance3.clear();
+  }
+
+
+  // Get the selected value
+  var selectedValue = selectize.getValue();
+
+  // Make an AJAX request to fetch additional data based on the selected value
+  $.ajax({
+    url: 'module/ajax/transaksi/anggota/mutasianggota/aj_getdetailanggota.php',
+    method: 'POST',
+    data: { ANGGOTA_KEY: selectedValue },
+    success: function(data) {
+      // console.log('response', data);
+      // Assuming data is a JSON object with the required information
+      // Make sure the keys match the fields in your returned JSON object
+      $("#editDAERAH_AWAL").val(data.DAERAH_DESKRIPSI);
+      $("#editCABANG_AWAL").val(data.CABANG_KEY);
+      $("#editCABANG_DESKRIPSI").val(data.CABANG_DESKRIPSI);
+      $("#editTINGKATAN_ID").val(data.TINGKATAN_ID);
+      $("#editTINGKATAN_NAMA").val(data.TINGKATAN_NAMA);
+      $("#editTINGKATAN_SEBUTAN").val(data.TINGKATAN_SEBUTAN);
+      $("#editANGGOTA_RANTING").val(data.ANGGOTA_RANTING);
+
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+        data:'ANGGOTA_KEY='+selectedValue,
+        success: function(data){
+          $("#loadpicedit").html(data);
+        }
+      });
+
+    },
+    error: function(error) {
+      console.error('Error fetching data:', error);
+    }
+  });
+}
+
 function resetPreview() { // Function Reset Preview Dropdown Value
   var selectizeInstance2 = $('#selectize-dropdown2')[0].selectize; // Add Tingkatan
-  var selectizeInstance4 = $('#selectize-dropdown4')[0].selectize; // Add Anggota
-  var selectizeInstance8 = $('#selectize-dropdown8')[0].selectize; // Add Lokasi PPD
-  var selectizeInstance6 = $('#selectize-dropdown6')[0].selectize; // Edit Tingkatan
-  var selectizeInstance7 = $('#selectize-dropdown7')[0].selectize; // Edit Anggota
-  var selectizeInstance11 = $('#selectize-dropdown11')[0].selectize; // Edit Lokasi PPD
+  var selectizeInstance3 = $('#selectize-dropdown3')[0].selectize; // Add Anggota
+  var selectizeInstance5 = $('#selectize-dropdown4')[0].selectize; // Add PIC
 
-  var isExist = $('#selectize-dropdown9').length > 0 && $('#selectize-dropdown10').length > 0 && $('#selectize-dropdown3').length > 0 && $('#selectize-dropdown5').length > 0;
+  var isExist = $('#selectize-dropdown9').length > 0 && $('#selectize-dropdown10').length > 0 && $('#selectize-dropdown11').length > 0 && $('#selectize-dropdown12').length > 0;
 
   if (isExist) {
     var selectizeInstance9 = $('#selectize-dropdown9')[0].selectize;
     var selectizeInstance10 = $('#selectize-dropdown10')[0].selectize;
-    var selectizeInstance3 = $('#selectize-dropdown3')[0].selectize;
-    var selectizeInstance5 = $('#selectize-dropdown5')[0].selectize;
+    var selectizeInstance11 = $('#selectize-dropdown11')[0].selectize;
+    var selectizeInstance12 = $('#selectize-dropdown12')[0].selectize;
   }
 
-  if (selectizeInstance9) {
-    selectizeInstance9.clear();
-  }
-  if (selectizeInstance10) {
-    selectizeInstance10.clear();
+  if (selectizeInstance2) {
+    selectizeInstance2.clear();
   }
   if (selectizeInstance3) {
     selectizeInstance3.clear();
@@ -49,24 +141,26 @@ function resetPreview() { // Function Reset Preview Dropdown Value
   if (selectizeInstance5) {
     selectizeInstance5.clear();
   }
-  if (selectizeInstance2) {
-    selectizeInstance2.clear();
+  if (selectizeInstance9) {
+    selectizeInstance9.clear();
   }
-  if (selectizeInstance4) {
-    selectizeInstance4.clear();
-  }
-  if (selectizeInstance8) {
-    selectizeInstance8.clear();
-  }
-  if (selectizeInstance6) {
-    selectizeInstance6.clear();
-  }
-  if (selectizeInstance7) {
-    selectizeInstance7.clear();
+  if (selectizeInstance10) {
+    selectizeInstance10.clear();
   }
   if (selectizeInstance11) {
     selectizeInstance11.clear();
   }
+  if (selectizeInstance12) {
+    selectizeInstance12.clear();
+  }
+
+  // Get the reference to your HTML table body
+  var anggotaTableBody = document.getElementById('anggota-table').getElementsByTagName('tbody')[0];
+  var picTableBody = document.getElementById('pic-table').getElementsByTagName('tbody')[0];
+
+  // Clear all rows from the table body
+  anggotaTableBody.innerHTML = '';
+  picTableBody.innerHTML = '';
 }
 
 function savePDFToDrive(MUTASI_ID) { // Function Save PDF to Drive
@@ -105,7 +199,7 @@ function sendEmailNotification(MUTASI_ID) { // Function Send Email Notification
 
 // Assuming you have a Bootstrap modal with the ID "myModal"
 
-$('#EditPPD').on('hidden.bs.modal', handleModalHidden);
+$('#EditMutasiAnggota').on('hidden.bs.modal', handleModalHidden);
 $('#AddPPD').on('hidden.bs.modal', handleModalHidden);
 
 var formSubmitted = false; // Flag to indicate whether the form has been submitted
@@ -174,34 +268,34 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
           hideLoadingOverlay();
 
           // Example usage:
-          // showLoadingOverlay('Proses pembuatan dokumen dan pengiriman email...');
+          showLoadingOverlay('Proses pembuatan dokumen dan pengiriman email...');
 
-          // // Save PDF to Drive and send email notification concurrently
-          // Promise.all([savePDFToDrive(PPD_ID), sendEmailNotification(PPD_ID)])
-          //   .then(function (responses) {
-          //     const pdfResponse = responses[0];
-          //     const emailResponse = responses[1];
+          // Save PDF to Drive and send email notification concurrently
+          Promise.all([savePDFToDrive(PPD_ID), sendEmailNotification(PPD_ID)])
+            .then(function (responses) {
+              const pdfResponse = responses[0];
+              const emailResponse = responses[1];
 
-          //     // Handle the responses if needed
-          //     if (pdfResponse) {
-          //     }
+              // Handle the responses if needed
+              if (pdfResponse) {
+              }
 
-          //     if (emailResponse === 'Success') {
-          //       MailNotification('Email pemberitahuan berhasil dikirimkan!');
-          //     } else {
-          //       failedNotification(emailResponse);
-          //     }
-          //   })
-          //   .catch(function (errors) {
-          //     // Handle errors
-          //     for (const error of errors) {
-          //       errorNotification(error);
-          //     }
-          //   })
-          //   .finally(function () {
-          //     // Hide the loading overlay after all asynchronous tasks are complete
-          //     hideLoadingOverlay();
-          //   });
+              if (emailResponse === 'Success') {
+                MailNotification('Email pemberitahuan berhasil dikirimkan!');
+              } else {
+                failedNotification(emailResponse);
+              }
+            })
+            .catch(function (errors) {
+              // Handle errors
+              for (const error of errors) {
+                errorNotification(error);
+              }
+            })
+            .finally(function () {
+              // Hide the loading overlay after all asynchronous tasks are complete
+              hideLoadingOverlay();
+            });
         } else {
           // Display error notification
           failedNotification(response);
@@ -221,60 +315,32 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
 }
 
 function handleModalHidden() {
+  if (formSubmitted) { // Check if the form has not been submitted
+      $.ajax({
+          url: 'module/ajax/transaksi/aktivitas/ppd/aj_deletedetailppd.php',
+          method: 'POST',
+          dataType: 'json',
+          success: function(data) {
+              // console.log('Data Deleted Status: ' + data);
+          },
+          error: function(xhr, status, error) {
+              console.error('Error deleting data:', status, error);
+          }
+      });
+  }
 
   resetPreview();
+  // Reset the formSubmitted flag for the next form submission
+  formSubmitted = false;
 }
 
 $(document).ready(function() {
   // add Anggota
   handleForm('#AddPPD-form', SuccessNotification, FailedNotification, UpdateNotification);
   // edit Anggota
-  handleForm('#EditPPD-form', UpdateNotification, FailedNotification, UpdateNotification);
+  handleForm('#EditMutasiAnggota-form', UpdateNotification, FailedNotification, UpdateNotification);
   // Approve Anggota
   handleForm('#ApproveMutasiAnggota-form', UpdateNotification, FailedNotification, UpdateNotification);
-
-  // Event listener for the anggota dropdown change
-  $('#selectize-dropdown4').change(function() {
-    // Initialize Selectize on the first dropdown
-    var selectizeAnggota = $('#selectize-dropdown4').selectize();
-    
-    // Get the Selectize instance
-    var AnggotaInstance = selectizeAnggota[0].selectize;
-    
-    // Get the selected values from both dropdowns
-    var ANGGOTA_KEY = AnggotaInstance.getValue();
-
-    // Make an AJAX request to fetch data for the second dropdown based on the selected value
-    $.ajax({
-      type: "POST",
-      url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-      data:'ANGGOTA_KEY='+ANGGOTA_KEY,
-      success: function(data){
-        $("#loadpic").html(data);
-      }
-    });
-  });
-  // Event listener for the anggota dropdown change
-  $('#selectize-dropdown7').change(function() {
-    // Initialize Selectize on the first dropdown
-    var selectizeAnggota = $('#selectize-dropdown7').selectize();
-    
-    // Get the Selectize instance
-    var AnggotaInstance = selectizeAnggota[0].selectize;
-    
-    // Get the selected values from both dropdowns
-    var ANGGOTA_KEY = AnggotaInstance.getValue();
-
-    // Make an AJAX request to fetch data for the second dropdown based on the selected value
-    $.ajax({
-      type: "POST",
-      url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-      data:'ANGGOTA_KEY='+ANGGOTA_KEY,
-      success: function(data){
-        $("#loadpicedit").html(data);
-      }
-    });
-  });
 
   // Get Dropdown Cabang from Daerah
   // Event listener for the daerah awal dropdown change
@@ -315,43 +381,6 @@ $(document).ready(function() {
     });
   });
 
-  $('#selectize-dropdown3').change(function() {
-    // Initialize Selectize on the first dropdown
-    var selectizeSelect9 = $('#selectize-dropdown3').selectize();
-    
-    // Get the Selectize instance
-    var selectizeInstance = selectizeSelect9[0].selectize;
-
-    // Event listener for the first dropdown change
-    selectizeInstance.on('change', function (selectedDaerah) {
-        // Make an AJAX request to fetch data for the second dropdown based on the selected value
-        $.ajax({
-            url: 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php',
-            method: 'POST',
-            data: { id: selectedDaerah },
-            dataType: 'json', // Specify the expected data type as JSON
-            success: function (data) {
-                // Clear options in the second dropdown
-                var selectizeSelect2 = $('#selectize-dropdown5').selectize();
-                var selectizeInstance2 = selectizeSelect2[0].selectize;
-                selectizeInstance2.clearOptions();
-
-                // Add new options to the second dropdown
-                selectizeInstance2.addOption(data);
-
-                // Update the value of the second dropdown
-                selectizeInstance2.setValue('');
-
-                // Refresh the Selectize instance to apply changes
-                // selectizeInstance2.refreshOptions();
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching cabang data:', status, error);
-            }
-        });
-    });
-  });
-
   // Get Dropdown Anggota
   // Event listener for the daerah awal dropdown change
   
@@ -359,7 +388,7 @@ $(document).ready(function() {
   var isValid = $('#selectize-dropdown10').length > 0;
 
   if (isValid) {
-    $('#selectize-dropdown2, #PPD_JENIS').change(function() {
+    $('#selectize-dropdown10, #selectize-dropdown2').change(function() {
       // Initialize Selectize on the first and second dropdowns
       var selectizeSelect9 = $('#selectize-dropdown10').selectize();
       var selectizeSelect10 = $('#selectize-dropdown2').selectize();
@@ -371,14 +400,13 @@ $(document).ready(function() {
       // Get the selected values from both dropdowns
       var CABANG = selectizeInstance9.getValue();
       var TINGKATAN = selectizeInstance10.getValue();
-      var JENIS = $('#PPD_JENIS').val();
   
       // Make an AJAX request to fetch data for the third dropdown based on the selected values
       // Request For Anggota PPD
       $.ajax({
           url: 'module/ajax/transaksi/aktivitas/ppd/aj_getanggotappd.php',
           method: 'POST',
-          data: { CABANG_KEY: CABANG, TINGKATAN_ID: TINGKATAN, PPD_JENIS: JENIS},
+          data: { CABANG_KEY: CABANG, TINGKATAN_ID: TINGKATAN },
           dataType: 'json', // Specify the expected data type as JSON
           success: function (data) {
               // Clear options in the third dropdown
@@ -399,52 +427,35 @@ $(document).ready(function() {
               console.error('Error fetching cabang data:', status, error);
           }
       });
-    });
 
-    $('#selectize-dropdown5, #selectize-dropdown6, #editPPD_JENIS').change(function() {
-      // Initialize Selectize on the first and second dropdowns
-      var selectizeSelect9 = $('#selectize-dropdown5').selectize();
-      var selectizeSelect10 = $('#selectize-dropdown6').selectize();
-  
-      // Get the Selectize instances
-      var selectizeInstance9 = selectizeSelect9[0].selectize;
-      var selectizeInstance10 = selectizeSelect10[0].selectize;
-  
-      // Get the selected values from both dropdowns
-      var CABANG = selectizeInstance9.getValue();
-      var TINGKATAN = selectizeInstance10.getValue();
-      var JENIS = $('#editPPD_JENIS').val();
-
-  
-      // Make an AJAX request to fetch data for the third dropdown based on the selected values
-      // Request For Anggota PPD
+      // Request For PIC PPD
       $.ajax({
-          url: 'module/ajax/transaksi/aktivitas/ppd/aj_getanggotappd.php',
-          method: 'POST',
-          data: { CABANG_KEY: CABANG, TINGKATAN_ID: TINGKATAN, PPD_JENIS: JENIS},
-          dataType: 'json', // Specify the expected data type as JSON
-          success: function (data) {
-              // Clear options in the third dropdown
-              var selectizeSelect3 = $('#selectize-dropdown7').selectize();
-              var selectizeInstance3 = selectizeSelect3[0].selectize;
-              selectizeInstance3.clearOptions();
-  
-              // Add new options to the third dropdown
-              selectizeInstance3.addOption(data);
-  
-              // Update the value of the third dropdown
-              selectizeInstance3.setValue('');
-  
-              // Refresh the Selectize instance to apply changes
-              // selectizeInstance3.refreshOptions();
-          },
-          error: function(xhr, status, error) {
-              console.error('Error fetching cabang data:', status, error);
-          }
+        url: 'module/ajax/transaksi/aktivitas/ppd/aj_getpicppd.php',
+        method: 'POST',
+        data: { CABANG_KEY: CABANG, TINGKATAN_ID: TINGKATAN },
+        dataType: 'json', // Specify the expected data type as JSON
+        success: function (data) {
+          // Clear options in the third dropdown
+          var PICSelect = $('#selectize-dropdown3').selectize();
+          var PICInstance = PICSelect[0].selectize;
+          PICInstance.clearOptions();
+
+          // Add new options to the third dropdown
+          PICInstance.addOption(data);
+
+          // Update the value of the third dropdown
+          PICInstance.setValue('');
+
+          // Refresh the Selectize instance to apply changes
+          // selectizeInstance3.refreshOptions();
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching cabang data:', status, error);
+        }
       });
     });
   } else {
-    $('#selectize-dropdown2, #PPD_JENIS').change(function() {
+    $('#selectize-dropdown2').change(function() {
       // Initialize Selectize on the first and second dropdowns
       var selectizeSelect10 = $('#selectize-dropdown2').selectize();
   
@@ -453,14 +464,13 @@ $(document).ready(function() {
   
       // Get the selected values from both dropdowns
       var TINGKATAN = selectizeInstance10.getValue();
-      var JENIS = $('#PPD_JENIS').val();
   
       // Make an AJAX request to fetch data for the third dropdown based on the selected values
       // Request For Anggota PPD
       $.ajax({
           url: 'module/ajax/transaksi/aktivitas/ppd/aj_getanggotappd.php',
           method: 'POST',
-          data: { TINGKATAN_ID: TINGKATAN, PPD_JENIS: JENIS },
+          data: { TINGKATAN_ID: TINGKATAN },
           dataType: 'json', // Specify the expected data type as JSON
           success: function (data) {
               // Clear options in the third dropdown
@@ -481,44 +491,30 @@ $(document).ready(function() {
               console.error('Error fetching anggota data:', status, error);
           }
       });
-    });
-
-    $('#selectize-dropdown6, #editPPD_JENIS').change(function() {
-      // Initialize Selectize on the first and second dropdowns
-      var selectizeSelect6 = $('#selectize-dropdown6').selectize();
-  
-      // Get the Selectize instances
-      var selectizeInstance6 = selectizeSelect6[0].selectize;
-  
-      // Get the selected values from both dropdowns
-      var TINGKATAN = selectizeInstance6.getValue();
-      var JENIS = $('#editPPD_JENIS').val();
-  
-      // Make an AJAX request to fetch data for the third dropdown based on the selected values
-      // Request For Anggota PPD
+      // Request For PIC PPD
       $.ajax({
-          url: 'module/ajax/transaksi/aktivitas/ppd/aj_getanggotappd.php',
-          method: 'POST',
-          data: { TINGKATAN_ID: TINGKATAN, PPD_JENIS: JENIS },
-          dataType: 'json', // Specify the expected data type as JSON
-          success: function (data) {
-              // Clear options in the third dropdown
-              var selectizeSelect7 = $('#selectize-dropdown7').selectize();
-              var selectizeInstance7 = selectizeSelect7[0].selectize;
-              selectizeInstance7.clearOptions();
-  
-              // Add new options to the third dropdown
-              selectizeInstance7.addOption(data);
-  
-              // Update the value of the third dropdown
-              selectizeInstance7.setValue('');
-  
-              // Refresh the Selectize instance to apply changes
-              // selectizeInstance3.refreshOptions();
-          },
-          error: function(xhr, status, error) {
-              console.error('Error fetching anggota data:', status, error);
-          }
+        url: 'module/ajax/transaksi/aktivitas/ppd/aj_getpicppd.php',
+        method: 'POST',
+        data: { TINGKATAN_ID: TINGKATAN },
+        dataType: 'json', // Specify the expected data type as JSON
+        success: function (data) {
+            // Clear options in the third dropdown
+            var PICSelect = $('#selectize-dropdown3').selectize();
+            var PICInstance = PICSelect[0].selectize;
+            PICInstance.clearOptions();
+
+            // Add new options to the third dropdown
+            PICInstance.addOption(data);
+
+            // Update the value of the third dropdown
+            PICInstance.setValue('');
+
+            // Refresh the Selectize instance to apply changes
+            // selectizeInstance3.refreshOptions();
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching cabang data:', status, error);
+        }
       });
     });
   }
@@ -585,20 +581,20 @@ $(document).ready(function() {
   });
 });
 
-// Delete PPD
-function eventppd(value1,value2) {
+// Delete Anggota
+function eventmutasi(value1,value2) {
   // Ask for confirmation
   if (confirm("Apakah anda yakin untuk mereset / menghapus data ini?")) {
     // Create the data object
     var eventdata = {
-      PPD_ID: value1,
+      MUTASI_ID: value1,
       EVENT_ACTION: value2
     };
 
     // Perform the AJAX request
     $.ajax({
       type: 'POST',
-      url: 'module/backend/transaksi/aktivitas/ppd/t_ppd.php',
+      url: 'module/backend/transaksi/anggota/mutasianggota/t_mutasianggota.php',
       data: eventdata,
       success: function(response) {
         // Check the response from the server
@@ -613,15 +609,15 @@ function eventppd(value1,value2) {
           // Call the reloadDataTable() function after inserting data to reload the DataTable
           $.ajax({
             type: 'POST',
-            url: 'module/ajax/transaksi/aktivitas/ppd/aj_tableppd.php',
-            success: function (response) {
+            url: 'module/ajax/transaksi/anggota/mutasianggota/aj_tablemutasianggota.php',
+            success: function(response) {
               // Destroy the DataTable before updating
-              $('#ppd-table').DataTable().destroy();
-              $("#ppddata").html(response);
+              $('#mutasianggota-table').DataTable().destroy();
+              $("#mutasianggotadata").html(response);
               // Reinitialize Sertifikat Table
               callTable();
             },
-            error: function (xhr, status, error) {
+            error: function(xhr, status, error) {
               // Handle any errors
             }
           });
@@ -639,106 +635,152 @@ function eventppd(value1,value2) {
   }
 }
 
-// View PPD
-$(document).on("click", ".open-ViewPPD", function () {
+// View Anggota
+$(document).on("click", ".open-ViewMutasiAnggota", function () {
   
   var key = $(this).data('id');
+  var anggota = $(this).data('anggota');
   
   // Make an AJAX request to fetch additional data based on the selected value
   $.ajax({
-    url: 'module/ajax/transaksi/aktivitas/ppd/aj_getdetailppd.php',
+    url: 'module/ajax/transaksi/anggota/mutasianggota/aj_getdetailmutasi.php',
     method: 'POST',
-    data: { PPD_ID: key },
+    data: { MUTASI_ID: key },
     success: function(data) {
       // console.log('response', data);
       // Assuming data is a JSON object with the required information
       // Make sure the keys match the fields in your returned JSON object
-      $("#viewPPD_DAERAH").val(data.DAERAH_DESKRIPSI);
-      $("#viewPPD_CABANG").val(data.CABANG_DESKRIPSI);
-      $("#viewPPD_TANGGAL").val(data.PPD_TANGGAL);
-      $("#viewPPD_JENIS").val(data.PPD_JENIS_DESKRIPSI);
-      $("#viewPPD_TINGKATAN").val(data.TINGKATAN_NAMA + ' - ' + data.TINGKATAN_SEBUTAN);
-      $("#viewPPD_ANGGOTA").val(data.ANGGOTA_NAMA);
-      $("#viewPPD_LOKASI").val(data.LOKASI_DAERAH + ' - ' + data.LOKASI_CABANG);
-      $("#viewPPD_DESKRIPSI").val(data.PPD_DESKRIPSI);
-
-      // Make an AJAX request to fetch data for the second dropdown based on the selected value
-      $.ajax({
-        type: "POST",
-        url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-        data:'ANGGOTA_KEY='+data.ANGGOTA_KEY,
-        success: function(result){
-          $("#loadpicview").html(result);
-        }
-      });
+      $("#viewDAERAH_AWAL_KEY").val(data.DAERAH_AWAL_KEY);
+      $("#viewDAERAH_AWAL_DES").val(data.DAERAH_AWAL_DES);
+      $("#viewCABANG_AWAL").val(data.CABANG_AWAL);
+      $("#viewCABANG_AWAL_DES").val(data.CABANG_AWAL_DES);
+      $("#viewDAERAH_TUJUAN_KEY").val(data.DAERAH_TUJUAN_KEY);
+      $("#viewDAERAH_TUJUAN_DES").val(data.DAERAH_TUJUAN_DES);
+      $("#viewCABANG_TUJUAN").val(data.CABANG_TUJUAN);
+      $("#viewCABANG_TUJUAN_DES").val(data.CABANG_TUJUAN_DES);
+      $("#viewANGGOTA_KEY").val(data.ANGGOTA_KEY);
+      $("#viewANGGOTA_ID").val(data.ANGGOTA_ID);
+      $("#viewANGGOTA_IDNAMA").val(data.ANGGOTA_IDNAMA);
+      $("#viewANGGOTA_NAMA").val(data.ANGGOTA_NAMA);
+      $("#viewANGGOTA_IDNAMA").val(data.ANGGOTA_IDNAMA);
+      $("#viewTINGKATAN_NAMA").val(data.TINGKATAN_NAMA);
+      $("#viewTINGKATAN_SEBUTAN").val(data.TINGKATAN_SEBUTAN);
+      $("#viewMUTASI_DESKRIPSI").val(data.MUTASI_DESKRIPSI);
+      $("#viewMUTASI_TANGGAL").val(data.MUTASI_TANGGAL);
+      $("#viewTANGGAL_EFEKTIF").val(data.TANGGAL_EFEKTIF);
+      $("#viewINPUT_BY").text(data.INPUT_BY);
+      $("#viewINPUT_DATE").text(data.INPUT_DATE);
+      $("#viewAPPROVE_BY").text(data.APPROVE_BY);
+      $("#viewMUTASI_APP_TANGGAL").text(data.MUTASI_APP_TANGGAL);
+      $("#viewMUTASI_STATUS_DES").html(data.MUTASI_STATUS_DES);
 
     },
     error: function(error) {
       console.error('Error fetching data:', error);
     }
   });
+
+  $.ajax({
+    type: "POST",
+    url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+    data:'ANGGOTA_KEY='+anggota,
+    success: function(data){
+      $("#loadpicview").html(data);
+    }
+  });
+  
+  // console.log(id);
 });
 
-// Edit PPD
-$(document).on("click", ".open-EditPPD", function () {
+// Edit Anggota
+$(document).on("click", ".open-EditMutasiAnggota", function () {
   
   var key = $(this).data('id');
+  var anggota = $(this).data('anggota');
   
   // Make an AJAX request to fetch additional data based on the selected value
   $.ajax({
-    url: 'module/ajax/transaksi/aktivitas/ppd/aj_getdetailppd.php',
+    url: 'module/ajax/transaksi/anggota/mutasianggota/aj_getdetailmutasi.php',
     method: 'POST',
-    data: { PPD_ID: key },
+    data: { MUTASI_ID: key },
     success: function(data) {
       // Assuming data is a JSON object with the required information
       // Make sure the keys match the fields in your returned JSON object
+      var daerahawal = data.DAERAH_AWAL_KEY;
+      var cabangawal = data.CABANG_AWAL;
+      var daerahtujuan = data.DAERAH_TUJUAN_KEY;
+      var cabangtujuan = data.CABANG_TUJUAN;
 
+      $("#editMUTASI_ID").val(data.MUTASI_ID);
+      $("#editDAERAH_AWAL_KEY").val(data.DAERAH_AWAL_KEY);
+      $("#editDAERAH_AWAL_DES").val(data.DAERAH_AWAL_DES);
+      $("#editCABANG_AWAL").val(data.CABANG_AWAL);
+      $("#editCABANG_AWAL_DES").val(data.CABANG_AWAL_DES);
+      $("#editDAERAH_TUJUAN_KEY").val(data.DAERAH_TUJUAN_KEY);
+      $("#editDAERAH_TUJUAN_DES").val(data.DAERAH_TUJUAN_DES);
+      $("#editCABANG_TUJUAN").val(data.CABANG_TUJUAN);
+      $("#editCABANG_TUJUAN_DES").val(data.CABANG_TUJUAN_DES);
+      $("#editANGGOTA_ID").val(data.ANGGOTA_ID);
+      $("#editANGGOTA_IDNAMA").val(data.ANGGOTA_IDNAMA);
+      $("#editANGGOTA_NAMA").val(data.ANGGOTA_NAMA);
+      $("#editANGGOTA_IDNAMA").val(data.ANGGOTA_IDNAMA);
+      $("#editTINGKATAN_NAMA").val(data.TINGKATAN_NAMA);
+      $("#editTINGKATAN_SEBUTAN").val(data.TINGKATAN_SEBUTAN);
+      $("#editMUTASI_DESKRIPSI").val(data.MUTASI_DESKRIPSI);
+      $("#editMUTASI_TANGGAL").val(data.MUTASI_TANGGAL);
+      $("#datepicker5").val(data.MUTASI_TANGGAL);
+      $("#editINPUT_BY").text(data.INPUT_BY);
+      $("#editINPUT_DATE").text(data.INPUT_DATE);
+      $("#editeditAPPROVE_BY").text(data.APPROVE_BY);
+      $("#editMUTASI_APP_TANGGAL").text(data.MUTASI_APP_TANGGAL);
+      $("#editMUTASI_STATUS_DES").html(data.MUTASI_STATUS_DES);
+      
       // Check if the administrator-specific elements exist
-      var isExist = $('#selectize-dropdown3').length > 0 && $('#selectize-dropdown5').length > 0;
-
-      $("#editPPD_ID").val(data.PPD_ID);
-      $("#datepicker41").val(data.PPD_TANGGAL);
-      $("#editPPD_JENIS").val(data.PPD_JENIS);
-      $(".modal-body #selectize-dropdown11")[0].selectize.setValue(data.PPD_LOKASI);
-      $("#editPPD_DESKRIPSI").val(data.PPD_DESKRIPSI);
+      var isExist = $('#selectize-dropdown11').length > 0 && $('#selectize-dropdown12').length > 0;
 
       if (isExist) {
 
-        $(".modal-body #selectize-dropdown3")[0].selectize.setValue(data.DAERAH_KEY);
-        $(".modal-body #selectize-dropdown6")[0].selectize.setValue(data.TINGKATAN_ID);
+        $(".modal-body #selectize-dropdown11")[0].selectize.setValue(daerahawal);
         // Wait for the options in the second dropdown to be populated before setting its value
         setTimeout(function () {
-          $(".modal-body #selectize-dropdown5")[0].selectize.setValue(data.CABANG_KEY);
-          
-          // After setting the value for selectize-dropdown5, set the value for selectize-dropdown7
-          setTimeout(function () {
-            $(".modal-body #selectize-dropdown7")[0].selectize.setValue(data.ANGGOTA_KEY);
-          }, 200); // You may need to adjust the delay based on your application's behavior
-          
-        }, 300); // You may need to adjust the delay based on your application's behavior
+        $(".modal-body #selectize-dropdown12")[0].selectize.setValue(cabangawal);
+        }, 200); // You may need to adjust the delay based on your application's behavior
+        setTimeout(function () {
+        $(".modal-body #selectize-dropdown4")[0].selectize.setValue(anggota);
+        }, 400); // You may need to adjust the delay based on your application's behavior
+        // Wait for the options in the second dropdown to be populated before setting its value
+        setTimeout(function () {
+          $(".modal-body #selectize-dropdown5")[0].selectize.setValue(daerahtujuan);
+        }, 500); // You may need to adjust the delay based on your application's behavior
+        setTimeout(function () {
+          $(".modal-body #selectize-dropdown6")[0].selectize.setValue(cabangtujuan);
+        }, 850); // You may need to adjust the delay based on your application's behavior
 
       } else {
-        $(".modal-body #selectize-dropdown6")[0].selectize.setValue(data.TINGKATAN_ID);
+        
+        $(".modal-body #selectize-dropdown4")[0].selectize.setValue(anggota);
+        // Wait for the options in the second dropdown to be populated before setting its value
+        setTimeout(function () {
+          $(".modal-body #selectize-dropdown5")[0].selectize.setValue(daerahtujuan);
+        }, 100); // You may need to adjust the delay based on your application's behavior
 
         setTimeout(function () {
-        $(".modal-body #selectize-dropdown7")[0].selectize.setValue(data.ANGGOTA_KEY);
-        }, 200); // You may need to adjust the delay based on your application's behavior
+          $(".modal-body #selectize-dropdown6")[0].selectize.setValue(cabangtujuan);
+        }, 500); // You may need to adjust the delay based on your application's behavior
         
       }
-
-      // Make an AJAX request to fetch data for the second dropdown based on the selected value
-      $.ajax({
-        type: "POST",
-        url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-        data:'ANGGOTA_KEY='+data.ANGGOTA_KEY,
-        success: function(result){
-          $("#loadpicedit").html(result);
-        }
-      });
-
     },
     error: function(error) {
       console.error('Error fetching data:', error);
+    }
+  });
+
+  $.ajax({
+    type: "POST",
+    url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+    data:'ANGGOTA_KEY='+anggota,
+    success: function(data){
+      $("#loadpicedit").html(data);
     }
   });
 });
@@ -879,6 +921,23 @@ function clearForm() {
   if (selectizeInstance3) {
     selectizeInstance3.clear();
   }
+
+  document.getElementById("filterMutasiAnggota").reset();
+  // Call the reloadDataTable() function after inserting data to reload the DataTable
+  $.ajax({
+    type: 'POST',
+    url: 'module/ajax/transaksi/anggota/mutasianggota/aj_tablemutasianggota.php',
+    success: function(response) {
+      // Destroy the DataTable before updating
+      $('#mutasianggota-table').DataTable().destroy();
+      $("#mutasianggotadata").html(response);
+      // Reinitialize Sertifikat Table
+      callTable();
+    },
+    error: function(xhr, status, error) {
+      // Handle any errors
+    }
+  });
 }
 // ----- End of function to reset form ----- //
 

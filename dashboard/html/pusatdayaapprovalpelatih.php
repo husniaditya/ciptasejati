@@ -38,15 +38,15 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
                 <!-- Page Header -->
                 <div class="page-header page-header-block">
                     <div class="page-header-section">
-                        <h4 class="title semibold">Data Uji Kenaikan Tingkat</h4>
+                        <h4 class="title semibold">Persetujuan Pelatih PPD</h4>
                     </div>
                     <div class="page-header-section">
                         <!-- Toolbar -->
                         <div class="toolbar">
                             <ol class="breadcrumb breadcrumb-transparent nm">
-                                <li><a href="javascript:void(0);">Transaksi</a></li>
-                                <li><a href="javascript:void(0);">Aktivitas</a></li>
-                                <li class="active">Uji Kenaikan Tingkat</li>
+                                <li><a href="javascript:void(0);">Persetujuan Dokumen</a></li>
+                                <li><a href="javascript:void(0);">Persetujuan PPD</a></li>
+                                <li class="active">Persetujuan Pelatih PPD</li>
                             </ol>
                         </div>
                         <!--/ Toolbar -->
@@ -54,7 +54,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
                 </div>
                 <!-- Page Header -->
 
-                <?php include 'module/component/transaksi/aktivitas/ukt/v_ukt.php';?>
+                <?php include 'module/component/transaksi/aktivitas/ppd/v_ppdApprovalPelatih.php';?>
             </div>
         </section>
             <!--/ END Template Container -->
@@ -71,7 +71,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
 
         <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
         <?php include 'module/js.php';?>
-        <script type="text/javascript" src="module/javascript/component/transaksi/aktivitas/ukt/ukt.js"></script>
+        <script type="text/javascript" src="module/javascript/component/transaksi/aktivitas/ppd/ppd.js"></script>
         <!--/ END JAVASCRIPT SECTION -->
     </body>
     <!--/ END Body -->

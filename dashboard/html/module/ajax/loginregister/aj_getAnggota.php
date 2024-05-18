@@ -3,18 +3,49 @@ require_once ("../../connection/conn.php");
 
 $ANGGOTA_ID = $_POST["id"];
 
-$getListAnggota = GetQuery("SELECT a.*,a.ANGGOTA_RANTING,DATE_FORMAT(a.ANGGOTA_TANGGAL_LAHIR, '%d %M %Y') TGL_LAHIR,c.CABANG_DESKRIPSI,d.DAERAH_DESKRIPSI,
+$getListAnggota = GetQuery("SELECT 
+a.*, 
+a.ANGGOTA_RANTING, 
+DATE_FORMAT(a.ANGGOTA_TANGGAL_LAHIR, '%d %M %Y') AS TGL_LAHIR,
+c.CABANG_DESKRIPSI, 
+d.DAERAH_DESKRIPSI,
 CASE
-WHEN (SELECT 1 FROM m_user u WHERE u.ANGGOTA_ID = '$ANGGOTA_ID' AND u.USER_STATUS = 1) = 1 THEN 'ID Anggota belum melakukan verifikasi!'
-WHEN COUNT(u.ANGGOTA_KEY) > 0 AND (SELECT 1 FROM m_anggota a WHERE a.ANGGOTA_ID = '$ANGGOTA_ID' AND a.ANGGOTA_RESIGN IS NULL AND a.ANGGOTA_STATUS = 0) = 1 THEN 'ID Anggota sudah terdaftar!'
-WHEN a.ANGGOTA_ID IS NULL AND (SELECT 1 FROM m_anggota a WHERE a.ANGGOTA_ID = '$ANGGOTA_ID' AND a.ANGGOTA_RESIGN IS NULL AND a.ANGGOTA_STATUS = 0) IS NULL then 'ID Anggota tidak terdaftar!'
-ELSE ''
-END ANGGOTA_REMARKS
-FROM m_anggota a
-LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
-LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-LEFT JOIN m_user u ON a.ANGGOTA_KEY = u.ANGGOTA_KEY
-WHERE a.DELETION_STATUS = 0 AND a.ANGGOTA_RESIGN IS NULL AND a.ANGGOTA_STATUS = 0 AND a.ANGGOTA_ID = '$ANGGOTA_ID' AND a.ANGGOTA_AKSES <> 'Administrator'");
+    WHEN EXISTS (SELECT 1 FROM m_user u WHERE u.ANGGOTA_ID = '$ANGGOTA_ID' AND u.USER_STATUS = 1) THEN 'ID Anggota belum melakukan verifikasi!'
+    WHEN (
+        (SELECT COUNT(u.ANGGOTA_KEY) 
+         FROM m_user u 
+         WHERE u.ANGGOTA_ID = '$ANGGOTA_ID') > 0
+        AND 
+        (SELECT COUNT(*) 
+         FROM m_anggota a2 
+         WHERE a2.ANGGOTA_ID = '$ANGGOTA_ID' 
+           AND a2.ANGGOTA_RESIGN IS NULL 
+           AND a2.ANGGOTA_STATUS = 0) > 0
+    ) THEN 'ID Anggota sudah terdaftar!'
+    WHEN NOT EXISTS (
+        SELECT 1 
+        FROM m_anggota a3 
+        WHERE a3.ANGGOTA_ID = '$ANGGOTA_ID' 
+          AND a3.ANGGOTA_RESIGN IS NULL 
+          AND a3.ANGGOTA_STATUS = 0
+    ) THEN 'ID Anggota tidak terdaftar!'
+    ELSE ''
+END AS ANGGOTA_REMARKS
+FROM 
+m_anggota a
+LEFT JOIN 
+m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
+LEFT JOIN 
+m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
+LEFT JOIN 
+m_user u ON a.ANGGOTA_KEY = u.ANGGOTA_KEY
+WHERE 
+a.DELETION_STATUS = 0 
+AND a.ANGGOTA_RESIGN IS NULL 
+AND a.ANGGOTA_STATUS = 0 
+AND a.ANGGOTA_ID = '$ANGGOTA_ID' 
+AND a.ANGGOTA_AKSES <> 'Administrator';
+");
 
 $data = array();
 
