@@ -6,7 +6,23 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
 $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 $USER_CABANG = $_SESSION["LOGINCAB_CS"];
 
-if ($USER_AKSES == "Administrator") {
+if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["PPD_LOKASI"]) || isset($_POST["PPD_ID"]) || isset($_POST["ANGGOTA_ID"]) || isset($_POST["ANGGOTA_NAMA"]) || isset($_POST["TINGKATAN_ID"]) || isset($_POST["PPD_JENIS"]) || isset($_POST["PPD_TANGGAL"])) {
+
+    if ($USER_AKSES == "Administrator") {
+        $DAERAH_KEY = $_POST["DAERAH_KEY"];
+        $CABANG_KEY = $_POST["CABANG_KEY"];
+    } else {
+        $DAERAH_KEY = "";
+        $CABANG_KEY = "";
+    }
+    $PPD_LOKASI = $_POST["PPD_LOKASI"];
+    $PPD_ID = $_POST["PPD_ID"];
+    $ANGGOTA_ID = $_POST["ANGGOTA_ID"];
+    $ANGGOTA_NAMA = $_POST["ANGGOTA_NAMA"];
+    $TINGKATAN_ID = $_POST["TINGKATAN_ID"];
+    $PPD_JENIS = $_POST["PPD_JENIS"];
+    $PPD_TANGGAL = $_POST["PPD_TANGGAL"];
+
     $getPPD = GetQuery("SELECT p.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_KEY,c.CABANG_DESKRIPSI,t2.TINGKATAN_NAMA PPD_TINGKATAN,t2.TINGKATAN_SEBUTAN PPD_SEBUTAN,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,c2.CABANG_DESKRIPSI PPD_CABANG,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL, p.PPD_FILE,
     CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan'
     ELSE 'Ulang'
@@ -35,47 +51,76 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
     LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID = t2.TINGKATAN_ID
-    WHERE p.DELETION_STATUS = 0
+    WHERE p.DELETION_STATUS = 0 AND (d.DAERAH_KEY LIKE CONCAT('%','$DAERAH_KEY','%')) AND (p.CABANG_KEY LIKE CONCAT('%','$CABANG_KEY','%')) AND (p.PPD_LOKASI LIKE CONCAT('%','$PPD_LOKASI','%')) AND (t2.TINGKATAN_ID LIKE CONCAT('%','$TINGKATAN_ID','%')) AND (a.ANGGOTA_ID LIKE CONCAT('%','$ANGGOTA_ID','%')) AND (a.ANGGOTA_NAMA LIKE CONCAT('%','$ANGGOTA_NAMA','%')) AND (p.PPD_ID LIKE CONCAT('%','$PPD_ID','%')) AND (p.PPD_JENIS LIKE CONCAT('%','$PPD_JENIS','%')) AND (p.PPD_TANGGAL LIKE CONCAT('%','$PPD_TANGGAL','%'))
     ORDER BY p.PPD_TANGGAL DESC");
 } else {
-    $getPPD = GetQuery("SELECT p.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_KEY,c.CABANG_DESKRIPSI,t2.TINGKATAN_NAMA PPD_TINGKATAN,t2.TINGKATAN_SEBUTAN PPD_SEBUTAN,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,c2.CABANG_DESKRIPSI PPD_CABANG,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL, p.PPD_FILE,
-    CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan'
-    ELSE 'Ulang'
-    END PPD_JENIS,
-    CASE WHEN p.PPD_APPROVE_PELATIH = 0 THEN 'fa-solid fa-spinner fa-spin'
-    WHEN p.PPD_APPROVE_PELATIH = 1 THEN 'fa-solid fa-check'
-    ELSE 'fa-solid fa-xmark'
-    END PELATIH_CLASS,
-    CASE WHEN p.PPD_APPROVE_GURU = 0 THEN 'fa-solid fa-spinner fa-spin'
-    WHEN p.PPD_APPROVE_GURU = 1 THEN 'fa-solid fa-check'
-    ELSE 'fa-solid fa-xmark'
-    END GURU_CLASS,
-    CASE WHEN p.PPD_APPROVE_PELATIH = 0 THEN 'badge badge-inverse'
-    WHEN p.PPD_APPROVE_PELATIH = 1 THEN 'badge badge-success' 
-    ELSE 'badge badge-danger' 
-    END AS PELATIH_BADGE,
-    CASE WHEN p.PPD_APPROVE_GURU = 0 THEN 'badge badge-inverse'
-    WHEN p.PPD_APPROVE_GURU = 1 THEN 'badge badge-success' 
-    ELSE 'badge badge-danger' 
-    END AS GURU_BADGE
-    FROM t_ppd p
-    LEFT JOIN m_anggota a ON p.ANGGOTA_KEY = a.ANGGOTA_KEY
-    LEFT JOIN m_anggota a2 ON p.INPUT_BY = a2.ANGGOTA_ID
-    LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
-    LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
-    LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-    LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
-    LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID = t2.TINGKATAN_ID
-    WHERE p.DELETION_STATUS = 0 AND p.CABANG_KEY = '$USER_CABANG'
-    ORDER BY p.PPD_TANGGAL DESC");
+    if ($USER_AKSES == "Administrator") {
+        $getPPD = GetQuery("SELECT p.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_KEY,c.CABANG_DESKRIPSI,t2.TINGKATAN_NAMA PPD_TINGKATAN,t2.TINGKATAN_SEBUTAN PPD_SEBUTAN,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,c2.CABANG_DESKRIPSI PPD_CABANG,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL, p.PPD_FILE,
+        CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan'
+        ELSE 'Ulang'
+        END PPD_JENIS,
+        CASE WHEN p.PPD_APPROVE_PELATIH = 0 THEN 'fa-solid fa-spinner fa-spin'
+        WHEN p.PPD_APPROVE_PELATIH = 1 THEN 'fa-solid fa-check'
+        ELSE 'fa-solid fa-xmark'
+        END PELATIH_CLASS,
+        CASE WHEN p.PPD_APPROVE_GURU = 0 THEN 'fa-solid fa-spinner fa-spin'
+        WHEN p.PPD_APPROVE_GURU = 1 THEN 'fa-solid fa-check'
+        ELSE 'fa-solid fa-xmark'
+        END GURU_CLASS,
+        CASE WHEN p.PPD_APPROVE_PELATIH = 0 THEN 'badge badge-inverse'
+        WHEN p.PPD_APPROVE_PELATIH = 1 THEN 'badge badge-success' 
+        ELSE 'badge badge-danger' 
+        END AS PELATIH_BADGE,
+        CASE WHEN p.PPD_APPROVE_GURU = 0 THEN 'badge badge-inverse'
+        WHEN p.PPD_APPROVE_GURU = 1 THEN 'badge badge-success' 
+        ELSE 'badge badge-danger' 
+        END AS GURU_BADGE
+        FROM t_ppd p
+        LEFT JOIN m_anggota a ON p.ANGGOTA_KEY = a.ANGGOTA_KEY
+        LEFT JOIN m_anggota a2 ON p.INPUT_BY = a2.ANGGOTA_ID
+        LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
+        LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
+        LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
+        LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
+        LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID = t2.TINGKATAN_ID
+        WHERE p.DELETION_STATUS = 0
+        ORDER BY p.PPD_TANGGAL DESC");
+    } else {
+        $getPPD = GetQuery("SELECT p.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_KEY,c.CABANG_DESKRIPSI,t2.TINGKATAN_NAMA PPD_TINGKATAN,t2.TINGKATAN_SEBUTAN PPD_SEBUTAN,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,c2.CABANG_DESKRIPSI PPD_CABANG,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL, p.PPD_FILE,
+        CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan'
+        ELSE 'Ulang'
+        END PPD_JENIS,
+        CASE WHEN p.PPD_APPROVE_PELATIH = 0 THEN 'fa-solid fa-spinner fa-spin'
+        WHEN p.PPD_APPROVE_PELATIH = 1 THEN 'fa-solid fa-check'
+        ELSE 'fa-solid fa-xmark'
+        END PELATIH_CLASS,
+        CASE WHEN p.PPD_APPROVE_GURU = 0 THEN 'fa-solid fa-spinner fa-spin'
+        WHEN p.PPD_APPROVE_GURU = 1 THEN 'fa-solid fa-check'
+        ELSE 'fa-solid fa-xmark'
+        END GURU_CLASS,
+        CASE WHEN p.PPD_APPROVE_PELATIH = 0 THEN 'badge badge-inverse'
+        WHEN p.PPD_APPROVE_PELATIH = 1 THEN 'badge badge-success' 
+        ELSE 'badge badge-danger' 
+        END AS PELATIH_BADGE,
+        CASE WHEN p.PPD_APPROVE_GURU = 0 THEN 'badge badge-inverse'
+        WHEN p.PPD_APPROVE_GURU = 1 THEN 'badge badge-success' 
+        ELSE 'badge badge-danger' 
+        END AS GURU_BADGE
+        FROM t_ppd p
+        LEFT JOIN m_anggota a ON p.ANGGOTA_KEY = a.ANGGOTA_KEY
+        LEFT JOIN m_anggota a2 ON p.INPUT_BY = a2.ANGGOTA_ID
+        LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
+        LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
+        LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
+        LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
+        LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID = t2.TINGKATAN_ID
+        WHERE p.DELETION_STATUS = 0 AND p.CABANG_KEY = '$USER_CABANG'
+        ORDER BY p.PPD_TANGGAL DESC");
+    }
 }
 
 while ($rowPPD = $getPPD->fetch(PDO::FETCH_ASSOC)) {
     extract($rowPPD);
-    $getAnggotaPPD = GetQuery("SELECT p.ANGGOTA_TYPE,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING FROM t_ppd_anggota p
-    LEFT JOIN m_anggota a ON p.ANGGOTA_KEY = a.ANGGOTA_KEY
-    WHERE p.PPD_ID = '$PPD_ID'");
-    $AnggotaPPD = $getAnggotaPPD->fetchAll(PDO::FETCH_ASSOC);
     ?>
     <tr>
         <td align="center">

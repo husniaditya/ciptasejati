@@ -94,16 +94,16 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
         </a>
         <div id="collapseOne" class="panel-collapse collapse">
             <div class="panel-body">
-                <form method="post" class="form filterMutasiAnggota" id="filterMutasiAnggota">
+                <form method="post" class="form filterPPD" id="filterPPD">
                     <div class="row">
                         <?php
                         if ($USER_AKSES == "Administrator") {
                             ?>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>Daerah Awal</label>
-                                    <select name="DAERAH_AWAL_KEY" id="selectize-select3" required="" class="form-control" data-parsley-required>
-                                        <option value="">-- Pilih Daerah Awal --</option>
+                                    <label>Daerah</label>
+                                    <select name="DAERAH_KEY" id="selectize-select3" required="" class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Daerah --</option>
                                         <?php
                                         foreach ($rowd as $filterDaerah) {
                                             extract($filterDaerah);
@@ -117,9 +117,9 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>Cabang Awal</label>
-                                    <select name="CABANG_AWAL_KEY" id="selectize-select2" required="" class="form-control" data-parsley-required>
-                                        <option value="">-- Pilih Cabang Awal --</option>
+                                    <label>Cabang</label>
+                                    <select name="CABANG_KEY" id="selectize-select2" required="" class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Cabang --</option>
                                     </select>
                                 </div> 
                             </div>
@@ -128,26 +128,26 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                         ?>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>Daerah Tujuan</label>
-                                <select name="DAERAH_TUJUAN_KEY" id="selectize-select4" required="" class="form-control" data-parsley-required>
-                                    <option value="">-- Pilih Daerah Tujuan --</option>
-                                    <?php
-                                    foreach ($rowd as $filterDaerah) {
-                                        extract($filterDaerah);
-                                        ?>
-                                        <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                <label>Cabang PPD</label>
+                                <div id="selectize-wrapper5" style="position: relative;">
+                                    <select name="PPD_LOKASI" id="selectize-dropdown5" required="" class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Cabang --</option>
                                         <?php
-                                    }
-                                    ?>
-                                </select>
+                                        foreach ($rowPPDCabang as $rowCabang) {
+                                            extract($rowCabang);
+                                            ?>
+                                            <option value="<?= $CABANG_KEY; ?>"><?= $CABANG_DESKRIPSI; ?> - <?= $DAERAH_DESKRIPSI; ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
                             </div> 
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>Cabang Tujuan</label>
-                                <select name="CABANG_TUJUAN_KEY" id="selectize-select5" required="" class="form-control" data-parsley-required>
-                                    <option value="">-- Pilih Cabang Tujuan --</option>
-                                </select>
+                                <label>No Dokumen</label>
+                                <input type="text" class="form-control" id="filterPPD_ID" name="PPD_ID" value="" placeholder="Input No Dokumen PPD">
                             </div> 
                         </div>
                     </div>
@@ -166,7 +166,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>Tingkatan</label>
+                                <label>Tingkatan PPD</label>
                                 <select name="TINGKATAN_ID" id="selectize-select" required="" class="form-control" data-parsley-required>
                                     <option value="">-- Pilih Tingkatan --</option>
                                     <?php
@@ -182,13 +182,20 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>Status Mutasi</label>
-                                <select id="filterMUTASI_STATUS" name="MUTASI_STATUS" class="form-control"  data-parsley-required required>
+                                <label>Jenis PPD</label>
+                                <select id="filterPPD_JENIS" name="PPD_JENIS" class="form-control"  data-parsley-required required>
                                     <option value="">Tampilkan semua</option>
-                                    <option value="0">Menunggu</option>
-                                    <option value="1">Disetujui</option>
-                                    <option value="2">Ditolak</option>
+                                    <option value="0">Kenaikan</option>
+                                    <option value="1">Ulang</option>
                                 </select>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Tanggal PPD</label>
+                                <input type="text" class="form-control" id="datepicker42" name="PPD_TANGGAL" placeholder="Pilih Tanggal PPD" readonly/>
                             </div> 
                         </div>
                     </div>

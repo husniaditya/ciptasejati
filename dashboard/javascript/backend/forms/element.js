@@ -317,6 +317,11 @@
             changeYear: true,
             dateFormat: 'yy-mm-dd',
         });
+        $('#datepicker42').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy-mm-dd',
+        });
         $('#datepicker44').datepicker({
             changeMonth: true,
             changeYear: true,
