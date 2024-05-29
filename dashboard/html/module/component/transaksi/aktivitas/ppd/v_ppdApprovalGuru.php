@@ -32,7 +32,7 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
     LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID = t2.TINGKATAN_ID
-    WHERE p.DELETION_STATUS = 0 AND p.PPD_APPROVE_GURU = 0
+    WHERE p.DELETION_STATUS = 0 AND p.PPD_APPROVE_PELATIH = 1 AND p.PPD_APPROVE_GURU = 0
     ORDER BY p.PPD_TANGGAL DESC");
 
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0");
@@ -65,7 +65,7 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
     LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID = t2.TINGKATAN_ID
-    WHERE p.DELETION_STATUS = 0 AND p.CABANG_KEY = '$USER_CABANG' AND p.PPD_APPROVE_PELATIH = 0
+    WHERE p.DELETION_STATUS = 0 AND p.CABANG_KEY = '$USER_CABANG' AND p.PPD_APPROVE_PELATIH = 1 AND p.PPD_APPROVE_GURU = 0
     ORDER BY p.PPD_TANGGAL DESC");
 
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 and CABANG_KEY = '$USER_CABANG'");
@@ -78,9 +78,13 @@ WHERE c.DELETION_STATUS = 0
 ORDER BY CABANG_DESKRIPSI ASC");
 $getTingkatan = GetQuery("SELECT * FROM m_tingkatan WHERE DELETION_STATUS = 0 ORDER BY TINGKATAN_LEVEL ASC");
 // Fetch all rows into an array
+$getTanggalPPD = GetQuery("SELECT PPD_TANGGAL FROM t_ppd
+WHERE DELETION_STATUS = 0 AND PPD_APPROVE_PELATIH = 1 AND PPD_APPROVE_GURU = 0
+GROUP BY PPD_TANGGAL");
 $rowd = $getDaerah->fetchAll(PDO::FETCH_ASSOC);
 $rowPPDCabang = $getPPDCabang->fetchAll(PDO::FETCH_ASSOC);
 $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
+$rowTanggalPPD = $getTanggalPPD->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="panel-group" id="accordion1"> <!-- Input Filter -->
@@ -94,16 +98,16 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
         </a>
         <div id="collapseOne" class="panel-collapse collapse">
             <div class="panel-body">
-                <form method="post" class="form filterMutasiAnggota" id="filterMutasiAnggota">
+                <form method="post" class="form filterPPD" id="filterPPD">
                     <div class="row">
                         <?php
                         if ($USER_AKSES == "Administrator") {
                             ?>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>Daerah Awal</label>
-                                    <select name="DAERAH_AWAL_KEY" id="selectize-select3" required="" class="form-control" data-parsley-required>
-                                        <option value="">-- Pilih Daerah Awal --</option>
+                                    <label>Daerah</label>
+                                    <select name="DAERAH_KEY" id="selectize-select3" required="" class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Daerah --</option>
                                         <?php
                                         foreach ($rowd as $filterDaerah) {
                                             extract($filterDaerah);
@@ -117,9 +121,9 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>Cabang Awal</label>
-                                    <select name="CABANG_AWAL_KEY" id="selectize-select2" required="" class="form-control" data-parsley-required>
-                                        <option value="">-- Pilih Cabang Awal --</option>
+                                    <label>Cabang</label>
+                                    <select name="CABANG_KEY" id="selectize-select2" required="" class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Cabang --</option>
                                     </select>
                                 </div> 
                             </div>
@@ -128,26 +132,26 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                         ?>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>Daerah Tujuan</label>
-                                <select name="DAERAH_TUJUAN_KEY" id="selectize-select4" required="" class="form-control" data-parsley-required>
-                                    <option value="">-- Pilih Daerah Tujuan --</option>
-                                    <?php
-                                    foreach ($rowd as $filterDaerah) {
-                                        extract($filterDaerah);
-                                        ?>
-                                        <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                <label>Cabang PPD</label>
+                                <div id="selectize-wrapper" style="position: relative;">
+                                    <select name="PPD_LOKASI" id="selectize-dropdown" required="" class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Cabang --</option>
                                         <?php
-                                    }
-                                    ?>
-                                </select>
+                                        foreach ($rowPPDCabang as $rowCabang) {
+                                            extract($rowCabang);
+                                            ?>
+                                            <option value="<?= $CABANG_KEY; ?>"><?= $CABANG_DESKRIPSI; ?> - <?= $DAERAH_DESKRIPSI; ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
                             </div> 
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>Cabang Tujuan</label>
-                                <select name="CABANG_TUJUAN_KEY" id="selectize-select5" required="" class="form-control" data-parsley-required>
-                                    <option value="">-- Pilih Cabang Tujuan --</option>
-                                </select>
+                                <label>No Dokumen</label>
+                                <input type="text" class="form-control" id="filterPPD_ID" name="PPD_ID" value="" placeholder="Input No Dokumen PPD">
                             </div> 
                         </div>
                     </div>
@@ -166,7 +170,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>Tingkatan</label>
+                                <label>Tingkatan PPD</label>
                                 <select name="TINGKATAN_ID" id="selectize-select" required="" class="form-control" data-parsley-required>
                                     <option value="">-- Pilih Tingkatan --</option>
                                     <?php
@@ -182,19 +186,36 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>Status Mutasi</label>
-                                <select id="filterMUTASI_STATUS" name="MUTASI_STATUS" class="form-control"  data-parsley-required required>
+                                <label>Jenis PPD</label>
+                                <select id="filterPPD_JENIS" name="PPD_JENIS" class="form-control"  data-parsley-required required>
                                     <option value="">Tampilkan semua</option>
-                                    <option value="0">Menunggu</option>
-                                    <option value="1">Disetujui</option>
-                                    <option value="2">Ditolak</option>
+                                    <option value="0">Kenaikan</option>
+                                    <option value="1">Ulang</option>
+                                </select>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Tanggal Periode PPD</label>
+                                <select name="TANGGAL_PPD" id="selectize-select21" required="" class="form-control" data-parsley-required>
+                                    <option value="">-- Pilih Tanggal Periode --</option>
+                                    <?php
+                                    foreach ($rowTanggalPPD as $filterTanggal) {
+                                        extract($filterTanggal);
+                                        ?>
+                                        <option value="<?= $PPD_TANGGAL; ?>"><?= $PPD_TANGGAL; ?></option>
+                                        <?php
+                                    }
+                                    ?>
                                 </select>
                             </div> 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12" align="center">
-                            <button type="button" id="reloadButton" onclick="clearForm()" class="submit btn btn-teal btn-outline mb5 btn-rounded"><span class="ico-refresh"></span> Reset Filter</button>
+                            <button type="button" id="reloadButton" onclick="clearFormGuru()" class="submit btn btn-teal btn-outline mb5 btn-rounded"><span class="ico-refresh"></span> Reset Filter</button>
                         </div>
                     </div>
                 </form>
@@ -245,17 +266,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewPPD" class="open-ViewPPD" style="color:#222222;" data-id="<?= $PPD_ID; ?>" ><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
-                                            <?php
-                                            if ($PPD_APPROVE_PELATIH == 0) {
-                                                ?>
-                                                <li><a data-toggle="modal" href="#EditPPD" class="open-EditPPD" style="color:#00a5d2;" data-id="<?= $PPD_ID; ?>" ><span class="ico-edit"></span> Ubah</a></li>
-                                                <?php
-                                            }
-                                            ?>
-                                            <li><a href="assets/print/transaksi/mutasi/print_mutasi.php?id=<?=$PPD_ID; ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
-                                            <li class="divider"></li>
-                                            <li><a href="#" onclick="eventmutasi('<?= $PPD_ID;?>','delete')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
+                                            <li><a data-toggle="modal" href="#ViewPPD" class="open-ViewPPD" style="color:#00a5d2;" data-id="<?= $PPD_ID; ?>" ><span class="ico-edit"></span> Persetujuan</a></li>
                                         </ul>
                                     </div>
                                 </form>
@@ -299,7 +310,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-inverse">Tambah Data PPD Anggota</h3>
+                    <h3 class="semibold modal-title text-inverse">Persetujuan Data PPD Anggota</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -366,139 +377,10 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Cancel</button>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
-
-<div id="ApproveMutasiAnggota" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="ApproveMutasiAnggota-form" method="post" class="form" data-parsley-validate>
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header text-center">
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-inverse">Persetujuan Data Mutasi Anggota</h3>
-                </div>
-                <div class="modal-body">
-                    <h5 class="text-center" id="appMUTASI_STATUS_DES"></h5><br>
-                    <div class="row hidden">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>ID Mutasi</label>
-                                <input type="text" class="form-control" id="appPPD_ID" name="PPD_ID" value="" readonly>
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                            <div class="form-group">
-                                <label>Diajukan Oleh</label>
-                                <p id="appINPUT_BY"></p>
-                            </div> 
-                        </div>
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                            <div class="form-group">
-                                <label>Tanggal Pengajuan</label>
-                                <p id="appINPUT_DATE"></p>
-                            </div> 
-                        </div>
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                            <div class="form-group">
-                                <label>Disetujui Oleh</label>
-                                <p id="appAPPROVE_BY"></p>
-                            </div> 
-                        </div>
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                            <div class="form-group">
-                                <label>Tanggal persetujuan</label>
-                                <p id="appMUTASI_APP_TANGGAL"></p>
-                            </div> 
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
-                            <div class="short-div">
-                                <label>Foto Anggota </label><br>
-                                <div id="loadpicapp"></div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>ID - Nama Anggota</label>
-                                    <input type="text" class="form-control" id="appANGGOTA_IDNAMA" name="ANGGOTA_ID" value="" readonly>
-                                </div> 
-                            </div>
-                            <div class="short-div hidden">
-                                <div class="form-group">
-                                    <label>ID Cabang</label>
-                                    <input type="text" class="form-control" id="appCABANG_AWAL" name="CABANG_AWAL" value="" readonly>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Daerah</label>
-                                    <input type="text" class="form-control" id="appDAERAH_AWAL_DES" name="DAERAH_AWAL" value="" readonly>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Cabang</label>
-                                    <input type="text" class="form-control" id="appCABANG_AWAL_DES" name="CABANG_DESKRIPSI" value="" readonly>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Sabuk</label>
-                                    <input type="text" class="form-control" id="appTINGKATAN_NAMA" name="TINGKATAN_ID" value="" readonly>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Tingkatan</label>
-                                    <input type="text" class="form-control" id="appTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
-                                </div> 
-                            </div>   
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Daerah Tujuan</label>
-                                <input type="text" class="form-control" id="appDAERAH_TUJUAN_DES" name="DAERAH_TUJUAN" value="" readonly>
-                            </div> 
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Cabang Tujuan</label>
-                                <input type="text" class="form-control" id="appCABANG_TUJUAN_DES" name="CABANG_TUJUAN" value="" readonly>
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Deskripsi</label>
-                                <textarea type="text" rows="4" class="form-control" id="appMUTASI_DESKRIPSI" name="MUTASI_DESKRIPSI" value="" data-parsley-required readonly></textarea>
-                            </div> 
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Tanggal Efektif</label>
-                                <input type="text" class="form-control" id="appTANGGAL_EFEKTIF" name="MUTAS_TANGGAL" value="" readonly>
-                            </div> 
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
                     <div class="row">
                         <div class="col-md-6 text-left">
-                            <button type="submit" name="submit" id="approvemutasianggota" class="submit btn btn-success mb5 btn-rounded"><i class="fa-regular fa-square-check"></i> Setuju</button>
-                            <button type="submit" name="submit" id="rejectmutasianggota" class="submit btn btn-danger mb5 btn-rounded"><i class="fa-regular fa-rectangle-xmark"></i> Tolak</button>
+                            <button type="submit" name="submit" id="approveGuru" class="submit btn btn-success mb5 btn-rounded"><i class="fa-regular fa-square-check"></i> Setuju</button>
+                            <button type="submit" name="submit" id="rejectGuru" class="submit btn btn-danger mb5 btn-rounded"><i class="fa-regular fa-rectangle-xmark"></i> Tolak</button>
                         </div>
                         <div class="col-md-6 text-right">
                             <button type="button" class="btn btn-inverse btn-outline mb5 btn-rounded next" data-dismiss="modal"><span class="ico-cancel"></span> Close</button>

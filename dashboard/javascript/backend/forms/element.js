@@ -56,6 +56,10 @@
             },
             dropdownParent: 'body'
         });
+        $('#selectize-select21').selectize({
+            create: true,
+            dropdownParent: 'body'
+        });
         $('#selectize-select3').selectize({
             create: true,
             sortField: {

@@ -129,8 +129,8 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Cabang PPD</label>
-                                <div id="selectize-wrapper5" style="position: relative;">
-                                    <select name="PPD_LOKASI" id="selectize-dropdown5" required="" class="form-control" data-parsley-required>
+                                <div id="selectize-wrapper" style="position: relative;">
+                                    <select name="PPD_LOKASI" id="selectize-dropdown" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Cabang --</option>
                                         <?php
                                         foreach ($rowPPDCabang as $rowCabang) {
@@ -538,7 +538,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                             <div class="short-div hidden">
                                 <div class="form-group">
                                     <label>ID</label><span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="editPPD_ID" name="PPD_ID" readonly required data-parsley-required/>
+                                    <input type="text" class="form-control" id="approvePPD_ID" name="PPD_ID" readonly required data-parsley-required/>
                                 </div> 
                             </div>
                         <?php

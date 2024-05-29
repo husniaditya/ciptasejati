@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     
     // MenuID: Persetujuan
-    if (currentPage === 'pusatdayaapprovalpelatih.php' || currentPage === 'pusatdayaapprovalguru.php') {
+    if (currentPage === 'pusatdayaApprovalKoordinator.php' || currentPage === 'pusatdayaApprovalGuru.php') {
       addInClassToSubmenu('persetujuan');
       addInClassToSubmenu('persetujuanppd');
     }

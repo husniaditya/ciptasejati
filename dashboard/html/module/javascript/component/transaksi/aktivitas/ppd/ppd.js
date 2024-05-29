@@ -107,6 +107,7 @@ function sendEmailNotification(MUTASI_ID) { // Function Send Email Notification
 
 $('#EditPPD').on('hidden.bs.modal', handleModalHidden);
 $('#AddPPD').on('hidden.bs.modal', handleModalHidden);
+$('#ApprovePPD').on('hidden.bs.modal', handleModalHidden);
 
 var formSubmitted = false; // Flag to indicate whether the form has been submitted
 
@@ -220,6 +221,115 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
   });
 }
 
+function handleFormApproveKoordinator(formId, successNotification, failedNotification, updateNotification) {
+  // Set the flag to true indicating that the form has been submitted
+  formSubmitted = true;
+  // Function to show the full-screen loading overlay with a progress bar
+  function showLoadingOverlay(message) {
+    var overlayHtml = '<div id="loading-overlay" class="loading-overlay"><div class="loading-spinner"></div><div class="loading-message">' + message + '</div><div class="progress-bar"><div class="progress"></div></div></div>';
+    $('body').append(overlayHtml);
+  }
+
+  $(formId).submit(function (event) {
+    // Example usage:
+    showLoadingOverlay('Data sedang diproses, mohon ditunggu.');
+    
+    event.preventDefault(); // Prevent the default form submission
+
+    var formData = new FormData($(this)[0]); // Create FormData object from the form
+    var buttonId = $(event.originalEvent.submitter).attr('id'); // Retrieve button ID);
+
+    // Manually add the button title or ID to the serialized data
+    formData.append(buttonId, 'edit');
+
+    var PPD_ID; // Declare MUTASI_ID here to make it accessible in the outer scope
+
+    $.ajax({
+      type: 'POST',
+      url: 'module/backend/transaksi/aktivitas/ppd/t_ppd.php',
+      data: formData,
+      processData: false, // Prevent jQuery from processing the data
+      contentType: false, // Prevent jQuery from setting content type
+      success: function (response) {
+        // Split the response into parts using a separator (assuming a dot in this case)
+        var parts = response.split(',');
+        var successMessage = parts[0];
+        PPD_ID = parts[1]; // Assign value to MUTASI_ID
+
+        // Check the response from the server
+        if (successMessage === 'Success') {
+          // Display success notification
+          successNotification('Data berhasil tersimpan!');
+
+          // Close the modal
+          $(formId.replace("-form", "")).modal('hide');
+
+          // Call the reloadDataTable() function after inserting data to reload the DataTable
+          $.ajax({
+            type: 'POST',
+            url: 'module/ajax/transaksi/aktivitas/ppd/aj_tableppdKoordinator.php',
+            success: function (response) {
+              // Destroy the DataTable before updating
+              $('#ppd-table').DataTable().destroy();
+              $("#ppddata").html(response);
+              // Reinitialize Sertifikat Table
+              callTable();
+            },
+            error: function (xhr, status, error) {
+              // Handle any errors
+            }
+          });
+
+          // Hide the loading overlay after the initial processing
+          hideLoadingOverlay();
+
+          // Example usage:
+          // showLoadingOverlay('Proses pembuatan dokumen dan pengiriman email...');
+
+          // // Save PDF to Drive and send email notification concurrently
+          // Promise.all([savePDFToDrive(PPD_ID), sendEmailNotification(PPD_ID)])
+          //   .then(function (responses) {
+          //     const pdfResponse = responses[0];
+          //     const emailResponse = responses[1];
+
+          //     // Handle the responses if needed
+          //     if (pdfResponse) {
+          //     }
+
+          //     if (emailResponse === 'Success') {
+          //       MailNotification('Email pemberitahuan berhasil dikirimkan!');
+          //     } else {
+          //       failedNotification(emailResponse);
+          //     }
+          //   })
+          //   .catch(function (errors) {
+          //     // Handle errors
+          //     for (const error of errors) {
+          //       errorNotification(error);
+          //     }
+          //   })
+          //   .finally(function () {
+          //     // Hide the loading overlay after all asynchronous tasks are complete
+          //     hideLoadingOverlay();
+          //   });
+        } else {
+          // Display error notification
+          failedNotification(response);
+
+          // Hide the loading overlay in case of an error
+          hideLoadingOverlay();
+        }
+      },
+      error: function (xhr, status, error) {
+        // Handle any errors
+
+        // Hide the loading overlay in case of an error
+        hideLoadingOverlay();
+      }
+    });
+  });
+}
+
 function handleModalHidden() {
 
   resetPreview();
@@ -231,7 +341,7 @@ $(document).ready(function() {
   // edit Anggota
   handleForm('#EditPPD-form', UpdateNotification, FailedNotification, UpdateNotification);
   // Approve Anggota
-  handleForm('#ApproveMutasiAnggota-form', UpdateNotification, FailedNotification, UpdateNotification);
+  handleFormApproveKoordinator('#ApprovePPD-form', UpdateNotification, FailedNotification, UpdateNotification);
 
   // Event listener for the daerah awal dropdown change
   $('#selectize-select3').change(function() {
@@ -781,7 +891,48 @@ $(document).on("click", ".open-EditPPD", function () {
   });
 });
 
-// Approve Mutasi Anggota
+// Approve PPD
+$(document).on("click", ".open-ApprovePPD", function () {
+  
+  var key = $(this).data('id');
+  
+  // Make an AJAX request to fetch additional data based on the selected value
+  $.ajax({
+    url: 'module/ajax/transaksi/aktivitas/ppd/aj_getdetailppd.php',
+    method: 'POST',
+    data: { PPD_ID: key },
+    success: function(data) {
+      // console.log('response', data);
+      // Assuming data is a JSON object with the required information
+      // Make sure the keys match the fields in your returned JSON object
+      $("#approvePPD_ID").val(data.PPD_ID);
+      $("#approvePPD_DAERAH").val(data.DAERAH_DESKRIPSI);
+      $("#approvePPD_CABANG").val(data.CABANG_DESKRIPSI);
+      $("#approvePPD_TANGGAL").val(data.PPD_TANGGAL);
+      $("#approvePPD_JENIS").val(data.PPD_JENIS_DESKRIPSI);
+      $("#approvePPD_TINGKATAN").val(data.TINGKATAN_NAMA + ' - ' + data.TINGKATAN_SEBUTAN);
+      $("#approvePPD_ANGGOTA").val(data.ANGGOTA_NAMA);
+      $("#approvePPD_LOKASI").val(data.LOKASI_DAERAH + ' - ' + data.LOKASI_CABANG);
+      $("#approvePPD_DESKRIPSI").val(data.PPD_DESKRIPSI);
+
+      // Make an AJAX request to fetch data for the second dropdown based on the selected value
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+        data:'ANGGOTA_KEY='+data.ANGGOTA_KEY,
+        success: function(result){
+          $("#loadpicview").html(result);
+        }
+      });
+
+    },
+    error: function(error) {
+      console.error('Error fetching data:', error);
+    }
+  });
+});
+
+// Filter PPD
 $(document).on("click", ".open-ApproveMutasiAnggota", function () {
   
   var key = $(this).data('id');
@@ -844,7 +995,7 @@ function filterPPDEvent() {
   // Your event handling code here
   const daerah = $('#selectize-select3').val();
   const cabang = $('#selectize-select2').val();
-  const cabangPPD = $('#selectize-dropdown5').val();
+  const cabangPPD = $('#selectize-dropdown').val();
   const ppd = $('#filterPPD_ID').val();
   const id = $('#filterANGGOTA_ID').val();
   const nama = $('#filterANGGOTA_NAMA').val();
@@ -880,6 +1031,47 @@ function filterPPDEvent() {
   // console.log(formData);
 }
 
+$('.filterPPDKoordinator select, .filterPPDKoordinator input').on('change input', debounce(filterPPDKoordinatorEvent, 500));
+function filterPPDKoordinatorEvent() {
+  // Your event handling code here
+  const daerah = $('#selectize-select3').val();
+  const cabang = $('#selectize-select2').val();
+  const cabangPPD = $('#selectize-dropdown').val();
+  const ppd = $('#filterPPD_ID').val();
+  const id = $('#filterANGGOTA_ID').val();
+  const nama = $('#filterANGGOTA_NAMA').val();
+  const tingkatan = $('#selectize-select').val();
+  const jenis = $('#filterPPD_JENIS').val();
+  const tanggal = $('#datepicker42').val();
+
+  // Create a data object to hold the form data
+  const formData = {
+    DAERAH_KEY: daerah,
+    CABANG_KEY: cabang,
+    PPD_LOKASI: cabangPPD,
+    PPD_ID: ppd,
+    ANGGOTA_ID: id,
+    ANGGOTA_NAMA: nama,
+    TINGKATAN_ID: tingkatan,
+    PPD_JENIS: jenis,
+    PPD_TANGGAL: tanggal
+  };
+
+  $.ajax({
+    type: "POST",
+    url: 'module/ajax/transaksi/aktivitas/ppd/aj_tableppdKoordinator.php',
+    data: formData,
+    success: function(response){
+      // Destroy the DataTable before updating
+      $('#ppd-table').DataTable().destroy();
+      $("#ppddata").html(response);
+      // Reinitialize Sertifikat Table
+      callTable();
+    }
+  });
+  // console.log(formData);
+}
+
 // ----- Function to reset form ----- //
 function clearForm() {
   
@@ -890,10 +1082,10 @@ function clearForm() {
     var selectizeInstance1 = $('#selectize-select3')[0].selectize;
     var selectizeInstance2 = $('#selectize-select2')[0].selectize;
     var selectizeInstance3 = $('#selectize-select')[0].selectize;
-    var selectizeInstance5 = $('#selectize-dropdown5')[0].selectize;
+    var selectizeInstance5 = $('#selectize-dropdown')[0].selectize;
   } else {
     var selectizeInstance3 = $('#selectize-select')[0].selectize;
-    var selectizeInstance5 = $('#selectize-dropdown5')[0].selectize;
+    var selectizeInstance5 = $('#selectize-dropdown')[0].selectize;
 
   }
   

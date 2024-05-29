@@ -54,7 +54,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
                 </div>
                 <!-- Page Header -->
 
-                <?php include 'module/component/transaksi/aktivitas/ppd/v_ppdApprovalPelatih.php';?>
+                <?php include 'module/component/transaksi/aktivitas/ppd/v_ppdApprovalKoordinator.php';?>
             </div>
         </section>
             <!--/ END Template Container -->
