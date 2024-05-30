@@ -102,6 +102,44 @@ if (isset($_POST["rejectKoordinator"])) {
     }
 }
 
+if (isset($_POST["approveGuru"])) {
+    try {
+        $PPD_LOKASI = $_POST["PPD_LOKASI"];
+        $PPD_TANGGAL = $_POST["PPD_TANGGAL"];
+
+        GetQuery("update t_ppd set PPD_APPROVE_GURU = 1, PPD_APPROVE_GURU_TGL = NOW() where PPD_LOKASI = '$PPD_LOKASI' and PPD_TANGGAL = '$PPD_TANGGAL' and DELETION_STATUS = 0 and PPD_APPROVE_PELATIH = 1 and PPD_APPROVE_GURU = 0");
+
+        GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_KEY, TINGKATAN_ID, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'U', '$USER_ID', now() from t_ppd where PPD_LOKASI = '$PPD_LOKASI' and PPD_TANGGAL = '$PPD_TANGGAL'");
+
+        $response="Success,null";
+        echo $response;
+
+    } catch (Exception $e) {
+        // Generic exception handling
+        $response =  "Caught Exception: " . $e->getMessage();
+        echo $response;
+    }
+}
+
+if (isset($_POST["rejectGuru"])) {
+    try {
+        $PPD_LOKASI = $_POST["PPD_LOKASI"];
+        $PPD_TANGGAL = $_POST["PPD_TANGGAL"];
+
+        GetQuery("update t_ppd set PPD_APPROVE_GURU = 2, PPD_APPROVE_GURU_TGL = NOW() where PPD_LOKASI = '$PPD_LOKASI' and PPD_TANGGAL = '$PPD_TANGGAL' and DELETION_STATUS = 0 and PPD_APPROVE_PELATIH = 1 and PPD_APPROVE_GURU = 0");
+
+        GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_KEY, TINGKATAN_ID, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'U', '$USER_ID', now() from t_ppd where PPD_LOKASI = '$PPD_LOKASI' and PPD_TANGGAL = '$PPD_TANGGAL'");
+
+        $response="Success,null";
+        echo $response;
+
+    } catch (Exception $e) {
+        // Generic exception handling
+        $response =  "Caught Exception: " . $e->getMessage();
+        echo $response;
+    }
+}
+
 if (isset($_POST["EVENT_ACTION"])) {
 
     try {

@@ -128,7 +128,7 @@ while ($rowPPD = $getPPD->fetch(PDO::FETCH_ASSOC)) {
                 <div class="btn-group" style="margin-bottom:5px;">
                     <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a data-toggle="modal" href="#ApprovePPD" class="open-ApprovePPD" style="color:#00a5d2;" data-id="<?= $PPD_ID; ?>" ><span class="ico-edit"></span> Persetujuan</a></li>
+                        <li><a data-toggle="modal" href="#ApprovePPDKoordinator" class="open-ApprovePPDKoordinator" style="color:#00a5d2;" data-id="<?= $PPD_ID; ?>" ><span class="ico-edit"></span> Persetujuan</a></li>
                     </ul>
                 </div>
             </form>

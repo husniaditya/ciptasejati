@@ -94,7 +94,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
         </a>
         <div id="collapseOne" class="panel-collapse collapse">
             <div class="panel-body">
-                <form method="post" class="form filterPPD" id="filterPPD">
+                <form method="post" class="form filterPPD resettable-form" id="filterPPD">
                     <div class="row">
                         <?php
                         if ($USER_AKSES == "Administrator") {

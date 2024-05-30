@@ -94,7 +94,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
         </a>
         <div id="collapseOne" class="panel-collapse collapse">
             <div class="panel-body">
-                <form method="post" class="form filterPPDKoordinator" id="filterPPDKoordinator">
+                <form method="post" class="form filterPPDKoordinator resettable-form" id="filterPPDKoordinator">
                     <div class="row">
                         <?php
                         if ($USER_AKSES == "Administrator") {
@@ -252,7 +252,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ApprovePPD" class="open-ApprovePPD" style="color:#00a5d2;" data-id="<?= $PPD_ID; ?>" ><span class="ico-edit"></span> Persetujuan</a></li>
+                                            <li><a data-toggle="modal" href="#ApprovePPDKoordinator" class="open-ApprovePPDKoordinator" style="color:#00a5d2;" data-id="<?= $PPD_ID; ?>" ><span class="ico-edit"></span> Persetujuan</a></li>
                                         </ul>
                                     </div>
                                 </form>
@@ -290,8 +290,8 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
 <br><br>
 <!--/ END row -->
 
-<div id="ApprovePPD" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="ApprovePPD-form" method="post" class="form" data-parsley-validate>
+<div id="ApprovePPDKoordinator" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form id="ApprovePPDKoordinator-form" method="post" class="form" data-parsley-validate>
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header text-center">
@@ -310,7 +310,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                             <div class="short-div hidden">
                                 <div class="form-group">
                                     <label>ID</label><span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="approvePPD_ID" name="PPD_ID" readonly required data-parsley-required/>
+                                    <input type="text" class="form-control" id="koordinatorPPD_ID" name="PPD_ID" readonly required data-parsley-required/>
                                 </div> 
                             </div>
                             <?php
@@ -318,12 +318,12 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                 ?>
                                 <div class="form-group">
                                     <label>Daerah</label>
-                                    <input type="text" class="form-control" id="approvePPD_DAERAH" name="DAERAH_KEY" readonly />
+                                    <input type="text" class="form-control" id="koordinatorPPD_DAERAH" name="DAERAH_KEY" readonly />
                                 </div> 
                                 <div class="short-div">
                                     <div class="form-group">
                                         <label>Cabang</label>
-                                        <input type="text" class="form-control" id="approvePPD_CABANG" name="CABANG_KEY" readonly />
+                                        <input type="text" class="form-control" id="koordinatorPPD_CABANG" name="CABANG_KEY" readonly />
                                     </div> 
                                 </div>
                                 <?php
@@ -332,37 +332,37 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>Tanggal</label>
-                                    <input type="text" class="form-control" id="approvePPD_TANGGAL" name="PPD_TANGGAL" readonly />
+                                    <input type="text" class="form-control" id="koordinatorPPD_TANGGAL" name="PPD_TANGGAL" readonly />
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>Jenis PPD</label>
-                                    <input type="text" class="form-control" id="approvePPD_JENIS" name="PPD_JENIS" readonly />
+                                    <input type="text" class="form-control" id="koordinatorPPD_JENIS" name="PPD_JENIS" readonly />
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>Tingkatan Lanjutan</label>
-                                    <input type="text" class="form-control" id="approvePPD_TINGKATAN" name="PPD_TINGKATAN" readonly />
+                                    <input type="text" class="form-control" id="koordinatorPPD_TINGKATAN" name="PPD_TINGKATAN" readonly />
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>Anggota</label>
-                                    <input type="text" class="form-control" id="approvePPD_ANGGOTA" name="ANGGOTA_KEY" readonly />
+                                    <input type="text" class="form-control" id="koordinatorPPD_ANGGOTA" name="ANGGOTA_KEY" readonly />
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>Lokasi Cabang PPD</label>
-                                    <input type="text" class="form-control" id="approvePPD_LOKASI" name="PPD_LOKASI" readonly />
+                                    <input type="text" class="form-control" id="koordinatorPPD_LOKASI" name="PPD_LOKASI" readonly />
                                 </div> 
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>Deskripsi</label>
-                                    <textarea type="text" rows="4" class="form-control" id="approvePPD_DESKRIPSI" name="PPD_DESKRIPSI" value="" readonly></textarea>
+                                    <textarea type="text" rows="4" class="form-control" id="koordinatorPPD_DESKRIPSI" name="PPD_DESKRIPSI" value="" readonly></textarea>
                                 </div> 
                             </div>
                         </div>
