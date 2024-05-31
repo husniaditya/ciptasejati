@@ -25,7 +25,7 @@ if (isset($_POST["saveppd"])) {
 
         GetQuery("INSERT INTO `t_ppd` (`PPD_ID`, `CABANG_KEY`, `ANGGOTA_KEY`, `TINGKATAN_ID`, `PPD_JENIS`, `PPD_LOKASI`, `PPD_TANGGAL`, `PPD_DESKRIPSI`, `PPD_FILE`, `PPD_APPROVE_PELATIH`, `PPD_APPROVE_PELATIH_TGL`, `PPD_APPROVE_GURU`, `PPD_APPROVE_GURU_TGL`, `DELETION_STATUS`, `INPUT_BY`, `INPUT_DATE`) VALUES ('$PPD_ID', '$CABANG_KEY', '$ANGGOTA_KEY', '$TINGKATAN_ID', '$PPD_JENIS', '$PPD_LOKASI', '$PPD_TANGGAL', '$PPD_DESKRIPSI', '', '0', NULL, '0', NULL, '0', '$USER_ID', now())");
 
-        GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_KEY, TINGKATAN_ID, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'I', '$USER_ID', now() from t_ppd where PPD_ID = '$PPD_ID'");
+        GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_KEY, TINGKATAN_ID, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_FILE_NAME, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'I', '$USER_ID', now() from t_ppd where PPD_ID = '$PPD_ID'");
 
         $response="Success,$PPD_ID";
         echo $response;
@@ -54,7 +54,7 @@ if (isset($_POST["updateppd"])) {
 
         GetQuery("update t_ppd set TINGKATAN_ID = '$TINGKATAN_ID', PPD_TANGGAL = '$PPD_TANGGAL', CABANG_KEY = '$CABANG_KEY', ANGGOTA_KEY = '$ANGGOTA_KEY', PPD_JENIS = '$PPD_JENIS', PPD_LOKASI = '$PPD_LOKASI', PPD_DESKRIPSI = '$PPD_DESKRIPSI', INPUT_BY = '$USER_ID', INPUT_DATE = NOW() where PPD_ID = '$PPD_ID'");
 
-        GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_KEY, TINGKATAN_ID, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'U', '$USER_ID', now() from t_ppd where PPD_ID = '$PPD_ID'");
+        GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_KEY, TINGKATAN_ID, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_FILE_NAME, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'U', '$USER_ID', now() from t_ppd where PPD_ID = '$PPD_ID'");
 
         $response="Success,$PPD_ID";
         echo $response;
@@ -70,9 +70,34 @@ if (isset($_POST["approveKoordinator"])) {
     try {
         $PPD_ID = $_POST["PPD_ID"];
 
-        GetQuery("update t_ppd set PPD_APPROVE_PELATIH = 1, PPD_APPROVE_PELATIH_TGL = NOW() where PPD_ID = '$PPD_ID'");
+        $incNum = autoIncCert("t_ppd","PPD_ID",5);
+        $getSertifikat = GetQuery("SELECT CONCAT('$incNum', '/', LEFT(a.ANGGOTA_ID, 7), '/', t.TINGKATAN_SERTIFIKAT, '/', 'ISBDS-CS/', 
+        CASE MONTH(p.PPD_TANGGAL)
+          WHEN 1 THEN 'I'
+          WHEN 2 THEN 'II'
+          WHEN 3 THEN 'III'
+          WHEN 4 THEN 'IV'
+          WHEN 5 THEN 'V'
+          WHEN 6 THEN 'VI'
+          WHEN 7 THEN 'VII'
+          WHEN 8 THEN 'VIII'
+          WHEN 9 THEN 'IX'
+          WHEN 10 THEN 'X'
+          WHEN 11 THEN 'XI'
+          WHEN 12 THEN 'XII'
+        END, 
+        '/', DATE_FORMAT(p.PPD_TANGGAL, '%Y')) AS PPD_FILE_NAME
+        FROM t_ppd p
+        LEFT JOIN m_anggota a ON p.ANGGOTA_KEY = a.ANGGOTA_KEY
+        LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID = t.TINGKATAN_ID
+        WHERE p.PPD_ID = '$PPD_ID'");
+        while ($rowSertifikat = $getSertifikat->fetch(PDO::FETCH_ASSOC)) {
+            extract($rowSertifikat);
+        }
 
-        GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_KEY, TINGKATAN_ID, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'U', '$USER_ID', now() from t_ppd where PPD_ID = '$PPD_ID'");
+        GetQuery("update t_ppd set PPD_APPROVE_PELATIH = 1, PPD_APPROVE_PELATIH_TGL = NOW(), PPD_FILE_NAME = '$PPD_FILE_NAME' where PPD_ID = '$PPD_ID'");
+
+        GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_KEY, TINGKATAN_ID, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_FILE_NAME, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'U', '$USER_ID', now() from t_ppd where PPD_ID = '$PPD_ID'");
 
         $response="Success,$PPD_ID";
         echo $response;
@@ -90,7 +115,7 @@ if (isset($_POST["rejectKoordinator"])) {
 
         GetQuery("update t_ppd set PPD_APPROVE_PELATIH = 2, PPD_APPROVE_PELATIH_TGL = NOW() where PPD_ID = '$PPD_ID'");
 
-        GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_KEY, TINGKATAN_ID, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'U', '$USER_ID', now() from t_ppd where PPD_ID = '$PPD_ID'");
+        GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_KEY, TINGKATAN_ID, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_FILE_NAME, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'U', '$USER_ID', now() from t_ppd where PPD_ID = '$PPD_ID'");
 
         $response="Success,$PPD_ID";
         echo $response;
@@ -109,7 +134,7 @@ if (isset($_POST["approveGuru"])) {
 
         GetQuery("update t_ppd set PPD_APPROVE_GURU = 1, PPD_APPROVE_GURU_TGL = NOW() where PPD_LOKASI = '$PPD_LOKASI' and PPD_TANGGAL = '$PPD_TANGGAL' and DELETION_STATUS = 0 and PPD_APPROVE_PELATIH = 1 and PPD_APPROVE_GURU = 0");
 
-        GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_KEY, TINGKATAN_ID, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'U', '$USER_ID', now() from t_ppd where PPD_LOKASI = '$PPD_LOKASI' and PPD_TANGGAL = '$PPD_TANGGAL'");
+        GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_KEY, TINGKATAN_ID, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_FILE_NAME, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'U', '$USER_ID', now() from t_ppd where PPD_LOKASI = '$PPD_LOKASI' and PPD_TANGGAL = '$PPD_TANGGAL'");
 
         $response="Success,null";
         echo $response;
@@ -128,7 +153,7 @@ if (isset($_POST["rejectGuru"])) {
 
         GetQuery("update t_ppd set PPD_APPROVE_GURU = 2, PPD_APPROVE_GURU_TGL = NOW() where PPD_LOKASI = '$PPD_LOKASI' and PPD_TANGGAL = '$PPD_TANGGAL' and DELETION_STATUS = 0 and PPD_APPROVE_PELATIH = 1 and PPD_APPROVE_GURU = 0");
 
-        GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_KEY, TINGKATAN_ID, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'U', '$USER_ID', now() from t_ppd where PPD_LOKASI = '$PPD_LOKASI' and PPD_TANGGAL = '$PPD_TANGGAL'");
+        GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_KEY, TINGKATAN_ID, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_FILE_NAME, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'U', '$USER_ID', now() from t_ppd where PPD_LOKASI = '$PPD_LOKASI' and PPD_TANGGAL = '$PPD_TANGGAL'");
 
         $response="Success,null";
         echo $response;
@@ -149,7 +174,7 @@ if (isset($_POST["EVENT_ACTION"])) {
     
         GetQuery("update t_ppd set DELETION_STATUS = 1 where PPD_ID = '$PPD_ID'");
 
-        GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_KEY, TINGKATAN_ID, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'D', '$USER_ID', now() from t_ppd where PPD_ID = '$PPD_ID'");
+        GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_KEY, TINGKATAN_ID, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_FILE_NAME, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'D', '$USER_ID', now() from t_ppd where PPD_ID = '$PPD_ID'");
         
         $response="Success";
         echo $response;

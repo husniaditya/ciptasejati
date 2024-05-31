@@ -292,7 +292,18 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                             <td><?= $PPD_DESKRIPSI; ?></td>
                             <td align="center"></td>
                             <td align="center"></td>
-                            <td align="center"><?= $PPD_FILE; ?></td>
+                            <td align="center">
+                            <?php
+                            if ($PPD_APPROVE_GURU == 1) {
+                                ?>
+                                <div>
+                                    <a href="<?= $PPD_FILE; ?>" target="_blank"> <i class="fa-regular fa-file-lines"></i> <?= $PPD_FILE_NAME; ?>
+                                    </a>
+                                </div>
+                                <?php
+                            }
+                            ?>
+                            </td>
                             <td><?= $INPUT_BY; ?></td>
                             <td><?= $INPUT_DATE; ?></td>
                         </tr>
@@ -538,7 +549,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                             <div class="short-div hidden">
                                 <div class="form-group">
                                     <label>ID</label><span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="approvePPD_ID" name="PPD_ID" readonly required data-parsley-required/>
+                                    <input type="text" class="form-control" id="editPPD_ID" name="PPD_ID" readonly required data-parsley-required/>
                                 </div> 
                             </div>
                         <?php

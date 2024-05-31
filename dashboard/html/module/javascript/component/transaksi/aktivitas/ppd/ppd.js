@@ -88,14 +88,15 @@ function resetPreview() { // Function Reset Preview Dropdown Value
   }
 }
 
-function savePDFToDrive(MUTASI_ID) { // Function Save PDF to Drive
+function savePDFToDrive(PPD_ID) { // Function Save PDF to Drive
   return new Promise(function(resolve, reject) {
     $.ajax({
       type: 'POST',
-      url: 'module/backend/transaksi/anggota/mutasianggota/t_mutasifile.php',
-      data: { MUTASI_ID: MUTASI_ID },
+      url: 'module/backend/transaksi/aktivitas/ppd/t_ppdfile.php',
+      data: { id: PPD_ID },
       success: function(response) {
         // Check the response from the server
+        console.log(response);
         resolve(response);
       },
       error: function(xhr, status, error) {
@@ -126,8 +127,6 @@ function sendEmailNotification(MUTASI_ID) { // Function Send Email Notification
 
 $('#EditPPD').on('hidden.bs.modal', handleModalHidden);
 $('#AddPPD').on('hidden.bs.modal', handleModalHidden);
-$('#ApprovePPDKoordinator').on('hidden.bs.modal', handleModalHidden);
-$('#ApprovePPDGuru').on('hidden.bs.modal', handleModalHidden);
 
 var formSubmitted = false; // Flag to indicate whether the form has been submitted
 
@@ -193,36 +192,7 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
 
           // Hide the loading overlay after the initial processing
           hideLoadingOverlay();
-
-          // Example usage:
-          // showLoadingOverlay('Proses pembuatan dokumen dan pengiriman email...');
-
-          // // Save PDF to Drive and send email notification concurrently
-          // Promise.all([savePDFToDrive(PPD_ID), sendEmailNotification(PPD_ID)])
-          //   .then(function (responses) {
-          //     const pdfResponse = responses[0];
-          //     const emailResponse = responses[1];
-
-          //     // Handle the responses if needed
-          //     if (pdfResponse) {
-          //     }
-
-          //     if (emailResponse === 'Success') {
-          //       MailNotification('Email pemberitahuan berhasil dikirimkan!');
-          //     } else {
-          //       failedNotification(emailResponse);
-          //     }
-          //   })
-          //   .catch(function (errors) {
-          //     // Handle errors
-          //     for (const error of errors) {
-          //       errorNotification(error);
-          //     }
-          //   })
-          //   .finally(function () {
-          //     // Hide the loading overlay after all asynchronous tasks are complete
-          //     hideLoadingOverlay();
-          //   });
+          
         } else {
           // Display error notification
           failedNotification(response);
@@ -304,34 +274,27 @@ function handleFormApproveKoordinator(formId, successNotification, failedNotific
           hideLoadingOverlay();
 
           // Example usage:
-          // showLoadingOverlay('Proses pembuatan dokumen dan pengiriman email...');
+          showLoadingOverlay('Proses pembuatan dokumen...');
 
-          // // Save PDF to Drive and send email notification concurrently
-          // Promise.all([savePDFToDrive(PPD_ID), sendEmailNotification(PPD_ID)])
-          //   .then(function (responses) {
-          //     const pdfResponse = responses[0];
-          //     const emailResponse = responses[1];
+          // Save PDF to Drive and send email notification concurrently
+          Promise.all([savePDFToDrive(PPD_ID)])
+            .then(function (responses) {
+              const pdfResponse = responses[0];
 
-          //     // Handle the responses if needed
-          //     if (pdfResponse) {
-          //     }
-
-          //     if (emailResponse === 'Success') {
-          //       MailNotification('Email pemberitahuan berhasil dikirimkan!');
-          //     } else {
-          //       failedNotification(emailResponse);
-          //     }
-          //   })
-          //   .catch(function (errors) {
-          //     // Handle errors
-          //     for (const error of errors) {
-          //       errorNotification(error);
-          //     }
-          //   })
-          //   .finally(function () {
-          //     // Hide the loading overlay after all asynchronous tasks are complete
-          //     hideLoadingOverlay();
-          //   });
+              // Handle the responses if needed
+              if (pdfResponse) {
+              }
+            })
+            .catch(function (errors) {
+              // Handle errors
+              for (const error of errors) {
+                errorNotification(error);
+              }
+            })
+            .finally(function () {
+              // Hide the loading overlay after all asynchronous tasks are complete
+              hideLoadingOverlay();
+            });
         } else {
           // Display error notification
           failedNotification(response);
@@ -412,35 +375,6 @@ function handleFormApproveGuru(formId, successNotification, failedNotification, 
           // Hide the loading overlay after the initial processing
           hideLoadingOverlay();
 
-          // Example usage:
-          // showLoadingOverlay('Proses pembuatan dokumen dan pengiriman email...');
-
-          // // Save PDF to Drive and send email notification concurrently
-          // Promise.all([savePDFToDrive(PPD_ID), sendEmailNotification(PPD_ID)])
-          //   .then(function (responses) {
-          //     const pdfResponse = responses[0];
-          //     const emailResponse = responses[1];
-
-          //     // Handle the responses if needed
-          //     if (pdfResponse) {
-          //     }
-
-          //     if (emailResponse === 'Success') {
-          //       MailNotification('Email pemberitahuan berhasil dikirimkan!');
-          //     } else {
-          //       failedNotification(emailResponse);
-          //     }
-          //   })
-          //   .catch(function (errors) {
-          //     // Handle errors
-          //     for (const error of errors) {
-          //       errorNotification(error);
-          //     }
-          //   })
-          //   .finally(function () {
-          //     // Hide the loading overlay after all asynchronous tasks are complete
-          //     hideLoadingOverlay();
-          //   });
         } else {
           // Display error notification
           failedNotification(response);
