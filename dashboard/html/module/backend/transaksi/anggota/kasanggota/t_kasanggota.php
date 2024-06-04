@@ -10,9 +10,16 @@ $MONTH=date("m");
 
 if (isset($_POST["savekasanggota"])) {
     try {
+        if ($USER_AKSES == "Administrator") {
+            $CABANG_KEY = $_POST["CABANG_KEY"];
+        } else {
+            $CABANG_KEY = $USER_CABANG;
+        }
+        
         $KAS_ID = createKode("t_kas","KAS_ID","KAS-$YEAR$MONTH-",3);
         $KAS_JENIS = $_POST["KAS_JENIS"];
         $ANGGOTA_KEY = $_POST["ANGGOTA_KEY"];
+        $ANGGOTA_ID = $_POST["ANGGOTA_ID"];
         $KAS_DK = $_POST["KAS_DK"];
         $rawKAS_JUMLAH = $_POST["KAS_JUMLAH"];
         $KAS_DESKRIPSI = $_POST["KAS_DESKRIPSI"];
@@ -45,7 +52,7 @@ if (isset($_POST["savekasanggota"])) {
             extract($rowNamaAnggota);
         }
 
-        GetQuery("insert into t_kas select '$KAS_ID','$CABANG_KEY','$ANGGOTA_KEY', '$KAS_JENIS', now(), '$KAS_DK','$KAS_JUMLAH', '$KAS_SALDO','$KAS_DESKRIPSI', null, 0, '$USER_ID', now()");
+        GetQuery("insert into t_kas select '$KAS_ID','$CABANG_KEY','$ANGGOTA_KEY','$ANGGOTA_ID', '$KAS_JENIS', now(), '$KAS_DK','$KAS_JUMLAH', '$KAS_SALDO','$KAS_DESKRIPSI', null, 0, '$USER_ID', now()");
 
         GetQuery("insert into t_kas_log select uuid(), KAS_ID, CABANG_KEY, ANGGOTA_KEY, KAS_JENIS, KAS_TANGGAL, KAS_DK,KAS_JUMLAH, KAS_SALDO, KAS_DESKRIPSI, KAS_FILE, DELETION_STATUS, 'I', '$USER_ID', now() from t_kas where KAS_ID = '$KAS_ID'");
 
@@ -66,9 +73,16 @@ if (isset($_POST["savekasanggota"])) {
 
 if (isset($_POST["editkasanggota"])) {
     try {
+        if ($USER_AKSES == "Administrator") {
+            $CABANG_KEY = $_POST["CABANG_KEY"];
+        } else {
+            $CABANG_KEY = $USER_CABANG;
+        }
+        
         $KAS_ID = $_POST["KAS_ID"];
         $KAS_JENIS = $_POST["KAS_JENIS"];
         $ANGGOTA_KEY = $_POST["ANGGOTA_KEY"];
+        $ANGGOTA_ID = $_POST["ANGGOTA_ID"];
         $KAS_DK = $_POST["KAS_DK"];
         $rawKAS_JUMLAH = $_POST["KAS_JUMLAH"];
         $KAS_DESKRIPSI = $_POST["KAS_DESKRIPSI"];
@@ -101,7 +115,7 @@ if (isset($_POST["editkasanggota"])) {
             extract($rowNamaAnggota);
         }
 
-        $test = GetQuery("update t_kas set CABANG_KEY = '$CABANG_KEY', ANGGOTA_KEY = '$ANGGOTA_KEY', KAS_DK = '$KAS_DK', KAS_JUMLAH = '$KAS_JUMLAH', KAS_SALDO = '$KAS_SALDO', KAS_DESKRIPSI = '$KAS_DESKRIPSI', INPUT_BY = '$USER_ID', INPUT_DATE = now() where KAS_ID = '$KAS_ID'");
+        GetQuery("update t_kas set CABANG_KEY = '$CABANG_KEY', ANGGOTA_KEY = '$ANGGOTA_KEY', ANGGOTA_ID = '$ANGGOTA_ID', KAS_DK = '$KAS_DK', KAS_JUMLAH = '$KAS_JUMLAH', KAS_SALDO = '$KAS_SALDO', KAS_DESKRIPSI = '$KAS_DESKRIPSI', INPUT_BY = '$USER_ID', INPUT_DATE = now() where KAS_ID = '$KAS_ID'");
 
         GetQuery("insert into t_kas_log select uuid(), KAS_ID, CABANG_KEY, ANGGOTA_KEY, KAS_JENIS, KAS_TANGGAL, KAS_DK,KAS_JUMLAH, KAS_SALDO, KAS_DESKRIPSI, KAS_FILE, DELETION_STATUS, 'U', '$USER_ID', now() from t_kas where KAS_ID = '$KAS_ID'");
 

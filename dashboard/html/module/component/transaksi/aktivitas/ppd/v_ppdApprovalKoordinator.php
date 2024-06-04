@@ -25,7 +25,7 @@ if ($USER_AKSES == "Administrator") {
     ELSE 'badge badge-danger' 
     END AS GURU_BADGE
     FROM t_ppd p
-    LEFT JOIN m_anggota a ON p.ANGGOTA_KEY = a.ANGGOTA_KEY
+    LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY
     LEFT JOIN m_anggota a2 ON p.INPUT_BY = a2.ANGGOTA_ID
     LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
@@ -58,7 +58,7 @@ if ($USER_AKSES == "Administrator") {
     ELSE 'badge badge-danger' 
     END AS GURU_BADGE
     FROM t_ppd p
-    LEFT JOIN m_anggota a ON p.ANGGOTA_KEY = a.ANGGOTA_KEY
+    LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY
     LEFT JOIN m_anggota a2 ON p.INPUT_BY = a2.ANGGOTA_ID
     LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
@@ -252,7 +252,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ApprovePPDKoordinator" class="open-ApprovePPDKoordinator" style="color:#00a5d2;" data-id="<?= $PPD_ID; ?>" ><span class="ico-edit"></span> Persetujuan</a></li>
+                                            <li><a data-toggle="modal" href="#ApprovePPDKoordinator" class="open-ApprovePPDKoordinator" style="color:#00a5d2;" data-id="<?= $PPD_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><span class="ico-edit"></span> Persetujuan</a></li>
                                         </ul>
                                     </div>
                                 </form>
@@ -350,7 +350,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>Anggota</label>
-                                    <input type="text" class="form-control" id="koordinatorPPD_ANGGOTA" name="ANGGOTA_KEY" readonly />
+                                    <input type="text" class="form-control" id="koordinatorPPD_ANGGOTA" name="ANGGOTA_ID" readonly />
                                 </div> 
                             </div>
                             <div class="short-div">

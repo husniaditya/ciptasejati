@@ -16,7 +16,7 @@ if (isset($_POST["PPD_LOKASI"]) || isset($_POST["PPD_TANGGAL"])) {
     ELSE 'Ulang'
     END PPD_JENIS
     FROM t_ppd p
-    LEFT JOIN m_anggota a ON p.ANGGOTA_KEY = a.ANGGOTA_KEY
+    LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY
     LEFT JOIN m_anggota a2 ON p.INPUT_BY = a2.ANGGOTA_ID
     LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY

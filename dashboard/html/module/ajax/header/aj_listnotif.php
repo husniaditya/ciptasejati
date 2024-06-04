@@ -6,7 +6,7 @@ $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 
 $USER_KEY = $_SESSION["LOGINKEY_CS"];
 
-$getNotif = GetQuery("SELECT n.*,a.ANGGOTA_NAMA,c.CABANG_DESKRIPSI,COALESCE(m.ANGGOTA_KEY,k.ANGGOTA_KEY) as ANGGOTA_KEY, k.KAS_JENIS,
+$getNotif = GetQuery("SELECT n.*,a.ANGGOTA_NAMA,c.CABANG_DESKRIPSI,COALESCE(m.ANGGOTA_KEY,k.ANGGOTA_KEY) as ANGGOTA_KEY,COALESCE(m.ANGGOTA_ID,k.ANGGOTA_ID) as ANGGOTA_ID, k.KAS_JENIS,
 CASE
     WHEN n.KATEGORI = 'KAS' THEN
         CASE
@@ -74,7 +74,7 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
     extract($rowNotif);
     if ($READ_STATUS == 0 && $APPROVE_STATUS == 0 && ($USER_AKSES == "Administrator" || $USER_AKSES == "Koordinator")) {
         ?>
-        <a href="#<?= $HREF; ?>" data-toggle="modal" class="media border-dotted <?= $TOGGLE; ?>" style="background-color: lavender;" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-jenis="<?= $KAS_JENIS; ?>" onclick="getNotif(this)">
+        <a href="#<?= $HREF; ?>" data-toggle="modal" class="media border-dotted <?= $TOGGLE; ?>" style="background-color: lavender;" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-anggotaid="<?= $ANGGOTA_ID; ?>" data-jenis="<?= $KAS_JENIS; ?>" data-cabang="<?= $CABANG_AWAL; ?>" onclick="getNotif(this)">
             <span class="media-body">
                 <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
                 <span class="media-heading text-primary semibold"><?= $DOKUMEN_ID; ?></span>
@@ -89,7 +89,7 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
         <?php
     } elseif ($READ_STATUS == 0 && $APPROVE_STATUS <> 0 && ($USER_AKSES == "Administrator" || $USER_AKSES == "Koordinator")) {
         ?>
-        <a href="#<?= $HREF; ?>" data-toggle="modal" class="media border-dotted <?= $TOGGLE; ?>" style="background-color: lavender;" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-jenis="<?= $KAS_JENIS; ?>" onclick="getNotif(this)">
+        <a href="#<?= $HREF; ?>" data-toggle="modal" class="media border-dotted <?= $TOGGLE; ?>" style="background-color: lavender;" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-anggotaid="<?= $ANGGOTA_ID; ?>" data-jenis="<?= $KAS_JENIS; ?>" data-cabang="<?= $CABANG_AWAL; ?>" onclick="getNotif(this)">
             <span class="media-body">
                 <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
                 <span class="media-heading text-primary semibold"><?= $DOKUMEN_ID; ?></span>
@@ -104,7 +104,7 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
         <?php
     } elseif ($READ_STATUS == 1 && $APPROVE_STATUS == 0 && ($USER_AKSES == "Administrator" || $USER_AKSES == "Koordinator")) {
         ?>
-        <a href="#<?= $HREF; ?>" data-toggle="modal" data-toggle="modal" class="media read border-dotted <?= $TOGGLE; ?>" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-jenis="<?= $KAS_JENIS; ?>" onclick="getNotif(this)">
+        <a href="#<?= $HREF; ?>" data-toggle="modal" data-toggle="modal" class="media read border-dotted <?= $TOGGLE; ?>" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-anggotaid="<?= $ANGGOTA_ID; ?>" data-jenis="<?= $KAS_JENIS; ?>" data-cabang="<?= $CABANG_AWAL; ?>" onclick="getNotif(this)">
             <span class="media-body">
                 <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
                 <span class="media-heading"><?= $DOKUMEN_ID; ?></span>
@@ -121,7 +121,7 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
     else {
         if ($READ_STATUS == 0) {
             ?>
-            <a href="#<?= $HREF; ?>" data-toggle="modal" data-toggle="modal" class="media border-dotted <?= $TOGGLE; ?>" style="background-color: lavender;" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-jenis="<?= $KAS_JENIS; ?>" onclick="getNotif(this)">
+            <a href="#<?= $HREF; ?>" data-toggle="modal" data-toggle="modal" class="media border-dotted <?= $TOGGLE; ?>" style="background-color: lavender;" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-anggotaid="<?= $ANGGOTA_ID; ?>" data-jenis="<?= $KAS_JENIS; ?>" data-cabang="<?= $CABANG_AWAL; ?>" onclick="getNotif(this)">
                 <span class="media-body">
                     <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
                     <span class="media-heading text-primary semibold"><?= $DOKUMEN_ID; ?></span>
@@ -136,7 +136,7 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
             <?php
         } else {
             ?>
-            <a href="#<?= $HREF; ?>" data-toggle="modal" data-toggle="modal" class="media read border-dotted <?= $TOGGLE; ?>" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-jenis="<?= $KAS_JENIS; ?>" onclick="getNotif(this)">
+            <a href="#<?= $HREF; ?>" data-toggle="modal" data-toggle="modal" class="media read border-dotted <?= $TOGGLE; ?>" data-id="<?= $NOTIFIKASI_ID; ?>" data-dokumen="<?= $DOKUMEN_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-anggotaid="<?= $ANGGOTA_ID; ?>" data-jenis="<?= $KAS_JENIS; ?>" data-cabang="<?= $CABANG_AWAL; ?>" onclick="getNotif(this)">
                 <span class="media-body">
                     <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
                     <span class="media-heading"><?= $DOKUMEN_ID; ?></span>

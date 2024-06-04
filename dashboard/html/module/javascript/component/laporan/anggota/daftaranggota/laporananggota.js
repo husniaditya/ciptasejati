@@ -484,7 +484,7 @@ $(document).on("click", ".open-ViewAnggota", function () {
   $.ajax({
     type: "POST",
     url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-    data:'ANGGOTA_KEY='+key,
+    data: { ANGGOTA_KEY: anggotaid, CABANG_KEY: cabangkey },
     success: function(data){
       $("#loadpic").html(data);
     }

@@ -482,7 +482,7 @@ $(document).on("click", ".open-ViewAnggota", function () {
   $.ajax({
     type: "POST",
     url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-    data:'ANGGOTA_KEY='+key,
+    data: { ANGGOTA_KEY: anggotaid, CABANG_KEY: cabangkey },
     success: function(data){
       $("#loadpic").html(data);
     }
@@ -525,6 +525,7 @@ $(document).on("click", ".open-EditAnggota", function () {
   previewContainer.style.display = 'none';
   
   var key = $(this).data('key');
+  var id = $(this).data('id');
   var anggotaid = $(this).data('shortid');
   var daerahkey = $(this).data('daerahkey');
   var daerahdes = $(this).data('daerahdes');
@@ -571,7 +572,7 @@ $(document).on("click", ".open-EditAnggota", function () {
   $.ajax({
     type: "POST",
     url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-    data:'ANGGOTA_KEY='+key,
+    data: { ANGGOTA_KEY: id, CABANG_KEY: cabangkey },
     success: function(data){
       $("#loadpicedit").html(data);
     }

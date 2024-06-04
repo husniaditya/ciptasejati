@@ -25,7 +25,7 @@ if ($USER_AKSES == "Administrator") {
     ELSE 'badge badge-danger' 
     END AS GURU_BADGE
     FROM t_ppd p
-    LEFT JOIN m_anggota a ON p.ANGGOTA_KEY = a.ANGGOTA_KEY
+    LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY
     LEFT JOIN m_anggota a2 ON p.INPUT_BY = a2.ANGGOTA_ID
     LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
@@ -33,7 +33,7 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
     LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID = t2.TINGKATAN_ID
     WHERE p.DELETION_STATUS = 0
-    ORDER BY p.PPD_TANGGAL DESC");
+    ORDER BY p.PPD_ID DESC");
 
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0");
 } else {
@@ -58,7 +58,7 @@ if ($USER_AKSES == "Administrator") {
     ELSE 'badge badge-danger' 
     END AS GURU_BADGE
     FROM t_ppd p
-    LEFT JOIN m_anggota a ON p.ANGGOTA_KEY = a.ANGGOTA_KEY
+    LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY
     LEFT JOIN m_anggota a2 ON p.INPUT_BY = a2.ANGGOTA_ID
     LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
@@ -66,7 +66,7 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
     LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID = t2.TINGKATAN_ID
     WHERE p.DELETION_STATUS = 0 AND p.CABANG_KEY = '$USER_CABANG'
-    ORDER BY p.PPD_TANGGAL DESC");
+    ORDER BY p.PPD_ID DESC");
 
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 and CABANG_KEY = '$USER_CABANG'");
 }
@@ -260,11 +260,11 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewPPD" class="open-ViewPPD" style="color:#222222;" data-id="<?= $PPD_ID; ?>" ><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
+                                            <li><a data-toggle="modal" href="#ViewPPD" class="open-ViewPPD" style="color:#222222;" data-id="<?= $PPD_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
                                             <?php
                                             if ($PPD_APPROVE_PELATIH == 0) {
                                                 ?>
-                                                <li><a data-toggle="modal" href="#EditPPD" class="open-EditPPD" style="color:#00a5d2;" data-id="<?= $PPD_ID; ?>" ><span class="ico-edit"></span> Ubah</a></li>
+                                                <li><a data-toggle="modal" href="#EditPPD" class="open-EditPPD" style="color:#00a5d2;" data-id="<?= $PPD_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><span class="ico-edit"></span> Ubah</a></li>
                                                 <?php
                                             }
                                             ?>
@@ -407,7 +407,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="form-group">
                                     <label>Pilih Anggota<span class="text-danger">*</span></label>
                                     <div id="selectize-wrapper4" style="position: relative;">
-                                        <select name="ANGGOTA_KEY" id="selectize-dropdown4" required="" class="form-control" data-parsley-required>
+                                        <select name="ANGGOTA_ID" id="selectize-dropdown4" required="" class="form-control" data-parsley-required>
                                             <option value="">-- Pilih Anggota --</option>
                                         </select>
                                     </div>
