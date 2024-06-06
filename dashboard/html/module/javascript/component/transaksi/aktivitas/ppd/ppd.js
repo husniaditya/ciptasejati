@@ -96,7 +96,7 @@ function savePDFToDrive(PPD_ID) { // Function Save PDF to Drive
       data: { id: PPD_ID },
       success: function(response) {
         // Check the response from the server
-        console.log(response);
+        // console.log(response);
         resolve(response);
       },
       error: function(xhr, status, error) {
@@ -957,7 +957,7 @@ $(document).on("click", ".open-EditPPD", function () {
         $(".modal-body #selectize-dropdown6")[0].selectize.setValue(data.TINGKATAN_ID);
 
         setTimeout(function () {
-        $(".modal-body #selectize-dropdown7")[0].selectize.setValue(data.ANGGOTA_KEY);
+        $(".modal-body #selectize-dropdown7")[0].selectize.setValue(data.ANGGOTA_ID);
         }, 200); // You may need to adjust the delay based on your application's behavior
         
       }

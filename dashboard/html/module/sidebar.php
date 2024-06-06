@@ -62,7 +62,7 @@ $USER_AKSES = $_SESSION["LOGINAKS_CS"];
                                         <?php
                                         $getChild3 = GetQuery("SELECT m.* FROM m_menu m
                                         LEFT JOIN m_menuakses a ON m.MENU_ID = a.MENU_ID
-                                        WHERE m.MENU_INDUK = '{$rowChild2["MENU_ID"]}' AND MENU_LEVEL='level3' and a.USER_AKSES = 'administrator' AND a.view = 'Y' AND m.DELETION_STATUS = 0
+                                        WHERE m.MENU_INDUK = '{$rowChild2["MENU_ID"]}' AND MENU_LEVEL='level3' and a.USER_AKSES = '$USER_AKSES' AND a.view = 'Y' AND m.DELETION_STATUS = 0
                                         ORDER BY m.MENU_ID ASC");
 
                                         while ($rowChild3 = $getChild3->fetch(PDO::FETCH_ASSOC)) {
@@ -85,7 +85,7 @@ $USER_AKSES = $_SESSION["LOGINAKS_CS"];
                                                         <?php
                                                         $getChild4 = GetQuery("SELECT m.* FROM m_menu m
                                                         LEFT JOIN m_menuakses a ON m.MENU_ID = a.MENU_ID
-                                                        WHERE m.MENU_INDUK = '{$rowChild3["MENU_ID"]}' AND MENU_LEVEL='level4' and a.USER_AKSES = 'administrator' AND a.view = 'Y' AND m.DELETION_STATUS = 0
+                                                        WHERE m.MENU_INDUK = '{$rowChild3["MENU_ID"]}' AND MENU_LEVEL='level4' and a.USER_AKSES = '$USER_AKSES' AND a.view = 'Y' AND m.DELETION_STATUS = 0
                                                         ORDER BY m.MENU_ID ASC");
 
                                                         while ($rowChild4 = $getChild4->fetch(PDO::FETCH_ASSOC)) {

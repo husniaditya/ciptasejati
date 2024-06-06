@@ -21,25 +21,24 @@ if (isset($_POST["saveprofilakun"])) {
         while ($rowNamaCabang = $getNamaCabang->fetch(PDO::FETCH_ASSOC)) {
             extract($rowNamaCabang);
         }
-        $lastAnggotaId = substr($USER_ID, -4);
 
         // Create directory if not exists
-        if (!file_exists("../../../assets/images/daftaranggota/".$CABANG_DESKRIPSI."/".$ANGGOTA_NAMA."_".$lastAnggotaId)) {
-            mkdir("../../../assets/images/daftaranggota/".$CABANG_DESKRIPSI."/".$ANGGOTA_NAMA."_".$lastAnggotaId, 0777, true);
-        }
+        $FilePath = '../../../assets/images/daftaranggota/'.$CABANG_DESKRIPSI.'/'.$USER_ID.' - '. $ANGGOTA_NAMA;
 
-        // Directory to store files
-        $directory = "../../../assets/images/daftaranggota/".$CABANG_DESKRIPSI."/".$ANGGOTA_NAMA."_".$lastAnggotaId."/";
+        // Create directory if not exists
+        if (!file_exists($FilePath)) {
+            mkdir($FilePath, 0777, true);
+        }
 
         // Handle ANGGOTA_PIC files
         if (!empty($_FILES['ANGGOTA_PIC']['tmp_name'][0])) {
             foreach ($_FILES['ANGGOTA_PIC']['tmp_name'] as $key => $idCardFileTmp) {
                 $idCardFileName = $_FILES['ANGGOTA_PIC']['name'][$key];
-                $idCardFileDestination = $directory . "/" . $idCardFileName;
+                $idCardFileDestination = $FilePath . "/" . $idCardFileName;
                 move_uploaded_file($idCardFileTmp, $idCardFileDestination);
 
                 // Re-initialize the variable for database
-                $idCardFileDestination = "./assets/images/daftaranggota/".$CABANG_DESKRIPSI."/".$ANGGOTA_NAMA."_".$lastAnggotaId."/" . $idCardFileName;
+                $idCardFileDestination = "./assets/images/daftaranggota/".$CABANG_DESKRIPSI."/".$USER_ID." - ".$ANGGOTA_NAMA."/" . $idCardFileName;
 
                 GetQuery("update m_anggota set ANGGOTA_PIC = '$idCardFileDestination' where ANGGOTA_KEY = '$USER_KEY'");
 

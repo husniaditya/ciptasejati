@@ -79,7 +79,7 @@ try {
     {
         global $db1;
         $angkaAkhir = 0;
-        $stmt = $db1->query("select max(right($namaKolom,$jumlahAngka)) as akhir from $namaTabel where PPD_APPROVE_PELATIH = 1");
+        $stmt = $db1->query("select max(left($namaKolom,$jumlahAngka)) as akhir from $namaTabel where PPD_APPROVE_PELATIH = 1");
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             if (isset($row["akhir"])) {
                 $angkaAkhir = intval($row["akhir"]);

@@ -38,7 +38,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
                 <!-- Page Header -->
                 <div class="page-header page-header-block">
                     <div class="page-header-section">
-                        <h4 class="title semibold">Persetujuan Pelatih PPD</h4>
+                        <h4 class="title semibold">Persetujuan Koordinator PPD</h4>
                     </div>
                     <div class="page-header-section">
                         <!-- Toolbar -->
@@ -46,7 +46,7 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
                             <ol class="breadcrumb breadcrumb-transparent nm">
                                 <li><a href="javascript:void(0);">Persetujuan Dokumen</a></li>
                                 <li><a href="javascript:void(0);">Persetujuan PPD</a></li>
-                                <li class="active">Persetujuan Pelatih PPD</li>
+                                <li class="active">Persetujuan Koordinator PPD</li>
                             </ol>
                         </div>
                         <!--/ Toolbar -->
