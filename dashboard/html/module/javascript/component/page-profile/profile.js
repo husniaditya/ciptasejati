@@ -129,10 +129,11 @@ function previewImageedit(input) {
     reader.readAsDataURL(input.files[0]);
 }
 
-function fetchDataAndPopulateForm(value1, value2) {
+function fetchDataAndPopulateForm(value1, value2, value3) {
     // Assign PHP session variables to JavaScript variables
     var anggotaKey = value1;
     var cabangKey = value2;
+    var anggotaid = value3;
 
 
     // Make an AJAX request to fetch additional data based on the selected value
@@ -176,33 +177,42 @@ function fetchDataAndPopulateForm(value1, value2) {
     $.ajax({
         type: "POST",
         url: "module/ajax/transaksi/anggota/daftaranggota/aj_getmutasianggota.php",
-        data:'ANGGOTA_KEY='+anggotaKey,
+        data:'id='+anggotaid,
         success: function(data){
-        // Destroy the DataTable before updating
-        $('#riwayatmutasi-table').DataTable().destroy();
-        $("#riwayatmutasi").html(data);
-        // Reinitialize Sertifikat Table
-        callTable();
-        },
-        error: function(error) {
-            console.error('AJAX error:', error);
-        }
-    });
-        
-    $.ajax({
-        type: "POST",
-        url: "module/ajax/transaksi/anggota/daftaranggota/aj_getmutasikas.php",
-        data:'ANGGOTA_KEY='+anggotaKey,
-        success: function(data){
+            console.log(data);
             // Destroy the DataTable before updating
-            $('#mutasikas-table').DataTable().destroy();
-            $("#riwayatkas").html(data);
+            $('#riwayatmutasi-table').DataTable().destroy();
+            $("#riwayatmutasi").html(data);
             // Reinitialize Sertifikat Table
             callTable();
-        },
-        error: function(error) {
-            console.error('AJAX error:', error);
         }
+    });
+    
+    $.ajax({
+    type: "POST",
+    url: "module/ajax/transaksi/anggota/daftaranggota/aj_getmutasikas.php",
+    data: { id: anggotaid, cabang: cabangKey },
+    success: function(data){
+        console.log(data);
+        // Destroy the DataTable before updating
+        $('#mutasikas-table').DataTable().destroy();
+        $("#riwayatkas").html(data);
+        // Reinitialize Sertifikat Table
+        callTable();
+    }
+    });
+
+    $.ajax({
+    type: "POST",
+    url: "module/ajax/transaksi/anggota/daftaranggota/aj_getppdanggota.php",
+    data:'id='+anggotaid,
+    success: function(data){
+        // Destroy the DataTable before updating
+        $('#riwayatppd-table').DataTable().destroy();
+        $("#datariwayatppd").html(data);
+        // Reinitialize Sertifikat Table
+        callTable();
+    }
     });
 }
 
@@ -211,6 +221,7 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
       
         var anggotaKey = document.getElementById('JANGGOTA_KEY').innerHTML;
         var cabangKey = document.getElementById('JCABANG_KEY').innerHTML;
+        var anggotaid = document.getElementById('JANGGOTA_ID').innerHTML;
 
         event.preventDefault(); // Prevent the default form submission
 
@@ -231,7 +242,7 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
             if (response === 'Success') {
             // Display success notification
             successNotification('Data berhasil diubah!');
-            fetchDataAndPopulateForm(anggotaKey,cabangKey);
+            fetchDataAndPopulateForm(anggotaKey,cabangKey,anggotaid);
             } else {
             // Display error notification
             failedNotification(response);
@@ -249,8 +260,10 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
 $(document).ready(function() {
     var anggotaKey = document.getElementById('JANGGOTA_KEY').innerHTML;
     var cabangKey = document.getElementById('JCABANG_KEY').innerHTML;
+    var anggotaid = document.getElementById('JANGGOTA_ID').innerHTML;
+
     // Call the function when needed
-    fetchDataAndPopulateForm(anggotaKey,cabangKey);
-    callTable()
+    fetchDataAndPopulateForm(anggotaKey,cabangKey,anggotaid);
+    callTable();
     handleForm('#EditProfile-form', SuccessNotification, FailedNotification, UpdateNotification);
 });

@@ -433,8 +433,8 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label>Deskripsi<span class="text-danger">*</span></label>
-                                    <textarea type="text" rows="4" class="form-control" id="MUTASI_DESKRIPSI" name="PPD_DESKRIPSI" value="" data-parsley-required required></textarea>
+                                    <label>Deskripsi </label>
+                                    <textarea type="text" rows="4" class="form-control" id="MUTASI_DESKRIPSI" name="PPD_DESKRIPSI" value="" ></textarea>
                                 </div> 
                             </div>
                         </div>
@@ -650,8 +650,8 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label>Deskripsi<span class="text-danger">*</span></label>
-                                    <textarea type="text" rows="4" class="form-control" id="editPPD_DESKRIPSI" name="PPD_DESKRIPSI" value="" data-parsley-required required></textarea>
+                                    <label>Deskripsi </label>
+                                    <textarea type="text" rows="4" class="form-control" id="editPPD_DESKRIPSI" name="PPD_DESKRIPSI" value="" ></textarea>
                                 </div> 
                             </div>
                         </div>

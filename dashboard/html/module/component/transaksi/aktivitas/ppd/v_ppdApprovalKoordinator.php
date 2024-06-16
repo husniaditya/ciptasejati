@@ -241,7 +241,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                         <th>Input Tanggal</th>
                     </tr>
                 </thead>
-                <tbody id="ppddata">
+                <tbody id="koordinatorppddata">
                     <?php
                     while ($rowPPD = $getPPD->fetch(PDO::FETCH_ASSOC)) {
                         extract($rowPPD);

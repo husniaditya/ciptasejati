@@ -70,6 +70,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // MenuID: Persetujuan
+    if (currentPage === 'persetujuanmutasi.php') {
+      addInClassToSubmenu('persetujuan');
+    }
+
     if (currentPage === 'pusatdayaapprovalpelatih.php' || currentPage === 'pusatdayaapprovalguru.php') {
       addInClassToSubmenu('persetujuan');
       addInClassToSubmenu('persetujuanppd');

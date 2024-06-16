@@ -17,6 +17,7 @@ try {
     $db1 = new PDO("mysql:host=$host;dbname=$database", $username, $password);
     $db1->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     date_default_timezone_set("Asia/Jakarta");
+    setlocale(LC_TIME, 'id_ID');
 	ini_set('max_execution_time', 300); //300 seconds = 5 minutes
 	ini_set('upload_max_filesize', '10M');
     session_start();

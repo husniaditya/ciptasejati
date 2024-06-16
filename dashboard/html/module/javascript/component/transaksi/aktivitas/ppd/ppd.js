@@ -14,7 +14,7 @@ function callTable() {
       ]
   });
 
-  $('#ApprovePPDGuru').on('shown.bs.modal', function () {
+  $('#ApprovePPDGuru, #ViewPPDGuru').on('shown.bs.modal', function () {
     // Destroy DataTable for riwayatmutasi-table if it exists
     if ($.fn.DataTable.isDataTable('#detailppd-table')) {
       $('#detailppd-table').DataTable().destroy();
@@ -261,7 +261,7 @@ function handleFormApproveKoordinator(formId, successNotification, failedNotific
             success: function (response) {
               // Destroy the DataTable before updating
               $('#ppd-table').DataTable().destroy();
-              $("#ppddata").html(response);
+              $("#koordinatorppddata").html(response);
               // Reinitialize Sertifikat Table
               callTable();
             },
@@ -465,8 +465,6 @@ $(document).ready(function() {
     
     // Get the selected values from both dropdowns
     var ANGGOTA_KEY = AnggotaInstance.getValue();
-
-    console.log('ANGGOTA_KEY', ANGGOTA_KEY, 'CABANG_KEY', selectedCabang);
 
     // Make an AJAX request to fetch data for the second dropdown based on the selected value
     $.ajax({
@@ -1045,6 +1043,31 @@ $(document).on("click", ".open-ApprovePPDGuru", function () {
   });
 });
 
+// View PPD Guru
+$(document).on("click", ".open-ViewPPDGuru", function () {
+  
+  var tanggal = $(this).data('tanggal');
+  var lokasi = $(this).data('cabangppd');
+  
+  // Make an AJAX request to fetch additional data based on the selected value
+  $.ajax({
+    type: "POST",
+    url: 'module/ajax/transaksi/aktivitas/ppd/aj_tableppdGuruDetailView.php',
+    data: { PPD_TANGGAL: tanggal, PPD_LOKASI: lokasi },
+    dataType: 'json',
+    success: function(response){
+      
+      $("#guruPPD_LOKASI").val(lokasi);
+      $("#guruPPD_LOKASI_DESKRIPSI").val(response.PPD_CABANG);
+      $("#guruPPD_TANGGAL").val(tanggal);
+
+      // Destroy the DataTable before updating
+      $('#detailppd-table').DataTable().destroy();
+      $("#detailppddata").html(response.table_rows);
+    }
+  });
+});
+
 // Mutasi Anggota Filtering
 // Attach debounced event handler to form inputs
 $('.filterPPD select, .filterPPD input').on('change input', debounce(filterPPDEvent, 500));
@@ -1113,7 +1136,7 @@ function filterPPDKoordinatorEvent() {
     PPD_JENIS: jenis,
     PPD_TANGGAL: tanggal
   };
-  console.log(formData);
+  // console.log(formData);
 
   $.ajax({
     type: "POST",
@@ -1122,7 +1145,7 @@ function filterPPDKoordinatorEvent() {
     success: function(response){
       // Destroy the DataTable before updating
       $('#ppd-table').DataTable().destroy();
-      $("#ppddata").html(response);
+      $("#koordinatorppddata").html(response);
       // Reinitialize Sertifikat Table
       callTable();
     }

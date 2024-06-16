@@ -491,7 +491,7 @@ $(document).on("click", ".open-ViewAnggota", function () {
   $.ajax({
     type: "POST",
     url: "module/ajax/transaksi/anggota/daftaranggota/aj_getmutasianggota.php",
-    data:'ANGGOTA_KEY='+key,
+    data:'id='+anggotaid,
     success: function(data){
       // Destroy the DataTable before updating
       $('#riwayatmutasi-table').DataTable().destroy();
@@ -503,11 +503,23 @@ $(document).on("click", ".open-ViewAnggota", function () {
   $.ajax({
     type: "POST",
     url: "module/ajax/transaksi/anggota/daftaranggota/aj_getmutasikas.php",
-    data:'ANGGOTA_KEY='+key,
+    data: { id: anggotaid, cabang: cabangkey },
     success: function(data){
       // Destroy the DataTable before updating
       $('#mutasikas-table').DataTable().destroy();
       $("#riwayatkas").html(data);
+      // Reinitialize Sertifikat Table
+    }
+  });
+
+  $.ajax({
+    type: "POST",
+    url: "module/ajax/transaksi/anggota/daftaranggota/aj_getppdanggota.php",
+    data:'id='+anggotaid,
+    success: function(data){
+      // Destroy the DataTable before updating
+      $('#riwayatppd-table').DataTable().destroy();
+      $("#riwayatppd").html(data);
       // Reinitialize Sertifikat Table
     }
   });

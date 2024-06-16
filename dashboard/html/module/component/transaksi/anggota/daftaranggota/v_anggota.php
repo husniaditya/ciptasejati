@@ -706,15 +706,19 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                                 <table class="table table-striped table-bordered" id="riwayatppd-table">
                                                     <thead>
                                                         <tr>
-                                                            <th>No Dokumen</th>
-                                                            <th>ID Anggota</th>
-                                                            <th>Daerah </th>
-                                                            <th>Cabang </th>
-                                                            <th>Sabuk </th>
+                                                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                            <th>No Dokumen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                            <th>ID Anggota&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                            <th>Nama Anggota&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                            <th>Daerah &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                            <th>Cabang &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                            <th>Jenis </th>
                                                             <th>Tingkatan </th>
-                                                            <th>Gelar </th>
-                                                            <th>Nama</th>
+                                                            <th>Tingkatan PPD </th>
+                                                            <th>Cabang PPD</th>
                                                             <th>Tanggal</th>
+                                                            <th>Deskripsi</th>
+                                                            <th>Sertifikat</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="riwayatppd">

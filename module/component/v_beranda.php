@@ -193,7 +193,7 @@ WHERE c.DELETION_STATUS = 0 ORDER BY INPUT_DATE DESC limit 10");
                     <h2 class="text-color-light font-weight-bold text-10 negative-ls-05 line-height-1 mb-0 appear-animation" data-appear-animation="fadeInUpShorterPlus" data-appear-animation-delay="100" data-plugin-options="{'minWindowWidth': 0}">Kegiatan Cipta Sejati<br><span class="font-weight-extra-bold custom-highlight-1 custom-highlight-1-tertiary ws-nowrap p-1 custom-highlight-anim custom-highlight-anim-delay">Indonesia</span></h2>
                 </div>
                 <div class="col-lg-6 mt-3 mt-lg-0">
-                    <p class="mb-0 text-color-light ps-lg-5">Membuat generasi muda untuk mencintai budaya pencak silat yang menjadi kebanggaan bangsa indonesia</p>
+                    <p class="mb-0 text-color-light ps-lg-5">Membuat generasi muda untuk mencintai budaya pencak silat yang menjadi kebanggaan bangsa indonesia. Semua kegiatan Cipta Sejati Indonesia bertujuan untuk meningkatkan keterampilan, persaudaraan, dan kesadaran budaya pencak silat Indonesia di antara anggotanya.</p>
                 </div>
                 <div class="col-lg-3 mt-3 mt-lg-0 text-lg-end">
                     <a href="hubungi.php" class="btn btn-modern btn-light text-color-dark font-weight-bold border-0 py-3 px-5 btn-arrow-effect-1 ws-nowrap">DAFTAR SEKARANG <i class="fas fa-arrow-right ms-2"></i></a>
@@ -210,7 +210,7 @@ WHERE c.DELETION_STATUS = 0 ORDER BY INPUT_DATE DESC limit 10");
                     <div class="card-body text-center text-lg-start m-2 appear-animation" data-appear-animation="fadeInUpShorterPlus" data-appear-animation-delay="100" data-plugin-options="{'minWindowWidth': 0}">
                         <img height="90" src="./dashboard/html/<?= $PROFIL_LOGO; ?>" alt="" />
                         <h4 class="font-weight-bold mt-4">Pembukaan Pusat Daya</h4>
-                        <p class="text-3">Lorem ipsum dolor sit amet, consec tetur adipiscing elit. Proin mauris erat, accumsan quis ullamcorper.</p>
+                        <p class="text-3">Acara ini bertujuan untuk membuka pusat pelatihan dan meningkatkan kesadaran akan budaya pencak silat Indonesia.</p>
                     </div>
                 </div>
             </div>
@@ -219,7 +219,7 @@ WHERE c.DELETION_STATUS = 0 ORDER BY INPUT_DATE DESC limit 10");
                     <div class="card-body text-center text-lg-start m-2 appear-animation" data-appear-animation="fadeInUpShorterPlus" data-appear-animation-delay="400" data-plugin-options="{'minWindowWidth': 0}">
                         <img height="90" src="./dashboard/html/<?= $PROFIL_LOGO; ?>" alt="" />
                         <h4 class="font-weight-bold mt-4">Ujian Kenaikan Tingkat</h4>
-                        <p class="text-3">Lorem ipsum dolor sit amet, consec tetur adipiscing elit. Proin mauris erat, accumsan quis ullamcorper.</p>
+                        <p class="text-3">Acara ini digunakan untuk menguji kemampuan pesilat dan meningkatkan keterampilan anggota.</p>
                     </div>
                 </div>
             </div>
@@ -228,7 +228,7 @@ WHERE c.DELETION_STATUS = 0 ORDER BY INPUT_DATE DESC limit 10");
                     <div class="card-body text-center text-lg-start m-2 appear-animation" data-appear-animation="fadeInUpShorterPlus" data-appear-animation-delay="700" data-plugin-options="{'minWindowWidth': 0}">
                         <img height="90" src="./dashboard/html/<?= $PROFIL_LOGO; ?>" alt="" />
                         <h4 class="font-weight-bold mt-4">Latihan Gabungan Nasional</h4>
-                        <p class="text-3">Lorem ipsum dolor sit amet, consec tetur adipiscing elit. Proin mauris erat, accumsan quis ullamcorper.</p>
+                        <p class="text-3">Acara ini digunakan untuk meningkatkan keterampilan dan persaudaraan di antara anggotanya.</p>
                     </div>
                 </div>
             </div>
@@ -237,7 +237,7 @@ WHERE c.DELETION_STATUS = 0 ORDER BY INPUT_DATE DESC limit 10");
                     <div class="card-body text-center text-lg-start m-2 appear-animation" data-appear-animation="fadeInUpShorterPlus" data-appear-animation-delay="1200" data-plugin-options="{'minWindowWidth': 0}">
                         <img height="90" src="./dashboard/html/<?= $PROFIL_LOGO; ?>" alt="" />
                         <h4 class="font-weight-bold mt-4">Pendidikan dan Latihan</h4>
-                        <p class="text-3">Lorem ipsum dolor sit amet, consec tetur adipiscing elit. Proin mauris erat, accumsan quis ullamcorper.</p>
+                        <p class="text-3">Acara ini digunakan untuk memberikan pendidikan dan latihan silat kepada anggotanya.</p>
                     </div>
                 </div>
             </div>
