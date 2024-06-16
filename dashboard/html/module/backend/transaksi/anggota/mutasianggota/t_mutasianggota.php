@@ -15,6 +15,7 @@ if (isset($_POST["savemutasianggota"])) {
         $MUTASI_ID = createKode("t_mutasi","MUTASI_ID","MTS-$YEAR$MONTH-",3);
         $CABANG_TUJUAN = $_POST["CABANG_TUJUAN"];
         $ANGGOTA_KEY = $_POST["ANGGOTA_KEY"];
+        $ANGGOTA_ID = $_POST["ANGGOTA_ID"];
         $MUTASI_DESKRIPSI = $_POST["MUTASI_DESKRIPSI"];
         $MUTASI_TANGGAL = $_POST["MUTASI_TANGGAL"];
         $MUTASI_FILE = "";
@@ -29,7 +30,7 @@ if (isset($_POST["savemutasianggota"])) {
             extract($rowNamaAnggota);
         }
 
-        GetQuery("insert into t_mutasi select UUID(),'$MUTASI_ID', '$CABANG_AWAL', '$CABANG_TUJUAN', '$ANGGOTA_KEY', '$MUTASI_DESKRIPSI', '$MUTASI_TANGGAL', 0, now(), null, null, '$MUTASI_FILE',0,0, '$USER_ID', now()");
+        GetQuery("insert into t_mutasi select UUID(),'$MUTASI_ID', '$CABANG_AWAL', '$CABANG_TUJUAN', '$ANGGOTA_KEY', '$ANGGOTA_ID', '$MUTASI_DESKRIPSI', '$MUTASI_TANGGAL', 0, now(), null, null, '$MUTASI_FILE',0,0, '$USER_ID', now()");
 
         GetQuery("insert into t_mutasi_log select uuid(), MUTASI_ID, CABANG_AWAL, CABANG_TUJUAN, ANGGOTA_KEY, MUTASI_DESKRIPSI, MUTASI_TANGGAL, MUTASI_STATUS, MUTASI_STATUS_TANGGAL, MUTASI_APPROVE_BY, MUTASI_APPROVE_TANGGAL, MUTASI_FILE, DELETION_STATUS, 'I', '$USER_ID', now() from t_mutasi where MUTASI_ID = '$MUTASI_ID'");
 

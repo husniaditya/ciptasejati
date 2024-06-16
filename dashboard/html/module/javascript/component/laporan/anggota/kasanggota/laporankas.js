@@ -560,12 +560,13 @@ $(document).on("click", ".open-ViewKasAnggota", function () {
   var key = $(this).data('id');
   var anggota = $(this).data('anggota');
   var jenis = $(this).data('jenis');
+  var cabang = $(this).data('cabang');
   
   // Make an AJAX request to fetch additional data based on the selected value
   $.ajax({
     url: 'module/ajax/transaksi/anggota/kasanggota/aj_getdetailkas.php',
     method: 'POST',
-    data: { KAS_ID: key, ANGGOTA_KEY: anggota, KAS_JENIS: jenis },
+    data: { KAS_ID: key, ANGGOTA_KEY: anggota, KAS_JENIS: jenis, CABANG_KEY: cabang },
     success: function(data) {
       // console.log('response', data);
       // Assuming data is a JSON object with the required information
@@ -591,21 +592,20 @@ $(document).on("click", ".open-ViewKasAnggota", function () {
       $("#viewINPUT_BY").text(data.INPUT_BY);
       $("#viewINPUT_DATE").text(data.INPUT_DATE);
 
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+        data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: data.CABANG_KEY },
+        success: function(data){
+          $("#loadpicview").html(data);
+        }
+      });
+
     },
     error: function(error) {
       console.error('Error fetching data:', error);
     }
   });
-
-  $.ajax({
-    type: "POST",
-    url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-    data:'ANGGOTA_KEY='+anggota,
-    success: function(data){
-      $("#loadpicview").html(data);
-    }
-  });
-  
   // console.log(id);
 });
 

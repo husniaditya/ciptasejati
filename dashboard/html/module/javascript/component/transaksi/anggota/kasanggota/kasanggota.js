@@ -17,19 +17,27 @@ function callTable() {
 
 function populateFields() { // Funciton Populate Fields
   var selectize = $("#selectize-dropdown")[0].selectize;
+  var isExist = $('#selectize-dropdown10').length > 0;
 
   // Get the selected value
   var selectedValue = selectize.getValue();
+  if (isExist) {
+    var selectizeCabang = $("#selectize-dropdown10")[0].selectize;
+    var selectedCabang = selectizeCabang.getValue();
+  } else {
+    var selectedCabang = $('#CABANG_KEY').val();
+  }
 
   // Make an AJAX request to fetch additional data based on the selected value
   $.ajax({
     url: 'module/ajax/transaksi/anggota/kasanggota/aj_getdetailanggota.php',
     method: 'POST',
-    data: { ANGGOTA_KEY: selectedValue },
+    data: { ANGGOTA_KEY: selectedValue, CABANG_KEY: selectedCabang },
     success: function(data) {
       // console.log('response', data);
       // Assuming data is a JSON object with the required information
       // Make sure the keys match the fields in your returned JSON object
+      $("#ANGGOTA_KEY").val(data.ANGGOTA_KEY);
       $("#DAERAH_AWAL").val(data.DAERAH_DESKRIPSI);
       $("#CABANG_AWAL").val(data.CABANG_KEY);
       $("#CABANG_DESKRIPSI").val(data.CABANG_DESKRIPSI);
@@ -44,7 +52,7 @@ function populateFields() { // Funciton Populate Fields
       $.ajax({
         type: "POST",
         url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-        data:'ANGGOTA_KEY='+selectedValue,
+        data: { ANGGOTA_KEY: selectedValue, CABANG_KEY: selectedCabang },
         success: function(data){
           $("#loadpic").html(data);
         }
@@ -59,19 +67,27 @@ function populateFields() { // Funciton Populate Fields
 
 function populateFieldsEdit() { // Funciton Populate Fields in Edit Modal
   var selectize = $("#selectize-dropdown4")[0].selectize;
+  var isExist = $('#selectize-dropdown12').length > 0;
 
   // Get the selected value
   var selectedValue = selectize.getValue();
+  if (isExist) {
+    var selectizeCabang = $("#selectize-dropdown12")[0].selectize;
+    var selectedCabang = selectizeCabang.getValue();
+  } else {
+    var selectedCabang = $('#editCABANG_KEY').val();
+  }
 
   // Make an AJAX request to fetch additional data based on the selected value
   $.ajax({
-    url: 'module/ajax/transaksi/anggota/mutasianggota/aj_getdetailanggota.php',
+    url: 'module/ajax/transaksi/anggota/kasanggota/aj_getdetailanggota.php',
     method: 'POST',
-    data: { ANGGOTA_KEY: selectedValue },
+    data: { ANGGOTA_KEY: selectedValue, CABANG_KEY: selectedCabang },
     success: function(data) {
       // console.log('response', data);
       // Assuming data is a JSON object with the required information
       // Make sure the keys match the fields in your returned JSON object
+      $("#editANGGOTA_KEY").val(data.ANGGOTA_KEY);
       $("#editDAERAH_AWAL_DES").val(data.DAERAH_DESKRIPSI);
       $("#editCABANG_AWAL").val(data.CABANG_KEY);
       $("#editCABANG_AWAL_DES").val(data.CABANG_DESKRIPSI);
@@ -86,7 +102,7 @@ function populateFieldsEdit() { // Funciton Populate Fields in Edit Modal
       $.ajax({
         type: "POST",
         url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-        data:'ANGGOTA_KEY='+selectedValue,
+        data: { ANGGOTA_KEY: selectedValue, CABANG_KEY: selectedCabang },
         success: function(data){
           $("#loadpicedit").html(data);
         }
@@ -101,6 +117,16 @@ function populateFieldsEdit() { // Funciton Populate Fields in Edit Modal
 
 function populateSaldoAwal() { // Funciton Populate Fields
   var selectize = $("#selectize-dropdown")[0].selectize;
+  var isExist = $('#selectize-dropdown10').length > 0;
+
+  // Get the selected value
+  var selectedValue = selectize.getValue();
+  if (isExist) {
+    var selectizeCabang = $("#selectize-dropdown10")[0].selectize;
+    var selectedCabang = selectizeCabang.getValue();
+  } else {
+    var selectedCabang = $('#CABANG_KEY').val();
+  }
 
   // Get the selected value
   var selectedValue = selectize.getValue();
@@ -110,8 +136,9 @@ function populateSaldoAwal() { // Funciton Populate Fields
   $.ajax({
     url: 'module/ajax/transaksi/anggota/kasanggota/aj_getsaldoawal.php',
     method: 'POST',
-    data: { ANGGOTA_KEY: selectedValue, KAS_JENIS: jenisKas },
+    data: { ANGGOTA_KEY: selectedValue, KAS_JENIS: jenisKas, CABANG_KEY: selectedCabang },
     success: function(data) {
+      // console.log(data);
       $("#KAS_SALDOAWAL").val(data.SALDOAWAL);
       // Trigger the main calculation when the saldoawal is populated
       $("#KAS_JUMLAH, #KAS_DK, #KAS_JENIS").trigger("input");
@@ -124,6 +151,16 @@ function populateSaldoAwal() { // Funciton Populate Fields
 
 function populateSaldoAwalEdit() { // Funciton Populate Fields
   var selectize = $("#selectize-dropdown4")[0].selectize;
+  var isExist = $('#selectize-dropdown12').length > 0;
+
+  // Get the selected value
+  var selectedValue = selectize.getValue();
+  if (isExist) {
+    var selectizeCabang = $("#selectize-dropdown12")[0].selectize;
+    var selectedCabang = selectizeCabang.getValue();
+  } else {
+    var selectedCabang = $('#editCABANG_KEY').val();
+  }
 
   // Get the selected value
   var selectedValue = selectize.getValue();
@@ -134,7 +171,7 @@ function populateSaldoAwalEdit() { // Funciton Populate Fields
   $.ajax({
     url: 'module/ajax/transaksi/anggota/kasanggota/aj_getsaldoawal.php',
     method: 'POST',
-    data: { ANGGOTA_KEY: selectedValue, KAS_JENIS: jenisKas, KAS_ID: key },
+    data: { ANGGOTA_KEY: selectedValue, KAS_JENIS: jenisKas, KAS_ID: key, CABANG_KEY: selectedCabang },
     success: function(data) {
       $("#editKAS_SALDOAWAL").val(data.SALDOAWAL);
       // Trigger the main calculation when the saldoawal is populated
@@ -562,12 +599,13 @@ $(document).on("click", ".open-ViewKasAnggota", function () {
   var key = $(this).data('id');
   var anggota = $(this).data('anggota');
   var jenis = $(this).data('jenis');
+  var cabang = $(this).data('cabang');
   
   // Make an AJAX request to fetch additional data based on the selected value
   $.ajax({
     url: 'module/ajax/transaksi/anggota/kasanggota/aj_getdetailkas.php',
     method: 'POST',
-    data: { KAS_ID: key, ANGGOTA_KEY: anggota, KAS_JENIS: jenis },
+    data: { KAS_ID: key, ANGGOTA_KEY: anggota, KAS_JENIS: jenis, CABANG_KEY: cabang },
     success: function(data) {
       // console.log('response', data);
       // Assuming data is a JSON object with the required information
@@ -593,22 +631,20 @@ $(document).on("click", ".open-ViewKasAnggota", function () {
       $("#viewINPUT_BY").text(data.INPUT_BY);
       $("#viewINPUT_DATE").text(data.INPUT_DATE);
 
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+        data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: data.CABANG_KEY },
+        success: function(data){
+          $("#loadpicview").html(data);
+        }
+      });
+
     },
     error: function(error) {
       console.error('Error fetching data:', error);
     }
   });
-
-  $.ajax({
-    type: "POST",
-    url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-    data:'ANGGOTA_KEY='+anggota,
-    success: function(data){
-      $("#loadpicview").html(data);
-    }
-  });
-  
-  // console.log(id);
 });
 
 // Edit Anggota
@@ -617,13 +653,15 @@ $(document).on("click", ".open-EditKasAnggota", function () {
   var key = $(this).data('id');
   var anggota = $(this).data('anggota');
   var jenis = $(this).data('jenis');
+  var cabang = $(this).data('cabang');
   
   // Make an AJAX request to fetch additional data based on the selected value
   $.ajax({
     url: 'module/ajax/transaksi/anggota/kasanggota/aj_getdetailkas.php',
     method: 'POST',
-    data: { KAS_ID: key, ANGGOTA_KEY: anggota, KAS_JENIS: jenis },
+    data: { KAS_ID: key, ANGGOTA_KEY: anggota, KAS_JENIS: jenis, CABANG_KEY: cabang },
     success: function(data) {
+      // console.log('response', data);
       // Assuming data is a JSON object with the required information
       // Make sure the keys match the fields in your returned JSON object
 
@@ -654,7 +692,7 @@ $(document).on("click", ".open-EditKasAnggota", function () {
         $(".modal-body #selectize-dropdown12")[0].selectize.setValue(data.CABANG_KEY);
         }, 200); // You may need to adjust the delay based on your application's behavior
         setTimeout(function () {
-        $(".modal-body #selectize-dropdown4")[0].selectize.setValue(anggota);
+        $(".modal-body #selectize-dropdown4")[0].selectize.setValue(data.ANGGOTA_ID);
         }, 300); // You may need to adjust the delay based on your application's behavior
         setTimeout(function () {
         $("#editKAS_JENIS").val(data.KAS_JENIS);
@@ -666,7 +704,7 @@ $(document).on("click", ".open-EditKasAnggota", function () {
           $("#editKAS_SALDOAKHIR").val(data.FKAS_SALDO);
         }, 600); // You may need to adjust the delay based on your application's behavior
       } else {
-        $(".modal-body #selectize-dropdown4")[0].selectize.setValue(anggota);
+        $(".modal-body #selectize-dropdown4")[0].selectize.setValue(data.ANGGOTA_ID);
         setTimeout(function () {
           $("#editKAS_JENIS").val(data.KAS_JENIS);
         }, 200); // You may need to adjust the delay based on your application's behavior
@@ -678,18 +716,17 @@ $(document).on("click", ".open-EditKasAnggota", function () {
         }, 300); // You may need to adjust the delay based on your application's behavior
       }
       
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+        data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: data.CABANG_KEY },
+        success: function(data){
+          $("#loadpicedit").html(data);
+        }
+      });
     },
     error: function(error) {
       console.error('Error fetching data:', error);
-    }
-  });
-
-  $.ajax({
-    type: "POST",
-    url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-    data:'ANGGOTA_KEY='+anggota,
-    success: function(data){
-      $("#loadpicedit").html(data);
     }
   });
 });

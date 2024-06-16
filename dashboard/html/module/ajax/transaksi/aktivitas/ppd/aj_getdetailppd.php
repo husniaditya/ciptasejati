@@ -10,7 +10,7 @@ CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan'
 FROM t_ppd p
 LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
 LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-LEFT JOIN m_anggota a ON p.ANGGOTA_KEY = a.ANGGOTA_KEY
+LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY
 LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
 LEFT JOIN m_daerah d2 ON c2.DAERAH_KEY = d2.DAERAH_KEY
 LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID = t.TINGKATAN_ID
@@ -42,7 +42,7 @@ while ($rowDetail = $GetDetail->fetch(PDO::FETCH_ASSOC)) {
     $data['TINGKATAN_ID'] = $rowDetail["TINGKATAN_ID"];
     $data['TINGKATAN_NAMA'] = $rowDetail["TINGKATAN_NAMA"];
     $data['TINGKATAN_SEBUTAN'] = $rowDetail["TINGKATAN_SEBUTAN"];
-    $data['ANGGOTA_KEY'] = $rowDetail["ANGGOTA_KEY"];
+    $data['ANGGOTA_ID'] = $rowDetail["ANGGOTA_ID"];
     $data['ANGGOTA_NAMA'] = $rowDetail["ANGGOTA_NAMA"];
 }
 

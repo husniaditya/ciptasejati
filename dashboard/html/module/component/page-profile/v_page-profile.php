@@ -12,6 +12,7 @@
                     <span class="semibold ellipsis mt0 pull-left"><?= $_SESSION["LOGINIDUS_CS"];?></span>
                     <span class="semibold ellipsis mt0 pull-left hidden" id="JANGGOTA_KEY"><?= $_SESSION["LOGINKEY_CS"];?></span>
                     <span class="semibold ellipsis mt0 pull-left hidden" id="JCABANG_KEY"><?= $_SESSION["LOGINCAB_CS"];?></span>
+                    <span class="semibold ellipsis mt0 pull-left hidden" id="JANGGOTA_ID"><?= $_SESSION["LOGINIDUS_CS"];?></span>
                     <br>
                     <span class="semibold ellipsis mt0 pull-left"><?= $_SESSION["LOGINNAME_CS"];?></span>
                     <br>
@@ -386,18 +387,22 @@
                                         <table class="table table-striped table-bordered" id="riwayatppd-table">
                                             <thead>
                                                 <tr>
-                                                    <th>No Dokumen</th>
-                                                    <th>ID Anggota</th>
-                                                    <th>Daerah </th>
-                                                    <th>Cabang </th>
-                                                    <th>Sabuk </th>
+                                                    <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                    <th>No Dokumen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                    <th>ID Anggota&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                    <th>Nama Anggota&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                    <th>Daerah &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                    <th>Cabang &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                    <th>Jenis </th>
                                                     <th>Tingkatan </th>
-                                                    <th>Gelar </th>
-                                                    <th>Nama</th>
+                                                    <th>Tingkatan PPD </th>
+                                                    <th>Cabang PPD</th>
                                                     <th>Tanggal</th>
+                                                    <th>Deskripsi</th>
+                                                    <th>Sertifikat</th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="riwayatppd">
+                                            <tbody id="datariwayatppd">
                                             </tbody>
                                         </table>
                                     </div>

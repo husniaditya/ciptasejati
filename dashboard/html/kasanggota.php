@@ -7,6 +7,16 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
     ?><script>document.location.href='index.php';</script><?php
     die(0);
 }
+$getMaintenance = GetQuery("SELECT * FROM p_param WHERE KATEGORI = 'isMaintenance'");
+while ($mt = $getMaintenance->fetch(PDO::FETCH_ASSOC)) {
+    extract($mt);
+}
+
+if($CODE == 1)
+{
+    ?><script>document.location.href='maintenance.php';</script><?php
+    die(0);
+}
 ?>
 
 <!DOCTYPE html>

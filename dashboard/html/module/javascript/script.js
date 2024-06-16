@@ -182,6 +182,7 @@ $(document).on("click", ".open-ViewNotifMutasi", function () {
 
   var key = $(this).data('dokumen');
   var anggota = $(this).data('anggota');
+  var cabang = $(this).data('cabang');
   
   // Make an AJAX request to fetch additional data based on the selected value
   $.ajax({
@@ -216,22 +217,20 @@ $(document).on("click", ".open-ViewNotifMutasi", function () {
       $("#viewnotifMUTASI_APP_TANGGAL").text(data.MUTASI_APP_TANGGAL);
       $("#viewnotifMUTASI_STATUS_DES").html(data.MUTASI_STATUS_DES);
 
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+        data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: data.CABANG_AWAL },
+        success: function(data){
+          $("#notifloadpicview").html(data);
+        }
+      });
+
     },
     error: function(error) {
       console.error('Error fetching data:', error);
     }
   });
-
-  $.ajax({
-    type: "POST",
-    url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-    data:'ANGGOTA_KEY='+anggota,
-    success: function(data){
-      $("#notifloadpicview").html(data);
-    }
-  });
-  
-  // console.log(id);
 });
 
   // ApproveNotifMutasi
@@ -239,6 +238,7 @@ $(document).on("click", ".open-ApproveNotifMutasi", function () {
   
   var key = $(this).data('dokumen');
   var anggota = $(this).data('anggota');
+  var cabang = $(this).data('cabang');
   
   // Make an AJAX request to fetch additional data based on the selected value
   $.ajax({
@@ -274,37 +274,34 @@ $(document).on("click", ".open-ApproveNotifMutasi", function () {
       $("#appnotifMUTASI_APP_TANGGAL").text(data.MUTASI_APP_TANGGAL);
       $("#appnotifMUTASI_STATUS_DES").html(data.MUTASI_STATUS_DES);
 
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+        data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: data.CABANG_AWAL },
+        success: function(data){
+          $("#notifloadpicapp").html(data);
+        }
+      });
     },
     error: function(error) {
       console.error('Error fetching data:', error);
     }
   });
-
-  $.ajax({
-    type: "POST",
-    url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-    data:'ANGGOTA_KEY='+anggota,
-    success: function(data){
-      $("#notifloadpicapp").html(data);
-    }
-  });
-  
-  // console.log(id);
 });
 
 // View Kas Anggota
 $(document).on("click", ".open-ViewNotifKas", function () {
   
   var key = $(this).data('dokumen');
-  var anggota = $(this).data('anggota');
+  var anggota = $(this).data('anggotaid');
   var jenis = $(this).data('jenis');
-  // console.log(key, anggota);
+  var cabang = $(this).data('cabang');
   
   // Make an AJAX request to fetch additional data based on the selected value
   $.ajax({
     url: 'module/ajax/transaksi/anggota/kasanggota/aj_getdetailkas.php',
     method: 'POST',
-    data: { KAS_ID: key, ANGGOTA_KEY: anggota, KAS_JENIS: jenis },
+    data: { KAS_ID: key, ANGGOTA_KEY: anggota, KAS_JENIS: jenis, CABANG_KEY: cabang },
     success: function(data) {
       // console.log('response', data);
       // Assuming data is a JSON object with the required information
@@ -330,21 +327,19 @@ $(document).on("click", ".open-ViewNotifKas", function () {
       $("#kasviewINPUT_BY").text(data.INPUT_BY);
       $("#kasviewINPUT_DATE").text(data.INPUT_DATE);
 
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+        data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: data.CABANG_KEY },
+        success: function(data){
+          $("#notifkaspic").html(data);
+        }
+      });
     },
     error: function(error) {
       console.error('Error fetching data:', error);
     }
   });
-
-  $.ajax({
-    type: "POST",
-    url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-    data:'ANGGOTA_KEY='+anggota,
-    success: function(data){
-      $("#notifkaspic").html(data);
-    }
-  });
-  
   // console.log(id);
 });
 

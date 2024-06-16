@@ -2,8 +2,9 @@
 require_once("../../../../../module/connection/conn.php");
 
 
-if (isset($_POST['ANGGOTA_KEY'])) {
-    $ANGGOTA_KEY = $_POST['ANGGOTA_KEY'];
+if (isset($_POST['id'])) {
+    $ANGGOTA_ID = $_POST['id'];
+    $CABANG_KEY = $_POST['cabang'];
 
     $getKas = GetQuery("SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
     CASE
@@ -19,12 +20,12 @@ if (isset($_POST['ANGGOTA_KEY'])) {
         ELSE 'color: red;' 
     END AS KAS_COLOR
     FROM t_kas k
-    LEFT JOIN m_anggota a ON k.ANGGOTA_KEY = a.ANGGOTA_KEY
+    LEFT JOIN m_anggota a ON k.ANGGOTA_ID = a.ANGGOTA_ID AND k.CABANG_KEY = a.CABANG_KEY
     LEFT JOIN m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID
     LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
-    WHERE k.DELETION_STATUS = 0 AND a.DELETION_STATUS=0 and k.ANGGOTA_KEY = '$ANGGOTA_KEY'
+    WHERE k.DELETION_STATUS = 0 AND a.DELETION_STATUS=0 AND k.ANGGOTA_ID = '$ANGGOTA_ID' AND k.CABANG_KEY = '$CABANG_KEY'
     ORDER BY k.KAS_ID");
 
     while ($rowKas = $getKas->fetch(PDO::FETCH_ASSOC)) {
@@ -39,7 +40,8 @@ if (isset($_POST['ANGGOTA_KEY'])) {
             t_kas
         WHERE 
             DELETION_STATUS = 0 
-            AND ANGGOTA_KEY = '$ANGGOTA_KEY' 
+            AND ANGGOTA_ID = '$ANGGOTA_ID' 
+            AND CABANG_KEY = '$CABANG_KEY'
             AND KAS_ID <= '$KAS_ID' 
             AND KAS_JENIS = '$KAS_JENIS';
         ");

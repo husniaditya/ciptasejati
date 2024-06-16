@@ -44,7 +44,7 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
     ELSE 'badge badge-danger' 
     END AS GURU_BADGE
     FROM t_ppd p
-    LEFT JOIN m_anggota a ON p.ANGGOTA_KEY = a.ANGGOTA_KEY
+    LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY
     LEFT JOIN m_anggota a2 ON p.INPUT_BY = a2.ANGGOTA_ID
     LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
@@ -52,7 +52,7 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
     LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
     LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID = t2.TINGKATAN_ID
     WHERE p.DELETION_STATUS = 0 AND p.PPD_APPROVE_PELATIH = 0 AND (d.DAERAH_KEY LIKE CONCAT('%','$DAERAH_KEY','%')) AND (p.CABANG_KEY LIKE CONCAT('%','$CABANG_KEY','%')) AND (p.PPD_LOKASI LIKE CONCAT('%','$PPD_LOKASI','%')) AND (t2.TINGKATAN_ID LIKE CONCAT('%','$TINGKATAN_ID','%')) AND (a.ANGGOTA_ID LIKE CONCAT('%','$ANGGOTA_ID','%')) AND (a.ANGGOTA_NAMA LIKE CONCAT('%','$ANGGOTA_NAMA','%')) AND (p.PPD_ID LIKE CONCAT('%','$PPD_ID','%')) AND (p.PPD_JENIS LIKE CONCAT('%','$PPD_JENIS','%')) AND (p.PPD_TANGGAL LIKE CONCAT('%','$PPD_TANGGAL','%'))
-    ORDER BY p.PPD_TANGGAL DESC");
+    ORDER BY p.PPD_ID DESC");
 } else {
     if ($USER_AKSES == "Administrator") {
         $getPPD = GetQuery("SELECT p.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_KEY,c.CABANG_DESKRIPSI,t2.TINGKATAN_NAMA PPD_TINGKATAN,t2.TINGKATAN_SEBUTAN PPD_SEBUTAN,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,c2.CABANG_DESKRIPSI PPD_CABANG,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL, p.PPD_FILE,
@@ -76,7 +76,7 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
         ELSE 'badge badge-danger' 
         END AS GURU_BADGE
         FROM t_ppd p
-        LEFT JOIN m_anggota a ON p.ANGGOTA_KEY = a.ANGGOTA_KEY
+        LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY
         LEFT JOIN m_anggota a2 ON p.INPUT_BY = a2.ANGGOTA_ID
         LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
         LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
@@ -84,7 +84,7 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
         LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
         LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID = t2.TINGKATAN_ID
         WHERE p.DELETION_STATUS = 0 AND p.PPD_APPROVE_PELATIH = 0
-        ORDER BY p.PPD_TANGGAL DESC");
+        ORDER BY p.PPD_ID DESC");
     } else {
         $getPPD = GetQuery("SELECT p.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_KEY,c.CABANG_DESKRIPSI,t2.TINGKATAN_NAMA PPD_TINGKATAN,t2.TINGKATAN_SEBUTAN PPD_SEBUTAN,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,c2.CABANG_DESKRIPSI PPD_CABANG,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL, p.PPD_FILE,
         CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan'
@@ -107,7 +107,7 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
         ELSE 'badge badge-danger' 
         END AS GURU_BADGE
         FROM t_ppd p
-        LEFT JOIN m_anggota a ON p.ANGGOTA_KEY = a.ANGGOTA_KEY
+        LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY
         LEFT JOIN m_anggota a2 ON p.INPUT_BY = a2.ANGGOTA_ID
         LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
         LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
@@ -115,7 +115,7 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
         LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
         LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID = t2.TINGKATAN_ID
         WHERE p.DELETION_STATUS = 0 AND p.CABANG_KEY = '$USER_CABANG' AND p.PPD_APPROVE_PELATIH = 0
-        ORDER BY p.PPD_TANGGAL DESC");
+        ORDER BY p.PPD_ID DESC");
     }
 }
 
@@ -128,7 +128,7 @@ while ($rowPPD = $getPPD->fetch(PDO::FETCH_ASSOC)) {
                 <div class="btn-group" style="margin-bottom:5px;">
                     <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a data-toggle="modal" href="#ApprovePPDKoordinator" class="open-ApprovePPDKoordinator" style="color:#00a5d2;" data-id="<?= $PPD_ID; ?>" ><span class="ico-edit"></span> Persetujuan</a></li>
+                        <li><a data-toggle="modal" href="#ApprovePPDKoordinator" class="open-ApprovePPDKoordinator" style="color:#00a5d2;" data-id="<?= $PPD_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><span class="ico-edit"></span> Persetujuan</a></li>
                     </ul>
                 </div>
             </form>

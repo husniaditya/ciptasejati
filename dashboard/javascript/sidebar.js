@@ -46,6 +46,10 @@ document.addEventListener('DOMContentLoaded', function () {
       addInClassToSubmenu('laporan');
       addInClassToSubmenu('lapanggota');
     }
+    if (currentPage === 'lapppd.php' || currentPage === 'lapsummaryppd.php') {
+      addInClassToSubmenu('laporan');
+      addInClassToSubmenu('lapaktivitas');
+    }
   
     // MenuID: Admin
     if (currentPage === 'profil.php' || currentPage === 'visimisi.php' || currentPage === 'warnalambang.php') {
@@ -66,6 +70,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // MenuID: Persetujuan
+    if (currentPage === 'persetujuanmutasi.php') {
+      addInClassToSubmenu('persetujuan');
+    }
+
     if (currentPage === 'pusatdayaapprovalpelatih.php' || currentPage === 'pusatdayaapprovalguru.php') {
       addInClassToSubmenu('persetujuan');
       addInClassToSubmenu('persetujuanppd');

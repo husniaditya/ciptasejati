@@ -239,44 +239,28 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewMutasiAnggota" class="open-ViewMutasiAnggota" style="color:#222222;" data-id="<?= $MUTASI_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
+                                            <li><a data-toggle="modal" href="#ViewMutasiAnggota" class="open-ViewMutasiAnggota" style="color:#222222;" data-id="<?= $MUTASI_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-cabang="<?= $CABANG_KEY; ?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
                                             <?php
                                             if ($MUTASI_STATUS == 0 && ($USER_AKSES == "Administrator" || $USER_AKSES == "Koordinator")) {
                                                 if ($USER_AKSES == "Administrator") {
                                                     ?>
-                                                    <li><a data-toggle="modal" href="#EditMutasiAnggota" class="open-EditMutasiAnggota" style="color:#00a5d2;" data-id="<?= $MUTASI_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>"><span class="ico-edit"></span> Ubah</a></li>
+                                                    <li><a data-toggle="modal" href="#EditMutasiAnggota" class="open-EditMutasiAnggota" style="color:#00a5d2;" data-id="<?= $MUTASI_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-cabang="<?= $CABANG_KEY; ?>"><span class="ico-edit"></span> Ubah</a></li>
                                                     <?php
                                                 }
                                                 if ($USER_AKSES == "Koordinator" && $USER_CABANG == $CABANG_AWAL) {
                                                     ?>
-                                                    <li><a data-toggle="modal" href="#EditMutasiAnggota" class="open-EditMutasiAnggota" style="color:#00a5d2;" data-id="<?= $MUTASI_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>"><span class="ico-edit"></span> Ubah</a></li>
+                                                    <li><a data-toggle="modal" href="#EditMutasiAnggota" class="open-EditMutasiAnggota" style="color:#00a5d2;" data-id="<?= $MUTASI_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-cabang="<?= $CABANG_KEY; ?>"><span class="ico-edit"></span> Ubah</a></li>
                                                     <?php
                                                 }
                                             }
                                             ?>
                                             <li><a href="assets/print/transaksi/mutasi/print_mutasi.php?id=<?=$MUTASI_ID; ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
                                             <?php
-                                            if ($MUTASI_STATUS == 0 && ($USER_AKSES == "Administrator" || $USER_AKSES == "Koordinator")) {
-                                                if ($USER_AKSES == "Administrator") {
-                                                    ?>
-                                                    <li class="divider"></li>
-                                                    <li><a data-toggle="modal" href="#ApproveMutasiAnggota" class="open-ApproveMutasiAnggota" style="color:forestgreen;" data-id="<?= $MUTASI_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>"><i class="fa-regular fa-circle-question"></i> Persetujuan</a></li>
-                                                    <?php
-                                                }
-                                                if ($USER_AKSES == "Koordinator" && $USER_CABANG <> $CABANG_AWAL) {
-                                                    ?>
-                                                    <li class="divider"></li>
-                                                    <li><a data-toggle="modal" href="#ApproveMutasiAnggota" class="open-ApproveMutasiAnggota" style="color:forestgreen;"><i class="fa-regular fa-circle-question"></i> Persetujuan</a></li>
-                                                    <?php
-                                                }
-                                            }
-                                            else {
-                                                if ($USER_AKSES == "Administrator") {
-                                                    ?>
-                                                    <li class="divider"></li>
-                                                    <li><a href="#" onclick="eventmutasi('<?= $MUTASI_ID;?>','reset')" style="color:#dimgrey;"><i class="fa-solid fa-clock-rotate-left"></i> Reset Persetujuan</a></li>
-                                                    <?php
-                                                }
+                                            if ($USER_AKSES == "Administrator") {
+                                                ?>
+                                                <li class="divider"></li>
+                                                <li><a href="#" onclick="eventmutasi('<?= $MUTASI_ID;?>','reset')" style="color:#dimgrey;"><i class="fa-solid fa-clock-rotate-left"></i> Reset Persetujuan</a></li>
+                                                <?php
                                             }
                                             ?>
                                             <li class="divider"></li>
@@ -368,21 +352,27 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                     if ($USER_AKSES == "Administrator") {
                                         ?>
                                         <div id="selectize-wrapper" style="position: relative;">
-                                            <select name="ANGGOTA_KEY" id="selectize-dropdown" required="" class="form-control" onchange="populateFields()" data-parsley-required>
+                                            <select name="ANGGOTA_ID" id="selectize-dropdown" required="" class="form-control" onchange="populateFields()" data-parsley-required>
                                                 <option value="">-- Pilih Anggota --</option>
                                             </select>
                                         </div>
                                         <?php
                                     } else {
                                         ?>
+                                        <div class="short-div hidden">
+                                            <div class="form-group">
+                                                <label>Cabang Key</label>
+                                                <input type="text" class="form-control" id="CABANG_KEY" name="CABANG_KEY" value="<?= $USER_CABANG; ?>" readonly>
+                                            </div> 
+                                        </div>
                                         <div id="selectize-wrapper" style="position: relative;">
-                                            <select name="ANGGOTA_KEY" id="selectize-dropdown" required="" class="form-control" onchange="populateFields()" data-parsley-required>
+                                            <select name="ANGGOTA_ID" id="selectize-dropdown" required="" class="form-control" onchange="populateFields()" data-parsley-required>
                                                 <option value="">-- Pilih Anggota --</option>
                                                 <?php
                                                 foreach ($rowa as $rowAnggota) {
                                                     extract($rowAnggota);
                                                     ?>
-                                                    <option value="<?= $ANGGOTA_KEY; ?>"><?= $ANGGOTA_ID; ?> - <?= $ANGGOTA_NAMA; ?></option>
+                                                    <option value="<?= $ANGGOTA_ID; ?>"><?= $ANGGOTA_ID; ?> - <?= $ANGGOTA_NAMA; ?></option>
                                                     <?php
                                                 }
                                                 ?>
@@ -391,6 +381,12 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                         <?php
                                     }
                                     ?>
+                                </div> 
+                            </div>
+                            <div class="short-div hidden">
+                                <div class="form-group">
+                                    <label>Anggota Key</label>
+                                    <input type="text" class="form-control" id="ANGGOTA_KEY" name="ANGGOTA_KEY" value="" readonly>
                                 </div> 
                             </div>
                             <div class="short-div hidden">
@@ -667,7 +663,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="form-group">
                                         <label>Anggota</label>
                                         <div id="selectize-wrapper4" style="position: relative;">
-                                            <select name="ANGGOTA_KEY" id="selectize-dropdown4" required="" class="form-control" onchange="populateFieldsEdit()" data-parsley-required>
+                                            <select name="ANGGOTA_ID" id="selectize-dropdown4" required="" class="form-control" onchange="populateFieldsEdit()" data-parsley-required>
                                                 <option value="">-- Pilih Anggota --</option>
                                             </select>
                                         </div>
@@ -676,17 +672,23 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                 <?php
                             } else {
                                 ?>
+                                <div class="short-div hidden">
+                                    <div class="form-group">
+                                        <label>Cabang Token</label>
+                                        <input type="text" class="form-control" id="editCABANG_KEY" name="CABANG_KEY" value="<?= $USER_CABANG; ?>" readonly>
+                                    </div> 
+                                </div>
                                 <div class="short-div">
                                     <div class="form-group">
                                         <label>Anggota</label>
                                         <div id="selectize-wrapper4" style="position: relative;">
-                                            <select name="ANGGOTA_KEY" id="selectize-dropdown4" required="" class="form-control" onchange="populateFieldsEdit()" data-parsley-required>
+                                            <select name="ANGGOTA_ID" id="selectize-dropdown4" required="" class="form-control" onchange="populateFieldsEdit()" data-parsley-required>
                                                 <option value="">-- Pilih Anggota --</option>
                                                 <?php
                                                 foreach ($rowa as $rowAnggota) {
                                                     extract($rowAnggota);
                                                     ?>
-                                                    <option value="<?= $ANGGOTA_KEY; ?>"><?= $ANGGOTA_ID; ?> - <?= $ANGGOTA_NAMA; ?></option>
+                                                    <option value="<?= $ANGGOTA_ID; ?>"><?= $ANGGOTA_ID; ?> - <?= $ANGGOTA_NAMA; ?></option>
                                                     <?php
                                                 }
                                                 ?>
@@ -709,6 +711,12 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                 <?php
                             }
                             ?>
+                            <div class="short-div hidden">
+                                <div class="form-group">
+                                    <label>Anggota Token</label>
+                                    <input type="text" class="form-control" id="editANGGOTA_KEY" name="ANGGOTA_KEY" value="" readonly>
+                                </div> 
+                            </div>
                             <div class="short-div hidden">
                                 <div class="form-group">
                                     <label>ID Cabang</label>
@@ -778,143 +786,6 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Close</button>
                     <button type="submit" name="submit" id="editmutasianggota" class="submit btn btn-primary btn-outline mb5 btn-rounded"><span class="ico-save"></span> Save</button>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
-
-<div id="ApproveMutasiAnggota" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="ApproveMutasiAnggota-form" method="post" class="form" data-parsley-validate>
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header text-center">
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-inverse">Persetujuan Data Mutasi Anggota</h3>
-                </div>
-                <div class="modal-body">
-                    <h5 class="text-center" id="appMUTASI_STATUS_DES"></h5><br>
-                    <div class="row hidden">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>ID Mutasi</label>
-                                <input type="text" class="form-control" id="appMUTASI_ID" name="MUTASI_ID" value="" readonly>
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                            <div class="form-group">
-                                <label>Diajukan Oleh</label>
-                                <p id="appINPUT_BY"></p>
-                            </div> 
-                        </div>
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                            <div class="form-group">
-                                <label>Tanggal Pengajuan</label>
-                                <p id="appINPUT_DATE"></p>
-                            </div> 
-                        </div>
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                            <div class="form-group">
-                                <label>Disetujui Oleh</label>
-                                <p id="appAPPROVE_BY"></p>
-                            </div> 
-                        </div>
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                            <div class="form-group">
-                                <label>Tanggal persetujuan</label>
-                                <p id="appMUTASI_APP_TANGGAL"></p>
-                            </div> 
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
-                            <div class="short-div">
-                                <label>Foto Anggota </label><br>
-                                <div id="loadpicapp"></div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>ID - Nama Anggota</label>
-                                    <input type="text" class="form-control" id="appANGGOTA_IDNAMA" name="ANGGOTA_ID" value="" readonly>
-                                </div> 
-                            </div>
-                            <div class="short-div hidden">
-                                <div class="form-group">
-                                    <label>ID Cabang</label>
-                                    <input type="text" class="form-control" id="appCABANG_AWAL" name="CABANG_AWAL" value="" readonly>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Daerah</label>
-                                    <input type="text" class="form-control" id="appDAERAH_AWAL_DES" name="DAERAH_AWAL" value="" readonly>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Cabang</label>
-                                    <input type="text" class="form-control" id="appCABANG_AWAL_DES" name="CABANG_DESKRIPSI" value="" readonly>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Sabuk</label>
-                                    <input type="text" class="form-control" id="appTINGKATAN_NAMA" name="TINGKATAN_ID" value="" readonly>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Tingkatan</label>
-                                    <input type="text" class="form-control" id="appTINGKATAN_SEBUTAN" name="TINGKATAN_SEBUTAN" value="" readonly>
-                                </div> 
-                            </div>   
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Daerah Tujuan</label>
-                                <input type="text" class="form-control" id="appDAERAH_TUJUAN_DES" name="DAERAH_TUJUAN" value="" readonly>
-                            </div> 
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Cabang Tujuan</label>
-                                <input type="text" class="form-control" id="appCABANG_TUJUAN_DES" name="CABANG_TUJUAN" value="" readonly>
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Deskripsi</label>
-                                <textarea type="text" rows="4" class="form-control" id="appMUTASI_DESKRIPSI" name="MUTASI_DESKRIPSI" value="" data-parsley-required readonly></textarea>
-                            </div> 
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Tanggal Efektif</label>
-                                <input type="text" class="form-control" id="appTANGGAL_EFEKTIF" name="MUTAS_TANGGAL" value="" readonly>
-                            </div> 
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="row">
-                        <div class="col-md-6 text-left">
-                            <button type="submit" name="submit" id="approvemutasianggota" class="submit btn btn-success mb5 btn-rounded"><i class="fa-regular fa-square-check"></i> Setuju</button>
-                            <button type="submit" name="submit" id="rejectmutasianggota" class="submit btn btn-danger mb5 btn-rounded"><i class="fa-regular fa-rectangle-xmark"></i> Tolak</button>
-                        </div>
-                        <div class="col-md-6 text-right">
-                            <button type="button" class="btn btn-inverse btn-outline mb5 btn-rounded next" data-dismiss="modal"><span class="ico-cancel"></span> Close</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

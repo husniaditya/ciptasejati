@@ -4,6 +4,7 @@ require_once("../../../../../module/connection/conn.php");
 $KAS_ID = $_POST["KAS_ID"];
 $ANGGOTA_KEY = $_POST["ANGGOTA_KEY"];
 $KAS_JENIS = $_POST["KAS_JENIS"];
+$CABANG_KEY = $_POST["CABANG_KEY"];
 
 $getDetail = GetQuery("SELECT 
 k.*,
@@ -53,17 +54,17 @@ LEFT JOIN
     FROM 
         t_kas
     WHERE 
-        DELETION_STATUS = 0 and ANGGOTA_KEY = '$ANGGOTA_KEY' and KAS_JENIS = '$KAS_JENIS' and KAS_ID <= '$KAS_ID'
+        DELETION_STATUS = 0 and ANGGOTA_KEY = '$ANGGOTA_KEY' and CABANG_KEY = '$CABANG_KEY' and KAS_JENIS = '$KAS_JENIS' and KAS_ID <= '$KAS_ID'
     GROUP BY 
         ANGGOTA_KEY, KAS_JENIS
 ) saldo_query ON k.ANGGOTA_KEY = saldo_query.ANGGOTA_KEY AND k.KAS_JENIS = saldo_query.KAS_JENIS
 WHERE 
-k.DELETION_STATUS = 0 AND a.DELETION_STATUS = 0 AND k.KAS_ID = '$KAS_ID'
+k.DELETION_STATUS = 0 AND a.DELETION_STATUS = 0 AND k.KAS_ID = '$KAS_ID' AND k.CABANG_KEY = '$CABANG_KEY'
 ORDER BY 
 k.KAS_ID");
 
 // make a select sum query to get saldo awal where anggota_key = $ANGGOTA_KEY and KAS_ID < $KAS_ID and deletion_status = 0 (not deleted)
-$getSaldoAwal = GetQuery("SELECT FORMAT(IFNULL(SUM(KAS_JUMLAH),0), 0) AS SALDOAWAL FROM t_kas WHERE DELETION_STATUS = 0 AND ANGGOTA_KEY = '$ANGGOTA_KEY' AND KAS_ID < '$KAS_ID' AND KAS_JENIS = '$KAS_JENIS'");
+$getSaldoAwal = GetQuery("SELECT FORMAT(IFNULL(SUM(KAS_JUMLAH),0), 0) AS SALDOAWAL FROM t_kas WHERE DELETION_STATUS = 0 AND ANGGOTA_KEY = '$ANGGOTA_KEY' AND CABANG_KEY = '$CABANG_KEY' AND KAS_ID < '$KAS_ID' AND KAS_JENIS = '$KAS_JENIS'");
 
 // Initialize an associative array to hold the data
 $data = array();

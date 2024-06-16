@@ -9,7 +9,7 @@ $options = array();
 
 while ($ListAnggota = $getListAnggota->fetch(PDO::FETCH_ASSOC)) {
     $options[] = array(
-        'value' => $ListAnggota['ANGGOTA_KEY'],
+        'value' => $ListAnggota['ANGGOTA_ID'],
         'text' => $ListAnggota['ANGGOTA_ID'] . ' - ' .$ListAnggota['ANGGOTA_NAMA']
     );
 }
