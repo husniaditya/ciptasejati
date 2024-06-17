@@ -1180,6 +1180,33 @@ function filterPPDGuruEvent() {
   // console.log(formData);
 }
 
+$('.filterPPDGuruReport select, .filterPPDGuruReport input').on('change input', debounce(filterPPDGuruReportEvent, 500));
+function filterPPDGuruReportEvent() {
+  // Your event handling code here
+  const cabangPPD = $('#selectize-dropdown').val();
+  const tanggal = $('#selectize-dropdown2').val();
+
+  // Create a data object to hold the form data
+  const formData = {
+    PPD_LOKASI: cabangPPD,
+    PPD_TANGGAL: tanggal
+  };
+
+  $.ajax({
+    type: "POST",
+    url: 'module/ajax/transaksi/aktivitas/ppd/aj_tableppdGuruReport.php',
+    data: formData,
+    success: function(response){
+      // Destroy the DataTable before updating
+      $('#ppd-table').DataTable().destroy();
+      $("#ppddata").html(response);
+      // Reinitialize Sertifikat Table
+      callTable();
+    }
+  });
+  // console.log(formData);
+}
+
 // ----- Function to reset form ----- //
 function clearForm() {
   
@@ -1238,6 +1265,26 @@ function clearFormGuru() {
   // JavaScript to reset all forms with the class "resettable-form"
   document.querySelectorAll('.resettable-form').forEach(form => form.reset());
   filterPPDGuruEvent();
+}
+
+function clearFormReportGuru() {
+  
+  // Check if the administrator-specific elements exist
+
+  var selectizeInstance1 = $('#selectize-dropdown')[0].selectize;
+  var selectizeInstance2 = $('#selectize-dropdown2')[0].selectize;
+  
+  // Clear the third Selectize dropdown
+  if (selectizeInstance1) {
+    selectizeInstance1.clear();
+  }
+  if (selectizeInstance2) {
+    selectizeInstance2.clear();
+  }
+  
+  // JavaScript to reset all forms with the class "resettable-form"
+  document.querySelectorAll('.resettable-form').forEach(form => form.reset());
+  filterPPDGuruReportEvent();
 }
 // ----- End of function to reset form ----- //
 

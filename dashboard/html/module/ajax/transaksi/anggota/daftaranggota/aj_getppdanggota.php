@@ -40,7 +40,7 @@ if (isset($_POST['id'])) {
         extract($rowPPD);
         ?>
         <tr>
-            <td align="center"><a href="module/backend/transaksi/aktivitas/ppd/t_ppdreportanggota.php?id=<?= $PPD_ID; ?>" target="_blank" style="color: #00b1e1;"><i class="fa-solid fa-print"></i> Cetak</a></td>
+            <td align="center"><a href="assets/print/transaksi/aktivitas/ppd/print_ppdreportanggota.php?id=<?= $PPD_ID; ?>" target="_blank" style="color: #00b1e1;"><i class="fa-solid fa-print"></i> Cetak</a></td>
             <td>
                 <?= $PPD_ID; ?><br> 
                 <span class="<?= $PELATIH_BADGE; ?>"><i class="<?= $PELATIH_CLASS; ?>"></i> Koordinator </span><br> 
