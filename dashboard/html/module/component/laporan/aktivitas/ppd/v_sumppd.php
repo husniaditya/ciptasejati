@@ -48,7 +48,7 @@ $rowPPDTanggal = $getPPDTanggal->fetchAll(PDO::FETCH_ASSOC);
         </a>
         <div id="collapseOne" class="panel-collapse collapse">
             <div class="panel-body">
-                <form method="post" class="form filterPPDGuru" id="filterPPDGuru">
+                <form method="post" class="form filterPPDGuruReport" id="filterPPDGuruReport">
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
@@ -89,7 +89,7 @@ $rowPPDTanggal = $getPPDTanggal->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="row">
                         <div class="col-md-12" align="center">
-                            <button type="button" id="reloadButton" onclick="clearFormGuru()" class="submit btn btn-teal btn-outline mb5 btn-rounded"><span class="ico-refresh"></span> Reset Filter</button>
+                            <button type="button" id="reloadButton" onclick="clearFormReportGuru()" class="submit btn btn-teal btn-outline mb5 btn-rounded"><span class="ico-refresh"></span> Reset Filter</button>
                         </div>
                     </div>
                 </form>
@@ -129,7 +129,8 @@ $rowPPDTanggal = $getPPDTanggal->fetchAll(PDO::FETCH_ASSOC);
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
                                             <li><a data-toggle="modal" href="#ViewPPDGuru" class="open-ViewPPDGuru" style="color:#00a5d2;" data-tanggal="<?= $PPD_TANGGAL; ?>" data-cabangppd="<?= $PPD_LOKASI; ?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
-                                            <li><a href="module/backend/transaksi/aktivitas/ppd/t_ppdsummaryreport.php?tgl=<?= $PPD_TANGGAL; ?>&cbg=<?= $PPD_LOKASI;?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="assets/print/transaksi/aktivitas/ppd/print_ppdsummaryreport.php?tgl=<?= $PPD_TANGGAL; ?>&cbg=<?= $PPD_LOKASI;?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
                                         </ul>
                                     </div>
                                 </form>
