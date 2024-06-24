@@ -13,7 +13,7 @@ LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
 LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY
 LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
 LEFT JOIN m_daerah d2 ON c2.DAERAH_KEY = d2.DAERAH_KEY
-LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID = t.TINGKATAN_ID
+LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_BARU = t.TINGKATAN_ID
 WHERE p.PPD_ID = '$PPD_ID'");
 
 // Initialize an associative array to hold the data
@@ -39,7 +39,7 @@ while ($rowDetail = $GetDetail->fetch(PDO::FETCH_ASSOC)) {
     $data['LOKASI_DAERAH'] = $rowDetail["LOKASI_DAERAH"];
     $data['LOKASI_CABANG_KEY'] = $rowDetail["LOKASI_CABANG_KEY"];
     $data['LOKASI_CABANG'] = $rowDetail["LOKASI_CABANG"];
-    $data['TINGKATAN_ID'] = $rowDetail["TINGKATAN_ID"];
+    $data['TINGKATAN_ID'] = $rowDetail["TINGKATAN_ID_BARU"];
     $data['TINGKATAN_NAMA'] = $rowDetail["TINGKATAN_NAMA"];
     $data['TINGKATAN_SEBUTAN'] = $rowDetail["TINGKATAN_SEBUTAN"];
     $data['ANGGOTA_ID'] = $rowDetail["ANGGOTA_ID"];

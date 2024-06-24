@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
   
     // Example: Add the "in" class to the "admin" submenu
     // MenuID: Master
-    if (currentPage === 'tingkatgelar.php' || currentPage === 'idsertifikat.php' || currentPage === 'dataterpusat.php') {
+    if (currentPage === 'tingkatgelar.php' || currentPage === 'idsertifikat.php' || currentPage === 'dataterpusat.php' || currentPage === 'materiukt.php') {
       addInClassToSubmenu('master');
     }
     if (currentPage === 'lokasipusat.php' || currentPage === 'lokasidaerah.php' || currentPage === 'lokasicabang.php') {

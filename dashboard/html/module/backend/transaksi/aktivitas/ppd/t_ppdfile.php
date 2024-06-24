@@ -16,8 +16,8 @@ if (isset($_POST['id'])) {
     LEFT JOIN m_anggota koor on p.PPD_APPROVE_PELATIH_BY = koor.ANGGOTA_ID and p.CABANG_KEY = koor.CABANG_KEY
     LEFT JOIN m_anggota guru on p.PPD_APPROVE_GURU_BY = guru.ANGGOTA_ID
     LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
-    LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID = t.TINGKATAN_ID
-    LEFT JOIN m_idsertifikat s ON p.TINGKATAN_ID = s.TINGKATAN_ID
+    LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_BARU = t.TINGKATAN_ID
+    LEFT JOIN m_idsertifikat s ON t.TINGKATAN_ID = s.TINGKATAN_ID
     WHERE p.PPD_ID = '$PPD_ID'");
 
     try {

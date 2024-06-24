@@ -49,8 +49,8 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
     LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-    LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
-    LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID = t2.TINGKATAN_ID
+    LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_LAMA = t.TINGKATAN_ID
+    LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID_BARU = t2.TINGKATAN_ID
     WHERE p.DELETION_STATUS = 0 AND p.PPD_APPROVE_PELATIH = 0 AND (d.DAERAH_KEY LIKE CONCAT('%','$DAERAH_KEY','%')) AND (p.CABANG_KEY LIKE CONCAT('%','$CABANG_KEY','%')) AND (p.PPD_LOKASI LIKE CONCAT('%','$PPD_LOKASI','%')) AND (t2.TINGKATAN_ID LIKE CONCAT('%','$TINGKATAN_ID','%')) AND (a.ANGGOTA_ID LIKE CONCAT('%','$ANGGOTA_ID','%')) AND (a.ANGGOTA_NAMA LIKE CONCAT('%','$ANGGOTA_NAMA','%')) AND (p.PPD_ID LIKE CONCAT('%','$PPD_ID','%')) AND (p.PPD_JENIS LIKE CONCAT('%','$PPD_JENIS','%')) AND (p.PPD_TANGGAL LIKE CONCAT('%','$PPD_TANGGAL','%'))
     ORDER BY p.PPD_ID DESC");
 } else {
@@ -81,8 +81,8 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
         LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
         LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
         LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-        LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
-        LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID = t2.TINGKATAN_ID
+        LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_LAMA = t.TINGKATAN_ID
+        LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID_BARU = t2.TINGKATAN_ID
         WHERE p.DELETION_STATUS = 0 AND p.PPD_APPROVE_PELATIH = 0
         ORDER BY p.PPD_ID DESC");
     } else {
@@ -112,8 +112,8 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
         LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
         LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
         LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-        LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
-        LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID = t2.TINGKATAN_ID
+        LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_LAMA = t.TINGKATAN_ID
+        LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID_BARU = t2.TINGKATAN_ID
         WHERE p.DELETION_STATUS = 0 AND p.CABANG_KEY = '$USER_CABANG' AND p.PPD_APPROVE_PELATIH = 0
         ORDER BY p.PPD_ID DESC");
     }

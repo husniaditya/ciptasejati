@@ -91,26 +91,19 @@ function callTable() {
     });
 
     $('#riwayatppd-table').DataTable({
-    responsive: true,
-    order: [[7, 'asc']],
-    dom: 'Bfrtip',
-    columnDefs: [
-        { width: '100px', targets: 0 }, // Set width for column 1
-        { width: '150px', targets: 1 }, // Set width for column 2
-        { width: '150px', targets: 2 }, // Set width for column 3
-        { width: '150px', targets: 3 }, // Set width for column 4
-        { width: '100px', targets: 4 }, // Set width for column 5
-        { width: '100px', targets: 5 }, // Set width for column 6
-        { width: '100px', targets: 6 }, // Set width for column 7
-        { width: '100px', targets: 7 }, // Set width for column 8
-        // Add more columnDefs as needed
-    ],
-    paging: true,
-    scrollX: true,
-    scrollY: '350px', // Set the desired height here
-    buttons: [
-        'copy', 'csv', 'excel', 'pdf'
-    ]
+        responsive: true,
+        order: [],
+        dom: 'Bfrtip',
+        autoWidth: true,  // Ensure autoWidth is enabled
+        columnDefs: [
+            { width: 'auto', targets: '_all' }  // Apply auto width to all columns
+        ],
+        paging: true,
+        scrollX: true,
+        scrollY: '350px', // Set the desired height here
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf'
+        ]
     });
   }
 

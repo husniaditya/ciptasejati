@@ -30,8 +30,8 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-    LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
-    LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID = t2.TINGKATAN_ID
+    LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_LAMA = t.TINGKATAN_ID
+    LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID_BARU = t2.TINGKATAN_ID
     WHERE p.DELETION_STATUS = 0
     ORDER BY p.PPD_ID DESC");
 
@@ -63,8 +63,8 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-    LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
-    LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID = t2.TINGKATAN_ID
+    LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_LAMA = t.TINGKATAN_ID
+    LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID_BARU = t2.TINGKATAN_ID
     WHERE p.DELETION_STATUS = 0 AND p.CABANG_KEY = '$USER_CABANG'
     ORDER BY p.PPD_ID DESC");
 
@@ -361,7 +361,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                     <label>Cabang<span class="text-danger">*</span></label>
                                     <div id="selectize-wrapper10" style="position: relative;">
                                         <select name="CABANG_KEY" id="selectize-dropdown10" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Cabang --</option>]
+                                            <option value="">-- Pilih Cabang --</option>
                                         </select>
                                     </div>
                                 </div> 
@@ -624,7 +624,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="form-group">
                                     <label>Pilih Anggota<span class="text-danger">*</span></label>
                                     <div id="selectize-wrapper7" style="position: relative;">
-                                        <select name="ANGGOTA_KEY" id="selectize-dropdown7" required="" class="form-control" data-parsley-required>
+                                        <select name="ANGGOTA_ID" id="selectize-dropdown7" required="" class="form-control" data-parsley-required>
                                             <option value="">-- Pilih Anggota --</option>
                                         </select>
                                     </div>

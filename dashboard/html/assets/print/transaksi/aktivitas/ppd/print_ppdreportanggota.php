@@ -11,7 +11,7 @@ if ($_GET["id"]) {
     $PPD_ID = $_GET["id"];
 
     try {
-        $getData = GetQuery("SELECT p.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_KEY,c.CABANG_DESKRIPSI,c.CABANG_SEKRETARIAT,d2.DAERAH_KEY LOKASI_DAERAH_KEY,d2.DAERAH_DESKRIPSI LOKASI_DAERAH,c2.CABANG_KEY LOKASI_CABANG_KEY,c2.CABANG_DESKRIPSI LOKASI_CABANG,t.TINGKATAN_NAMA PPD_TINGKATAN,t.TINGKATAN_SEBUTAN PPD_SEBUTAN,a.ANGGOTA_NAMA,t2.TINGKATAN_NAMA, t2.TINGKATAN_SEBUTAN,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL,koor.ANGGOTA_NAMA PPD_KOORDINATOR,guru.ANGGOTA_NAMA PPD_GURU,DATE_FORMAT(p.PPD_APPROVE_GURU_TGL, '%d %M %Y') PPD_GURU_TGL,DATE_FORMAT(p.PPD_APPROVE_PELATIH_TGL, '%d %M %Y') PPD_PELATIH_TGL,
+        $getData = GetQuery("SELECT p.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_KEY,c.CABANG_DESKRIPSI,c.CABANG_SEKRETARIAT,d2.DAERAH_KEY LOKASI_DAERAH_KEY,d2.DAERAH_DESKRIPSI LOKASI_DAERAH,c2.CABANG_KEY LOKASI_CABANG_KEY,c2.CABANG_DESKRIPSI LOKASI_CABANG,t2.TINGKATAN_NAMA PPD_TINGKATAN,t2.TINGKATAN_SEBUTAN PPD_SEBUTAN,a.ANGGOTA_NAMA,t.TINGKATAN_NAMA, t.TINGKATAN_SEBUTAN,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL,koor.ANGGOTA_NAMA PPD_KOORDINATOR,guru.ANGGOTA_NAMA PPD_GURU,DATE_FORMAT(p.PPD_APPROVE_GURU_TGL, '%d %M %Y') PPD_GURU_TGL,DATE_FORMAT(p.PPD_APPROVE_PELATIH_TGL, '%d %M %Y') PPD_PELATIH_TGL,
         CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan'
             ELSE 'Ulang'
             END PPD_JENIS_DESKRIPSI
@@ -23,8 +23,8 @@ if ($_GET["id"]) {
         LEFT JOIN m_anggota guru ON p.PPD_APPROVE_GURU_BY = guru.ANGGOTA_ID AND p.CABANG_KEY = guru.CABANG_KEY
         LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
         LEFT JOIN m_daerah d2 ON c2.DAERAH_KEY = d2.DAERAH_KEY
-        LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID = t.TINGKATAN_ID
-        LEFT JOIN m_tingkatan t2 ON a.TINGKATAN_ID = t2.TINGKATAN_ID
+        LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_LAMA = t.TINGKATAN_ID
+        LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID_BARU = t2.TINGKATAN_ID
         WHERE p.PPD_ID = '$PPD_ID'");
     
         while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
@@ -41,10 +41,10 @@ if ($_GET["id"]) {
                     $this->SetMargins(40, PDF_MARGIN_TOP, 40);
                 
                     // Logo
-                    $image_ipsi = '../../../../../assets/images/logo/ipsi.png';
+                    $image_ipsi = K_PATH_IMAGES.'/../../../../../../dashboard/html/assets/images/logo/IPSI.png';
                     $this->Image($image_ipsi, 15, 9, 25, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
 
-                    $image_cs = '../../../../../assets/images/logo/logo.png';
+                    $image_cs = K_PATH_IMAGES.'/../../../../../../dashboard/html/assets/images/logo/Logo.png';
                     $this->Image($image_cs, 170, 9, 25, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
                 
                     // Set font

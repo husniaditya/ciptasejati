@@ -24,6 +24,16 @@ $rows = $getCabang->fetchAll(PDO::FETCH_ASSOC);
 $rowk = $getKategori->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
+<style>
+    .dataTables_wrapper {
+        width: 100%;
+        overflow: auto;
+    }
+    table.dataTable {
+        width: 100% !important;
+    }
+</style>
+
 <div class="panel-group" id="accordion1">
     <div class="panel panel-default">
         <a data-toggle="collapse" data-parent="#accordion1" href="#collapseOne" class="collapsed">

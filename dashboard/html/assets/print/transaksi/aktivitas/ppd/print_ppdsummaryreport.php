@@ -28,7 +28,7 @@ if ($_GET["tgl"] && $_GET["cbg"]) {
              FROM t_ppd p1 
              WHERE p1.PPD_TANGGAL = '$PPD_TANGGAL' AND p1.PPD_LOKASI = '$PPD_LOKASI' AND p1.PPD_APPROVE_PELATIH = 1 AND p1.PPD_APPROVE_GURU = 1) AS TOTAL_PPD
         FROM t_ppd p
-        LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID = t.TINGKATAN_ID
+        LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_BARU = t.TINGKATAN_ID
         LEFT JOIN m_cabang c ON p.PPD_LOKASI = c.CABANG_KEY
         LEFT JOIN m_daerah d ON d.DAERAH_KEY = c.DAERAH_KEY
         LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
@@ -36,7 +36,7 @@ if ($_GET["tgl"] && $_GET["cbg"]) {
         LEFT JOIN m_anggota koor ON p.PPD_APPROVE_PELATIH_BY = koor.ANGGOTA_ID AND p.CABANG_KEY = koor.CABANG_KEY
         LEFT JOIN m_anggota guru ON p.PPD_APPROVE_GURU_BY = guru.ANGGOTA_ID AND p.CABANG_KEY = guru.CABANG_KEY
         WHERE p.PPD_TANGGAL = '$PPD_TANGGAL' AND p.PPD_LOKASI = '$PPD_LOKASI' AND p.PPD_APPROVE_PELATIH = 1 AND p.PPD_APPROVE_GURU = 1
-        GROUP BY p.TINGKATAN_ID
+        GROUP BY p.TINGKATAN_ID_BARU
         ORDER BY t.TINGKATAN_LEVEL");
 
         if ($getData->rowCount() > 0) {
@@ -82,9 +82,10 @@ if ($_GET["tgl"] && $_GET["cbg"]) {
                     $this->SetMargins(40, PDF_MARGIN_TOP, 40);
 
                     // Logo
-                    $image_ipsi = '../../../../../assets/images/logo/ipsi.png';
+                    $image_ipsi = K_PATH_IMAGES.'/../../../../../../dashboard/html/assets/images/logo/IPSI.png';
                     $this->Image($image_ipsi, 15, 9, 25, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-                    $image_cs = '../../../../../assets/images/logo/logo.png';
+
+                    $image_cs = K_PATH_IMAGES.'/../../../../../../dashboard/html/assets/images/logo/Logo.png';
                     $this->Image($image_cs, 170, 9, 25, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
 
                     // Set font
@@ -186,9 +187,9 @@ if ($_GET["tgl"] && $_GET["cbg"]) {
             while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
                 $getAnggota = GetQuery("SELECT t.TINGKATAN_NAMA AS TINGKATAN_ANGGOTA, COUNT(p.ANGGOTA_ID) AS COUNT_ANGGOTA 
                                         FROM t_ppd p
-                                        LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID = t.TINGKATAN_ID
-                                        WHERE p.PPD_TANGGAL = '$PPD_TANGGAL' AND p.PPD_LOKASI = '$PPD_LOKASI' AND p.TINGKATAN_ID = '" . $data['TINGKATAN_ID'] . "' AND p.PPD_APPROVE_PELATIH = 1 AND p.PPD_APPROVE_GURU = 1
-                                        GROUP BY p.TINGKATAN_ID");
+                                        LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_BARU = t.TINGKATAN_ID
+                                        WHERE p.PPD_TANGGAL = '$PPD_TANGGAL' AND p.PPD_LOKASI = '$PPD_LOKASI' AND p.TINGKATAN_ID_BARU = '" . $data['TINGKATAN_ID_BARU'] . "' AND p.PPD_APPROVE_PELATIH = 1 AND p.PPD_APPROVE_GURU = 1
+                                        GROUP BY p.TINGKATAN_ID_BARU");
 
                 while ($row = $getAnggota->fetch(PDO::FETCH_ASSOC)) {
                     $pdf->Cell(25, 5, $row['TINGKATAN_ANGGOTA'], 0, 0, "L");
@@ -211,7 +212,7 @@ if ($_GET["tgl"] && $_GET["cbg"]) {
             
 
             $getTingkatan = GetQuery("SELECT t.TINGKATAN_ID,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,COUNT(p.ANGGOTA_ID) COUNT_TINGKATAN FROM t_ppd p
-            LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID = t.TINGKATAN_ID
+            LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_BARU = t.TINGKATAN_ID
             WHERE p.PPD_TANGGAL = '$PPD_TANGGAL' AND p.PPD_LOKASI = '$PPD_LOKASI' AND p.PPD_APPROVE_PELATIH = 1 AND p.PPD_APPROVE_GURU = 1
             GROUP BY t.TINGKATAN_ID
             ORDER BY t.TINGKATAN_LEVEL");
@@ -244,9 +245,9 @@ if ($_GET["tgl"] && $_GET["cbg"]) {
                 END PPD_JENIS
                 FROM t_ppd p
                 LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY
-                LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
-                LEFT JOIN m_tingkatan t2 ON t2.TINGKATAN_ID = p.TINGKATAN_ID
-                WHERE p.PPD_TANGGAL = '$PPD_TANGGAL' AND p.PPD_LOKASI = '$PPD_LOKASI' AND p.TINGKATAN_ID = '$TINGKATAN_ID' AND p.PPD_APPROVE_PELATIH = 1 AND p.PPD_APPROVE_GURU = 1");
+                LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_LAMA = t.TINGKATAN_ID
+                LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID_BARU = t2.TINGKATAN_ID
+                WHERE p.PPD_TANGGAL = '$PPD_TANGGAL' AND p.PPD_LOKASI = '$PPD_LOKASI' AND p.TINGKATAN_ID_BARU = '$TINGKATAN_ID' AND p.PPD_APPROVE_PELATIH = 1 AND p.PPD_APPROVE_GURU = 1");
 
                 while ($dataAnggota = $getAnggotaTingkatan->fetch(PDO::FETCH_ASSOC)) {
                     extract($dataAnggota);
