@@ -1,3 +1,10 @@
+<style>
+    /* Ensure the table takes up 100% width */
+    #riwayatppd-table {
+        width: 100%;
+    }
+</style>
+
 
 <!-- START row -->
 <div class="row">
@@ -51,9 +58,9 @@
                 <li class="list-group-item active"><a href="#profile" data-toggle="tab"><i class="ico-user2 mr5"></i> Profil Pengguna</a></li>
                 <li class="list-group-item"><a href="#account" data-toggle="tab"><i class="ico-archive2 mr5"></i> Informasi Keanggotaan</a></li>
                 <li class="list-group-item"><a href="#idsertifikat" data-toggle="tab"><i class="fa-regular fa-address-card"></i> ID &amp; Sertifikat</a></li>
-                <li class="list-group-item"><a href="#mutasikas" data-toggle="tab"><i class="fa-solid fa-money-bill-transfer"></i> Mutasi Kas</a></li>
-                <li class="list-group-item"><a href="#riwayatppd" data-toggle="tab"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat PPD</a></li>
-                <li class="list-group-item"><a href="#mutasi" data-toggle="tab"><i class="fa-solid fa-recycle"></i> Riwayat Mutasi</a></li>
+                <li class="list-group-item mutasikas"><a href="#mutasikas" data-toggle="tab"><i class="fa-solid fa-money-bill-transfer"></i> Mutasi Kas</a></li>
+                <li class="list-group-item riwayatppd"><a href="#riwayatppd" data-toggle="tab"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat PPD</a></li>
+                <li class="list-group-item mutasi"><a href="#mutasi" data-toggle="tab"><i class="fa-solid fa-recycle"></i> Riwayat Mutasi</a></li>
             </ul>
             <!-- tab menu -->
         </div>
@@ -387,12 +394,12 @@
                                         <table class="table table-striped table-bordered" id="riwayatppd-table">
                                             <thead>
                                                 <tr>
-                                                    <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                                                    <th>No Dokumen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                                                    <th>ID Anggota&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                                                    <th>Nama Anggota&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                                                    <th>Daerah &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                                                    <th>Cabang &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                    <th> </th>
+                                                    <th>No Dokumen </th>
+                                                    <th>ID Anggota </th>
+                                                    <th>Nama Anggota </th>
+                                                    <th>Daerah </th>
+                                                    <th>Cabang </th>
                                                     <th>Jenis </th>
                                                     <th>Tingkatan </th>
                                                     <th>Tingkatan PPD </th>
@@ -402,7 +409,7 @@
                                                     <th>Sertifikat</th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="datariwayatppd">
+                                            <tbody id="daftariwayatppd">
                                             </tbody>
                                         </table>
                                     </div>

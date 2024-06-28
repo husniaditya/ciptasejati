@@ -502,10 +502,10 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                         <div class="col-md-12">
                             <ul class="nav nav-pills nav-justified">
                                 <li class="active"><a href="#tab-informasianggota" data-toggle="tab">Informasi Anggota</a></li>
-                                <li><a href="#tab-riwayatmutasi" data-toggle="tab">Riwayat Mutasi</a></li>
+                                <li><a href="#tab-riwayatmutasi" data-toggle="tab" class="mutasi">Riwayat Mutasi</a></li>
                                 <li><a href="#tab-idsertifikat" data-toggle="tab">ID &amp; Sertifikat</a></li>
-                                <li><a href="#tab-mutasikas" data-toggle="tab">Mutasi Kas</a></li>
-                                <li><a href="#tab-riwayatppd" data-toggle="tab">Riwayat PPD</a></li>
+                                <li><a href="#tab-mutasikas" data-toggle="tab" class="mutasikas">Mutasi Kas</a></li>
+                                <li><a href="#tab-riwayatppd" data-toggle="tab" class="riwayatppd">Riwayat PPD</a></li>
                                 <li><a href="#tab-riwayatukt" data-toggle="tab">Riwayat UKT</a></li>
                             </ul>
                             <!--/ tab -->
@@ -721,7 +721,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                                             <th>Sertifikat</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody id="riwayatppd">
+                                                    <tbody id="daftariwayatppd">
                                                     </tbody>
                                                 </table>
                                             </div>

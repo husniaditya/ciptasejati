@@ -519,7 +519,7 @@ $(document).on("click", ".open-ViewAnggota", function () {
     success: function(data){
       // Destroy the DataTable before updating
       $('#riwayatppd-table').DataTable().destroy();
-      $("#riwayatppd").html(data);
+      $("#daftariwayatppd").html(data);
       // Reinitialize Sertifikat Table
     }
   });

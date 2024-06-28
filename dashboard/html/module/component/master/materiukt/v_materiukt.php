@@ -4,22 +4,26 @@ $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 $USER_CABANG = $_SESSION["LOGINCAB_CS"];
 
 if ($USER_AKSES == "Administrator") {
-    $getMateri = GetQuery("SELECT m.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA,DATE_FORMAT(m.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE
+    $getMateri = GetQuery("SELECT m.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a.ANGGOTA_NAMA,DATE_FORMAT(m.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE
     FROM m_materi m
     LEFT JOIN m_cabang c ON m.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID
+    LEFT JOIN m_tingkatan t ON m.TINGKATAN_ID = t.TINGKATAN_ID
     WHERE m.DELETION_STATUS = 0");
 } else {
-    $getMateri = GetQuery("SELECT m.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA,DATE_FORMAT(m.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE FROM m_materi m
+    $getMateri = GetQuery("SELECT m.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a.ANGGOTA_NAMA,DATE_FORMAT(m.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE FROM m_materi m
     LEFT JOIN m_cabang c ON m.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID
+    LEFT JOIN m_tingkatan t ON m.TINGKATAN_ID = t.TINGKATAN_ID
     WHERE m.DELETION_STATUS = 0 AND m.CABANG_KEY = '$USER_CABANG'");
 }
 $getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0 order by DAERAH_DESKRIPSI asc");
+$getTingkatan = GetQuery("select * from m_tingkatan where DELETION_STATUS = 0 order by TINGKATAN_LEVEL asc");
 // Fetch all rows into an array
 $rowd = $getDaerah->fetchAll(PDO::FETCH_ASSOC);
+$rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <style>
@@ -32,7 +36,7 @@ $rowd = $getDaerah->fetchAll(PDO::FETCH_ASSOC);
     }
 </style>
 
-<div class="panel-group" id="accordion1">
+<div class="panel-group" id="accordion1"> <!-- Filter Section -->
     <div class="panel panel-default">
         <a data-toggle="collapse" data-parent="#accordion1" href="#collapseOne" class="collapsed">
             <div class="panel-heading">
@@ -77,6 +81,24 @@ $rowd = $getDaerah->fetchAll(PDO::FETCH_ASSOC);
                         ?>
                         <div class="col-md-3">
                             <div class="form-group">
+                                <label>Tingkatan</label>
+                                <select name="TINGKATAN_ID" id="selectize-select3" required="" class="form-control" data-parsley-required>
+                                    <option value="">-- Pilih Tingkatan --</option>
+                                    <?php
+                                    foreach ($rowt as $filterTingkatan) {
+                                        extract($filterTingkatan);
+                                        ?>
+                                        <option value="<?= $TINGKATAN_ID; ?>"><?= $TINGKATAN_NAMA; ?> - <?= $TINGKATAN_SEBUTAN; ?></option>
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
                                 <label>Materi ID</label>
                                 <input type="text" class="form-control" id="filterMATERI_ID" name="MATERI_ID" value="" placeholder="Inputkan ID">
                             </div> 
@@ -115,8 +137,8 @@ if ($_SESSION["ADD_MateriUKT"] == "Y") {
 }
 ?>
 
-<!-- START row -->
-<div class="row">
+<!-- START row Table UKT-->
+<div class="row"> 
     <div class="col-md-12">
         <div class="panel panel-default" id="demo">
             <div class="panel-heading">
@@ -129,6 +151,7 @@ if ($_SESSION["ADD_MateriUKT"] == "Y") {
                         <th>ID Materi</th>
                         <th>Daerah</th>
                         <th>Cabang</th>
+                        <th>Tingkatan</th>
                         <th>Deskripsi </th>
                         <th>Bobot</th>
                         <th>Input Oleh </th>
@@ -171,10 +194,11 @@ if ($_SESSION["ADD_MateriUKT"] == "Y") {
                             <td align="center"><?= $MATERI_ID; ?></td>
                             <td align="center"><?= $DAERAH_DESKRIPSI; ?></td>
                             <td align="center"><?= $CABANG_DESKRIPSI; ?></td>
+                            <td align="center"><?= $TINGKATAN_NAMA; ?> - <?= $TINGKATAN_SEBUTAN; ?></td>
                             <td><?= $MATERI_DESKRIPSI; ?></td>
                             <td align="center"><?= $MATERI_BOBOT; ?>%</td>
-                            <td><?= $ANGGOTA_NAMA; ?></td>
-                            <td><?= $INPUT_DATE; ?></td>
+                            <td align="center"><?= $ANGGOTA_NAMA; ?></td>
+                            <td align="center"><?= $INPUT_DATE; ?></td>
                         </tr>
                         <?php
                     }
@@ -196,42 +220,60 @@ if ($_SESSION["ADD_MateriUKT"] == "Y") {
                     <h3 class="semibold modal-title text-inverse">Tambah Data Materi UKT</h3>
                 </div>
                 <div class="modal-body">
+                    <div class="row">
                     <?php
                     if ($USER_AKSES == "Administrator") {
                         ?>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Daerah<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper" style="position: relative;">
-                                        <select name="DAERAH_KEY" id="selectize-dropdown" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Daerah --</option>
-                                            <?php
-                                            foreach ($rowd as $rowDaerah) {
-                                                extract($rowDaerah);
-                                                ?>
-                                                <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
-                                                <?php
-                                            }
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Daerah<span class="text-danger">*</span></label>
+                                <div id="selectize-wrapper" style="position: relative;">
+                                    <select name="DAERAH_KEY" id="selectize-dropdown" required="" class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Daerah --</option>
+                                        <?php
+                                        foreach ($rowd as $rowDaerah) {
+                                            extract($rowDaerah);
                                             ?>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Cabang<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper2" style="position: relative;">
-                                        <select name="CABANG_KEY" id="selectize-dropdown2" required class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Cabang --</option>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
+                                            <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Cabang<span class="text-danger">*</span></label>
+                                <div id="selectize-wrapper2" style="position: relative;">
+                                    <select name="CABANG_KEY" id="selectize-dropdown2" required class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Cabang --</option>
+                                    </select>
+                                </div>
+                            </div> 
                         </div>
                         <?php
                     }
                     ?>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Tingkatan<span class="text-danger">*</span></label>
+                                <div id="selectize-wrapper5" style="position: relative;">
+                                    <select name="TINGKATAN_ID" id="selectize-dropdown5" required="" class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Tingkatan --</option>
+                                        <?php
+                                        foreach ($rowt as $rowTingkatan) {
+                                            extract($rowTingkatan);
+                                            ?>
+                                            <option value="<?= $TINGKATAN_ID; ?>"><?= $TINGKATAN_NAMA; ?> - <?= $TINGKATAN_SEBUTAN; ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-9">
                             <div class="form-group">
@@ -309,16 +351,22 @@ if ($_SESSION["ADD_MateriUKT"] == "Y") {
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label>Daerah </label>
                                 <input type="text" class="form-control" id="viewDAERAH_KEY" name="DAERAH_KEY" value="" required readonly data-parsley-required>
                             </div> 
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label>Cabang </label>
                                 <input type="text" class="form-control" id="viewCABANG_KEY" name="CABANG_KEY" value="" required readonly data-parsley-required>
+                            </div> 
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Tingkatan </label>
+                                <input type="text" class="form-control" id="viewTINGKATAN_ID" name="TINGKATAN_ID" value="" required readonly data-parsley-required>
                             </div> 
                         </div>
                     </div>
@@ -384,42 +432,60 @@ if ($_SESSION["ADD_MateriUKT"] == "Y") {
                             </div> 
                         </div>
                     </div>
+                    <div class="row">
                     <?php
                     if ($USER_AKSES == "Administrator") {
                         ?>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Daerah<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper3" style="position: relative;">
-                                        <select name="DAERAH_KEY" id="selectize-dropdown3" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Daerah --</option>
-                                            <?php
-                                            foreach ($rowd as $rowDaerah) {
-                                                extract($rowDaerah);
-                                                ?>
-                                                <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
-                                                <?php
-                                            }
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Daerah<span class="text-danger">*</span></label>
+                                <div id="selectize-wrapper3" style="position: relative;">
+                                    <select name="DAERAH_KEY" id="selectize-dropdown3" required="" class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Daerah --</option>
+                                        <?php
+                                        foreach ($rowd as $rowDaerah) {
+                                            extract($rowDaerah);
                                             ?>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Cabang<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper4" style="position: relative;">
-                                        <select name="CABANG_KEY" id="selectize-dropdown4" required class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Cabang --</option>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
+                                            <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Cabang<span class="text-danger">*</span></label>
+                                <div id="selectize-wrapper4" style="position: relative;">
+                                    <select name="CABANG_KEY" id="selectize-dropdown4" required class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Cabang --</option>
+                                    </select>
+                                </div>
+                            </div> 
                         </div>
                         <?php
                     }
                     ?>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Tingkatan<span class="text-danger">*</span></label>
+                                <div id="selectize-wrapper6" style="position: relative;">
+                                    <select name="TINGKATAN_ID" id="selectize-dropdown6" required="" class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Tingkatan --</option>
+                                        <?php
+                                        foreach ($rowt as $rowTingkatan) {
+                                            extract($rowTingkatan);
+                                            ?>
+                                            <option value="<?= $TINGKATAN_ID; ?>"><?= $TINGKATAN_NAMA; ?> - <?= $TINGKATAN_SEBUTAN; ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-9">
                             <div class="form-group">

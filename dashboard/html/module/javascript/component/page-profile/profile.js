@@ -94,18 +94,31 @@ function callTable() {
         responsive: true,
         order: [],
         dom: 'Bfrtip',
-        autoWidth: true,  // Ensure autoWidth is enabled
-        columnDefs: [
-            { width: 'auto', targets: '_all' }  // Apply auto width to all columns
-        ],
         paging: true,
         scrollX: true,
         scrollY: '350px', // Set the desired height here
         buttons: [
             'copy', 'csv', 'excel', 'pdf'
-        ]
-    });
-  }
+        ],
+        columnDefs: [
+            { width: '5%', targets: 0 },
+            { width: '10%', targets: 1 },
+            { width: '10%', targets: 2 },
+            { width: '10%', targets: 3 },
+            { width: '10%', targets: 4 },
+            { width: '10%', targets: 5 },
+            { width: '5%', targets: 6 },
+            { width: '5%', targets: 7 },
+            { width: '10%', targets: 8 },
+            { width: '10%', targets: 9 },
+            { width: '10%', targets: 10 },
+            { width: '10%', targets: 11 },
+            { width: '5%', targets: 12 }
+        ],
+        autoWidth: false,
+        fixedColumns: true,
+    }).columns.adjust().draw();
+}
 
 function previewImageedit(input) {
     var previewImage = document.getElementById('preview-image');
@@ -133,7 +146,7 @@ function fetchDataAndPopulateForm(value1, value2, value3) {
     $.ajax({
         url: 'module/ajax/page-profile/aj_getprofile.php',
         method: 'POST',
-        data: { ANGGOTA_KEY: anggotaKey, CABANG_KEY: cabangKey },
+        data: { ANGGOTA_ID: anggotaid, CABANG_KEY: cabangKey },
         success: function(data) {
             // Set the values of the Profile form fields
             $("#ANGGOTA_NAMA").val(data.ANGGOTA_NAMA);
@@ -166,13 +179,60 @@ function fetchDataAndPopulateForm(value1, value2, value3) {
             console.error('Error fetching data:', error);
         }
     });
+}
 
+$(document).on("click", ".mutasikas", function () {
+    
+    var anggotaid = document.getElementById('JANGGOTA_ID').innerHTML;
+    var cabangKey = document.getElementById('JCABANG_KEY').innerHTML;
+    
+    // Make an AJAX request to fetch additional data based on the selected value
+    $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/anggota/daftaranggota/aj_getmutasikas.php",
+        data: { id: anggotaid, cabang: cabangKey },
+        success: function(data){
+            // console.log(data);
+            // Destroy the DataTable before updating
+            $('#mutasikas-table').DataTable().destroy();
+            $("#riwayatkas").html(data);
+            // Reinitialize Sertifikat Table
+            callTable();
+        }
+    });
+  });
+
+$(document).on("click", ".riwayatppd", function () {
+    
+    var anggotaid = document.getElementById('JANGGOTA_ID').innerHTML;
+    
+    // Make an AJAX request to fetch additional data based on the selected value
+    
+    $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/anggota/daftaranggota/aj_getppdanggota.php",
+        data:'id='+anggotaid,
+        success: function(data){
+            // Destroy the DataTable before updating
+            $('#riwayatppd-table').DataTable().destroy();
+            $("#daftariwayatppd").html(data);
+            // Reinitialize Sertifikat Table
+            callTable();
+        }
+    });
+  });
+
+$(document).on("click", ".mutasi", function () {
+
+    var anggotaid = document.getElementById('JANGGOTA_ID').innerHTML;
+
+    // Make an AJAX request to fetch additional data based on the selected value
     $.ajax({
         type: "POST",
         url: "module/ajax/transaksi/anggota/daftaranggota/aj_getmutasianggota.php",
         data:'id='+anggotaid,
         success: function(data){
-            console.log(data);
+            // console.log(data);
             // Destroy the DataTable before updating
             $('#riwayatmutasi-table').DataTable().destroy();
             $("#riwayatmutasi").html(data);
@@ -180,34 +240,7 @@ function fetchDataAndPopulateForm(value1, value2, value3) {
             callTable();
         }
     });
-    
-    $.ajax({
-    type: "POST",
-    url: "module/ajax/transaksi/anggota/daftaranggota/aj_getmutasikas.php",
-    data: { id: anggotaid, cabang: cabangKey },
-    success: function(data){
-        console.log(data);
-        // Destroy the DataTable before updating
-        $('#mutasikas-table').DataTable().destroy();
-        $("#riwayatkas").html(data);
-        // Reinitialize Sertifikat Table
-        callTable();
-    }
-    });
-
-    $.ajax({
-    type: "POST",
-    url: "module/ajax/transaksi/anggota/daftaranggota/aj_getppdanggota.php",
-    data:'id='+anggotaid,
-    success: function(data){
-        // Destroy the DataTable before updating
-        $('#riwayatppd-table').DataTable().destroy();
-        $("#datariwayatppd").html(data);
-        // Reinitialize Sertifikat Table
-        callTable();
-    }
-    });
-}
+});
 
 function handleForm(formId, successNotification, failedNotification, updateNotification) {
     $(formId).submit(function (event) {

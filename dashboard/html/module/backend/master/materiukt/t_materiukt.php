@@ -9,7 +9,7 @@ $USER_KEY = $_SESSION["LOGINKEY_CS"];
 $YEAR=date("Y");
 $MONTH=date("m");
 
-if (isset($_POST["savemateri"])) {
+if (isset($_POST["savemateri"])) {  // Add a new materi
 
     try {
         if ($USER_AKSES == "Administrator") {
@@ -20,8 +20,9 @@ if (isset($_POST["savemateri"])) {
         $MATERI_ID = createKode("m_materi","MATERI_ID","MTR-$YEAR$MONTH-",3);
         $MATERI_DESKRIPSI = $_POST["MATERI_DESKRIPSI"];
         $MATERI_BOBOT = $_POST["MATERI_BOBOT"];
+        $TINGKATAN_ID = $_POST["TINGKATAN_ID"];
 
-        GetQuery("insert into m_materi select '$MATERI_ID', '$CABANG_KEY', '$MATERI_DESKRIPSI', '$MATERI_BOBOT', '0', '$USER_ID', now()");
+        GetQuery("insert into m_materi select '$MATERI_ID', '$CABANG_KEY', '$TINGKATAN_ID', '$MATERI_DESKRIPSI', '$MATERI_BOBOT', '0', '$USER_ID', now()");
 
         GetQuery("UPDATE m_materi_detail SET MATERI_ID = '$MATERI_ID' WHERE MATERI_ID = '$USER_KEY'");
 
@@ -35,7 +36,7 @@ if (isset($_POST["savemateri"])) {
     }
 }
 
-if (isset($_POST["updatemateri"])) {
+if (isset($_POST["updatemateri"])) { // Update an existing materi
 
     try {
         if ($USER_AKSES == "Administrator") {
@@ -46,8 +47,9 @@ if (isset($_POST["updatemateri"])) {
         $MATERI_ID = $_POST["MATERI_ID"];
         $MATERI_DESKRIPSI = $_POST["MATERI_DESKRIPSI"];
         $MATERI_BOBOT = $_POST["MATERI_BOBOT"];
+        $TINGKATAN_ID = $_POST["TINGKATAN_ID"];
 
-        GetQuery("UPDATE m_materi SET MATERI_DESKRIPSI = '$MATERI_DESKRIPSI', MATERI_BOBOT = '$MATERI_BOBOT', INPUT_BY = '$USER_ID', INPUT_DATE = now() WHERE MATERI_ID = '$MATERI_ID'");
+        GetQuery("UPDATE m_materi SET CABANG_KEY = '$CABANG_KEY', TINGKATAN_ID = '$TINGKATAN_ID', MATERI_DESKRIPSI = '$MATERI_DESKRIPSI', MATERI_BOBOT = '$MATERI_BOBOT', INPUT_BY = '$USER_ID', INPUT_DATE = now() WHERE MATERI_ID = '$MATERI_ID'");
 
         $response="Success,$MATERI_ID";
         echo $response;
@@ -59,7 +61,7 @@ if (isset($_POST["updatemateri"])) {
     }
 }
 
-if (isset($_POST["ADD_MODAL_DETAIL"])) {
+if (isset($_POST["ADD_MODAL_DETAIL"])) { // Add a new detail ADD MODAL
 
     try {
         $MATERI_ID = $_POST["materi"];
@@ -93,7 +95,7 @@ if (isset($_POST["ADD_MODAL_DETAIL"])) {
     }
 }
 
-if (isset($_POST["DELETE_MATERI_DETAIL"])) {
+if (isset($_POST["DELETE_MATERI_DETAIL"])) { // Delete a detail ADD MODAL
 
     try {
         $ID = $_POST["id"];
@@ -109,7 +111,7 @@ if (isset($_POST["DELETE_MATERI_DETAIL"])) {
     }
 }
 
-if (isset($_POST["ADD_DETAIL"])) {
+if (isset($_POST["ADD_DETAIL"])) { // Add a new detail EDIT MODAL
 
     try {
         $MATERI_ID = $_POST["materi"];
@@ -143,7 +145,7 @@ if (isset($_POST["ADD_DETAIL"])) {
     }
 }
 
-if (isset($_POST["DELETE_DETAIL"])) {
+if (isset($_POST["DELETE_DETAIL"])) { // Delete a detail EDIT MODAL
 
     try {
         $ID = $_POST["id"];
@@ -159,7 +161,7 @@ if (isset($_POST["DELETE_DETAIL"])) {
     }
 }
 
-if (isset($_POST["EVENT_ACTION"])) {
+if (isset($_POST["EVENT_ACTION"])) { // Delete a materi
 
     try {
         $MATERI_ID = $_POST["MATERI_ID"];

@@ -4,8 +4,9 @@ require_once ("../../../../module/connection/conn.php");
 $USER_CABANG = $_SESSION['LOGINCAB_CS'];
 $USER_AKSES = $_SESSION['LOGINAKS_CS'];
 
-if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["MATERI_ID"]) || isset($_POST["MATERI_DESKRIPSI"])) {
+if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["TINGKATAN_ID"]) || isset($_POST["MATERI_ID"]) || isset($_POST["MATERI_DESKRIPSI"])) {
 
+    $TINGKATAN_ID = $_POST["TINGKATAN_ID"];
     $MATERI_ID = $_POST["MATERI_ID"];
     $MATERI_DESKRIPSI = $_POST["MATERI_DESKRIPSI"];
 
@@ -13,34 +14,38 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
         $DAERAH_KEY = $_POST["DAERAH_KEY"];
         $CABANG_KEY = $_POST["CABANG_KEY"];
 
-        $getMateri = GetQuery("SELECT m.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA,DATE_FORMAT(m.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE
+        $getMateri = GetQuery("SELECT m.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a.ANGGOTA_NAMA,DATE_FORMAT(m.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE
         FROM m_materi m
         LEFT JOIN m_cabang c ON m.CABANG_KEY = c.CABANG_KEY
         LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
         LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID
-        WHERE m.DELETION_STATUS = 0 AND (d.DAERAH_KEY LIKE CONCAT('%','$DAERAH_KEY','%')) AND (m.CABANG_KEY LIKE CONCAT('%','$CABANG_KEY','%')) AND (m.MATERI_ID LIKE CONCAT('%','$MATERI_ID','%')) AND (m.MATERI_DESKRIPSI LIKE CONCAT('%','$MATERI_DESKRIPSI','%'))");
+        LEFT JOIN m_tingkatan t ON m.TINGKATAN_ID = t.TINGKATAN_ID
+        WHERE m.DELETION_STATUS = 0 AND (d.DAERAH_KEY LIKE CONCAT('%','$DAERAH_KEY','%')) AND (m.CABANG_KEY LIKE CONCAT('%','$CABANG_KEY','%')) AND (m.TINGKATAN_ID LIKE CONCAT('%','$TINGKATAN_ID','%')) AND (m.MATERI_ID LIKE CONCAT('%','$MATERI_ID','%')) AND (m.MATERI_DESKRIPSI LIKE CONCAT('%','$MATERI_DESKRIPSI','%'))");
     } else {
-        $getMateri = GetQuery("SELECT m.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA,DATE_FORMAT(m.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE
+        $getMateri = GetQuery("SELECT m.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a.ANGGOTA_NAMA,DATE_FORMAT(m.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE
         FROM m_materi m
         LEFT JOIN m_cabang c ON m.CABANG_KEY = c.CABANG_KEY
         LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
         LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID
-        WHERE m.DELETION_STATUS = 0 AND m.CABANG_KEY = '$USER_CABANG' AND (m.MATERI_ID LIKE CONCAT('%','$MATERI_ID','%')) AND (m.MATERI_DESKRIPSI LIKE CONCAT('%','$MATERI_DESKRIPSI','%'))");
+        LEFT JOIN m_tingkatan t ON m.TINGKATAN_ID = t.TINGKATAN_ID
+        WHERE m.DELETION_STATUS = 0 AND m.CABANG_KEY = '$USER_CABANG' AND (m.TINGKATAN_ID LIKE CONCAT('%','$TINGKATAN_ID','%')) AND (m.MATERI_ID LIKE CONCAT('%','$MATERI_ID','%')) AND (m.MATERI_DESKRIPSI LIKE CONCAT('%','$MATERI_DESKRIPSI','%'))");
     }
     
 } else {
     if ($USER_AKSES == "Administrator") {
-        $getMateri = GetQuery("SELECT m.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA,DATE_FORMAT(m.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE
+        $getMateri = GetQuery("SELECT m.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a.ANGGOTA_NAMA,DATE_FORMAT(m.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE
         FROM m_materi m
         LEFT JOIN m_cabang c ON m.CABANG_KEY = c.CABANG_KEY
         LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
         LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID
+        LEFT JOIN m_tingkatan t ON m.TINGKATAN_ID = t.TINGKATAN_ID
         WHERE m.DELETION_STATUS = 0");
     } else {
-        $getMateri = GetQuery("SELECT m.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA,DATE_FORMAT(m.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE FROM m_materi m
+        $getMateri = GetQuery("SELECT m.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a.ANGGOTA_NAMA,DATE_FORMAT(m.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE FROM m_materi m
         LEFT JOIN m_cabang c ON m.CABANG_KEY = c.CABANG_KEY
         LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
         LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID
+        LEFT JOIN m_tingkatan t ON m.TINGKATAN_ID = t.TINGKATAN_ID
         WHERE m.DELETION_STATUS = 0 AND m.CABANG_KEY = '$USER_CABANG'");
     }
 }
@@ -79,10 +84,11 @@ while ($rowMateri = $getMateri->fetch(PDO::FETCH_ASSOC)) {
         <td align="center"><?= $MATERI_ID; ?></td>
         <td align="center"><?= $DAERAH_DESKRIPSI; ?></td>
         <td align="center"><?= $CABANG_DESKRIPSI; ?></td>
+        <td align="center"><?= $TINGKATAN_NAMA; ?> - <?= $TINGKATAN_SEBUTAN; ?></td>
         <td><?= $MATERI_DESKRIPSI; ?></td>
         <td align="center"><?= $MATERI_BOBOT; ?>%</td>
-        <td><?= $ANGGOTA_NAMA; ?></td>
-        <td><?= $INPUT_DATE; ?></td>
+        <td align="center"><?= $ANGGOTA_NAMA; ?></td>
+        <td align="center"><?= $INPUT_DATE; ?></td>
     </tr>
     <?php
 }

@@ -125,6 +125,8 @@ function resetPreview(modalId) { // Function Reset Preview Dropdown Value
     var selectizeInstance3 = $('#selectize-dropdown3')[0].selectize; // DAERAH EDIT
     var selectizeInstance4 = $('#selectize-dropdown4')[0].selectize; // CABANG EDIT
   }
+  var tingkatanAdd = $('#selectize-dropdown5')[0].selectize; // TINGKATAN ADD
+  var tingkatanEdit = $('#selectize-dropdown6')[0].selectize; // TINGKATAN EDIT
 
   if (selectizeInstance) {
     selectizeInstance.clear();
@@ -138,6 +140,8 @@ function resetPreview(modalId) { // Function Reset Preview Dropdown Value
   if (selectizeInstance4) {
     selectizeInstance4.clear();
   }
+  tingkatanAdd.clear();
+  tingkatanEdit.clear();
 }
 
 $(document).ready(function() {
@@ -340,6 +344,7 @@ $(document).on("click", ".open-ViewMateri", function () {
       $("#viewMATERI_BOBOT").val(data.MATERI_BOBOT);
       $("#viewDAERAH_KEY").val(data.DAERAH_DESKRIPSI);
       $("#viewCABANG_KEY").val(data.CABANG_DESKRIPSI);
+      $("#viewTINGKATAN_ID").val(data.TINGKATAN_NAMA + ' - ' + data.TINGKATAN_SEBUTAN);
 
       $.ajax({
         type: "POST",
@@ -374,6 +379,7 @@ $(document).on("click", ".open-EditMateri", function () {
       $("#editMATERI_ID").val(data.MATERI_ID);
       $("#editMATERI_DESKRIPSI").val(data.MATERI_DESKRIPSI);
       $("#editMATERI_BOBOT").val(data.MATERI_BOBOT);
+      $(".modal-body #selectize-dropdown6")[0].selectize.setValue(data.TINGKATAN_ID);
       
       // Check if the administrator-specific elements exist
       var isExist = $('#selectize-dropdown3').length > 0 && $('#selectize-dropdown4').length > 0;
@@ -627,6 +633,7 @@ function filterMateriUKTEvent() {
   // Your event handling code here
   const daerah = $('#selectize-select').val();
   const cabang = $('#selectize-select2').val();
+  const tingkatan = $('#selectize-select3').val();
   const id = $('#filterMATERI_ID').val();
   const deskripsi = $('#filterMATERI_DESKRIPSI').val();
 
@@ -634,6 +641,7 @@ function filterMateriUKTEvent() {
   const formData = {
     DAERAH_KEY: daerah,
     CABANG_KEY: cabang,
+    TINGKATAN_ID: tingkatan,
     MATERI_ID: id,
     MATERI_DESKRIPSI: deskripsi,
   };
@@ -657,6 +665,7 @@ function filterMateriUKTEvent() {
 function clearForm() {
   // Clear the first Selectize dropdown
   var isExist = $('#selectize-select').length > 0 && $('#selectize-select2').length > 0;
+  var selectizeInstance3 = $('#selectize-select3')[0].selectize;
 
   if (isExist) {
     var selectizeInstance = $('#selectize-select')[0].selectize;
@@ -668,22 +677,7 @@ function clearForm() {
       selectizeInstance2.clear();
     }
   }
-
+  selectizeInstance3.clear();
   document.getElementById("filterMateriUKT").reset();
-  // Call the reloadDataTable() function after inserting data to reload the DataTable
-  $.ajax({
-    type: 'POST',
-    url: 'module/ajax/master/materiukt/aj_tablemateriukt.php',
-    success: function(response) {
-      // Destroy the DataTable before updating
-      $('#materi-table').DataTable().destroy();
-      $("#materidata").html(response);
-      // Reinitialize Sertifikat Table
-      callTable();
-    },
-    error: function(xhr, status, error) {
-      // Handle any errors
-    }
-  });
 }
 // ----- End of Pusat Section ----- //
