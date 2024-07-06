@@ -8,24 +8,51 @@ $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 $YEAR=date("Y");
 $MONTH=date("m");
 
-if (isset($_POST["saveppd"])) {
+if (isset($_POST["saveukt"])) {
     try {
-        $PPD_ID = createKode("t_ppd","PPD_ID","PPD-$YEAR$MONTH-",3);
+        // DECLARE VARIABLE
+        $UKT_ID = createKode("t_ukt","UKT_ID","UKT-$YEAR$MONTH-",3);
         $TINGKATAN_ID = $_POST["TINGKATAN_ID"];
-        $PPD_TANGGAL = $_POST["PPD_TANGGAL"];
-        $PPD_DESKRIPSI = $_POST["PPD_DESKRIPSI"];
+        $ANGGOTA_ID = $_POST["ANGGOTA_ID"];
+        $UKT_LOKASI = $_POST["UKT_LOKASI"];
+        $UKT_TANGGAL = $_POST["UKT_TANGGAL"];
+        $UKT_TOTAL = null;
+        $UKT_NILAI = '';
+        $UKT_DESKRIPSI = $_POST["UKT_DESKRIPSI"];
         $CABANG_KEY = $USER_CABANG;
         if ($USER_AKSES == "Administrator") {
             $CABANG_KEY = $_POST["CABANG_KEY"];
         }
+        // INSERT DATA
+        GetQuery("INSERT INTO t_ukt SELECT '$UKT_ID', '$CABANG_KEY', '$TINGKATAN_ID', '$ANGGOTA_ID', '$UKT_LOKASI', '$UKT_TANGGAL', '$UKT_TOTAL', '$UKT_NILAI', '$UKT_DESKRIPSI', 0, null, null, 0, null, null, 0, '$USER_ID', now()");
 
-        GetQuery("insert into t_ppd select '$PPD_ID','$CABANG_KEY','$TINGKATAN_ID', '$PPD_TANGGAL', '$PPD_DESKRIPSI', '', 0, '$USER_ID', now()");
+        // DECLARE DETAIL VARIABLE
+        $keys = $_POST['_key'];
+        $materi = $_POST['MATERI_ID'];
+        $bobot = $_POST['UKT_BOBOT'];
+        $nilai = $_POST['UKT_DETAIL_NILAI'];
+        $remarks = $_POST['UKT_DETAIL_REMARK'];
+        
+        foreach ($keys as $index => $key) {
+            $materivalue = isset($materi[$index]) ? $materi[$index] : '';
+            $bobotvalue = isset($bobot[$index]) ? $bobot[$index] : '';
+            $nilaiValue = isset($nilai[$index]) ? $nilai[$index] : '';
+            $remarkValue = isset($remarks[$index]) ? $remarks[$index] : '';
+            // INSERT NEW DETAIL
+            GetQuery("INSERT INTO t_ukt_detail SELECT '$UKT_ID', '$materivalue', '$key', '$bobotvalue', '$nilaiValue', '$remarkValue',0");
+        }
+        // UPDATE TOTAL SCORE
+        GetQuery("UPDATE t_ukt
+        SET UKT_TOTAL = (
+            SELECT SUM(UKT_DETAIL_NILAI * (UKT_BOBOT / 100)) AS NILAI_BOBOT
+            FROM t_ukt_detail
+            WHERE UKT_ID = '$UKT_ID'
+        )
+        WHERE UKT_ID = '$UKT_ID'");
+        // INSERT LOG
+        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'I', '$USER_ID', now() FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
 
-        GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, TINGKATAN_ID, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE,DELETION_STATUS, 'I', '$USER_ID', now() from t_ppd where PPD_ID = '$PPD_ID'");
-
-        GetQuery("update t_ppd_anggota set PPD_ID = '$PPD_ID' where PPD_ID = 'Temp_$USER_ID'");
-
-        $response="Success,$PPD_ID";
+        $response="Success,$UKT_ID";
         echo $response;
 
     } catch (Exception $e) {
@@ -35,55 +62,128 @@ if (isset($_POST["saveppd"])) {
     }
 }
 
-if (isset($_POST["updateppd"])) {
+if (isset($_POST["updateukt"])) {
     try {
-        $KAS_ID = $_POST["KAS_ID"];
-        $KAS_JENIS = $_POST["KAS_JENIS"];
-        $ANGGOTA_KEY = $_POST["ANGGOTA_KEY"];
-        $KAS_DK = $_POST["KAS_DK"];
-        $rawKAS_JUMLAH = $_POST["KAS_JUMLAH"];
-        $KAS_DESKRIPSI = $_POST["KAS_DESKRIPSI"];
-        $KAS_FILE = "";
-
-        $getSaldoAwal = GetQuery("SELECT 
-        CASE
-            WHEN SUM(KAS_JUMLAH) < 0 THEN CONCAT('(', SUM(KAS_JUMLAH), ')')
-            ELSE SUM(KAS_JUMLAH)
-        END AS SALDO_AWAL
-        FROM 
-            t_kas
-        WHERE 
-            DELETION_STATUS = 0 
-            AND ANGGOTA_KEY = '$ANGGOTA_KEY' 
-            AND KAS_ID < '$KAS_ID' 
-            AND KAS_JENIS = '$KAS_JENIS'");
-        while ($rowSaldoAwal = $getSaldoAwal->fetch(PDO::FETCH_ASSOC)) {
-            extract($rowSaldoAwal);
+        // DECLARE VARIABLE
+        $UKT_ID = $_POST["UKT_ID"];
+        $TINGKATAN_ID = $_POST["TINGKATAN_ID"];
+        $ANGGOTA_ID = $_POST["ANGGOTA_ID"];
+        $UKT_LOKASI = $_POST["UKT_LOKASI"];
+        $UKT_TANGGAL = $_POST["UKT_TANGGAL"];
+        $UKT_TOTAL = null;
+        $UKT_NILAI = '';
+        $UKT_DESKRIPSI = $_POST["UKT_DESKRIPSI"];
+        $CABANG_KEY = $USER_CABANG;
+        if ($USER_AKSES == "Administrator") {
+            $CABANG_KEY = $_POST["CABANG_KEY"];
         }
+        // INSERT DATA
+        GetQuery("UPDATE t_ukt SET TINGKATAN_ID = '$TINGKATAN_ID', ANGGOTA_ID = '$ANGGOTA_ID', UKT_LOKASI = '$UKT_LOKASI', UKT_TANGGAL = '$UKT_TANGGAL', UKT_TOTAL = '$UKT_TOTAL', UKT_NILAI = '$UKT_NILAI', UKT_DESKRIPSI = '$UKT_DESKRIPSI', CABANG_KEY = '$CABANG_KEY', INPUT_BY = '$USER_ID', INPUT_DATE = now() WHERE UKT_ID = '$UKT_ID'");
+        // DELETE DETAIL BEFORE INSERT
+        GetQuery("DELETE FROM t_ukt_detail WHERE UKT_ID = '$UKT_ID'");
+
+        $keys = $_POST['_key'];
+        $materi = $_POST['MATERI_ID'];
+        $bobot = $_POST['UKT_BOBOT'];
+        $nilai = $_POST['UKT_DETAIL_NILAI'];
+        $remarks = $_POST['UKT_DETAIL_REMARK'];
         
-        // Remove commas from the input
-        $cleanedKAS_JUMLAH = str_replace(',', '', $rawKAS_JUMLAH);
-        // Convert the cleaned value to an integer or float as needed
-        $KAS_JUMLAH = ($KAS_DK == "D") ? (float)$cleanedKAS_JUMLAH : -(float)$cleanedKAS_JUMLAH;
-        $KAS_SALDO = ($KAS_DK == "D") ? (float)$SALDO_AWAL + (float)$cleanedKAS_JUMLAH : (float)$SALDO_AWAL -(float)$cleanedKAS_JUMLAH;
-        
-        $getNamaAnggota = GetQuery("select a.ANGGOTA_NAMA, a.CABANG_KEY, c.CABANG_DESKRIPSI from m_anggota a left join m_cabang c on a.CABANG_KEY = c.CABANG_KEY where a.ANGGOTA_KEY = '$ANGGOTA_KEY'");
-        while ($rowNamaAnggota = $getNamaAnggota->fetch(PDO::FETCH_ASSOC)) {
-            extract($rowNamaAnggota);
+        foreach ($keys as $index => $key) {
+            $materivalue = isset($materi[$index]) ? $materi[$index] : '';
+            $bobotvalue = isset($bobot[$index]) ? $bobot[$index] : '';
+            $nilaiValue = isset($nilai[$index]) ? $nilai[$index] : '';
+            $remarkValue = isset($remarks[$index]) ? $remarks[$index] : '';
+            // INSERT NEW DETAIL
+            GetQuery("INSERT INTO t_ukt_detail SELECT '$UKT_ID', '$materivalue', '$key', '$bobotvalue', '$nilaiValue', '$remarkValue',0");
         }
+        // UPDATE TOTAL SCORE
+        GetQuery("UPDATE t_ukt
+        SET UKT_TOTAL = (
+            SELECT SUM(UKT_DETAIL_NILAI * (UKT_BOBOT / 100)) AS NILAI_BOBOT
+            FROM t_ukt_detail
+            WHERE UKT_ID = '$UKT_ID'
+        )
+        WHERE UKT_ID = '$UKT_ID'");
+        // INSERT LOG
+        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', now() FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
 
-        $test = GetQuery("update t_kas set CABANG_KEY = '$CABANG_KEY', ANGGOTA_KEY = '$ANGGOTA_KEY', KAS_DK = '$KAS_DK', KAS_JUMLAH = '$KAS_JUMLAH', KAS_SALDO = '$KAS_SALDO', KAS_DESKRIPSI = '$KAS_DESKRIPSI', INPUT_BY = '$USER_ID', INPUT_DATE = now() where KAS_ID = '$KAS_ID'");
+        $response="Success,$UKT_ID";
+        echo $response;
 
-        GetQuery("insert into t_kas_log select uuid(), KAS_ID, CABANG_KEY, ANGGOTA_KEY, KAS_JENIS, KAS_TANGGAL, KAS_DK,KAS_JUMLAH, KAS_SALDO, KAS_DESKRIPSI, KAS_FILE, DELETION_STATUS, 'U', '$USER_ID', now() from t_kas where KAS_ID = '$KAS_ID'");
+    } catch (Exception $e) {
+        // Generic exception handling
+        $response =  "Caught Exception: " . $e->getMessage();
+        echo $response;
+    }
+}
 
-        GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$KAS_ID'");
+if (isset($_POST["approveKoordinator"])) {
+    try {
+        $UKT_ID = $_POST["UKT_ID"];
+        // UPDATE APPROVAL KOORDINATOR STATUS
+        GetQuery("update t_ukt set UKT_APP_KOOR = 1, UKT_APP_KOOR_BY = '$USER_ID', UKT_APP_KOOR_DATE = NOW() where UKT_ID = '$UKT_ID'");
 
-        GetQuery("insert into t_notifikasi
-        select uuid(),ANGGOTA_KEY,'$KAS_ID',CABANG_KEY,CABANG_KEY,'Kas','ViewNotifKas','open-ViewNotifKas','Kas $KAS_JENIS', '[$KAS_DK] Kas a.n $ANGGOTA_NAMA dengan jumlah Rp $rawKAS_JUMLAH', 1, 0, '$USER_ID', NOW()
-        FROM m_anggota
-        WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN (CABANG_KEY,CABANG_KEY) AND (ANGGOTA_AKSES = 'Koordinator' AND CABANG_KEY = '$CABANG_KEY') OR ANGGOTA_KEY = '$ANGGOTA_KEY') AND ANGGOTA_STATUS = 0");
+        // INSERT LOG
+        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', now() FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
 
-        $response="Success,$KAS_ID";
+        $response="Success,$UKT_ID";
+        echo $response;
+
+    } catch (Exception $e) {
+        // Generic exception handling
+        $response =  "Caught Exception: " . $e->getMessage();
+        echo $response;
+    }
+}
+
+if (isset($_POST["rejectKoordinator"])) {
+    try {
+        $UKT_ID = $_POST["UKT_ID"];
+        // UPDATE APPROVAL KOORDINATOR STATUS
+        GetQuery("update t_ukt set UKT_APP_KOOR = 2, UKT_APP_KOOR_BY = '$USER_ID', UKT_APP_KOOR_DATE = NOW() where UKT_ID = '$UKT_ID'");
+
+        // INSERT LOG
+        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', now() FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
+
+        $response="Success,$UKT_ID";
+        echo $response;
+
+    } catch (Exception $e) {
+        // Generic exception handling
+        $response =  "Caught Exception: " . $e->getMessage();
+        echo $response;
+    }
+}
+
+if (isset($_POST["approveGuru"])) {
+    try {
+        $UKT_ID = $_POST["UKT_ID"];
+        // UPDATE APPROVAL GURU STATUS
+        GetQuery("update t_ukt set UKT_APP_GURU = 1, UKT_APP_GURU_BY = '$USER_ID', UKT_APP_GURU_DATE = NOW() where UKT_ID = '$UKT_ID'");
+
+        // INSERT LOG
+        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', now() FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
+
+        $response="Success,null";
+        echo $response;
+
+    } catch (Exception $e) {
+        // Generic exception handling
+        $response =  "Caught Exception: " . $e->getMessage();
+        echo $response;
+    }
+}
+
+if (isset($_POST["rejectGuru"])) {
+    try {
+        $UKT_ID = $_POST["UKT_ID"];
+        // UPDATE APPROVAL GURU STATUS
+        GetQuery("update t_ukt set UKT_APP_GURU = 2, UKT_APP_GURU_BY = '$USER_ID', UKT_APP_GURU_DATE = NOW() where UKT_ID = '$UKT_ID'");
+
+        // INSERT LOG
+        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', now() FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
+
+        $response="Success,null";
         echo $response;
 
     } catch (Exception $e) {
@@ -96,13 +196,13 @@ if (isset($_POST["updateppd"])) {
 if (isset($_POST["EVENT_ACTION"])) {
 
     try {
-        $KAS_ID = $_POST["KAS_ID"];
-
-        GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$KAS_ID'");
+        $UKT_ID = $_POST["id"];
     
-        GetQuery("update t_kas set DELETION_STATUS = 1 where KAS_ID = '$KAS_ID'");
+        GetQuery("update t_ukt set DELETION_STATUS = 1 where UKT_ID = '$UKT_ID'");
+        GetQuery("update t_ukt_detail set DELETION_STATUS = 1 where UKT_ID = '$UKT_ID'");
 
-        GetQuery("insert into t_kas_log select uuid(), KAS_ID, CABANG_KEY, ANGGOTA_KEY, KAS_JENIS, KAS_TANGGAL, KAS_DK,KAS_JUMLAH, KAS_SALDO, KAS_DESKRIPSI, KAS_FILE, DELETION_STATUS, 'I', '$USER_ID', now() from t_kas where KAS_ID = '$KAS_ID'");
+        // INSERT LOG
+        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'D', '$USER_ID', now() FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
         
         $response="Success";
         echo $response;

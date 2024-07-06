@@ -4,14 +4,30 @@ require_once("../../../../../module/connection/conn.php");
 $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 $USER_CABANG = $_SESSION["LOGINCAB_CS"];
 
-$TINGKATAN_ID = $_POST["tingkatan"];
-if ($USER_AKSES == "Administrator") {
-    $CABANG_KEY = $_POST["cabang"];
-} else {
-    $CABANG_KEY = $USER_CABANG;
-}
+$UKT_ID = $_POST["id"];
 
-$getMateri = GetQuery("SELECT CASE WHEN ROW_NUMBER() OVER (ORDER BY m.MATERI_ID) = 1 THEN 'active' ELSE '' END isActive,m.*,REPLACE(m.MATERI_DESKRIPSI,' ','') TabID FROM m_materi m WHERE m.CABANG_KEY = '$CABANG_KEY' AND m.TINGKATAN_ID = '$TINGKATAN_ID' AND m.DELETION_STATUS = 0");
+$getMateri = GetQuery("SELECT
+    CASE
+        WHEN rn = 1 THEN 'active'
+        ELSE ''
+    END AS isActive,
+    MATERI_ID,
+    MATERI_DESKRIPSI,
+    REPLACE(MATERI_DESKRIPSI, ' ', '') AS TabID
+FROM (
+    SELECT
+        MATERI_ID,
+        MATERI_DESKRIPSI,
+        ROW_NUMBER() OVER (ORDER BY MATERI_ID) AS rn
+    FROM (
+        SELECT DISTINCT
+            d.MATERI_ID,
+            m.MATERI_DESKRIPSI
+        FROM m_materi m
+        LEFT JOIN t_ukt_detail d ON m.MATERI_ID = d.MATERI_ID
+        WHERE d.UKT_ID = '$UKT_ID'
+    ) AS distinct_data
+) TableDistinct");
 
 $getNilai = GetQuery("SELECT * FROM p_param WHERE KATEGORI = 'UKT_NILAI' ORDER BY CODE DESC");
 
@@ -25,7 +41,7 @@ $rowN = $getNilai->fetchAll(PDO::FETCH_ASSOC);
             foreach ($rowM as $rowMateri) {
                 extract($rowMateri);
             ?>
-            <li class="<?= $isActive; ?>"><a href="#<?= $TabID; ?>" data-toggle="tab" class="<?= $TabID; ?>"><?= $MATERI_DESKRIPSI; ?></a></li>
+            <li class="<?= $isActive; ?>"><a href="#edit<?= $TabID; ?>" data-toggle="tab" class="<?= $TabID; ?>"><?= $MATERI_DESKRIPSI; ?></a></li>
             <?php
             }
             ?>
@@ -38,13 +54,13 @@ $rowN = $getNilai->fetchAll(PDO::FETCH_ASSOC);
             foreach ($rowM as $detailMateri) {
                 extract($detailMateri);
                 ?>
-                <div class="tab-pane <?= $isActive; ?>" id="<?= $TabID; ?>">
+                <div class="tab-pane <?= $isActive; ?>" id="edit<?= $TabID; ?>">
                     <div class="panel-body pt0 pb0">
                         <div class="panel panel-default" id="demo">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Tabel <?= $MATERI_DESKRIPSI; ?></h3>
                             </div>
-                            <table class="table table-striped table-bordered" id="<?= $TabID; ?>-table">
+                            <table class="table table-striped table-bordered" id="edit<?= $TabID; ?>-table">
                                 <thead>
                                     <tr>
                                         <th class="hidden"></th>
@@ -58,10 +74,10 @@ $rowN = $getNilai->fetchAll(PDO::FETCH_ASSOC);
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $getDetail = GetQuery("SELECT ROW_NUMBER() OVER (ORDER BY d.MATERI_ID) AS row_num,m.MATERI_ID,d.*
+                                    $getDetail = GetQuery("SELECT ROW_NUMBER() OVER (ORDER BY d.MATERI_ID) AS row_num,d._key,d.MATERI_ID,d.DETAIL_DESKRIPSI,ukd.* 
                                     FROM m_materi_detail d
-                                    LEFT JOIN m_materi m on m.MATERI_ID = d.MATERI_ID
-                                    WHERE d.MATERI_ID = '$MATERI_ID' AND d.DELETION_STATUS = 0");
+                                    LEFT JOIN t_ukt_detail ukd ON ukd.UKT_DETAIL = d._key
+                                    WHERE ukd.UKT_ID = '$UKT_ID' AND ukd.MATERI_ID = '$MATERI_ID'");
                                     while ($rowDetail = $getDetail->fetch(PDO::FETCH_ASSOC)) {
                                         extract($rowDetail);
                                         ?>
@@ -73,23 +89,23 @@ $rowN = $getNilai->fetchAll(PDO::FETCH_ASSOC);
                                                 <input type="text" class="form-control" id="MATERI_ID" name="MATERI_ID[]" value="<?= $MATERI_ID; ?>" readonly>
                                             </td>
                                             <td class="hidden">
-                                                <input type="text" class="form-control" id="UKT_BOBOT" name="UKT_BOBOT[]" value="<?= $DETAIL_BOBOT; ?>" readonly>
+                                                <input type="text" class="form-control" id="editUKT_BOBOT" name="UKT_BOBOT[]" value="<?= $UKT_BOBOT; ?>" readonly>
                                             </td>
                                             <td align="center"><?= $row_num; ?>.</td>
                                             <td><?= $DETAIL_DESKRIPSI; ?></td>
                                             <td>
-                                                <select id="UKT_DETAIL_NILAI" name="UKT_DETAIL_NILAI[]" class="form-control"  data-parsley-required required>
+                                                <select id="editUKT_DETAIL_NILAI" name="UKT_DETAIL_NILAI[]" class="form-control"  data-parsley-required required>
                                                     <?php
                                                     foreach ($rowN as $rowNilai) {
                                                         extract($rowNilai);
-                                                        ?><option value="<?= $CODE; ?>"><?= $CODE; ?></option><?php
+                                                        $selected = ($CODE == $UKT_DETAIL_NILAI) ? 'selected' : '';
+                                                        ?><option value="<?= $CODE; ?>" <?= $selected; ?>><?= $CODE; ?></option><?php
                                                     }
                                                     ?>
                                                 </select>
                                             </td>
                                             <td>
-                                            <input type="text" class="form-control" id="UKT_DETAIL_REMARK" name="UKT_DETAIL_REMARK[]" value="">
-                                            </td>
+                                            <input type="text" class="form-control" id="editUKT_DETAIL_REMARK" name="UKT_DETAIL_REMARK[]" value="<?= $UKT_DETAIL_REMARK; ?>">
                                         </tr>
                                         <?php
                                     }

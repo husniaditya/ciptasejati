@@ -42,10 +42,6 @@
         // ================================
         $('#selectize-select').selectize({
             create: true,
-            sortField: {
-                field: 'text',
-                direction: 'asc'
-            },
             dropdownParent: 'body'
         });
         $('#selectize-select2').selectize({
@@ -127,10 +123,6 @@
             // Initialize Selectize for the dropdown inside the modal
             $('#selectize-dropdown6').selectize({
                 create: true,
-                sortField: {
-                    field: 'text',
-                    direction: 'asc'
-                },
                 dropdownParent: '#selectize-wrapper6'
             });
         });

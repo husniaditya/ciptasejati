@@ -35,7 +35,7 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_daerah d2 ON c2.DAERAH_KEY = d2.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
-    WHERE u.DELETION_STATUS = 0
+    WHERE u.DELETION_STATUS = 0 AND u.UKT_APP_KOOR = 0
     ORDER BY u.UKT_ID DESC");
 
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 ORDER BY ANGGOTA_NAMA ASC");
@@ -71,7 +71,7 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_daerah d2 ON c2.DAERAH_KEY = d2.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
-    WHERE u.DELETION_STATUS = 0 AND u.CABANG_KEY = '$USER_CABANG'
+    WHERE u.DELETION_STATUS = 0 AND u.CABANG_KEY = '$USER_CABANG' AND u.UKT_APP_KOOR = 0
     ORDER BY u.UKT_ID DESC");
 
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 and CABANG_KEY = '$USER_CABANG' ORDER BY ANGGOTA_NAMA ASC");
@@ -121,7 +121,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
         </a>
         <div id="collapseOne" class="panel-collapse collapse">
             <div class="panel-body">
-                <form method="post" class="form filterUKT resettable-form" id="filterUKT">
+                <form method="post" class="form filterUKTKoordinator resettable-form" id="filterUKTKoordinator">
                     <div class="row">
                         <?php
                         if ($USER_AKSES == "Administrator") {
@@ -225,14 +225,6 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 <hr>
-<!-- START row -->
-<div class="row"> <!-- Add Data Button -->
-    <div class="col-lg-12">
-        <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddUKT btn btn-inverse btn-outline mb5 btn-rounded" href="#AddUKT"><i class="ico-plus2"></i> Tambah Data Uji Kenaikan Tingkat</a>
-    </div>
-</div>
-<br>
-<!--/ END row -->
 
 <!-- START row -->
 <div class="row"> <!-- Table UKT -->
@@ -261,7 +253,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         <th>Input Tanggal</th>
                     </tr>
                 </thead>
-                <tbody id="uktdata">
+                <tbody id="uktdatakoor">
                     <?php
                     while ($rowUKT = $getUKT->fetch(PDO::FETCH_ASSOC)) {
                         extract($rowUKT);
@@ -272,16 +264,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewUKT" class="open-ViewUKT" style="color:#222222;" data-id="<?= $UKT_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
-                                            <?php
-                                            if ($UKT_APP_KOOR == 0) {
-                                                ?>
-                                                <li><a data-toggle="modal" href="#EditUKT" class="open-EditUKT" style="color:#00a5d2;" data-id="<?= $UKT_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><span class="ico-edit"></span> Ubah</a></li>
-                                                <li class="divider"></li>
-                                                <li><a href="#" onclick="eventukt('<?= $UKT_ID;?>','delete')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
-                                                <?php
-                                            }
-                                            ?>
+                                            <li><a data-toggle="modal" href="#ApproveUKTKoordinator" class="open-ApproveUKTKoordinator" style="color:#00a5d2;" data-id="<?= $UKT_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><span class="ico-edit"></span> Persetujuan</a></li>
                                         </ul>
                                     </div>
                                 </form>
@@ -316,140 +299,8 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
 <br><br>
 <!--/ END row -->
 
-<div id="AddUKT" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="AddUKT-form" method="post" class="form" data-parsley-validate>
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header text-center">
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-inverse">Tambah Data UKT Anggota</h3>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
-                            <div class="short-div">
-                                <label>Foto Anggota </label><br>
-                                <div id="loadpic"></div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                        <?php
-                        if ($USER_AKSES == "Administrator") {
-                            ?>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Daerah<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper9" style="position: relative;">
-                                        <select name="DAERAH_KEY" id="selectize-dropdown9" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Daerah --</option>
-                                            <?php
-                                            foreach ($rowd as $rowDaerah) {
-                                                extract($rowDaerah);
-                                                ?>
-                                                <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Cabang<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper10" style="position: relative;">
-                                        <select name="CABANG_KEY" id="selectize-dropdown10" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Cabang --</option>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <?php
-                        }
-                        ?>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Tanggal</label><span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="datepicker4" name="UKT_TANGGAL" placeholder="Pilih tanggal" readonly required data-parsley-required/>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Pilih Anggota<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper4" style="position: relative;">
-                                        <select name="ANGGOTA_ID" id="selectize-dropdown4" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Anggota --</option>
-                                            <?php
-                                            foreach ($rowa as $rowAnggota) {
-                                                extract($rowAnggota);
-                                                ?>
-                                                <option value="<?= $ANGGOTA_ID; ?>"><?= $ANGGOTA_ID; ?> - <?= $ANGGOTA_NAMA; ?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Tingkatan UKT<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper2" style="position: relative;">
-                                        <select name="TINGKATAN_ID" id="selectize-dropdown2" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Tingkatan --</option>
-                                            <?php
-                                            foreach ($rowt as $rowTingkatan) {
-                                                extract($rowTingkatan);
-                                                ?>
-                                                <option value="<?= $TINGKATAN_ID; ?>"><?= $TINGKATAN_NAMA; ?> - <?= $TINGKATAN_SEBUTAN; ?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Lokasi Cabang UKT<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper8" style="position: relative;">
-                                        <select name="UKT_LOKASI" id="selectize-dropdown8" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Cabang --</option>
-                                            <?php
-                                            foreach ($rowPPDCabang as $rowCabang) {
-                                                extract($rowCabang);
-                                                ?>
-                                                <option value="<?= $CABANG_KEY; ?>"><?= $CABANG_DESKRIPSI; ?> - <?= $DAERAH_DESKRIPSI; ?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Deskripsi </label>
-                                    <textarea type="text" rows="4" class="form-control" id="UKT_DESKRIPSI" name="UKT_DESKRIPSI" value="" ></textarea>
-                                </div> 
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <h4>Rincian Nilai UKT</h4>
-                    <div id="addrincianukt"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Cancel</button>
-                    <button type="submit" name="submit" id="saveukt" class="submit btn btn-primary btn-outline mb5 btn-rounded"><span class="ico-save"></span> Save</button>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
-
-<div id="ViewUKT" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="ViewUKT-form" method="post" class="form" data-parsley-validate>
+<div id="ApproveUKTKoordinator" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form id="ApproveUKTKoordinator-form" method="post" class="form" data-parsley-validate>
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header text-center">
@@ -477,6 +328,12 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="short-div hidden">
+                                <div class="form-group">
+                                    <label>ID</label><span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="viewUKT_ID" name="UKT_ID" readonly required data-parsley-required/>
+                                </div> 
+                            </div>
                         <?php
                         if ($USER_AKSES == "Administrator") {
                             ?>
@@ -532,151 +389,15 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     <div id="viewrincianukt"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Cancel</button>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
-
-<div id="EditUKT" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="EditUKT-form" method="post" class="form" data-parsley-validate>
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header text-center">
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-inverse">Ubah Data UKT Anggota</h3>
-                </div>
-                <div class="modal-body">
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
-                            <div class="short-div">
-                                <label>Foto Anggota </label><br>
-                                <div id="loadpicedit"></div>
-                            </div>
+                        <div class="col-md-6 text-left">
+                            <button type="submit" name="submit" id="approveKoordinator" class="submit btn btn-success mb5 btn-rounded"><i class="fa-regular fa-square-check"></i> Setuju</button>
+                            <button type="submit" name="submit" id="rejectKoordinator" class="submit btn btn-danger mb5 btn-rounded"><i class="fa-regular fa-rectangle-xmark"></i> Tolak</button>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                            <div class="short-div hidden">
-                                <div class="form-group">
-                                    <label>ID</label><span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="editUKT_ID" name="UKT_ID" readonly required data-parsley-required/>
-                                </div> 
-                            </div>
-                            <div class="short-div hidden">
-                                <div class="form-group">
-                                    <label>Tingkatan</label><span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="editUKT_TINGKATAN" name="UKT_TINGKATAN" readonly required data-parsley-required/>
-                                </div> 
-                            </div>
-                        <?php
-                        if ($USER_AKSES == "Administrator") {
-                            ?>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Daerah<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper11" style="position: relative;">
-                                        <select name="DAERAH_KEY" id="selectize-dropdown11" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Daerah --</option>
-                                            <?php
-                                            foreach ($rowd as $rowDaerah) {
-                                                extract($rowDaerah);
-                                                ?>
-                                                <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Cabang<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper12" style="position: relative;">
-                                        <select name="CABANG_KEY" id="selectize-dropdown12" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Cabang --</option>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <?php
-                        }
-                        ?>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Tanggal</label><span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="datepicker42" name="UKT_TANGGAL" placeholder="Pilih tanggal" readonly required data-parsley-required/>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Pilih Anggota<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper5" style="position: relative;">
-                                        <select name="ANGGOTA_ID" id="selectize-dropdown5" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Anggota --</option>
-                                            <?php
-                                            foreach ($rowa as $rowAnggota) {
-                                                extract($rowAnggota);
-                                                ?>
-                                                <option value="<?= $ANGGOTA_ID; ?>"><?= $ANGGOTA_ID; ?> - <?= $ANGGOTA_NAMA; ?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Tingkatan UKT<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper6" style="position: relative;">
-                                        <select name="TINGKATAN_ID" id="selectize-dropdown6" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Tingkatan --</option>
-                                            <?php
-                                            foreach ($rowt as $rowTingkatan) {
-                                                extract($rowTingkatan);
-                                                ?>
-                                                <option value="<?= $TINGKATAN_ID; ?>"><?= $TINGKATAN_NAMA; ?> - <?= $TINGKATAN_SEBUTAN; ?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Lokasi Cabang UKT<span class="text-danger">*</span></label>
-                                    <div id="selectize-wrapper7" style="position: relative;">
-                                        <select name="UKT_LOKASI" id="selectize-dropdown7" required="" class="form-control" data-parsley-required>
-                                            <option value="">-- Pilih Cabang --</option>
-                                            <?php
-                                            foreach ($rowPPDCabang as $rowCabang) {
-                                                extract($rowCabang);
-                                                ?>
-                                                <option value="<?= $CABANG_KEY; ?>"><?= $CABANG_DESKRIPSI; ?> - <?= $DAERAH_DESKRIPSI; ?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="short-div">
-                                <div class="form-group">
-                                    <label>Deskripsi </label>
-                                    <textarea type="text" rows="4" class="form-control" id="editUKT_DESKRIPSI" name="UKT_DESKRIPSI" value="" ></textarea>
-                                </div> 
-                            </div>
+                        <div class="col-md-6 text-right">
+                            <button type="button" class="btn btn-inverse btn-outline mb5 btn-rounded next" data-dismiss="modal"><span class="ico-cancel"></span> Close</button>
                         </div>
                     </div>
-                    <hr>
-                    <h4>Rincian Nilai UKT</h4>
-                    <div id="editrincianukt"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Cancel</button>
-                    <button type="submit" name="submit" id="updateukt" class="submit btn btn-primary btn-outline mb5 btn-rounded"><span class="ico-save"></span> Save</button>
                 </div>
             </div>
         </div>

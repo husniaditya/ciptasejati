@@ -82,6 +82,11 @@ document.addEventListener('DOMContentLoaded', function () {
       addInClassToSubmenu('persetujuan');
       addInClassToSubmenu('persetujuanppd');
     }
+    
+    if (currentPage === 'uktapprovalkoordinator.php' || currentPage === 'uktapprovalguru.php') {
+      addInClassToSubmenu('persetujuan');
+      addInClassToSubmenu('persetujuanukt');
+    }
   
     // Function to set the active class for all level3 items in sub-menus
     function setActiveLevelItems(currentPage) {

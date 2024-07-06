@@ -5528,11 +5528,13 @@ button.close {
           box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
 }
 .modal-backdrop {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
+  bottom: 0;
   left: 0;
-  background-color: #000;
+  background-color: rgba(0, 0, 0, 0.6); /* Close to #000 but with some transparency */
+  backdrop-filter: blur(10px); /* Adjust the blur amount as needed */
 }
 .modal-backdrop.fade {
   filter: alpha(opacity=0);
@@ -5540,7 +5542,7 @@ button.close {
 }
 .modal-backdrop.in {
   filter: alpha(opacity=50);
-  opacity: .5;
+  opacity: .5; /* Ensure the backdrop has some transparency */
 }
 .modal-header {
   min-height: 16.42857143px;

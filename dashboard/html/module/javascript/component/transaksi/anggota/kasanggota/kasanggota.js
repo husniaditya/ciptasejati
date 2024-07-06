@@ -4,7 +4,7 @@
 function callTable() {
   $('#kasanggota-table').DataTable({
       responsive: true,
-      order: [[1, 'asc']],
+      order: [[1, 'desc']],
       dom: 'Bfrtlip',
       paging: true,
       scrollX: true,
