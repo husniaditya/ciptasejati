@@ -284,7 +284,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                             <td align="center"><?= $UKT_TANGGAL; ?></td>
                             <td align="center"><?= $UKT_TOTAL; ?></td>
                             <td align="center"><?= $UKT_NILAI; ?></td>
-                            <td align="center"><?= $UKT_DESKRIPSI; ?></td>
+                            <td><?= $UKT_DESKRIPSI; ?></td>
                             <td><?= $INPUT_BY; ?></td>
                             <td><?= $INPUT_DATE; ?></td>
                         </tr>
@@ -331,7 +331,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                             <div class="short-div hidden">
                                 <div class="form-group">
                                     <label>ID</label><span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="viewUKT_ID" name="UKT_ID" readonly required data-parsley-required/>
+                                    <input type="text" class="form-control" id="viewUKT_ID" name="UKT_ID" readonly />
                                 </div> 
                             </div>
                         <?php
@@ -382,6 +382,26 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                     <textarea type="text" rows="4" class="form-control" id="viewUKT_DESKRIPSI" name="UKT_DESKRIPSI" value="" readonly></textarea>
                                 </div> 
                             </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <h4>Daftar Penguji</h4>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Tabel Daftar Penguji</h3>
+                            </div>
+                            <table class="table table-striped table-bordered" id="viewPenguji-table">
+                                <thead>
+                                    <tr>
+                                        <th>No. </th>
+                                        <th>Nama Penguji </th>
+                                        <th>Tingkatan </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="viewPengujiData">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     <hr>

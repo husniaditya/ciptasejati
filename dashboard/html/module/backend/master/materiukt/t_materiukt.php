@@ -80,7 +80,11 @@ if (isset($_POST["ADD_MODAL_DETAIL"])) { // Add a new detail ADD MODAL
             $response="Mohon isi nilai bobot materi dan bobot detail materi";
             echo $response;
         } else if ($TOTAL_BOBOT + $DETAIL_BOBOT <= $MATERI_BOBOT) {
-            GetQuery("INSERT INTO m_materi_detail SELECT UUID(), '$MATERI_ID', '$DETAIL_DESKRIPSI', '$DETAIL_BOBOT', '0', '$USER_ID', now()");
+            // Prepare the query
+            $query = "INSERT INTO m_materi_detail SELECT UUID(), ?, ?, ?, '0', ?, NOW()";
+
+            // Execute the query with parameters
+            GetQuery2($query, [$MATERI_ID, $DETAIL_DESKRIPSI, $DETAIL_BOBOT, $USER_ID]);
 
             $response="Success";
             echo $response;
@@ -130,7 +134,11 @@ if (isset($_POST["ADD_DETAIL"])) { // Add a new detail EDIT MODAL
             $response="Mohon isi nilai bobot materi dan bobot detail materi";
             echo $response;
         } else if ($TOTAL_BOBOT + $DETAIL_BOBOT <= $MATERI_BOBOT) {
-            GetQuery("INSERT INTO m_materi_detail SELECT UUID(), '$MATERI_ID', '$DETAIL_DESKRIPSI', '$DETAIL_BOBOT', '0', '$USER_ID', now()");
+            // Prepare the query
+            $query = "INSERT INTO m_materi_detail SELECT UUID(), ?, ?, ?, '0', ?, NOW()";
+
+            // Execute the query with parameters
+            GetQuery2($query, [$MATERI_ID, $DETAIL_DESKRIPSI, $DETAIL_BOBOT, $USER_ID]);
 
             $response="Success";
             echo $response;

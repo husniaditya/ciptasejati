@@ -18,7 +18,7 @@ if ($USER_AKSES == "Administrator") {
 
 $getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0");
 $getCabang = GetQuery("select * from m_cabang where DELETION_STATUS = 0");
-$getTingkatan = GetQuery("select * from m_tingkatan where DELETION_STATUS = 0");
+$getTingkatan = GetQuery("select * from m_tingkatan where DELETION_STATUS = 0 order by TINGKATAN_LEVEL");
 // Fetch all rows into an array
 $rowd = $getDaerah->fetchAll(PDO::FETCH_ASSOC);
 $rows = $getCabang->fetchAll(PDO::FETCH_ASSOC);

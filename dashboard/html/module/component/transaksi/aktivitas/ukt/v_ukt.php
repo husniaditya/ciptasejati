@@ -39,6 +39,10 @@ if ($USER_AKSES == "Administrator") {
     ORDER BY u.UKT_ID DESC");
 
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 ORDER BY ANGGOTA_NAMA ASC");
+    $getPenguji = GetQuery("SELECT * FROM m_anggota a
+    LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
+    WHERE a.ANGGOTA_STATUS = 0 AND t.TINGKATAN_LEVEL >= 6 AND a.ANGGOTA_AKSES <> 'Administrator'
+    ORDER BY a.ANGGOTA_NAMA");
 } else {
     $getUKT = GetQuery("SELECT u.*,d.DAERAH_DESKRIPSI,d2.DAERAH_DESKRIPSI UKT_DAERAH,c.CABANG_DESKRIPSI,c2.CABANG_DESKRIPSI UKT_CABANG,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(u.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(u.UKT_TANGGAL, '%d %M %Y') UKT_TANGGAL,
     CASE
@@ -75,6 +79,10 @@ if ($USER_AKSES == "Administrator") {
     ORDER BY u.UKT_ID DESC");
 
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 and CABANG_KEY = '$USER_CABANG' ORDER BY ANGGOTA_NAMA ASC");
+    $getPenguji = GetQuery("SELECT * FROM m_anggota a
+    LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
+    WHERE a.ANGGOTA_STATUS = 0 AND t.TINGKATAN_LEVEL >= 6 AND a.CABANG_KEY = '$USER_CABANG' AND a.ANGGOTA_AKSES <> 'Administrator'
+    ORDER BY a.ANGGOTA_NAMA");
 }
 
 $getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0 order by DAERAH_DESKRIPSI asc");
@@ -88,6 +96,7 @@ $rowPPDCabang = $getPPDCabang->fetchAll(PDO::FETCH_ASSOC);
 $rowd = $getDaerah->fetchAll(PDO::FETCH_ASSOC);
 $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
 $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
+$rowp = $getPenguji->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <style>
@@ -301,7 +310,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                             <td align="center"><?= $UKT_TANGGAL; ?></td>
                             <td align="center"><?= $UKT_TOTAL; ?></td>
                             <td align="center"><?= $UKT_NILAI; ?></td>
-                            <td align="center"><?= $UKT_DESKRIPSI; ?></td>
+                            <td><?= $UKT_DESKRIPSI; ?></td>
                             <td><?= $INPUT_BY; ?></td>
                             <td><?= $INPUT_DATE; ?></td>
                         </tr>
@@ -436,6 +445,52 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                     <hr>
+                    <h4>Daftar Penguji</h4>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div id="selectize-wrapper13" style="position: relative;">
+                                    <select name="PENGUJI_ID" id="selectize-dropdown13" class="form-control" >
+                                        <option value="">-- Pilih Penguji --</option>
+                                        <?php
+                                        foreach ($rowp as $rowPenguji) {
+                                            extract($rowPenguji);
+                                            ?>
+                                            <option value="<?= $ANGGOTA_ID; ?>"><?= $ANGGOTA_ID; ?> - <?= $ANGGOTA_NAMA; ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label style="color: transparent;">.</span></label>
+                                <button type="button" id="addtambahdetail" class="addtambahdetail submit btn btn-success btn-outline mb5 btn-rounded"><span class="ico-plus"></span> Tambah</button>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Tabel Daftar Penguji</h3>
+                            </div>
+                            <table class="table table-striped table-bordered" id="addPenguji-table">
+                                <thead>
+                                    <tr>
+                                        <th>No. </th>
+                                        <th>Nama Penguji </th>
+                                        <th>Tingkatan </th>
+                                        <th> </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="addPengujiData">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <hr>
                     <h4>Rincian Nilai UKT</h4>
                     <div id="addrincianukt"></div>
                 </div>
@@ -525,6 +580,26 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                     <textarea type="text" rows="4" class="form-control" id="viewUKT_DESKRIPSI" name="UKT_DESKRIPSI" value="" readonly></textarea>
                                 </div> 
                             </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <h4>Daftar Penguji</h4>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Tabel Daftar Penguji</h3>
+                            </div>
+                            <table class="table table-striped table-bordered" id="viewPenguji-table">
+                                <thead>
+                                    <tr>
+                                        <th>No. </th>
+                                        <th>Nama Penguji </th>
+                                        <th>Tingkatan </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="viewPengujiData">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     <hr>
@@ -668,6 +743,52 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                     <textarea type="text" rows="4" class="form-control" id="editUKT_DESKRIPSI" name="UKT_DESKRIPSI" value="" ></textarea>
                                 </div> 
                             </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <h4>Daftar Penguji</h4>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div id="selectize-wrapper14" style="position: relative;">
+                                    <select name="PENGUJI_ID" id="selectize-dropdown14" class="form-control" >
+                                        <option value="">-- Pilih Penguji --</option>
+                                        <?php
+                                        foreach ($rowp as $rowEditPenguji) {
+                                            extract($rowEditPenguji);
+                                            ?>
+                                            <option value="<?= $ANGGOTA_ID; ?>"><?= $ANGGOTA_ID; ?> - <?= $ANGGOTA_NAMA; ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label style="color: transparent;">.</span></label>
+                                <button type="button" id="edittambahdetail" class="edittambahdetail submit btn btn-success btn-outline mb5 btn-rounded"><span class="ico-plus"></span> Tambah</button>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Tabel Daftar Penguji</h3>
+                            </div>
+                            <table class="table table-striped table-bordered" id="editPenguji-table">
+                                <thead>
+                                    <tr>
+                                        <th>No. </th>
+                                        <th>Nama Penguji </th>
+                                        <th>Tingkatan </th>
+                                        <th> </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="editPengujiData">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     <hr>

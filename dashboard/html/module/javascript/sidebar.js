@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
       addInClassToSubmenu('laporan');
       addInClassToSubmenu('lapanggota');
     }
-    if (currentPage === 'lapppd.php' || currentPage === 'lapsummaryppd.php') {
+    if (currentPage === 'lapppd.php' || currentPage === 'lapsummaryppd.php' || currentPage === 'lapukt.php') {
       addInClassToSubmenu('laporan');
       addInClassToSubmenu('lapaktivitas');
     }

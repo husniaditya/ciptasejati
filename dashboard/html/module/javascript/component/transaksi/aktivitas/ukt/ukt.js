@@ -83,12 +83,12 @@ function resetPreview() { // Function Reset Preview Dropdown Value
   }
 }
 
-function savePDFToDrive(id) { // Function Save PDF to Drive
+function savePDFToDrive(UKT_ID) { // Function Save PDF to Drive
   return new Promise(function(resolve, reject) {
     $.ajax({
       type: 'POST',
-      url: 'module/backend/transaksi/aktivitas/ppd/t_ppdfile.php',
-      data: { id: id },
+      url: 'module/backend/transaksi/aktivitas/ukt/t_uktfile.php',
+      data: { id: UKT_ID },
       success: function(response) {
         // Check the response from the server
         // console.log(response);
@@ -122,6 +122,22 @@ function sendEmailNotification(id) { // Function Send Email Notification
 
 $('#AddUKT').on('hidden.bs.modal', function() {
   resetPreview('#AddUKT');
+
+  var HIDE_ADD_MODAL = "HIDE_ADD_MODAL"
+
+  // Perform the AJAX request
+  $.ajax({
+    type: 'POST',
+    url: 'module/backend/transaksi/aktivitas/ukt/t_ukt.php',
+    data: HIDE_ADD_MODAL,
+    success: function(response) {
+      $('#addPenguji-table').DataTable().destroy();
+      $("#addPengujiData").html("");
+    },
+    error: function(xhr, status, error) {
+      console.error('Request failed. Status: ' + xhr.status);
+    }
+  });
 });
 $('#ViewUKT').on('hidden.bs.modal', function() {
   resetPreview('#ViewUKT');
@@ -311,6 +327,25 @@ function handleFormKoordinator(formId, successNotification, failedNotification, 
 
           // Hide the loading overlay after the initial processing
           hideLoadingOverlay();
+
+          // Example usage:
+          showLoadingOverlay('Proses pembuatan dokumen...');
+
+          // Save PDF to Drive and send email notification concurrently
+          Promise.all([savePDFToDrive(UKT_ID)])
+            .then(function (responses) {
+              // 
+            })
+            .catch(function (errors) {
+              // Handle errors
+              for (const error of errors) {
+                errorNotification(error);
+              }
+            })
+            .finally(function () {
+              // Hide the loading overlay after all asynchronous tasks are complete
+              hideLoadingOverlay();
+            });
           
         } else {
           // Display error notification
@@ -679,6 +714,186 @@ $(document).ready(function() {
   });
 });
 
+// Tambah Detail Penguji Add Modal
+$(document).on("click", ".addtambahdetail", function () {
+  var id = $("#TOKEN").val();
+  var cab = $("#TOKENC").val();
+  // Initialize Selectize on the first dropdown
+  var selectizeSelect13 = $('#selectize-dropdown13').selectize();
+  
+  // Get the Selectize instance
+  var selectizeInstance13 = selectizeSelect13[0].selectize;
+
+  var anggotaid = selectizeInstance13.getValue();
+
+  // Create the data object
+  var eventdata = {
+    id: id,
+    cabang: cab,
+    anggota: anggotaid,
+    ADD_MODAL_PENGUJI: "addmodalpenguji"
+  };
+
+  // Perform the AJAX request
+  $.ajax({
+    type: 'POST',
+    url: 'module/backend/transaksi/aktivitas/ukt/t_ukt.php',
+    data: eventdata,
+    success: function(response) {
+      // Check the response from the server
+      if (response === 'Success') {
+        
+        $.ajax({
+          type: "POST",
+          url: "module/ajax/transaksi/aktivitas/ukt/aj_getpengujiukt.php",
+          data: eventdata,
+          success: function(response){
+            // Destroy the DataTable before updating
+            $('#addPenguji-table').DataTable().destroy();
+            $("#addPengujiData").html(response);
+            // Reinitialize Sertifikat Table
+          }
+        });
+
+      } else {
+        // Display error notification
+        FailedNotification(response);
+      }
+    },
+    error: function(xhr, status, error) {
+      console.error('Request failed. Status: ' + xhr.status);
+    }
+  });
+
+});
+
+// Hapus Penguji Add Modal
+$(document).on("click", ".addhapuspenguji", function () {
+  var key = $(this).data('id');
+  var cab = $(this).data('cabang');
+
+  // Perform the AJAX request
+  $.ajax({
+    type: 'POST',
+    url: 'module/backend/transaksi/aktivitas/ukt/t_ukt.php',
+    data: { id: key, DELETE_MODAL_PENGUJI: "deletemodalpenguji" },
+    success: function(response) {
+      // Check the response from the server
+      if (response === 'Success') {
+        
+        $.ajax({
+          type: "POST",
+          url: "module/ajax/transaksi/aktivitas/ukt/aj_getpengujiukt.php",
+          data: { cabang: cab },
+          success: function(response){
+            // Destroy the DataTable before updating
+            $('#addPenguji-table').DataTable().destroy();
+            $("#addPengujiData").html(response);
+            // Reinitialize Sertifikat Table
+          }
+        });
+
+      } else {
+        // Display error notification
+        FailedNotification(response);
+      }
+    },
+    error: function(xhr, status, error) {
+      console.error('Request failed. Status: ' + xhr.status);
+    }
+  });
+
+});
+
+// Tambah Detail Penguji Edit Modal
+$(document).on("click", ".edittambahdetail", function () {
+  var id = $("#editUKT_ID").val();
+  // Initialize Selectize on the first dropdown
+  var selectizeSelect14 = $('#selectize-dropdown14').selectize();
+  
+  // Get the Selectize instance
+  var selectizeInstance14 = selectizeSelect14[0].selectize;
+
+  var anggotaid = selectizeInstance14.getValue();
+
+  // Create the data object
+  var eventdata = {
+    id: id,
+    anggota: anggotaid,
+    EDIT_MODAL_PENGUJI: "editmodalpenguji"
+  };
+
+  // Perform the AJAX request
+  $.ajax({
+    type: 'POST',
+    url: 'module/backend/transaksi/aktivitas/ukt/t_ukt.php',
+    data: eventdata,
+    success: function(response) {
+      // Check the response from the server
+      if (response === 'Success') {
+        
+        $.ajax({
+          type: "POST",
+          url: "module/ajax/transaksi/aktivitas/ukt/aj_geteditpengujiukt.php",
+          data: eventdata,
+          success: function(response){
+            // Destroy the DataTable before updating
+            $('#editPenguji-table').DataTable().destroy();
+            $("#editPengujiData").html(response);
+            // Reinitialize Sertifikat Table
+          }
+        });
+
+      } else {
+        // Display error notification
+        FailedNotification(response);
+      }
+    },
+    error: function(xhr, status, error) {
+      console.error('Request failed. Status: ' + xhr.status);
+    }
+  });
+
+});
+
+// Hapus Penguji Edit Modal
+$(document).on("click", ".edithapuspenguji", function () {
+  var key = $(this).data('id');
+  var ukt = $(this).data('ukt');
+
+  // Perform the AJAX request
+  $.ajax({
+    type: 'POST',
+    url: 'module/backend/transaksi/aktivitas/ukt/t_ukt.php',
+    data: { id: key, DELETE_MODAL_PENGUJI: "deletemodalpenguji" },
+    success: function(response) {
+      // Check the response from the server
+      if (response === 'Success') {
+        
+        $.ajax({
+          type: "POST",
+          url: "module/ajax/transaksi/aktivitas/ukt/aj_geteditpengujiukt.php",
+          data: { id: ukt },
+          success: function(response){
+            // Destroy the DataTable before updating
+            $('#editPenguji-table').DataTable().destroy();
+            $("#editPengujiData").html(response);
+            // Reinitialize Sertifikat Table
+          }
+        });
+
+      } else {
+        // Display error notification
+        FailedNotification(response);
+      }
+    },
+    error: function(xhr, status, error) {
+      console.error('Request failed. Status: ' + xhr.status);
+    }
+  });
+
+});
+
 // Delete UKT
 function eventukt(value1,value2) {
   // Ask for confirmation
@@ -768,6 +983,18 @@ $(document).on("click", ".open-ViewUKT", function () {
           $("#loadpicview").html(result);
         }
       });
+
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/aktivitas/ukt/aj_getviewpengujiukt.php",
+        data: { id: key },
+        success: function(response){
+          // Destroy the DataTable before updating
+          $('#viewPenguji-table').DataTable().destroy();
+          $("#viewPengujiData").html(response);
+          // Reinitialize Sertifikat Table
+        }
+      });
       
       // AJAX request to fetch UKT Detail
       $.ajax({
@@ -841,6 +1068,18 @@ $(document).on("click", ".open-EditUKT", function () {
         }
       });
 
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/aktivitas/ukt/aj_geteditpengujiukt.php",
+        data: { id: key },
+        success: function(response){
+          // Destroy the DataTable before updating
+          $('#editPenguji-table').DataTable().destroy();
+          $("#editPengujiData").html(response);
+          // Reinitialize Sertifikat Table
+        }
+      });
+
       // AJAX request to fetch UKT Detail
       setTimeout(function () {
         $.ajax({
@@ -896,6 +1135,18 @@ $(document).on("click", ".open-ApproveUKTKoordinator", function () {
           $("#loadpicview").html(result);
         }
       });
+
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/aktivitas/ukt/aj_getviewpengujiukt.php",
+        data: { id: key },
+        success: function(response){
+          // Destroy the DataTable before updating
+          $('#viewPenguji-table').DataTable().destroy();
+          $("#viewPengujiData").html(response);
+          // Reinitialize Sertifikat Table
+        }
+      });
       
       // AJAX request to fetch UKT Detail
       $.ajax({
@@ -949,6 +1200,18 @@ $(document).on("click", ".open-ApproveUKTGuru", function () {
         data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: data.CABANG_KEY },
         success: function(result){
           $("#loadpicview").html(result);
+        }
+      });
+
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/aktivitas/ukt/aj_getviewpengujiukt.php",
+        data: { id: key },
+        success: function(response){
+          // Destroy the DataTable before updating
+          $('#viewPenguji-table').DataTable().destroy();
+          $("#viewPengujiData").html(response);
+          // Reinitialize Sertifikat Table
         }
       });
       

@@ -188,6 +188,13 @@
                 dropdownParent: '#selectize-wrapper12'
             });
         });
+        $(document).ready(function () {
+            // Initialize Selectize for the dropdown inside the modal
+            $('#selectize-dropdown13').selectize({
+                create: true,
+                dropdownParent: '#selectize-wrapper13'
+            });
+        });
 
         // multiple select
         // ================================

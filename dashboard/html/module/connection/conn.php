@@ -47,6 +47,14 @@ try {
         $result->execute();
         return $result;
     }
+    
+    function GetQuery2($query, $params = [])
+    {
+        global $db1;
+        $result = $db1->prepare($query);
+        $result->execute($params);
+        return $result;
+    }
 
     function createKode($namaTabel, $namaKolom, $awalan, $jumlahAngka)
     {

@@ -35,10 +35,46 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_daerah d2 ON c2.DAERAH_KEY = d2.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
-    WHERE u.DELETION_STATUS = 0 AND u.UKT_APP_KOOR = 1 AND u.UKT_APP_GURU = 0
+    WHERE u.DELETION_STATUS = 0
     ORDER BY u.UKT_ID DESC");
 
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 ORDER BY ANGGOTA_NAMA ASC");
+} elseif ($USER_AKSES == "Koordinator" || $USER_AKSES == "Pengurus") {
+    $getUKT = GetQuery("SELECT u.*,d.DAERAH_DESKRIPSI,d2.DAERAH_DESKRIPSI UKT_DAERAH,c.CABANG_DESKRIPSI,c2.CABANG_DESKRIPSI UKT_CABANG,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(u.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(u.UKT_TANGGAL, '%d %M %Y') UKT_TANGGAL,
+    CASE
+    WHEN u.UKT_TOTAL >= 85 THEN 'A'
+    WHEN u.UKT_TOTAL >= 75 THEN 'B'
+    WHEN u.UKT_TOTAL >= 60 THEN 'C'
+    WHEN u.UKT_TOTAL >= 40 THEN 'D'
+    ELSE 'E' END UKT_NILAI,
+    CASE WHEN u.UKT_APP_KOOR = 0 THEN 'fa-solid fa-spinner fa-spin'
+    WHEN u.UKT_APP_KOOR = 1 THEN 'fa-solid fa-check'
+    ELSE 'fa-solid fa-xmark'
+    END KOOR_CLASS,
+    CASE WHEN u.UKT_APP_GURU = 0 THEN 'fa-solid fa-spinner fa-spin'
+    WHEN u.UKT_APP_GURU = 1 THEN 'fa-solid fa-check'
+    ELSE 'fa-solid fa-xmark'
+    END GURU_CLASS,
+    CASE WHEN u.UKT_APP_KOOR = 0 THEN 'badge badge-inverse'
+    WHEN u.UKT_APP_KOOR = 1 THEN 'badge badge-success' 
+    ELSE 'badge badge-danger' 
+    END AS KOOR_BADGE,
+    CASE WHEN u.UKT_APP_GURU = 0 THEN 'badge badge-inverse'
+    WHEN u.UKT_APP_GURU = 1 THEN 'badge badge-success' 
+    ELSE 'badge badge-danger' 
+    END AS GURU_BADGE
+    FROM t_ukt u
+    LEFT JOIN m_anggota a ON u.ANGGOTA_ID = a.ANGGOTA_ID AND u.CABANG_KEY = a.CABANG_KEY
+    LEFT JOIN m_anggota a2 ON u.INPUT_BY = a2.ANGGOTA_ID AND u.CABANG_KEY = a2.CABANG_KEY
+    LEFT JOIN m_cabang c ON u.CABANG_KEY = c.CABANG_KEY
+    LEFT JOIN m_cabang c2 ON u.UKT_LOKASI = c2.CABANG_KEY
+    LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
+    LEFT JOIN m_daerah d2 ON c2.DAERAH_KEY = d2.DAERAH_KEY
+    LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
+    WHERE u.DELETION_STATUS = 0 AND u.CABANG_KEY = '$USER_CABANG'
+    ORDER BY u.UKT_ID DESC");
+
+    $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 and CABANG_KEY = '$USER_CABANG' ORDER BY ANGGOTA_NAMA ASC");
 } else {
     $getUKT = GetQuery("SELECT u.*,d.DAERAH_DESKRIPSI,d2.DAERAH_DESKRIPSI UKT_DAERAH,c.CABANG_DESKRIPSI,c2.CABANG_DESKRIPSI UKT_CABANG,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(u.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(u.UKT_TANGGAL, '%d %M %Y') UKT_TANGGAL,
     CASE
@@ -71,7 +107,7 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_daerah d2 ON c2.DAERAH_KEY = d2.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON t.TINGKATAN_ID = a.TINGKATAN_ID
-    WHERE u.DELETION_STATUS = 0 AND u.CABANG_KEY = '$USER_CABANG' AND u.UKT_APP_KOOR = 1 AND u.UKT_APP_GURU = 0
+    WHERE u.DELETION_STATUS = 0 AND u.ANGGOTA_ID = '$USER_ID'
     ORDER BY u.UKT_ID DESC");
 
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 and CABANG_KEY = '$USER_CABANG' ORDER BY ANGGOTA_NAMA ASC");
@@ -121,7 +157,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
         </a>
         <div id="collapseOne" class="panel-collapse collapse">
             <div class="panel-body">
-                <form method="post" class="form filterUKTGuru resettable-form" id="filterUKTGuru">
+                <form method="post" class="form filterUKT resettable-form" id="filterUKT">
                     <div class="row">
                         <?php
                         if ($USER_AKSES == "Administrator") {
@@ -253,7 +289,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         <th>Input Tanggal</th>
                     </tr>
                 </thead>
-                <tbody id="uktdataguru">
+                <tbody id="uktdata">
                     <?php
                     while ($rowUKT = $getUKT->fetch(PDO::FETCH_ASSOC)) {
                         extract($rowUKT);
@@ -264,7 +300,15 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ApproveUKTGuru" class="open-ApproveUKTGuru" style="color:#00a5d2;" data-id="<?= $UKT_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><span class="ico-edit"></span> Persetujuan</a></li>
+                                            <li><a data-toggle="modal" href="#ViewUKT" class="open-ViewUKT" style="color:#222222;" data-id="<?= $UKT_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
+                                            <?php
+                                            if ($UKT_APP_KOOR == 1) {
+                                                ?>
+                                                <li class="divider"></li>
+                                                <li><a href="<?= $UKT_FILE; ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
+                                                <?php
+                                            }
+                                            ?>
                                         </ul>
                                     </div>
                                 </form>
@@ -284,7 +328,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                             <td align="center"><?= $UKT_TANGGAL; ?></td>
                             <td align="center"><?= $UKT_TOTAL; ?></td>
                             <td align="center"><?= $UKT_NILAI; ?></td>
-                            <td><?= $UKT_DESKRIPSI; ?></td>
+                            <td align="center"><?= $UKT_DESKRIPSI; ?></td>
                             <td><?= $INPUT_BY; ?></td>
                             <td><?= $INPUT_DATE; ?></td>
                         </tr>
@@ -299,8 +343,8 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
 <br><br>
 <!--/ END row -->
 
-<div id="ApproveUKTGuru" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="ApproveUKTGuru-form" method="post" class="form" data-parsley-validate>
+<div id="ViewUKT" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form id="ViewUKT-form" method="post" class="form" data-parsley-validate>
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header text-center">
@@ -328,12 +372,6 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                            <div class="short-div hidden">
-                                <div class="form-group">
-                                    <label>ID</label><span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="viewUKT_ID" name="UKT_ID" readonly />
-                                </div> 
-                            </div>
                         <?php
                         if ($USER_AKSES == "Administrator") {
                             ?>
@@ -409,15 +447,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                     <div id="viewrincianukt"></div>
                 </div>
                 <div class="modal-footer">
-                    <div class="row">
-                        <div class="col-md-6 text-left">
-                            <button type="submit" name="submit" id="approveGuru" class="submit btn btn-success mb5 btn-rounded"><i class="fa-regular fa-square-check"></i> Setuju</button>
-                            <button type="submit" name="submit" id="rejectGuru" class="submit btn btn-danger mb5 btn-rounded"><i class="fa-regular fa-rectangle-xmark"></i> Tolak</button>
-                        </div>
-                        <div class="col-md-6 text-right">
-                            <button type="button" class="btn btn-inverse btn-outline mb5 btn-rounded next" data-dismiss="modal"><span class="ico-cancel"></span> Close</button>
-                        </div>
-                    </div>
+                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Close</button>
                 </div>
             </div>
         </div>

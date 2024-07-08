@@ -164,7 +164,7 @@ while ($rowUKT = $getUKT->fetch(PDO::FETCH_ASSOC)) {
         <td align="center"><?= $UKT_TANGGAL; ?></td>
         <td align="center"><?= $UKT_TOTAL; ?></td>
         <td align="center"><?= $UKT_NILAI; ?></td>
-        <td align="center"><?= $UKT_DESKRIPSI; ?></td>
+        <td><?= $UKT_DESKRIPSI; ?></td>
         <td><?= $INPUT_BY; ?></td>
         <td><?= $INPUT_DATE; ?></td>
     </tr>
