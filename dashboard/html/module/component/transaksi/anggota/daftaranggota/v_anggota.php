@@ -25,6 +25,16 @@ $rows = $getCabang->fetchAll(PDO::FETCH_ASSOC);
 $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
+<style>
+    .dataTables_wrapper {
+        width: 100%;
+        overflow: auto;
+    }
+    table.dataTable {
+        width: 100% !important;
+    }
+</style>
+
 <div class="panel-group" id="accordion1">
     <div class="panel panel-default">
         <a data-toggle="collapse" data-parent="#accordion1" href="#collapseOne" class="collapsed">
@@ -503,10 +513,9 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                             <ul class="nav nav-pills nav-justified">
                                 <li class="active"><a href="#tab-informasianggota" data-toggle="tab">Informasi Anggota</a></li>
                                 <li><a href="#tab-riwayatmutasi" data-toggle="tab" class="mutasi">Riwayat Mutasi</a></li>
-                                <li><a href="#tab-idsertifikat" data-toggle="tab">ID &amp; Sertifikat</a></li>
                                 <li><a href="#tab-mutasikas" data-toggle="tab" class="mutasikas">Mutasi Kas</a></li>
                                 <li><a href="#tab-riwayatppd" data-toggle="tab" class="riwayatppd">Riwayat PPD</a></li>
-                                <li><a href="#tab-riwayatukt" data-toggle="tab">Riwayat UKT</a></li>
+                                <li><a href="#tab-riwayatukt" data-toggle="tab" class="riwayatukt">Riwayat UKT</a></li>
                             </ul>
                             <!--/ tab -->
                             <!-- tab content -->
@@ -634,37 +643,6 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane" id="tab-idsertifikat">
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="panel panel-default" id="demo">
-                                                <div class="panel-heading">
-                                                    <h3 class="panel-title">Tabel ID &amp; Sertifikat</h3>
-                                                </div>
-                                                <table class="table table-striped table-bordered" id="idsertifikat-table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>No Dokumen</th>
-                                                            <th>ID Anggota</th>
-                                                            <th>Daerah </th>
-                                                            <th>Cabang </th>
-                                                            <th>Sabuk </th>
-                                                            <th>Tingkatan </th>
-                                                            <th>Gelar </th>
-                                                            <th>Nama</th>
-                                                            <th>ID Card</th>
-                                                            <th>Sertifikat</th>
-                                                            <th>Tanggal</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="idsertifikat">
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="tab-pane" id="tab-mutasikas">
                                     <hr>
                                     <div class="row">
@@ -722,6 +700,41 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                                         </tr>
                                                     </thead>
                                                     <tbody id="daftariwayatppd">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="tab-riwayatukt">
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="panel panel-default" id="demo">
+                                                <div class="panel-heading">
+                                                    <h3 class="panel-title">Riwayat UKT</h3>
+                                                </div>
+                                                <table class="table table-striped table-bordered" id="riwayatukt-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>No Dokumen</th>
+                                                            <th>ID Anggota </th>
+                                                            <th>Nama Anggota </th>
+                                                            <th>Daerah </th>
+                                                            <th>Cabang </th>
+                                                            <th>Ranting </th>
+                                                            <th>Tingkatan </th>
+                                                            <th>Penyelenggara UKT </th>
+                                                            <th>Tanggal UKT </th>
+                                                            <th>Total Nilai </th>
+                                                            <th>Predikat </th>
+                                                            <th>Deskripsi </th>
+                                                            <th>Input Oleh</th>
+                                                            <th>Input Tanggal</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="daftarriwayatukt">
                                                     </tbody>
                                                 </table>
                                             </div>

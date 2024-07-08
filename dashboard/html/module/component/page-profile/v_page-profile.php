@@ -57,9 +57,9 @@
             <ul class="list-group list-group-tabs">
                 <li class="list-group-item active"><a href="#profile" data-toggle="tab"><i class="ico-user2 mr5"></i> Profil Pengguna</a></li>
                 <li class="list-group-item"><a href="#account" data-toggle="tab"><i class="ico-archive2 mr5"></i> Informasi Keanggotaan</a></li>
-                <li class="list-group-item"><a href="#idsertifikat" data-toggle="tab"><i class="fa-regular fa-address-card"></i> ID &amp; Sertifikat</a></li>
                 <li class="list-group-item mutasikas"><a href="#mutasikas" data-toggle="tab"><i class="fa-solid fa-money-bill-transfer"></i> Mutasi Kas</a></li>
                 <li class="list-group-item riwayatppd"><a href="#riwayatppd" data-toggle="tab"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat PPD</a></li>
+                <li class="list-group-item riwayatukt"><a href="#riwayatukt" data-toggle="tab"><i class="fa-regular fa-newspaper"></i> Riwayat UKT</a></li>
                 <li class="list-group-item mutasi"><a href="#mutasi" data-toggle="tab"><i class="fa-solid fa-recycle"></i> Riwayat Mutasi</a></li>
             </ul>
             <!-- tab menu -->
@@ -282,15 +282,15 @@
                 </div>
                 <!--/ tab-pane: mutasi -->
 
-                <!-- tab-pane: ID Sertifikat -->
-                <div class="tab-pane" id="idsertifikat">
-                    <!-- form ID Sertifikat -->
+                <!-- tab-pane: Riwayat UKT -->
+                <div class="tab-pane" id="riwayatukt">
+                    <!-- form Riwayat UKT -->
                     <form class="panel form-horizontal form-bordered" name="form-account">
                         <div class="panel-body pt0 pb0">
                             <div class="form-group header bgcolor-default">
                                 <div class="col-md-12">
-                                    <h4 class="semibold text-primary mt0 mb5">ID &amp; Sertifikat</h4>
-                                    <p class="text-default nm">Informasi mengenai riwayat ID dan Sertifikat anda.</p>
+                                    <h4 class="semibold text-primary mt0 mb5">Riwayat Uji Kenaikan Tingkat</h4>
+                                    <p class="text-default nm">Informasi mengenai riwayat uji kenaikan tingkat anda.</p>
                                 </div>
                             </div>
                             <br>
@@ -298,25 +298,29 @@
                                 <div class="col-md-12">
                                     <div class="panel panel-default" id="demo">
                                         <div class="panel-heading">
-                                            <h3 class="panel-title">Tabel ID &amp; Sertifikat</h3>
+                                            <h3 class="panel-title">Tabel Riwayat UKT</h3>
                                         </div>
-                                        <table class="table table-striped table-bordered" id="idsertifikat-table">
+                                        <table class="table table-striped table-bordered" id="riwayatukt-table">
                                             <thead>
                                                 <tr>
+                                                    <th></th>
                                                     <th>No Dokumen</th>
-                                                    <th>ID Anggota</th>
+                                                    <th>ID Anggota </th>
+                                                    <th>Nama Anggota </th>
                                                     <th>Daerah </th>
                                                     <th>Cabang </th>
-                                                    <th>Sabuk </th>
+                                                    <th>Ranting </th>
                                                     <th>Tingkatan </th>
-                                                    <th>Gelar </th>
-                                                    <th>Nama</th>
-                                                    <th>ID Card</th>
-                                                    <th>Sertifikat</th>
-                                                    <th>Tanggal</th>
+                                                    <th>Penyelenggara UKT </th>
+                                                    <th>Tanggal UKT </th>
+                                                    <th>Total Nilai </th>
+                                                    <th>Predikat </th>
+                                                    <th>Deskripsi </th>
+                                                    <th>Input Oleh</th>
+                                                    <th>Input Tanggal</th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="idsertifikat">
+                                            <tbody id="daftarriwayatukt">
                                             </tbody>
                                         </table>
                                     </div>
@@ -324,9 +328,9 @@
                             </div>
                         </div>
                     </form>
-                    <!--/ form ID Sertifikat -->
+                    <!--/ form Riwayat UKT -->
                 </div>
-                <!--/ tab-pane: ID Sertifikat -->
+                <!--/ tab-pane: Riwayat UKT -->
 
                 <!-- tab-pane: Mutasi Kas -->
                 <div class="tab-pane" id="mutasikas">

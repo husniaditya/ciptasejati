@@ -24,8 +24,8 @@ function callTable() {
     if ($.fn.DataTable.isDataTable('#mutasikas-table')) {
       $('#mutasikas-table').DataTable().destroy();
     }
-    if ($.fn.DataTable.isDataTable('#idsertifikat-table')) {
-      $('#idsertifikat-table').DataTable().destroy();
+    if ($.fn.DataTable.isDataTable('#riwayatukt-table')) {
+      $('#riwayatukt-table').DataTable().destroy();
     }
     if ($.fn.DataTable.isDataTable('#riwayatppd-table')) {
       $('#riwayatppd-table').DataTable().destroy();
@@ -79,23 +79,10 @@ function callTable() {
         ]
     });
     
-    $('#idsertifikat-table').DataTable({
+    $('#riwayatukt-table').DataTable({
       responsive: true,
-      order: [[9, 'asc']],
-      dom: 'Bfrtlip',
-      columnDefs: [
-          { width: '100px', targets: 0 }, // Set width for column 1
-          { width: '150px', targets: 1 }, // Set width for column 2
-          { width: '150px', targets: 2 }, // Set width for column 3
-          { width: '150px', targets: 3 }, // Set width for column 4
-          { width: '100px', targets: 4 }, // Set width for column 5
-          { width: '100px', targets: 5 }, // Set width for column 6
-          { width: '100px', targets: 6 }, // Set width for column 7
-          { width: '100px', targets: 7 }, // Set width for column 8
-          { width: '100px', targets: 8 }, // Set width for column 9
-          { width: '100px', targets: 9 }, // Set width for column 10
-          // Add more columnDefs as needed
-      ],
+      order: [],
+      dom: 'Bfrtip',
       paging: true,
       scrollX: true,
       scrollY: '350px', // Set the desired height here
@@ -520,6 +507,18 @@ $(document).on("click", ".open-ViewAnggota", function () {
       // Destroy the DataTable before updating
       $('#riwayatppd-table').DataTable().destroy();
       $("#daftariwayatppd").html(data);
+      // Reinitialize Sertifikat Table
+    }
+  });
+
+  $.ajax({
+    type: "POST",
+    url: "module/ajax/transaksi/anggota/daftaranggota/aj_getuktanggota.php",
+    data:'id='+anggotaid,
+    success: function(data){
+      // Destroy the DataTable before updating
+      $('#riwayatukt-table').DataTable().destroy();
+      $("#daftarriwayatukt").html(data);
       // Reinitialize Sertifikat Table
     }
   });
