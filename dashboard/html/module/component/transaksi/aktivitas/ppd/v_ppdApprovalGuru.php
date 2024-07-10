@@ -185,28 +185,32 @@ $rowPPDTanggal = $getPPDTanggal->fetchAll(PDO::FETCH_ASSOC);
                     <hr>
                     <div class="row">
                         <div class="col-md-12">
-                            <label>Daftar Anggota PPD</label>
-                            <table class="table table-striped table-bordered" id="detailppd-table">
-                                <thead>
-                                    <tr>
-                                        <th>No. </th>
-                                        <th>No. Dokumen </th>
-                                        <th>ID Anggota </th>
-                                        <th>Nama Anggota </th>
-                                        <th>Daerah </th>
-                                        <th>Cabang </th>
-                                        <th>Ranting </th>
-                                        <th>Jenis PPD </th>
-                                        <th>Tingkatan </th>
-                                        <th>Tingkatan PPD</th>
-                                        <th>Cabang PPD </th>
-                                        <th>Tanggal </th>
-                                        <th>Deskripsi </th>
-                                    </tr>
-                                </thead>
-                                <tbody id="detailppddata">
-                                </tbody>
-                            </table>
+                            <div class="panel panel-default" id="demo">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Daftar Anggota PPD</h3>
+                                </div>
+                                <table class="table table-striped table-bordered" id="detailppd-table">
+                                    <thead>
+                                        <tr>
+                                            <th>No. </th>
+                                            <th>No. Dokumen </th>
+                                            <th>ID Anggota </th>
+                                            <th>Nama Anggota </th>
+                                            <th>Daerah </th>
+                                            <th>Cabang </th>
+                                            <th>Ranting </th>
+                                            <th>Jenis PPD </th>
+                                            <th>Tingkatan </th>
+                                            <th>Tingkatan PPD</th>
+                                            <th>Cabang PPD </th>
+                                            <th>Tanggal </th>
+                                            <th>Deskripsi </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="detailppddata">
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

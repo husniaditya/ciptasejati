@@ -5,15 +5,19 @@ while ($rowLogo = $getLogo->fetch(PDO::FETCH_ASSOC)) {
 }
 $getVisi = GetQuery("SELECT * FROM c_visimisi WHERE VISIMISI_KATEGORI = 'Visi'");
 $getMisi = GetQuery("SELECT * FROM c_visimisi WHERE VISIMISI_KATEGORI = 'Misi'");
+$getKegiatan = GetQuery("SELECT * FROM c_kegiatan WHERE DELETION_STATUS = 0");
+$getInformasi = GetQuery("SELECT *,ROW_NUMBER() OVER (ORDER BY INFORMASI_ID) AS row_num FROM c_informasi WHERE DELETION_STATUS = 0");
 $getKoordinator = GetQuery("SELECT a.*,SUBSTRING(a.ANGGOTA_PIC, 2) ANGGOTA_PIC,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN
 FROM m_anggota a
 LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
 LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
-WHERE t.TINGKATAN_LEVEL BETWEEN 6 AND 9 AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0");
+WHERE a.ANGGOTA_AKSES = 'Koordinator' AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0");
 $getListBlog = GetQuery("SELECT c.*, CASE WHEN c.DELETION_STATUS = 0 THEN 'Aktif' ELSE 'Tidak Aktif' END BLOG_STATUS, DATE_FORMAT(c.INPUT_DATE, '%d %M %Y') INPUT_DATE, a.ANGGOTA_NAMA INPUT_BY
 FROM c_blog c
 LEFT JOIN m_anggota a ON c.INPUT_BY = a.ANGGOTA_ID
 WHERE c.DELETION_STATUS = 0 ORDER BY INPUT_DATE DESC limit 10");
+
+$rowInformasi = $getInformasi->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -205,42 +209,22 @@ WHERE c.DELETION_STATUS = 0 ORDER BY INPUT_DATE DESC limit 10");
     <!-- Section Kegiatan -->
     <div class="container container-xl-custom p-relative z-index-1 custom-el-pos-1">
         <div class="row">
-            <div class="col-lg-3">
-                <div class="card border-0 bg-color-light box-shadow-1 box-shadow-1-hover anim-hover-translate-top-10px transition-3ms">
-                    <div class="card-body text-center text-lg-start m-2 appear-animation" data-appear-animation="fadeInUpShorterPlus" data-appear-animation-delay="100" data-plugin-options="{'minWindowWidth': 0}">
-                        <img height="90" src="./dashboard/html/<?= $PROFIL_LOGO; ?>" alt="" />
-                        <h4 class="font-weight-bold mt-4">Pembukaan Pusat Daya</h4>
-                        <p class="text-3">Acara ini bertujuan untuk membuka pusat pelatihan dan meningkatkan kesadaran akan budaya pencak silat Indonesia.</p>
+            <?php
+            foreach ($getKegiatan as $rowKegiatan) {
+                extract($rowKegiatan);
+                ?>
+                <div class="col-lg-3">
+                    <div class="card border-0 bg-color-light box-shadow-1 box-shadow-1-hover anim-hover-translate-top-10px transition-3ms">
+                        <div class="card-body text-center text-lg-start m-2 appear-animation" data-appear-animation="fadeInUpShorterPlus" data-appear-animation-delay="100" data-plugin-options="{'minWindowWidth': 0}">
+                            <img height="90" src="./dashboard/html<?= $KEGIATAN_IMAGE; ?>" alt="" />
+                            <h4 class="font-weight-bold mt-4"><?= $KEGIATAN_JUDUL; ?></h4>
+                            <p class="text-3"><?= $KEGIATAN_DESKRIPSI; ?></p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="card border-0 bg-color-light box-shadow-1 box-shadow-1-hover anim-hover-translate-top-10px transition-3ms">
-                    <div class="card-body text-center text-lg-start m-2 appear-animation" data-appear-animation="fadeInUpShorterPlus" data-appear-animation-delay="400" data-plugin-options="{'minWindowWidth': 0}">
-                        <img height="90" src="./dashboard/html/<?= $PROFIL_LOGO; ?>" alt="" />
-                        <h4 class="font-weight-bold mt-4">Ujian Kenaikan Tingkat</h4>
-                        <p class="text-3">Acara ini digunakan untuk menguji kemampuan pesilat dan meningkatkan keterampilan anggota.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="card border-0 bg-color-light box-shadow-1 box-shadow-1-hover anim-hover-translate-top-10px transition-3ms">
-                    <div class="card-body text-center text-lg-start m-2 appear-animation" data-appear-animation="fadeInUpShorterPlus" data-appear-animation-delay="700" data-plugin-options="{'minWindowWidth': 0}">
-                        <img height="90" src="./dashboard/html/<?= $PROFIL_LOGO; ?>" alt="" />
-                        <h4 class="font-weight-bold mt-4">Latihan Gabungan Nasional</h4>
-                        <p class="text-3">Acara ini digunakan untuk meningkatkan keterampilan dan persaudaraan di antara anggotanya.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="card border-0 bg-color-light box-shadow-1 box-shadow-1-hover anim-hover-translate-top-10px transition-3ms">
-                    <div class="card-body text-center text-lg-start m-2 appear-animation" data-appear-animation="fadeInUpShorterPlus" data-appear-animation-delay="1200" data-plugin-options="{'minWindowWidth': 0}">
-                        <img height="90" src="./dashboard/html/<?= $PROFIL_LOGO; ?>" alt="" />
-                        <h4 class="font-weight-bold mt-4">Pendidikan dan Latihan</h4>
-                        <p class="text-3">Acara ini digunakan untuk memberikan pendidikan dan latihan silat kepada anggotanya.</p>
-                    </div>
-                </div>
-            </div>
+                <?php
+            }
+            ?>
         </div>
         <div class="row">
             <div class="col py-4">
@@ -292,7 +276,8 @@ WHERE c.DELETION_STATUS = 0 ORDER BY INPUT_DATE DESC limit 10");
             </div>
         </div>
     </section>
-
+    
+    <!-- Section Informasi -->
     <section class="my-0 py-5 border-0 bg-color-tertiary text-color-light p-relative overflow-hidden" style="background-image: url('');">
         <svg class="d-none d-lg-block custom-svg-position-3 rotate-r-90" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1686.88 1095.86" data-appear-animation-svg="true">
             <path class="appear-animation" data-plugin-options="{'accY': -500, 'forceAnimation': true}" data-appear-animation="customLines1anim" data-appear-animation-delay="100" data-appear-animation-duration="7s" fill="none" stroke="#d8d8d8" stroke-width="2px" stroke-miterlimit="10" d="M87.95,1.4c6.82,9.14,15.53,21.59,24.68,36.94c6.82,11.45,27.18,46.82,42.55,96.51
@@ -332,13 +317,17 @@ WHERE c.DELETION_STATUS = 0 ORDER BY INPUT_DATE DESC limit 10");
         <div class="container container-xl-custom pt-4 pb-5">
             <div class="row py-5">
                 <div class="col-lg-6">
-                    <h3 class="mb-3 text-warning"><u>INFORMASI TERBARU</u></h3>
-                    <p class="mb-4 pb-2 text-light">Demi keamanan dan kenyamanan Anggota Cipta Sejati, fitur ubah password/reset password telah diaktifkan. Hal ini dimaksudkan supaya semua pemakai Sistem Informasi dilingkungan Cipta Sejati dapat melakukan pengubahan sandi/password secara mandiri.</p>
-
-                    <ul class="list list-icons list-danger font-weight-medium mt-3">
-                        <li><i class="fas fa-check text-color-success"></i> Pastikan alamat email/No. HP yang anda pakai terdaftar di akun Website Cipta Sejati (Data Anggota)</li>
-                        <li><i class="fas fa-check text-color-success"></i> Alamat email/no hp tersebut digunakan untuk pengiriman angka sandi/token sebagai nomor pencocokan dan memastikan bahwa yang mereset password tersebut benar-benar akun yang dimiliki secara sah</li>
-                    </ul>
+                    <?php
+                    foreach ($rowInformasi as $rowInfo) {
+                        extract($rowInfo);
+                        if ($INFORMASI_KATEGORI == "Utama") {
+                            ?>
+                            <h3 class="mb-3 text-warning"><u><?= $INFORMASI_JUDUL; ?></u></h3>
+                            <p class="mb-4 pb-2 text-light"><?= $INFORMASI_DESKRIPSI; ?></p>
+                            <?php
+                        }
+                    }
+                    ?>
 
                     <div class="hstack gap-4 pt-3">
                         <div>
@@ -346,7 +335,7 @@ WHERE c.DELETION_STATUS = 0 ORDER BY INPUT_DATE DESC limit 10");
                         </div>
                         <div class="vr"></div>
                         <div>
-                            <a href="tel:0123456789" class="d-flex align-items-center text-decoration-none text-color-light text-color-hover-danger font-weight-semibold ms-1">
+                            <a href="tel:<?= $PROFIL_TELP_1; ?>" class="d-flex align-items-center text-decoration-none text-color-light text-color-hover-danger font-weight-semibold ms-1">
                                 <i class="icon icon-phone text-color-danger text-4-5 me-2"></i>
                                 <?= $PROFIL_TELP_1; ?>
                             </a>
@@ -355,69 +344,29 @@ WHERE c.DELETION_STATUS = 0 ORDER BY INPUT_DATE DESC limit 10");
                 </div>
                 <div class="col-lg-6 mt-5 mt-lg-0">
                     <div class="accordion accordion-modern-status accordion-modern-status-cipta" id="accordion100">
-                        <div class="card card-default">
-                            <div class="card-header" id="collapse100HeadingOne">
-                                <h4 class="card-title m-0">
-                                    <a class="accordion-toggle text-color-dark font-weight-bold border-radius text-3-5 collapsed" data-bs-toggle="collapse" data-bs-target="#collapse100One" aria-expanded="false" aria-controls="collapse100One">
-                                        1 - Daftar Anggota
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="collapse100One" class="collapse" aria-labelledby="collapse100HeadingOne" data-bs-parent="#accordion100">
-                                <div class="card-body">
-                                    <p class="mb-0 text-justify">Untuk daftar anggota silahkan hubungi koordinator / pengurus setempat agar dapat didaftarkan terlebih dahulu ke dalam aplikasi. Setelah data anggota sudah terdaftar, anda dapat melakukan verifikasi di web melalui menu registrasi user. Dan kami akan mengirimkan email verifikasi ke email anda. Mohon untuk dicek bagian folder inbox, maupun folder spam.</p>
+                        <?php
+                        foreach ($rowInformasi as $rowDetailinfo) {
+                            extract($rowDetailinfo);
+                            if ($INFORMASI_KATEGORI == "Tambahan") {
+                                ?>
+                                <div class="card card-default">
+                                    <div class="card-header" id="collapse100HeadingOne">
+                                        <h4 class="card-title m-0">
+                                            <a class="accordion-toggle text-color-dark font-weight-bold border-radius text-3-5 collapsed" data-bs-toggle="collapse" data-bs-target="#<?= $INFORMASI_ID; ?>" aria-expanded="false" aria-controls="<?= $INFORMASI_ID; ?>">
+                                                <?= $row_num; ?> - <?= $INFORMASI_JUDUL; ?>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="<?= $INFORMASI_ID; ?>" class="collapse" aria-labelledby="collapse100HeadingOne" data-bs-parent="#accordion100">
+                                        <div class="card-body">
+                                            <p class="mb-0 text-justify"><?= $INFORMASI_DESKRIPSI; ?></p>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="card card-default">
-                            <div class="card-header" id="collapse100HeadingTwo">
-                                <h4 class="card-title m-0">
-                                    <a class="accordion-toggle text-color-dark font-weight-bold border-radius text-3-5 collapsed" data-bs-toggle="collapse" data-bs-target="#collapse100Two" aria-expanded="false" aria-controls="collapse100Two">
-                                        2 - Login Anggota
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="collapse100Two" class="collapse" aria-labelledby="collapse100HeadingTwo" data-bs-parent="#accordion100">
-                                <div class="card-body">
-                                    <p class="mb-0 text-justify">Setelah data anggota sudah terdaftar ke dalam aplikasi, anda bisa melakukan login sesuai dengan user dan password yang sudah anda daftarkan. </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card card-default">
-                            <div class="card-header" id="collapse100HeadingThree">
-                                <h4 class="card-title m-0">
-                                    <a class="accordion-toggle text-color-dark font-weight-bold border-radius text-3-5 collapsed" data-bs-toggle="collapse" data-bs-target="#collapse100Three" aria-expanded="false" aria-controls="collapse100Three">
-                                        3 - Lupa, Ubah Password Secara Mandiri
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="collapse100Three" class="collapse" aria-labelledby="collapse100HeadingThree" data-bs-parent="#accordion100">
-                                <div class="card-body">
-                                    <p class="mb-0 text-justify">Adapun langkah-langkah untuk mereset password adalah:</p>
-                                    <ul class="list list-icons list-danger font-weight-medium mt-3">
-                                        <li class="text-justify">1 - Klik Tombol Lupa Password yang ada di pojok kanan bawah halaman login, kemudian anda akan diarahkan ke halaman reset password</li>
-                                        <li class="text-justify">2 - Isikan semua data yang terdapat pada form reset password, kemudian tekan tombol reset password</li>
-                                        <li class="text-justify">3 - Email verifikasi password akan dikirim melalui email, periksalah email anda dan pastikan anda menerima email</li>
-                                        <li class="text-justify">4 - Kemudian klik link verifikasi password yang terdapat pada email, anda akan diarahkan ke halaman reset password</li>
-                                        <li class="text-justify">5 - Setelah masuk ke menu verifikasi reset password anda bisa isikan password baru dan kemudian tekan tombol reset password</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card card-default">
-                            <div class="card-header" id="collapse100HeadingThree">
-                                <h4 class="card-title m-0">
-                                    <a class="accordion-toggle text-color-dark font-weight-bold border-radius text-3-5 collapsed" data-bs-toggle="collapse" data-bs-target="#peringatan" aria-expanded="false" aria-controls="collapse100Three">
-                                        4 - Peringatan
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="peringatan" class="collapse" aria-labelledby="collapse100HeadingThree" data-bs-parent="#accordion100">
-                                <div class="card-body">
-                                    <p class="mb-0 text-justify">Mohon untuk tidak membagikan informasi pribadi (Email, ID Anggota, Password) anda ke orang lain.</p>
-                                </div>
-                            </div>
-                        </div>
+                                <?php
+                            }
+                        }
+                        ?>
                     </div>
                 </div>
             </div>

@@ -1,103 +1,108 @@
-Highcharts.chart('aktivitasChart', {
-    title: {
-        text: 'Aktivitas CIPTA SEJATI',
-        align: 'left',
-        style: {
-            fontSize:'18px'
-        }
-    },
+$(document).ready(function() {
+    // Function to generate month names for the past 12 months up to the current month
+    function getPast12Months() {
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const result = [];
+        const currentMonth = new Date().getMonth();
+        const currentYear = new Date().getFullYear();
 
-    subtitle: {
-        text: 'Data aktivitas yang diselenggarakan oleh CIPTA SEJATI',
-        align: 'left',
-        style: {
-            fontSize:'12px'
+        for (let i = 0; i < 12; i++) {
+            const monthIndex = (currentMonth - i + 12) % 12;
+            const year = currentMonth - i < 0 ? currentYear - 1 : currentYear;
+            result.unshift(`${monthNames[monthIndex]} ${year}`);
         }
-    },
 
-    yAxis: {
-        title: {
-            text: 'Jumlah Aktivitas',
-            style: {
-                fontSize:'11px'
-            }
-        },
-        labels: {
-            style: {
-                fontSize:'11px'
-            }
-        }
-    },
-
-    xAxis: {
-        accessibility: {
-            rangeDescription: 'Range: 2010 to 2020'
-        },
-        labels: {
-            style: {
-                fontSize:'12px'
-            }
-        }
-    },
-
-    legend: {
-        title: {
-          text: 'Aktivitas Deskripsi:',
-          style: {
-              fontSize:'14px'
-          }
-        },
-        layout: 'vertical',
-        align: 'right',
-        verticalAlign: 'middle',
-        itemStyle: {
-            "fontSize": "14px",
-        }
-    },
-
-    tooltip: {
-		headerFormat: '<span style="font-size: 14px">{point.key}</span><br/>',
-        style: {
-            fontSize:'12px'
-        }
-    },
-    plotOptions: {
-        series: {
-            label: {
-                connectorAllowed: false,
-            },
-            pointStart: 2014,
-        }
-    },
-
-    series: [
-        {
-        name: 'Pembukaan Pusat Daya',
-        data: [Math.floor(Math.random() * (200 - 100 + 1)) + 100, Math.floor(Math.random() * (200 - 100 + 1)) + 100, Math.floor(Math.random() * (200 - 100 + 1)) + 100, Math.floor(Math.random() * (200 - 100 + 1)) + 100, Math.floor(Math.random() * (200 - 100 + 1)) + 100, Math.floor(Math.random() * (200 - 100 + 1)) + 100, Math.floor(Math.random() * (200 - 100 + 1)) + 100, Math.floor(Math.random() * (200 - 100 + 1)) + 100, Math.floor(Math.random() * (200 - 100 + 1)) + 100, Math.floor(Math.random() * (200 - 100 + 1)) + 100, 2]
-    }, {
-        name: 'Ujian Kenaikan Tingkat',
-        data: [Math.floor(Math.random() * (100 - 50 + 1)) + 50, Math.floor(Math.random() * (100 - 50 + 1)) + 50, Math.floor(Math.random() * (100 - 50 + 1)) + 50, Math.floor(Math.random() * (100 - 50 + 1)) + 50, Math.floor(Math.random() * (100 - 50 + 1)) + 50, Math.floor(Math.random() * (100 - 50 + 1)) + 50, Math.floor(Math.random() * (100 - 50 + 1)) + 50, Math.floor(Math.random() * (100 - 50 + 1)) + 50, Math.floor(Math.random() * (100 - 50 + 1)) + 50, Math.floor(Math.random() * (100 - 50 + 1)) + 50, 5]
-    }, {
-        name: 'Latihan Gabungan',
-        data: [Math.floor(Math.random() * (75 - 25 + 1)) + 25, Math.floor(Math.random() * (75 - 25 + 1)) + 25, Math.floor(Math.random() * (75 - 25 + 1)) + 25, Math.floor(Math.random() * (75 - 25 + 1)) + 25, Math.floor(Math.random() * (75 - 25 + 1)) + 25, Math.floor(Math.random() * (75 - 25 + 1)) + 25, Math.floor(Math.random() * (75 - 25 + 1)) + 25, Math.floor(Math.random() * (75 - 25 + 1)) + 25, Math.floor(Math.random() * (75 - 25 + 1)) + 25, Math.floor(Math.random() * (75 - 25 + 1)) + 25, 2]
-    }, {
-        name: 'Pendidikan dan Latihan',
-        data: [Math.floor(Math.random() * (200 - 150 + 1)) + 150, Math.floor(Math.random() * (200 - 150 + 1)) + 150, Math.floor(Math.random() * (200 - 150 + 1)) + 150, Math.floor(Math.random() * (200 - 150 + 1)) + 150, Math.floor(Math.random() * (200 - 150 + 1)) + 150, Math.floor(Math.random() * (200 - 150 + 1)) + 150, Math.floor(Math.random() * (200 - 150 + 1)) + 150, Math.floor(Math.random() * (200 - 150 + 1)) + 150, Math.floor(Math.random() * (200 - 150 + 1)) + 150, Math.floor(Math.random() * (200 - 150 + 1)) + 150, 7]
-    },],
-
-    responsive: {
-        rules: [{
-            condition: {
-                maxWidth: 500
-            },
-            chartOptions: {
-                legend: {
-                    layout: 'horizontal',
-                    align: 'center',
-                    verticalAlign: 'bottom'
-                }
-            }
-        }]
+        return result;
     }
-
+    // Fetch data for each series via AJAX
+    $.ajax({
+        url: './module/ajax/dashboard/aktivitas/aj_getaktivitas.php',
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            // Initialize the chart
+            Highcharts.chart('aktivitasChart', {
+                title: {
+                    text: 'Aktivitas CIPTA SEJATI',
+                    align: 'left',
+                    style: {
+                        fontSize: '18px'
+                    }
+                },
+                subtitle: {
+                    text: 'Data aktivitas yang diselenggarakan oleh CIPTA SEJATI',
+                    align: 'left',
+                    style: {
+                        fontSize: '12px'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Jumlah Aktivitas',
+                        style: {
+                            fontSize: '11px'
+                        }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '11px'
+                        }
+                    }
+                },
+                xAxis: {
+                    categories: getPast12Months(),
+                    labels: {
+                        style: {
+                            fontSize: '12px'
+                        }
+                    }
+                },
+                legend: {
+                    title: {
+                        text: 'Aktivitas Deskripsi:',
+                        style: {
+                            fontSize: '14px'
+                        }
+                    },
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    itemStyle: {
+                        fontSize: '14px'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size: 14px">{point.key}</span><br/>',
+                    style: {
+                        fontSize: '12px'
+                    }
+                },
+                plotOptions: {
+                    series: {
+                        label: {
+                            connectorAllowed: false
+                        }
+                    }
+                },
+                series: data.series,
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                layout: 'horizontal',
+                                align: 'center',
+                                verticalAlign: 'bottom'
+                            }
+                        }
+                    }]
+                }
+            });
+        },
+        error: function(error) {
+            console.error('Error fetching data:', error);
+        }
+    });
 });

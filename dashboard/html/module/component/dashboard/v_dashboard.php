@@ -1,4 +1,21 @@
+<?php
+$getJadwal = GetQuery("SELECT p.PPD_TANGGAL TANGGAL,'Pembukaan Pusat Daya' KATEGORI,CONCAT('PPD Anggota ',SUBSTRING_INDEX(CONCAT_WS(' ', a.ANGGOTA_NAMA), ' ', 2)) NAMA, c.CABANG_DESKRIPSI CABANG, pic.ANGGOTA_NAMA PIC_NAMA, pic.ANGGOTA_HP PIC_HP
+FROM t_ppd p
+LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY
+LEFT JOIN m_anggota pic ON p.INPUT_BY = pic.ANGGOTA_ID AND p.CABANG_KEY = pic.CABANG_KEY
+LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
+WHERE p.DELETION_STATUS = 0 AND p.PPD_TANGGAL >= CURDATE()
+UNION ALL
+SELECT u.UKT_TANGGAL TANGGAL,'Uji Kenaikan Tingkat' KATEGORI,CONCAT('UKT Anggota ',SUBSTRING_INDEX(CONCAT_WS(' ', a.ANGGOTA_NAMA), ' ', 2)) NAMA, c.CABANG_DESKRIPSI CABANG, pic.ANGGOTA_NAMA PIC_NAMA, pic.ANGGOTA_HP PIC_HP
+FROM t_ukt u
+LEFT JOIN m_anggota a ON u.ANGGOTA_ID = a.ANGGOTA_ID AND u.CABANG_KEY = a.CABANG_KEY
+LEFT JOIN m_anggota pic ON u.INPUT_BY = pic.ANGGOTA_ID AND u.CABANG_KEY = pic.CABANG_KEY
+LEFT JOIN m_cabang c ON u.UKT_LOKASI = c.CABANG_KEY
+WHERE u.DELETION_STATUS = 0 AND u.UKT_TANGGAL >= CURDATE()");
 
+$rowJadwal = $getJadwal->fetchAll(PDO::FETCH_ASSOC);
+
+?>
 
 <div class="row">
     <div class="col-md-6" style="margin-top: 20px;">
@@ -39,54 +56,21 @@
                     </tr>
                 </thead>
                 <tbody id="">
-                    <tr>
-                        <td>21 February 2024</td>
-                        <td>Pembukaan Pusat Daya</td>
-                        <td>PPD anggota a.n Slamet</td>
-                        <td>Kotawaringin Timur</td>
-                        <td>Husni</td>
-                        <td>081247566612</td>
-                    </tr>
-                    <tr>
-                        <td>24 February 2024</td>
-                        <td>Ujian Kenaikan Tingkat</td>
-                        <td>UKT anggota a.n Naura</td>
-                        <td>Seruyan</td>
-                        <td>Husni</td>
-                        <td>081247566612</td>
-                    </tr>
-                    <tr>
-                        <td>24 February 2024</td>
-                        <td>Latihan Gabungan</td>
-                        <td>Latihan Gabungan dengan Agus</td>
-                        <td>Kotawaringin Timur</td>
-                        <td>Husni</td>
-                        <td>081247566612</td>
-                    </tr>
-                    <tr>
-                        <td>25 February 2024</td>
-                        <td>Pendidikan Latihan</td>
-                        <td>Pendidikan anggota a.n Slamet</td>
-                        <td>Kotawaringin Timur</td>
-                        <td>Husni</td>
-                        <td>081247566612</td>
-                    </tr>
-                    <tr>
-                        <td>26 February 2024</td>
-                        <td>Pembukaan Pusat Daya</td>
-                        <td>PPD anggota a.n Slamet</td>
-                        <td>Kotawaringin Timur</td>
-                        <td>Husni</td>
-                        <td>081247566612</td>
-                    </tr>
-                    <tr>
-                        <td>27 February 2024</td>
-                        <td>Pembukaan Pusat Daya</td>
-                        <td>PPD anggota a.n Slamet</td>
-                        <td>Kotawaringin Timur</td>
-                        <td>Husni</td>
-                        <td>081247566612</td>
-                    </tr>
+                    <?php
+                    foreach ($rowJadwal as $dataJadwal) {
+                        extract($dataJadwal);
+                        ?>
+                        <tr>
+                            <td><?= $TANGGAL; ?></td>
+                            <td><?= $KATEGORI; ?></td>
+                            <td><?= $NAMA; ?></td>
+                            <td><?= $CABANG; ?></td>
+                            <td><?= $PIC_NAMA; ?></td>
+                            <td><?= $PIC_HP; ?></td>
+                        </tr>
+                        <?php
+                    }
+                    ?>
                 </tbody>
             </table>
         </div>

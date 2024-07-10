@@ -5,6 +5,11 @@ LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
 LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
 WHERE t.TINGKATAN_LEVEL BETWEEN 6 AND 9 AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0");
 
+
+$getKegiatan = GetQuery("SELECT * FROM c_kegiatan WHERE DELETION_STATUS = 0");
+
+$rowKegiatan = $getKegiatan->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <div role="main" class="main">
@@ -108,42 +113,22 @@ WHERE t.TINGKATAN_LEVEL BETWEEN 6 AND 9 AND a.ANGGOTA_STATUS = 0 AND a.DELETION_
     <!-- Data Aktivitas -->
     <div class="container container-xl-custom pb-3">
         <div class="row py-5 pb-4">
-            <div class="col-lg-3">
-                <div class="card border-0 bg-color-light box-shadow-1 box-shadow-1-hover anim-hover-translate-top-10px transition-3ms">
-                    <div class="card-body text-center text-lg-start m-2 appear-animation" data-appear-animation="fadeInUpShorterPlus" data-appear-animation-delay="100" data-plugin-options="{'minWindowWidth': 0}">
-                        <img height="90" src="./dashboard/html/<?= $PROFIL_LOGO; ?>" alt="" />
-                        <h4 class="font-weight-bold mt-4">Pembukaan Pusat Daya</h4>
-                        <p class="text-3">Lorem ipsum dolor sit amet, consec tetur adipiscing elit. Proin mauris erat, accumsan quis ullamcorper.</p>
+        <?php
+            foreach ($rowKegiatan as $dataKegiatan) {
+                extract($dataKegiatan);
+                ?>
+                <div class="col-lg-3">
+                    <div class="card border-0 bg-color-light box-shadow-1 box-shadow-1-hover anim-hover-translate-top-10px transition-3ms">
+                        <div class="card-body text-center text-lg-start m-2 appear-animation" data-appear-animation="fadeInUpShorterPlus" data-appear-animation-delay="100" data-plugin-options="{'minWindowWidth': 0}">
+                            <img height="90" src="./dashboard/html<?= $KEGIATAN_IMAGE; ?>" alt="" />
+                            <h4 class="font-weight-bold mt-4"><?= $KEGIATAN_JUDUL; ?></h4>
+                            <p class="text-3"><?= $KEGIATAN_DESKRIPSI; ?></p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="card border-0 bg-color-light box-shadow-1 box-shadow-1-hover anim-hover-translate-top-10px transition-3ms">
-                    <div class="card-body text-center text-lg-start m-2 appear-animation" data-appear-animation="fadeInUpShorterPlus" data-appear-animation-delay="400" data-plugin-options="{'minWindowWidth': 0}">
-                        <img height="90" src="./dashboard/html/<?= $PROFIL_LOGO; ?>" alt="" />
-                        <h4 class="font-weight-bold mt-4">Ujian Kenaikan Tingkat</h4>
-                        <p class="text-3">Lorem ipsum dolor sit amet, consec tetur adipiscing elit. Proin mauris erat, accumsan quis ullamcorper.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="card border-0 bg-color-light box-shadow-1 box-shadow-1-hover anim-hover-translate-top-10px transition-3ms">
-                    <div class="card-body text-center text-lg-start m-2 appear-animation" data-appear-animation="fadeInUpShorterPlus" data-appear-animation-delay="700" data-plugin-options="{'minWindowWidth': 0}">
-                        <img height="90" src="./dashboard/html/<?= $PROFIL_LOGO; ?>" alt="" />
-                        <h4 class="font-weight-bold mt-4">Latihan Gabungan Nasional</h4>
-                        <p class="text-3">Lorem ipsum dolor sit amet, consec tetur adipiscing elit. Proin mauris erat, accumsan quis ullamcorper.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="card border-0 bg-color-light box-shadow-1 box-shadow-1-hover anim-hover-translate-top-10px transition-3ms">
-                    <div class="card-body text-center text-lg-start m-2 appear-animation" data-appear-animation="fadeInUpShorterPlus" data-appear-animation-delay="1200" data-plugin-options="{'minWindowWidth': 0}">
-                        <img height="90" src="./dashboard/html/<?= $PROFIL_LOGO; ?>" alt="" />
-                        <h4 class="font-weight-bold mt-4">Pendidikan dan Latihan</h4>
-                        <p class="text-3">Lorem ipsum dolor sit amet, consec tetur adipiscing elit. Proin mauris erat, accumsan quis ullamcorper.</p>
-                    </div>
-                </div>
-            </div>
+                <?php
+            }
+            ?>
         </div>
     </div>
 

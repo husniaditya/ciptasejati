@@ -34,55 +34,6 @@ function callTable() {
   });
 }
 
-function resetPreview() { // Function Reset Preview Dropdown Value
-  // var selectizeInstance2 = $('#selectize-dropdown2')[0].selectize; // Add Tingkatan
-  var selectizeInstance4 = $('#selectize-dropdown4')[0].selectize; // Add Anggota
-  var selectizeInstance8 = $('#selectize-dropdown8')[0].selectize; // Add Lokasi PPD
-  var selectizeInstance6 = $('#selectize-dropdown6')[0].selectize; // Edit Tingkatan
-  var selectizeInstance7 = $('#selectize-dropdown7')[0].selectize; // Edit Anggota
-  var selectizeInstance11 = $('#selectize-dropdown11')[0].selectize; // Edit Lokasi PPD
-
-  var isExist = $('#selectize-dropdown9').length > 0 && $('#selectize-dropdown10').length > 0 && $('#selectize-dropdown3').length > 0 && $('#selectize-dropdown5').length > 0;
-
-  if (isExist) {
-    var selectizeInstance9 = $('#selectize-dropdown9')[0].selectize;
-    var selectizeInstance10 = $('#selectize-dropdown10')[0].selectize;
-    var selectizeInstance3 = $('#selectize-dropdown3')[0].selectize;
-    var selectizeInstance5 = $('#selectize-dropdown5')[0].selectize;
-  }
-
-  if (selectizeInstance9) {
-    selectizeInstance9.clear();
-  }
-  if (selectizeInstance10) {
-    selectizeInstance10.clear();
-  }
-  if (selectizeInstance3) {
-    selectizeInstance3.clear();
-  }
-  if (selectizeInstance5) {
-    selectizeInstance5.clear();
-  }
-  if (selectizeInstance2) {
-    selectizeInstance2.clear();
-  }
-  if (selectizeInstance4) {
-    selectizeInstance4.clear();
-  }
-  if (selectizeInstance8) {
-    selectizeInstance8.clear();
-  }
-  if (selectizeInstance6) {
-    selectizeInstance6.clear();
-  }
-  if (selectizeInstance7) {
-    selectizeInstance7.clear();
-  }
-  if (selectizeInstance11) {
-    selectizeInstance11.clear();
-  }
-}
-
 function savePDFToDrive(UKT_ID) { // Function Save PDF to Drive
   return new Promise(function(resolve, reject) {
     $.ajax({
@@ -139,12 +90,6 @@ $('#AddUKT').on('hidden.bs.modal', function() {
     }
   });
 });
-$('#ViewUKT').on('hidden.bs.modal', function() {
-  resetPreview('#ViewUKT');
-});
-$('#EditUKT').on('hidden.bs.modal', function() {
-  resetPreview('#EditUKT');
-});
 
 function resetPreview(modalId) { // Function Reset Preview Dropdown Value
 
@@ -153,15 +98,11 @@ function resetPreview(modalId) { // Function Reset Preview Dropdown Value
   if (isExist) {
     var selectizeInstance = $('#selectize-dropdown9')[0].selectize; // DAERAH ADD
     var selectizeInstance2 = $('#selectize-dropdown10')[0].selectize; // CABANG ADD
-    var selectizeInstance3 = $('#selectize-dropdown11')[0].selectize; // DAERAH EDIT
-    var selectizeInstance4 = $('#selectize-dropdown12')[0].selectize; // CABANG EDIT
   }
   var tingkatanAdd = $('#selectize-dropdown2')[0].selectize; // TINGKATAN ADD
-  var tingkatanEdit = $('#selectize-dropdown6')[0].selectize; // TINGKATAN EDIT
   var anggotaAdd = $('#selectize-dropdown4')[0].selectize; // ANGGOTA ADD
-  var anggotaEdit = $('#selectize-dropdown5')[0].selectize; // ANGGOTA EDIT
   var lokasiAdd = $('#selectize-dropdown8')[0].selectize; // LOKASI ADD
-  var lokasiEdit = $('#selectize-dropdown7')[0].selectize; // LOKASI EDIT
+  var pengujiAdd = $('#selectize-dropdown13')[0].selectize; // PENGUJI ADD
 
   if (selectizeInstance) {
     selectizeInstance.clear();
@@ -169,18 +110,10 @@ function resetPreview(modalId) { // Function Reset Preview Dropdown Value
   if (selectizeInstance2) {
     selectizeInstance2.clear();
   }
-  if (selectizeInstance3) {
-    selectizeInstance3.clear();
-  }
-  if (selectizeInstance4) {
-    selectizeInstance4.clear();
-  }
   tingkatanAdd.clear();
   anggotaAdd.clear();
   lokasiAdd.clear();
-  tingkatanEdit.clear();
-  anggotaEdit.clear();
-  lokasiEdit.clear();
+  pengujiAdd.clear();
 }
 
 var formSubmitted = false; // Flag to indicate whether the form has been submitted

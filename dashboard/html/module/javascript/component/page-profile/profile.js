@@ -66,15 +66,15 @@ function callTable() {
     });
     
     $('#riwayatukt-table').DataTable({
-    responsive: true,
-    order: [],
-    dom: 'Bfrtip',
-    paging: true,
-    scrollX: true,
-    scrollY: '350px', // Set the desired height here
-    buttons: [
-        'copy', 'csv', 'excel', 'pdf'
-    ]
+        responsive: true,
+        order: [],
+        dom: 'Bfrtip',
+        paging: true,
+        scrollX: true,
+        scrollY: '350px', // Set the desired height here
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf'
+        ]
     });
 
     $('#riwayatppd-table').DataTable({
