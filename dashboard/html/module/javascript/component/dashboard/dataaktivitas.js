@@ -1,19 +1,16 @@
 $(document).ready(function() {
-    // Function to generate month names for the past 12 months up to the current month
-    function getPast12Months() {
-        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    // Function to generate the past 5 years
+    function getPast5Years() {
         const result = [];
-        const currentMonth = new Date().getMonth();
         const currentYear = new Date().getFullYear();
 
-        for (let i = 0; i < 12; i++) {
-            const monthIndex = (currentMonth - i + 12) % 12;
-            const year = currentMonth - i < 0 ? currentYear - 1 : currentYear;
-            result.unshift(`${monthNames[monthIndex]} ${year}`);
+        for (let i = 0; i < 7; i++) {
+            result.unshift(currentYear - i);
         }
 
         return result;
     }
+
     // Fetch data for each series via AJAX
     $.ajax({
         url: './module/ajax/dashboard/aktivitas/aj_getaktivitas.php',
@@ -50,7 +47,7 @@ $(document).ready(function() {
                     }
                 },
                 xAxis: {
-                    categories: getPast12Months(),
+                    categories: getPast5Years(),
                     labels: {
                         style: {
                             fontSize: '12px'
