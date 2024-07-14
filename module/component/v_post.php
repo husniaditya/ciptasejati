@@ -8,7 +8,7 @@ $INPUT_DATE="";
 if (isset($_GET['id'])) {
     $BLOG_ID = $_GET['id'];
 
-    $sql = GetQuery("SELECT c.*, CASE WHEN c.DELETION_STATUS = 0 THEN 'Aktif' ELSE 'Tidak Aktif' END BLOG_STATUS, DATE_FORMAT(c.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE, a.ANGGOTA_NAMA INPUT_BY, a.ANGGOTA_PIC,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,cb.CABANG_DESKRIPSI,d.DAERAH_DESKRIPSI
+    $sql = GetQuery("SELECT c.*,SUBSTRING(c.BLOG_IMAGE FROM 2) BLOG_IMAGE, CASE WHEN c.DELETION_STATUS = 0 THEN 'Aktif' ELSE 'Tidak Aktif' END BLOG_STATUS, DATE_FORMAT(c.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE, a.ANGGOTA_NAMA INPUT_BY, SUBSTRING(a.ANGGOTA_PIC FROM 2) ANGGOTA_PIC,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,cb.CABANG_DESKRIPSI,d.DAERAH_DESKRIPSI
     FROM c_blog c
     LEFT JOIN m_anggota a ON c.INPUT_BY = a.ANGGOTA_ID
     LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
@@ -72,7 +72,7 @@ if (isset($_GET['id'])) {
                                     <div class="post-block post-author">
                                         <h3 class="text-color-dark text-capitalize font-weight-bold text-5 m-0 mb-3">Penulis</h3>
                                         <div class="img-thumbnail img-thumbnail-no-borders d-block pb-3">
-                                            <img src="./dashboard/html/<?= $ANGGOTA_PIC; ?>" class="rounded-circle" alt="" style="text-align: center;overflow: hidden;position: relative;width: 100px;height: 100px;">
+                                            <img src="./dashboard/html<?= $ANGGOTA_PIC; ?>" class="rounded-circle" alt="" style="text-align: center;overflow: hidden;position: relative;width: 100px;height: 100px;">
                                         </div>
                                         <p><strong class="name"><a href="#" class="text-4 text-dark pb-2 pt-2 d-block"><?= $INPUT_BY; ?></a></strong></p>
                                         <p><?= $TINGKATAN_NAMA; ?> - <?= $TINGKATAN_SEBUTAN; ?></p>

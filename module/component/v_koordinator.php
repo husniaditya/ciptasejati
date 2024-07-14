@@ -6,7 +6,7 @@ LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
 WHERE t.TINGKATAN_LEVEL BETWEEN 6 AND 9 AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0");
 
 
-$getKegiatan = GetQuery("SELECT * FROM c_kegiatan WHERE DELETION_STATUS = 0");
+$getKegiatan = GetQuery("SELECT *,SUBSTRING(KEGIATAN_IMAGE FROM 2) KEGIATAN_IMAGE FROM c_kegiatan WHERE DELETION_STATUS = 0");
 
 $rowKegiatan = $getKegiatan->fetchAll(PDO::FETCH_ASSOC);
 
@@ -41,7 +41,7 @@ $rowKegiatan = $getKegiatan->fetchAll(PDO::FETCH_ASSOC);
                 <div class="col-lg-4 mb-5">
                     <span class="thumb-info thumb-info-swap-content anim-hover-inner-wrapper rounded">
                         <span class="thumb-info-wrapper overlay overlay-show overlay-gradient-bottom-content">
-                        <img src="./dashboard/html/<?= $ANGGOTA_PIC; ?>" class="img-fluid" alt="" style="text-align: center; overflow: hidden; position: relative; height: 400px; object-fit:cover;">
+                        <img src="./dashboard/html<?= $ANGGOTA_PIC; ?>" class="img-fluid" alt="" style="text-align: center; overflow: hidden; position: relative; height: 400px; object-fit:cover;">
                         </span>
                     </span>
                     <h4 class="font-weight-bold mt-4"><?= $ANGGOTA_NAMA; ?></h4>

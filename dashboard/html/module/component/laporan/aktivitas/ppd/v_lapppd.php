@@ -4,7 +4,7 @@ $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 $USER_CABANG = $_SESSION["LOGINCAB_CS"];
 
 if ($USER_AKSES == "Administrator") {
-    $getPPD = GetQuery("SELECT p.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_KEY,c.CABANG_DESKRIPSI,t2.TINGKATAN_NAMA PPD_TINGKATAN,t2.TINGKATAN_SEBUTAN PPD_SEBUTAN,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,c2.CABANG_DESKRIPSI PPD_CABANG,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL, p.PPD_FILE,
+    $getPPD = GetQuery("SELECT p.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_KEY,c.CABANG_DESKRIPSI,t2.TINGKATAN_NAMA PPD_TINGKATAN,t2.TINGKATAN_SEBUTAN PPD_SEBUTAN,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,c2.CABANG_DESKRIPSI PPD_CABANG,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL, p.PPD_FILE, u.UKT_ID, DATE_FORMAT(u.UKT_TANGGAL, '%d %M %Y') UKT_TANGGAL,
     CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan'
     ELSE 'Ulang'
     END PPD_JENIS,
@@ -32,12 +32,13 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_LAMA = t.TINGKATAN_ID
     LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID_BARU = t2.TINGKATAN_ID
+    LEFT JOIN t_ukt u ON u.TINGKATAN_ID = p.TINGKATAN_ID_BARU AND u.ANGGOTA_ID = p.ANGGOTA_ID AND u.DELETION_STATUS = 0 AND u.UKT_APP_KOOR = 1
     WHERE p.DELETION_STATUS = 0
     ORDER BY p.PPD_ID DESC");
 
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0");
 } else if ($USER_AKSES == "Koordinator" || $USER_AKSES == "Pengurus") {
-    $getPPD = GetQuery("SELECT p.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_KEY,c.CABANG_DESKRIPSI,t2.TINGKATAN_NAMA PPD_TINGKATAN,t2.TINGKATAN_SEBUTAN PPD_SEBUTAN,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,c2.CABANG_DESKRIPSI PPD_CABANG,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL, p.PPD_FILE,
+    $getPPD = GetQuery("SELECT p.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_KEY,c.CABANG_DESKRIPSI,t2.TINGKATAN_NAMA PPD_TINGKATAN,t2.TINGKATAN_SEBUTAN PPD_SEBUTAN,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,c2.CABANG_DESKRIPSI PPD_CABANG,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL, p.PPD_FILE, u.UKT_ID, DATE_FORMAT(u.UKT_TANGGAL, '%d %M %Y') UKT_TANGGAL,
     CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan'
     ELSE 'Ulang'
     END PPD_JENIS,
@@ -65,12 +66,13 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_LAMA = t.TINGKATAN_ID
     LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID_BARU = t2.TINGKATAN_ID
+    LEFT JOIN t_ukt u ON u.TINGKATAN_ID = p.TINGKATAN_ID_BARU AND u.ANGGOTA_ID = p.ANGGOTA_ID AND u.DELETION_STATUS = 0 AND u.UKT_APP_KOOR = 1
     WHERE p.DELETION_STATUS = 0 AND p.CABANG_KEY = '$USER_CABANG'
     ORDER BY p.PPD_ID DESC");
 
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 and CABANG_KEY = '$USER_CABANG'");
 } else {
-    $getPPD = GetQuery("SELECT p.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_KEY,c.CABANG_DESKRIPSI,t2.TINGKATAN_NAMA PPD_TINGKATAN,t2.TINGKATAN_SEBUTAN PPD_SEBUTAN,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,c2.CABANG_DESKRIPSI PPD_CABANG,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL, p.PPD_FILE,
+    $getPPD = GetQuery("SELECT p.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_KEY,c.CABANG_DESKRIPSI,t2.TINGKATAN_NAMA PPD_TINGKATAN,t2.TINGKATAN_SEBUTAN PPD_SEBUTAN,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,c2.CABANG_DESKRIPSI PPD_CABANG,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL, p.PPD_FILE, u.UKT_ID, DATE_FORMAT(u.UKT_TANGGAL, '%d %M %Y') UKT_TANGGAL,
     CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan'
     ELSE 'Ulang'
     END PPD_JENIS,
@@ -98,6 +100,7 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_LAMA = t.TINGKATAN_ID
     LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID_BARU = t2.TINGKATAN_ID
+    LEFT JOIN t_ukt u ON u.TINGKATAN_ID = p.TINGKATAN_ID_BARU AND u.ANGGOTA_ID = p.ANGGOTA_ID AND u.DELETION_STATUS = 0 AND u.UKT_APP_KOOR = 1
     WHERE p.DELETION_STATUS = 0 AND p.ANGGOTA_ID = '$USER_ID'
     ORDER BY p.PPD_ID DESC");
 
@@ -308,8 +311,8 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                             <td align="center"><?= $PPD_CABANG; ?></td>
                             <td align="center"><?= $PPD_TANGGAL; ?></td>
                             <td><?= $PPD_DESKRIPSI; ?></td>
-                            <td align="center"></td>
-                            <td align="center"></td>
+                            <td align="center"><a data-toggle="modal" href="#ViewUKT" class="open-ViewUKT" data-id="<?= $UKT_ID; ?>" > <?= $UKT_ID; ?></a></td>
+                            <td align="center"><?= $UKT_TANGGAL; ?></td>
                             <td align="center">
                             <?php
                             if ($PPD_APPROVE_GURU == 1) {
@@ -342,7 +345,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-inverse">Data PPD Anggota</h3>
+                    <h3 class="semibold modal-title text-inverse">Lihat Data PPD Anggota</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -416,3 +419,113 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
     </form>
 </div>
 
+<div id="ViewUKT" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form id="ViewUKT-form" method="post" class="form" data-parsley-validate>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h3 class="semibold modal-title text-inverse">Lihat Data UKT Anggota</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="center">
+                            <div class="short-div">
+                                <label>Foto Anggota </label><br>
+                                <div id="loadpicukt"></div>
+                            </div>
+                            <br>
+                            <br>
+                            <div class="short-div">
+                                <div class="col-md-6">
+                                    <h2><u>Nilai UKT</u></h2>
+                                    <h2 id="viewUKT_TOTAL"></h2>
+                                </div>
+                                <div class="col-md-6">
+                                    <h2><u>Predikat</u></h2>
+                                    <h2 id="viewUKT_NILAI"></h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <?php
+                        if ($USER_AKSES == "Administrator") {
+                            ?>
+                            <div class="short-div">
+                                <div class="form-group">
+                                    <label>Daerah </label>
+                                    <input type="text" class="form-control" id="viewDAERAH_KEY" name="DAERAH_KEY" readonly/>
+                                </div> 
+                            </div>
+                            <div class="short-div">
+                                <div class="form-group">
+                                    <label>Cabang </label>
+                                    <input type="text" class="form-control" id="viewCABANG_KEY" name="CABANG_KEY" readonly />
+                                </div> 
+                            </div>
+                            <?php
+                        }
+                        ?>
+                            <div class="short-div">
+                                <div class="form-group">
+                                    <label>Tanggal </label>
+                                    <input type="text" class="form-control" id="viewUKT_TANGGAL" name="UKT_TANGGAL" readonly />
+                                </div> 
+                            </div>
+                            <div class="short-div">
+                                <div class="form-group">
+                                    <label>Pilih Anggota </label>
+                                    <input type="text" class="form-control" id="viewANGGOTA_ID" name="ANGGOTA_ID" readonly />
+                                </div> 
+                            </div>
+                            <div class="short-div">
+                                <div class="form-group">
+                                    <label>Tingkatan UKT </label>
+                                    <input type="text" class="form-control" id="viewTINGKATAN_ID" name="TINGKATAN_ID" readonly />
+                                </div> 
+                            </div>
+                            <div class="short-div">
+                                <div class="form-group">
+                                    <label>Lokasi Cabang UKT </label>
+                                    <input type="text" class="form-control" id="viewUKT_LOKASI" name="UKT_LOKASI" readonly />
+                                </div> 
+                            </div>
+                            <div class="short-div">
+                                <div class="form-group">
+                                    <label>Deskripsi </label>
+                                    <textarea type="text" rows="4" class="form-control" id="viewUKT_DESKRIPSI" name="UKT_DESKRIPSI" value="" readonly></textarea>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <h4>Daftar Penguji</h4>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Tabel Daftar Penguji</h3>
+                            </div>
+                            <table class="table table-striped table-bordered" id="viewPenguji-table">
+                                <thead>
+                                    <tr>
+                                        <th>No. </th>
+                                        <th>Nama Penguji </th>
+                                        <th>Tingkatan </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="viewPengujiData">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <hr>
+                    <h4>Rincian Nilai UKT</h4>
+                    <div id="viewrincianukt"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

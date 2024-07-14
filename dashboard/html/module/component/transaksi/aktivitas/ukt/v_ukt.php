@@ -509,7 +509,7 @@ $rowp = $getPenguji->fetchAll(PDO::FETCH_ASSOC);
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-inverse">Tambah Data UKT Anggota</h3>
+                    <h3 class="semibold modal-title text-inverse">Lihat Data UKT Anggota</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">

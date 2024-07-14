@@ -17,25 +17,25 @@ for ($i = 0; $i < 7; $i++) {
 if ($USER_AKSES == "Administrator") {
     $getPPD = GetQuery("SELECT COUNT(*) PPD, DATE_FORMAT(PPD_TANGGAL, '%Y') AS year
                         FROM t_ppd
-                        WHERE DELETION_STATUS = 0 AND PPD_TANGGAL >= DATE_SUB(CURDATE(), INTERVAL 7 YEAR)
+                        WHERE DELETION_STATUS = 0 AND PPD_TANGGAL >= DATE_SUB(CURDATE(), INTERVAL 7 YEAR) AND PPD_APPROVE_PELATIH = 1
                         GROUP BY year
                         ORDER BY year");
     
     $getUKT = GetQuery("SELECT COUNT(*) UKT, DATE_FORMAT(UKT_TANGGAL, '%Y') AS year
                         FROM t_ukt
-                        WHERE DELETION_STATUS = 0 AND UKT_TANGGAL >= DATE_SUB(CURDATE(), INTERVAL 7 YEAR)
+                        WHERE DELETION_STATUS = 0 AND UKT_TANGGAL >= DATE_SUB(CURDATE(), INTERVAL 7 YEAR) AND UKT_APP_KOOR = 1
                         GROUP BY year
                         ORDER BY year");
 } else {
     $getPPD = GetQuery("SELECT COUNT(*) PPD, DATE_FORMAT(PPD_TANGGAL, '%Y') AS year
                         FROM t_ppd
-                        WHERE DELETION_STATUS = 0 AND PPD_TANGGAL >= DATE_SUB(CURDATE(), INTERVAL 7 YEAR) AND CABANG_KEY = '$USER_CABANG'
+                        WHERE DELETION_STATUS = 0 AND PPD_TANGGAL >= DATE_SUB(CURDATE(), INTERVAL 7 YEAR) AND CABANG_KEY = '$USER_CABANG' AND PPD_APPROVE_PELATIH = 1
                         GROUP BY year
                         ORDER BY year");
     
     $getUKT = GetQuery("SELECT COUNT(*) UKT, DATE_FORMAT(UKT_TANGGAL, '%Y') AS year
                         FROM t_ukt
-                        WHERE DELETION_STATUS = 0 AND UKT_TANGGAL >= DATE_SUB(CURDATE(), INTERVAL 7 YEAR) AND CABANG_KEY = '$USER_CABANG'
+                        WHERE DELETION_STATUS = 0 AND UKT_TANGGAL >= DATE_SUB(CURDATE(), INTERVAL 7 YEAR) AND CABANG_KEY = '$USER_CABANG' AND UKT_APP_KOOR = 1
                         GROUP BY year
                         ORDER BY year");
 }

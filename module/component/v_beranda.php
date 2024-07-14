@@ -5,14 +5,14 @@ while ($rowLogo = $getLogo->fetch(PDO::FETCH_ASSOC)) {
 }
 $getVisi = GetQuery("SELECT * FROM c_visimisi WHERE VISIMISI_KATEGORI = 'Visi'");
 $getMisi = GetQuery("SELECT * FROM c_visimisi WHERE VISIMISI_KATEGORI = 'Misi'");
-$getKegiatan = GetQuery("SELECT * FROM c_kegiatan WHERE DELETION_STATUS = 0");
+$getKegiatan = GetQuery("SELECT *,SUBSTRING(KEGIATAN_IMAGE FROM 2) KEGIATAN_IMAGE FROM c_kegiatan WHERE DELETION_STATUS = 0");
 $getInformasi = GetQuery("SELECT *,ROW_NUMBER() OVER (ORDER BY INFORMASI_ID) AS row_num FROM c_informasi WHERE DELETION_STATUS = 0");
 $getKoordinator = GetQuery("SELECT a.*,SUBSTRING(a.ANGGOTA_PIC, 2) ANGGOTA_PIC,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN
 FROM m_anggota a
 LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
 LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
 WHERE a.ANGGOTA_AKSES = 'Koordinator' AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0");
-$getListBlog = GetQuery("SELECT c.*, CASE WHEN c.DELETION_STATUS = 0 THEN 'Aktif' ELSE 'Tidak Aktif' END BLOG_STATUS, DATE_FORMAT(c.INPUT_DATE, '%d %M %Y') INPUT_DATE, a.ANGGOTA_NAMA INPUT_BY
+$getListBlog = GetQuery("SELECT c.*,SUBSTRING(c.BLOG_IMAGE FROM 2) BLOG_IMAGE, CASE WHEN c.DELETION_STATUS = 0 THEN 'Aktif' ELSE 'Tidak Aktif' END BLOG_STATUS, DATE_FORMAT(c.INPUT_DATE, '%d %M %Y') INPUT_DATE, a.ANGGOTA_NAMA INPUT_BY
 FROM c_blog c
 LEFT JOIN m_anggota a ON c.INPUT_BY = a.ANGGOTA_ID
 WHERE c.DELETION_STATUS = 0 ORDER BY INPUT_DATE DESC limit 10");
@@ -393,7 +393,7 @@ $rowInformasi = $getInformasi->fetchAll(PDO::FETCH_ASSOC);
                             <div class="col-lg-12 mt-5 mt-lg-0">
                                 <div class="row align-items-center p-relative">
                                     <div class="col-lg-6">
-                                        <img src="./dashboard/html/<?= $BLOG_IMAGE; ?>" class="img-fluid rounded" alt="" style="text-align: center;overflow: hidden;position: relative;height: 190; width:336"/>
+                                        <img src="./dashboard/html<?= $BLOG_IMAGE; ?>" class="img-fluid rounded" alt="" style="text-align: center;overflow: hidden;position: relative;height: 190; width:336"/>
                                     </div>
                                     <div class="col-lg-6 mt-4 mt-lg-0">
                                         <span class="d-block text-color-grey font-weight-semibold positive-ls-2 text-1 text-uppercase"><?= $INPUT_DATE; ?> | <?= $INPUT_BY; ?></span>
