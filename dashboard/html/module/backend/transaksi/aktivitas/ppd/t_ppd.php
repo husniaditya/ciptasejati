@@ -212,6 +212,9 @@ if (isset($_POST["approveKoordinator"])) {
 
         GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_ID, TINGKATAN_ID_LAMA, TINGKATAN_ID_BARU, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_FILE_NAME, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'U', '$USER_ID', now() from t_ppd where PPD_ID = '$PPD_ID'");
         
+        // DELETE NOTIFIKASI BEFORE INSERT
+        GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$PPD_ID'");
+        
         // INSERT NOTIFIKASI
         GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$PPD_ID',p.CABANG_KEY,p.PPD_LOKASI,'PPD','ViewNotifPPD','open-ViewNotifPPD',CONCAT('PPD ', CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan' else 'Ulang' END, ' ', t.TINGKATAN_NAMA,' - ', t.TINGKATAN_SEBUTAN),CONCAT(p.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),1,0,'$USER_ID',NOW()
         FROM m_anggota a
@@ -260,6 +263,9 @@ if (isset($_POST["rejectKoordinator"])) {
 
         GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_ID, TINGKATAN_ID_LAMA, TINGKATAN_ID_BARU, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_FILE_NAME, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'U', '$USER_ID', now() from t_ppd where PPD_ID = '$PPD_ID'");
 
+        // DELETE NOTIFIKASI BEFORE INSERT
+        GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$PPD_ID'");
+        
         // INSERT NOTIFIKASI
         GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$PPD_ID',p.CABANG_KEY,p.PPD_LOKASI,'PPD',
         CASE

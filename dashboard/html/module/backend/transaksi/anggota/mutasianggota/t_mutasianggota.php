@@ -184,6 +184,8 @@ if (isset($_POST["approvemutasianggota"]) || isset($_POST["notifapprovemutasiang
             extract($rowMutasi);
         }
     
+        GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$MUTASI_ID'");
+     
         // INSERT NOTIFIKASI
         GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$MUTASI_ID',m.CABANG_AWAL,m.CABANG_TUJUAN,'Mutasi','ViewNotifMutasi','open-ViewNotifMutasi','Persetujuan Mutasi Anggota',CONCAT('Mutasi a.n ',a.ANGGOTA_NAMA,' dari cabang ',c.CABANG_DESKRIPSI),1,0,'$USER_ID',NOW()
         FROM m_anggota a
@@ -241,6 +243,8 @@ if (isset($_POST["rejectmutasianggota"]) || isset($_POST["notifrejectmutasianggo
             extract($rowMutasi);
         }
     
+        GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$MUTASI_ID'");
+     
         // INSERT NOTIFIKASI
         GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$MUTASI_ID',m.CABANG_AWAL,m.CABANG_TUJUAN,'Mutasi','ViewNotifMutasi','open-ViewNotifMutasi','Persetujuan Mutasi Anggota',CONCAT('Mutasi a.n ',a.ANGGOTA_NAMA,' dari cabang ',c.CABANG_DESKRIPSI),2,0,'$USER_ID',NOW()
         FROM m_anggota a

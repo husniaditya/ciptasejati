@@ -76,7 +76,7 @@ if (isset($_POST['id'])) {
                     $this->Cell($fullWidth,5,"Disetujui Oleh,",0,0,"R");
                     $this->Ln();
                     // QRCODE,H : QR-CODE Best error correction
-                    $this->write2DBarcode('localhost/ciptasejati/assets/token/tokenverify.php?id='.$encodedId.'&'.$encodedGuru, 'QRCODE,H', 230, 163, 50, 50, $style, 'N');
+                    $this->write2DBarcode('https://ciptasejatiindonesia.com/assets/token/tokenverify.php?id='.$encodedId.'&'.$encodedGuru, 'QRCODE,H', 230, 163, 50, 50, $style, 'N');
                     // $this->Ln(-1);
                     // $this->SetFont('times', 'BU', 15); // Set font for body
                     // $this->Cell($fullWidth,5,$GURU_NAMA,0,0,"R");
