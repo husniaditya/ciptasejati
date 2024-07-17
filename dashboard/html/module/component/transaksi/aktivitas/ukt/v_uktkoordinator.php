@@ -233,7 +233,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
             <div class="panel-heading">
                 <h3 class="panel-title">Tabel Uji Kenaikan Tingkat</h3>
             </div>
-            <table class="table table-striped table-bordered" id="ukt-table">
+            <table class="table table-striped table-bordered" id="uktkoor-table">
                 <thead>
                     <tr>
                         <th></th>
@@ -271,8 +271,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                             </td>
                             <td>
                                 <?= $UKT_ID; ?><br> 
-                                <span class="<?= $KOOR_BADGE; ?>"><i class="<?= $KOOR_CLASS; ?>"></i> Koordinator </span><br> 
-                                <span class="<?= $GURU_BADGE; ?>"><i class="<?= $GURU_CLASS; ?>"></i> Guru Besar </span>
+                                <span class="<?= $KOOR_BADGE; ?>"><i class="<?= $KOOR_CLASS; ?>"></i> Koordinator </span>
                             </td>
                             <td align="center"><?= $ANGGOTA_ID; ?></td>
                             <td><?= $ANGGOTA_NAMA; ?></td>
@@ -305,7 +304,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-inverse">Tambah Data UKT Anggota</h3>
+                    <h3 class="semibold modal-title text-inverse">Persetujuan Data UKT Anggota</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">

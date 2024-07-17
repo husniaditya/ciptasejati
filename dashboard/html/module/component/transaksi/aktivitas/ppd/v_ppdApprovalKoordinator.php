@@ -218,7 +218,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
             <div class="panel-heading">
                 <h3 class="panel-title">Tabel Pembukaan Pusat Daya</h3>
             </div>
-            <table class="table table-striped table-bordered" id="ppd-table">
+            <table class="table table-striped table-bordered" id="ppdKoor-table">
                 <thead>
                     <tr>
                         <th></th>

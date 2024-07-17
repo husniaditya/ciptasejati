@@ -289,6 +289,11 @@ $rowp = $getPenguji->fetchAll(PDO::FETCH_ASSOC);
                                                 <li class="divider"></li>
                                                 <li><a href="#" onclick="eventukt('<?= $UKT_ID;?>','delete')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
                                                 <?php
+                                            } else {
+                                                ?>
+                                                <li class="divider"></li>
+                                                <li><a href="#" onclick="eventukt('<?= $UKT_ID;?>','cancel')"><i class="fa-solid fa-rotate-left"></i> Batal Persetujuan</a></li>
+                                                <?php
                                             }
                                             ?>
                                         </ul>
@@ -297,8 +302,7 @@ $rowp = $getPenguji->fetchAll(PDO::FETCH_ASSOC);
                             </td>
                             <td>
                                 <?= $UKT_ID; ?><br> 
-                                <span class="<?= $KOOR_BADGE; ?>"><i class="<?= $KOOR_CLASS; ?>"></i> Koordinator </span><br> 
-                                <span class="<?= $GURU_BADGE; ?>"><i class="<?= $GURU_CLASS; ?>"></i> Guru Besar </span>
+                                <span class="<?= $KOOR_BADGE; ?>"><i class="<?= $KOOR_CLASS; ?>"></i> Koordinator </span>
                             </td>
                             <td align="center"><?= $ANGGOTA_ID; ?></td>
                             <td><?= $ANGGOTA_NAMA; ?></td>

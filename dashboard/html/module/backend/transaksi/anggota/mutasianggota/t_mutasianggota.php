@@ -34,23 +34,44 @@ if (isset($_POST["savemutasianggota"])) {
 
         GetQuery("insert into t_mutasi_log select uuid(), MUTASI_ID, CABANG_AWAL, CABANG_TUJUAN, ANGGOTA_KEY, MUTASI_DESKRIPSI, MUTASI_TANGGAL, MUTASI_STATUS, MUTASI_STATUS_TANGGAL, MUTASI_APPROVE_BY, MUTASI_APPROVE_TANGGAL, MUTASI_FILE, DELETION_STATUS, 'I', '$USER_ID', now() from t_mutasi where MUTASI_ID = '$MUTASI_ID'");
 
-        GetQuery("insert into t_notifikasi
-        select uuid(),ANGGOTA_KEY,'$MUTASI_ID','$CABANG_AWAL','$CABANG_TUJUAN','Mutasi',
+        // INSERT NOTIFIKASI
+        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$MUTASI_ID',m.CABANG_AWAL,m.CABANG_TUJUAN,'Mutasi',
         CASE
-            WHEN ANGGOTA_AKSES IN ('Administrator','Koordinator') THEN
+            WHEN n.ANGGOTA_AKSES IN ('Administrator','Koordinator') THEN
             'ApproveNotifMutasi'
             ELSE
             'ViewNotifMutasi'
         END AS HREF,
         CASE
-            WHEN ANGGOTA_AKSES IN ('Administrator','Koordinator') THEN
+            WHEN n.ANGGOTA_AKSES IN ('Administrator','Koordinator') THEN
             'open-ApproveNotifMutasi'
             ELSE
             'open-ViewNotifMutasi'
         END AS TOGGLE,
-        'Persetujuan Mutasi Anggota','Mutasi a.n $ANGGOTA_NAMA dari cabang $CABANG_DESKRIPSI', 0, 0, '$USER_ID', NOW()
-        FROM m_anggota
-        WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN ('$CABANG_AWAL','$CABANG_TUJUAN') AND ANGGOTA_AKSES = 'Koordinator' OR ANGGOTA_KEY = '$ANGGOTA_KEY') AND ANGGOTA_STATUS = 0");
+        'Persetujuan Mutasi Anggota',CONCAT('Mutasi a.n ',a.ANGGOTA_NAMA,' dari cabang ',c.CABANG_DESKRIPSI),0,0,'$USER_ID',NOW()
+        FROM m_anggota a
+        LEFT JOIN t_mutasi m ON a.ANGGOTA_ID = m.ANGGOTA_ID AND a.CABANG_KEY = m.CABANG_AWAL
+        LEFT JOIN m_cabang c ON m.CABANG_AWAL = c.CABANG_KEY
+        LEFT JOIN 
+            (
+                SELECT 
+                    a.ANGGOTA_KEY,
+                    a.CABANG_KEY,
+                    a.ANGGOTA_AKSES
+                FROM 
+                    m_anggota a
+                LEFT JOIN 
+                    t_mutasi m ON a.CABANG_KEY = m.CABANG_AWAL
+                WHERE 
+                    (a.ANGGOTA_AKSES = 'Administrator' OR 
+                    a.CABANG_KEY IN (m.CABANG_AWAL,m.CABANG_TUJUAN) AND 
+                    (a.ANGGOTA_AKSES IN ('Koordinator', 'Pengurus') AND 
+                    a.CABANG_KEY = '$CABANG_AWAL') OR 
+                    a.ANGGOTA_ID = '$ANGGOTA_ID') AND 
+                    a.ANGGOTA_STATUS = 0 AND 
+                    m.MUTASI_ID = '$MUTASI_ID'
+            ) n ON a.CABANG_KEY = n.CABANG_KEY
+        WHERE m.MUTASI_ID = '$MUTASI_ID'");
 
         $response="Success,$MUTASI_ID";
         echo $response;
@@ -69,6 +90,7 @@ if (isset($_POST["editmutasianggota"])) {
         $MUTASI_ID = $_POST["MUTASI_ID"];
         $CABANG_TUJUAN = $_POST["CABANG_TUJUAN"];
         $ANGGOTA_KEY = $_POST["ANGGOTA_KEY"];
+        $ANGGOTA_ID = $_POST["ANGGOTA_ID"];
         $MUTASI_DESKRIPSI = $_POST["MUTASI_DESKRIPSI"];
         $MUTASI_TANGGAL = $_POST["MUTASI_TANGGAL"];
         if ($USER_AKSES <> "Administrator") {
@@ -86,29 +108,50 @@ if (isset($_POST["editmutasianggota"])) {
             extract($rowNamaAnggota);
         }
 
-        GetQuery("update t_mutasi set CABANG_AWAL = '$CABANG_AWAL', CABANG_TUJUAN = '$CABANG_TUJUAN', ANGGOTA_KEY = '$ANGGOTA_KEY', MUTASI_DESKRIPSI = '$MUTASI_DESKRIPSI', MUTASI_TANGGAL = '$MUTASI_TANGGAL', MUTASI_STATUS = 0, MUTASI_STATUS_TANGGAL = now(), MUTASI_APPROVE_BY = null, MUTASI_APPROVE_TANGGAL = null, MUTASI_FILE = '$MUTASI_FILE', DELETION_STATUS = 0, INPUT_BY = '$USER_ID', INPUT_DATE = now() where MUTASI_ID = '$MUTASI_ID'");
+        GetQuery("update t_mutasi set CABANG_AWAL = '$CABANG_AWAL', CABANG_TUJUAN = '$CABANG_TUJUAN', ANGGOTA_KEY = '$ANGGOTA_KEY', ANGGOTA_ID = '$ANGGOTA_ID', MUTASI_DESKRIPSI = '$MUTASI_DESKRIPSI', MUTASI_TANGGAL = '$MUTASI_TANGGAL', MUTASI_STATUS = 0, MUTASI_STATUS_TANGGAL = now(), MUTASI_APPROVE_BY = null, MUTASI_APPROVE_TANGGAL = null, MUTASI_FILE = '$MUTASI_FILE', DELETION_STATUS = 0, INPUT_BY = '$USER_ID', INPUT_DATE = now() where MUTASI_ID = '$MUTASI_ID'");
 
         GetQuery("insert into t_mutasi_log select uuid(), MUTASI_ID, CABANG_AWAL, CABANG_TUJUAN, ANGGOTA_KEY, MUTASI_DESKRIPSI, MUTASI_TANGGAL, MUTASI_STATUS, MUTASI_STATUS_TANGGAL, MUTASI_APPROVE_BY, MUTASI_APPROVE_TANGGAL, MUTASI_FILE, DELETION_STATUS, 'U', '$USER_ID', now() from t_mutasi where MUTASI_ID = '$MUTASI_ID'");
 
         GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$MUTASI_ID'");
-
-        GetQuery("insert into t_notifikasi
-        select uuid(),ANGGOTA_KEY,'$MUTASI_ID','$CABANG_AWAL','$CABANG_TUJUAN','Mutasi',
+        
+        // INSERT NOTIFIKASI
+        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$MUTASI_ID',m.CABANG_AWAL,m.CABANG_TUJUAN,'Mutasi',
         CASE
-            WHEN ANGGOTA_AKSES IN ('Administrator','Koordinator') THEN
+            WHEN n.ANGGOTA_AKSES IN ('Administrator','Koordinator') THEN
             'ApproveNotifMutasi'
             ELSE
             'ViewNotifMutasi'
         END AS HREF,
         CASE
-            WHEN ANGGOTA_AKSES IN ('Administrator','Koordinator') THEN
+            WHEN n.ANGGOTA_AKSES IN ('Administrator','Koordinator') THEN
             'open-ApproveNotifMutasi'
             ELSE
             'open-ViewNotifMutasi'
         END AS TOGGLE,
-        'Persetujuan Mutasi Anggota','Mutasi a.n $ANGGOTA_NAMA dari cabang $CABANG_DESKRIPSI', 0, 0, '$USER_ID', NOW()
-        FROM m_anggota
-        WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN ('$CABANG_AWAL','$CABANG_TUJUAN') AND ANGGOTA_AKSES = 'Koordinator' OR ANGGOTA_KEY = '$ANGGOTA_KEY') AND ANGGOTA_STATUS = 0");
+        'Persetujuan Mutasi Anggota',CONCAT('Mutasi a.n ',a.ANGGOTA_NAMA,' dari cabang ',c.CABANG_DESKRIPSI),0,0,'$USER_ID',NOW()
+        FROM m_anggota a
+        LEFT JOIN t_mutasi m ON a.ANGGOTA_ID = m.ANGGOTA_ID AND a.CABANG_KEY = m.CABANG_AWAL
+        LEFT JOIN m_cabang c ON m.CABANG_AWAL = c.CABANG_KEY
+        LEFT JOIN 
+            (
+                SELECT 
+                    a.ANGGOTA_KEY,
+                    a.CABANG_KEY,
+                    a.ANGGOTA_AKSES
+                FROM 
+                    m_anggota a
+                LEFT JOIN 
+                    t_mutasi m ON a.CABANG_KEY = m.CABANG_AWAL
+                WHERE 
+                    (a.ANGGOTA_AKSES = 'Administrator' OR 
+                    a.CABANG_KEY IN (m.CABANG_AWAL,m.CABANG_TUJUAN) AND 
+                    (a.ANGGOTA_AKSES IN ('Koordinator', 'Pengurus') AND 
+                    a.CABANG_KEY = '$CABANG_AWAL') OR 
+                    a.ANGGOTA_ID = '$ANGGOTA_ID') AND 
+                    a.ANGGOTA_STATUS = 0 AND 
+                    m.MUTASI_ID = '$MUTASI_ID'
+            ) n ON a.CABANG_KEY = n.CABANG_KEY
+        WHERE m.MUTASI_ID = '$MUTASI_ID'");
 
         $response="Success,$MUTASI_ID";
         echo $response;
@@ -140,13 +183,32 @@ if (isset($_POST["approvemutasianggota"]) || isset($_POST["notifapprovemutasiang
         while ($rowMutasi = $getDataMutasi->fetch(PDO::FETCH_ASSOC)) {
             extract($rowMutasi);
         }
-
-        GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$MUTASI_ID'");
-
-        GetQuery("insert into t_notifikasi
-        select uuid(),ANGGOTA_KEY,'$MUTASI_ID','$CABANG_AWAL','$CABANG_TUJUAN','Mutasi','ViewNotifMutasi','open-ViewNotifMutasi','Persetujuan Mutasi Anggota','Mutasi a.n $ANGGOTA_NAMA dari cabang $CABANG_AWAL_DES', 1, 0, '$USER_ID', NOW()
-        FROM m_anggota
-        WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN ('$CABANG_AWAL','$CABANG_TUJUAN') AND ANGGOTA_AKSES = 'Koordinator' OR ANGGOTA_KEY = '$ANGGOTA_KEY') AND ANGGOTA_STATUS = 0");
+    
+        // INSERT NOTIFIKASI
+        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$MUTASI_ID',m.CABANG_AWAL,m.CABANG_TUJUAN,'Mutasi','ViewNotifMutasi','open-ViewNotifMutasi','Persetujuan Mutasi Anggota',CONCAT('Mutasi a.n ',a.ANGGOTA_NAMA,' dari cabang ',c.CABANG_DESKRIPSI),1,0,'$USER_ID',NOW()
+        FROM m_anggota a
+        LEFT JOIN t_mutasi m ON a.ANGGOTA_ID = m.ANGGOTA_ID AND a.CABANG_KEY = m.CABANG_AWAL
+        LEFT JOIN m_cabang c ON m.CABANG_AWAL = c.CABANG_KEY
+        LEFT JOIN 
+            (
+                SELECT 
+                    a.ANGGOTA_KEY,
+                    a.CABANG_KEY,
+                    a.ANGGOTA_AKSES
+                FROM 
+                    m_anggota a
+                LEFT JOIN 
+                    t_mutasi m ON a.CABANG_KEY = m.CABANG_AWAL
+                WHERE 
+                    (a.ANGGOTA_AKSES = 'Administrator' OR 
+                    a.CABANG_KEY IN (m.CABANG_AWAL,m.CABANG_TUJUAN) AND 
+                    (a.ANGGOTA_AKSES IN ('Koordinator', 'Pengurus') AND 
+                    a.CABANG_KEY = '$CABANG_AWAL') OR 
+                    a.ANGGOTA_ID = '$ANGGOTA_ID') AND 
+                    a.ANGGOTA_STATUS = 0 AND 
+                    m.MUTASI_ID = '$MUTASI_ID'
+            ) n ON a.CABANG_KEY = n.CABANG_KEY
+        WHERE m.MUTASI_ID = '$MUTASI_ID'");
 
         $response="Success,$MUTASI_ID";
         echo $response;
@@ -178,13 +240,32 @@ if (isset($_POST["rejectmutasianggota"]) || isset($_POST["notifrejectmutasianggo
         while ($rowMutasi = $getDataMutasi->fetch(PDO::FETCH_ASSOC)) {
             extract($rowMutasi);
         }
-
-        GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$MUTASI_ID'");
-
-        GetQuery("insert into t_notifikasi
-        select uuid(),ANGGOTA_KEY,'$MUTASI_ID','$CABANG_AWAL','$CABANG_TUJUAN','Mutasi','ViewNotifMutasi','open-ViewNotifMutasi','Persetujuan Mutasi Anggota','Mutasi a.n $ANGGOTA_NAMA dari cabang $CABANG_AWAL_DES', 2, 0, '$USER_ID', NOW()
-        FROM m_anggota
-        WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN ('$CABANG_AWAL','$CABANG_TUJUAN') AND ANGGOTA_AKSES = 'Koordinator' OR ANGGOTA_KEY = '$ANGGOTA_KEY') AND ANGGOTA_STATUS = 0");
+    
+        // INSERT NOTIFIKASI
+        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$MUTASI_ID',m.CABANG_AWAL,m.CABANG_TUJUAN,'Mutasi','ViewNotifMutasi','open-ViewNotifMutasi','Persetujuan Mutasi Anggota',CONCAT('Mutasi a.n ',a.ANGGOTA_NAMA,' dari cabang ',c.CABANG_DESKRIPSI),2,0,'$USER_ID',NOW()
+        FROM m_anggota a
+        LEFT JOIN t_mutasi m ON a.ANGGOTA_ID = m.ANGGOTA_ID AND a.CABANG_KEY = m.CABANG_AWAL
+        LEFT JOIN m_cabang c ON m.CABANG_AWAL = c.CABANG_KEY
+        LEFT JOIN 
+            (
+                SELECT 
+                    a.ANGGOTA_KEY,
+                    a.CABANG_KEY,
+                    a.ANGGOTA_AKSES
+                FROM 
+                    m_anggota a
+                LEFT JOIN 
+                    t_mutasi m ON a.CABANG_KEY = m.CABANG_AWAL
+                WHERE 
+                    (a.ANGGOTA_AKSES = 'Administrator' OR 
+                    a.CABANG_KEY IN (m.CABANG_AWAL,m.CABANG_TUJUAN) AND 
+                    (a.ANGGOTA_AKSES IN ('Koordinator', 'Pengurus') AND 
+                    a.CABANG_KEY = '$CABANG_AWAL') OR 
+                    a.ANGGOTA_ID = '$ANGGOTA_ID') AND 
+                    a.ANGGOTA_STATUS = 0 AND 
+                    m.MUTASI_ID = '$MUTASI_ID'
+            ) n ON a.CABANG_KEY = n.CABANG_KEY
+        WHERE m.MUTASI_ID = '$MUTASI_ID'");
 
         $response="Success,$MUTASI_ID";
         echo $response;

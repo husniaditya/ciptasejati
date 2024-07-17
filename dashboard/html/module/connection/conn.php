@@ -98,6 +98,18 @@ try {
         return substr("00000000" . $angkaAkhir, -1 * $jumlahAngka);
     }
 
+    function encodeIdToBase64($id) {
+        $base64 = base64_encode($id);
+        $urlSafeBase64 = str_replace(['+', '/', '='], ['-', '_', ''], $base64);
+        return $urlSafeBase64;
+    }
+    
+    function decodeBase64ToId($urlSafeBase64) {
+        $base64 = str_replace(['-', '_'], ['+', '/'], $urlSafeBase64);
+        $id = base64_decode($base64);
+        return $id;
+    }
+
 } catch (PDOException $e) {
     die("Database connection failed: " . $e->getMessage());
 }

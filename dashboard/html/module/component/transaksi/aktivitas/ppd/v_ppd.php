@@ -222,7 +222,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
 <!--/ END row -->
 
 <!-- START row -->
-<div class="row"> <!-- Table PPD -->
+<div class="row"> <!-- Table UKT -->
     <div class="col-md-12">
         <div class="panel panel-default" id="demo">
             <div class="panel-heading">
@@ -267,11 +267,16 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                             if ($PPD_APPROVE_PELATIH == 0) {
                                                 ?>
                                                 <li><a data-toggle="modal" href="#EditPPD" class="open-EditPPD" style="color:#00a5d2;" data-id="<?= $PPD_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><span class="ico-edit"></span> Ubah</a></li>
+                                                <li class="divider"></li>
+                                                <li><a href="#" onclick="eventppd('<?= $PPD_ID;?>','delete')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
+                                                <?php
+                                            } else {
+                                                ?>
+                                                <li class="divider"></li>
+                                                <li><a href="#" onclick="eventppd('<?= $PPD_ID;?>','cancel')"><i class="fa-solid fa-rotate-left"></i> Batal Persetujuan</a></li>
                                                 <?php
                                             }
                                             ?>
-                                            <li class="divider"></li>
-                                            <li><a href="#" onclick="eventppd('<?= $PPD_ID;?>','delete')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
                                         </ul>
                                     </div>
                                 </form>
@@ -457,7 +462,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-inverse">Tambah Data PPD Anggota</h3>
+                    <h3 class="semibold modal-title text-inverse">Lihat Data PPD Anggota</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">

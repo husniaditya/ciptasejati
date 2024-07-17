@@ -8,7 +8,11 @@ $USER_NAMA = $_SESSION["LOGINNAME_CS"];
 require_once('../../../../../assets/tcpdf/tcpdf.php');
 
 if ($_GET["id"]) {
-    $PPD_ID = $_GET["id"];
+    $id = $_GET["id"];
+    $decodedId = decodeBase64ToId($id);
+    $PPD_ID = $decodedId;
+    $encodedKoor = encodeIdToBase64('Koor');
+    $encodedGuru = encodeIdToBase64('Guru');
 
     try {
         $getData = GetQuery("SELECT p.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_KEY,c.CABANG_DESKRIPSI,c.CABANG_SEKRETARIAT,d2.DAERAH_KEY LOKASI_DAERAH_KEY,d2.DAERAH_DESKRIPSI LOKASI_DAERAH,c2.CABANG_KEY LOKASI_CABANG_KEY,c2.CABANG_DESKRIPSI LOKASI_CABANG,t.TINGKATAN_NAMA PPD_TINGKATAN,t.TINGKATAN_SEBUTAN PPD_SEBUTAN,a.ANGGOTA_NAMA,t2.TINGKATAN_NAMA, t2.TINGKATAN_SEBUTAN,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL,koor.ANGGOTA_NAMA PPD_KOORDINATOR,guru.ANGGOTA_NAMA PPD_GURU,DATE_FORMAT(p.PPD_APPROVE_GURU_TGL, '%d %M %Y') PPD_GURU_TGL,DATE_FORMAT(p.PPD_APPROVE_PELATIH_TGL, '%d %M %Y') PPD_PELATIH_TGL,
@@ -81,7 +85,7 @@ if ($_GET["id"]) {
     
                 // Page footer
                 public function Footer() {
-                    global $USER_NAMA, $CABANG_DESKRIPSI, $PPD_PELATIH_TGL, $PPD_GURU_TGL, $PPD_APPROVE_GURU, $PPD_APPROVE_PELATIH_BY, $PPD_APPROVE_GURU_BY, $PPD_KOORDINATOR, $PPD_GURU, $DATENOW;
+                    global $id, $encodedKoor, $encodedGuru, $USER_NAMA, $CABANG_DESKRIPSI, $PPD_PELATIH_TGL, $PPD_GURU_TGL, $PPD_APPROVE_GURU, $PPD_APPROVE_PELATIH_BY, $PPD_APPROVE_GURU_BY, $PPD_KOORDINATOR, $PPD_GURU, $PPD_APPROVE_PELATIH, $DATENOW;
     
                     // set style for barcode
                     $style = array(
@@ -106,9 +110,11 @@ if ($_GET["id"]) {
                     $this->Cell(170,5,"Guru Besar,",0,0,"R");
                     $this->Ln();
                     // QRCODE,H : QR-CODE Best error correction
-                    $this->write2DBarcode($PPD_APPROVE_PELATIH_BY.' - '.$PPD_KOORDINATOR, 'QRCODE,H', 15, 220, 25, 25, $style, 'N');
+                    if ($PPD_APPROVE_PELATIH == 1) {
+                        $this->write2DBarcode('http://localhost/ciptasejati/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedKoor, 'QRCODE,H', 15, 220, 25, 25, $style, 'N');
+                    }
                     if ($PPD_APPROVE_GURU == 1) {
-                        $this->write2DBarcode($PPD_APPROVE_GURU_BY.' - '.$PPD_GURU, 'QRCODE,H', 160, 220, 25, 25, $style, 'N');
+                        $this->write2DBarcode('http://localhost/ciptasejati/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedGuru, 'QRCODE,H', 160, 220, 25, 25, $style, 'N');
                     }
                     $this->Ln(3);
                     $this->SetFont('times', 'U', 12); // Set font for body

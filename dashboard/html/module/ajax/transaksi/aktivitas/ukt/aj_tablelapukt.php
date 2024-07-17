@@ -137,16 +137,10 @@ while ($rowUKT = $getUKT->fetch(PDO::FETCH_ASSOC)) {
                     <ul class="dropdown-menu" role="menu">
                         <li><a data-toggle="modal" href="#ViewUKT" class="open-ViewUKT" style="color:#222222;" data-id="<?= $UKT_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
                         <?php
-                        if ($UKT_APP_KOOR == 0) {
-                            ?>
-                            <li><a data-toggle="modal" href="#EditUKT" class="open-EditUKT" style="color:#00a5d2;" data-id="<?= $UKT_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><span class="ico-edit"></span> Ubah</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#" onclick="eventukt('<?= $UKT_ID;?>','delete')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
-                            <?php
-                        } else {
+                        if ($UKT_APP_KOOR == 1) {
                             ?>
                             <li class="divider"></li>
-                            <li><a href="#" onclick="eventukt('<?= $UKT_ID;?>','cancel')"><i class="fa-solid fa-rotate-left"></i> Batal Persetujuan</a></li>
+                            <li><a href="<?= $UKT_FILE; ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
                             <?php
                         }
                         ?>

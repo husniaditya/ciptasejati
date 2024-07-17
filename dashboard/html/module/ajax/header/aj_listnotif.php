@@ -13,7 +13,7 @@ CASE
             WHEN k.KAS_DK = 'D' THEN 'Debit'
             ELSE 'Kredit'
         END
-    WHEN n.KATEGORI = 'MUTASI' THEN
+    WHEN n.KATEGORI = 'MUTASI' OR n.KATEGORI = 'PPD' OR n.KATEGORI = 'UKT' THEN
         CASE
             WHEN n.APPROVE_STATUS = 0 THEN 'Menunggu'
             WHEN n.APPROVE_STATUS = 1 THEN 'Disetujui'
@@ -26,7 +26,7 @@ CASE
             WHEN k.KAS_DK = 'D' THEN 'badge badge-success'
             ELSE 'badge badge-danger'
         END
-    WHEN n.KATEGORI = 'MUTASI' THEN
+    WHEN n.KATEGORI = 'MUTASI' OR n.KATEGORI = 'PPD' OR n.KATEGORI = 'UKT' THEN
         CASE
             WHEN n.APPROVE_STATUS = 0 THEN 'badge badge-inverse'
             WHEN n.APPROVE_STATUS = 1 THEN 'badge badge-success'
@@ -39,7 +39,7 @@ CASE
             WHEN k.KAS_DK = 'D' THEN 'fa-solid fa-right-to-bracket'
             ELSE 'fa-solid fa-right-from-bracket'
         END
-    WHEN n.KATEGORI = 'MUTASI' THEN
+    WHEN n.KATEGORI = 'MUTASI' OR n.KATEGORI = 'PPD' OR n.KATEGORI = 'UKT' THEN
         CASE
             WHEN n.APPROVE_STATUS = 0 THEN 'fa-solid fa-spinner fa-spin'
             WHEN n.APPROVE_STATUS = 1 THEN 'fa-solid fa-check'
@@ -47,7 +47,11 @@ CASE
         END
 END AS NOTIF_ICON,
 CASE
-    WHEN TIMEDIFF(NOW(), n.INPUT_DATE) < '01:00:00' THEN
+    WHEN TIMEDIFF(NOW(), n.INPUT_DATE) < '00:10:00' THEN
+        CONCAT(
+            'Baru saja'
+        )
+    WHEN TIMEDIFF(NOW(), n.INPUT_DATE) > '00:10:00' THEN
         CONCAT(
             MINUTE(TIMEDIFF(NOW(), n.INPUT_DATE)), ' Menit yang lalu'
         )
@@ -79,10 +83,10 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
                 <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
                 <span class="media-heading text-primary semibold"><?= $DOKUMEN_ID; ?></span>
                 <span class="media-heading text-primary semibold"><?= $SUBJECT; ?></span>
-                <span class="media-text ellipsis nm semibold"><?= $BODY; ?></span>
+                <span class="media-text nm semibold"><?= $BODY; ?></span>
                 <!-- meta icon -->
-                <span class="media-meta pull-left"><?= $ANGGOTA_NAMA." / ".$CABANG_DESKRIPSI; ?></span>
-                <span class="media-meta pull-right"><?= $difference; ?></span>
+                <span class="media-meta pull-left"><i class="fa-regular fa-pen-to-square"></i> <?= $ANGGOTA_NAMA." / ".$CABANG_DESKRIPSI; ?></span>
+                <span class="media-meta pull-right"><i class="fa-regular fa-clock"></i> <?= $difference; ?></span>
                 <!--/ meta icon -->
             </span>
         </a>
@@ -94,10 +98,10 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
                 <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
                 <span class="media-heading text-primary semibold"><?= $DOKUMEN_ID; ?></span>
                 <span class="media-heading text-primary semibold"><?= $SUBJECT; ?></span>
-                <span class="media-text ellipsis nm semibold"><?= $BODY; ?></span>
+                <span class="media-text nm semibold"><?= $BODY; ?></span>
                 <!-- meta icon -->
-                <span class="media-meta pull-left"><?= $ANGGOTA_NAMA." / ".$CABANG_DESKRIPSI; ?></span>
-                <span class="media-meta pull-right"><?= $difference; ?></span>
+                <span class="media-meta pull-left"><i class="fa-regular fa-pen-to-square"></i> <?= $ANGGOTA_NAMA." / ".$CABANG_DESKRIPSI; ?></span>
+                <span class="media-meta pull-right"><i class="fa-regular fa-clock"></i> <?= $difference; ?></span>
                 <!--/ meta icon -->
             </span>
         </a>
@@ -109,10 +113,10 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
                 <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
                 <span class="media-heading"><?= $DOKUMEN_ID; ?></span>
                 <span class="media-heading"><?= $SUBJECT; ?></span>
-                <span class="media-text ellipsis nm"><?= $BODY; ?></span>
+                <span class="media-text nm"><?= $BODY; ?></span>
                 <!-- meta icon -->
-                <span class="media-meta pull-left"><?= $ANGGOTA_NAMA." / ".$CABANG_DESKRIPSI; ?></span>
-                <span class="media-meta pull-right"><?= $difference; ?></span>
+                <span class="media-meta pull-left"><i class="fa-regular fa-pen-to-square"></i> <?= $ANGGOTA_NAMA." / ".$CABANG_DESKRIPSI; ?></span>
+                <span class="media-meta pull-right"><i class="fa-regular fa-clock"></i> <?= $difference; ?></span>
                 <!--/ meta icon -->
             </span>
         </a>
@@ -126,10 +130,10 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
                     <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
                     <span class="media-heading text-primary semibold"><?= $DOKUMEN_ID; ?></span>
                     <span class="media-heading text-primary semibold"><?= $SUBJECT; ?></span>
-                    <span class="media-text ellipsis nm semibold"><?= $BODY; ?></span>
+                    <span class="media-text nm semibold"><?= $BODY; ?></span>
                     <!-- meta icon -->
-                    <span class="media-meta pull-left"><?= $ANGGOTA_NAMA." / ".$CABANG_DESKRIPSI; ?></span>
-                    <span class="media-meta pull-right"><?= $difference; ?></span>
+                    <span class="media-meta pull-left"><i class="fa-regular fa-pen-to-square"></i> <?= $ANGGOTA_NAMA." / ".$CABANG_DESKRIPSI; ?></span>
+                    <span class="media-meta pull-right"><i class="fa-regular fa-clock"></i> <?= $difference; ?></span>
                     <!--/ meta icon -->
                 </span>
             </a>
@@ -141,10 +145,10 @@ while ($rowNotif = $getNotif->fetch(PDO::FETCH_ASSOC)) {
                     <span class="media-meta pull-right <?= $NOTIF_BADGE; ?>" style="color: white;"><i class="<?= $NOTIF_ICON; ?>"></i> <?= $APPROVAL; ?></span>
                     <span class="media-heading"><?= $DOKUMEN_ID; ?></span>
                     <span class="media-heading"><?= $SUBJECT; ?></span>
-                    <span class="media-text ellipsis nm"><?= $BODY; ?></span>
+                    <span class="media-text nm"><?= $BODY; ?></span>
                     <!-- meta icon -->
-                    <span class="media-meta pull-left"><?= $ANGGOTA_NAMA." / ".$CABANG_DESKRIPSI; ?></span>
-                    <span class="media-meta pull-right"><?= $difference; ?></span>
+                    <span class="media-meta pull-left"><i class="fa-regular fa-pen-to-square"></i> <?= $ANGGOTA_NAMA." / ".$CABANG_DESKRIPSI; ?></span>
+                    <span class="media-meta pull-right"><i class="fa-regular fa-clock"></i> <?= $difference; ?></span>
                     <!--/ meta icon -->
                 </span>
             </a>

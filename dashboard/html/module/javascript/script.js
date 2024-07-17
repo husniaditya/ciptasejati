@@ -42,12 +42,87 @@ function loadAndRefresh() {
     }, 7000);
 }
 
-// Call the function when the document is ready
-$(document).ready(loadAndRefresh);
+function savePPDToDrive(PPD_ID) { // Function Save PDF to Drive
+  return new Promise(function(resolve, reject) {
+    $.ajax({
+      type: 'POST',
+      url: 'module/backend/transaksi/aktivitas/ppd/t_ppdfile.php',
+      data: { id: PPD_ID },
+      success: function(response) {
+        // Check the response from the server
+        // console.log(response);
+        resolve(response);
+      },
+      error: function(xhr, status, error) {
+        reject('Error! ' + xhr.status + ' ' + error);
+      }
+    });
+  });
+}
 
+function saveUKTToDrive(UKT_ID) { // Function Save PDF to Drive
+  return new Promise(function(resolve, reject) {
+    $.ajax({
+      type: 'POST',
+      url: 'module/backend/transaksi/aktivitas/ukt/t_uktfile.php',
+      data: { id: UKT_ID },
+      success: function(response) {
+        // Check the response from the server
+        // console.log(response);
+        resolve(response);
+      },
+      error: function(xhr, status, error) {
+        reject('Error! ' + xhr.status + ' ' + error);
+      }
+    });
+  });
+}
+
+function saveMutasiToDrive(MUTASI_ID) { // Function Save PDF to Drive
+  return new Promise(function(resolve, reject) {
+    $.ajax({
+      type: 'POST',
+      url: 'module/backend/transaksi/anggota/mutasianggota/t_mutasifile.php',
+      data: { MUTASI_ID: MUTASI_ID },
+      success: function(response) {
+        // Check the response from the server
+        resolve(response);
+      },
+      error: function(xhr, status, error) {
+        reject('Error! ' + xhr.status + ' ' + error);
+      }
+    });
+  });
+}
+
+function sendEmailMutasi(MUTASI_ID) { // Function Send Email Notification
+  return new Promise(function(resolve, reject) {
+    $.ajax({
+      type: 'POST',
+      url: 'module/backend/transaksi/anggota/mutasianggota/t_mutasimail.php',
+      data: { MUTASI_ID: MUTASI_ID },
+      success: function(response) {
+        // Check the response from the server
+        resolve(response);
+      },
+      error: function(xhr, status, error) {
+        reject('Error! ' + xhr.status + ' ' + error);
+      }
+    });
+  });
+}
 
 function handleNotif(formId, successNotification, failedNotification, updateNotification) {
+  
+  // Function to show the full-screen loading overlay with a progress bar
+  function showLoadingOverlay(message) {
+    var overlayHtml = '<div id="loading-overlay" class="loading-overlay"><div class="loading-spinner"></div><div class="loading-message">' + message + '</div><div class="progress-bar"><div class="progress"></div></div></div>';
+    $('body').append(overlayHtml);
+  }
+
   $(formId).submit(function(event) {
+    showLoadingOverlay('Data sedang diproses, mohon ditunggu.');
+
     event.preventDefault(); // Prevent the default form submission
 
     var formData = new FormData($(this)[0]); // Create FormData object from the form
@@ -91,41 +166,43 @@ function handleNotif(formId, successNotification, failedNotification, updateNoti
               // Handle any errors
             }
           });
+        
+          // Hide the loading overlay after the initial processing
+          hideLoadingOverlay();
+
+          // Example usage:
+          showLoadingOverlay('Proses pembuatan dokumen dan pengiriman email...');
+
+          // Save PDF to Drive and send email notification concurrently
+          Promise.all([saveMutasiToDrive(MUTASI_ID), sendEmailMutasi(MUTASI_ID)])
+            .then(function (responses) {
+              const pdfResponse = responses[0];
+              const emailResponse = responses[1];
+
+              // Handle the responses if needed
+              if (pdfResponse) {
+              }
+
+              if (emailResponse === 'Success') {
+                MailNotification('Email pemberitahuan berhasil dikirimkan!');
+              } else {
+                failedNotification(emailResponse);
+              }
+            })
+            .catch(function (errors) {
+              // Handle errors
+              for (const error of errors) {
+                errorNotification(error);
+              }
+            })
+            .finally(function () {
+              // Hide the loading overlay after all asynchronous tasks are complete
+              hideLoadingOverlay();
+            });
         } else {
           // Display error notification
           failedNotification(response);
         }
-        // Save PDF to Drive
-        $.ajax({
-          type: 'POST',
-          url: 'module/backend/transaksi/anggota/mutasianggota/t_mutasifile.php',
-          data: { MUTASI_ID: MUTASI_ID },
-          success: function(response) {
-            // Check the response from the server
-          },
-          error: function(xhr, status, error) {
-            errorNotification('Error! '+xhr.status+' '+error);
-          }
-        });
-        // Send email notification
-        $.ajax({
-          type: 'POST',
-          url: 'module/backend/transaksi/anggota/mutasianggota/t_mutasimail.php',
-          data: { MUTASI_ID: MUTASI_ID },
-          success: function(response) {
-            // Check the response from the server
-            if (response === 'Success') {
-              // Display success notification
-              MailNotification('Email pemberitahuan berhasil dikirimkan!');
-            } else {
-              // Display error notification
-              failedNotification(response);
-            }
-          },
-          error: function(xhr, status, error) {
-            errorNotification('Error! '+xhr.status+' '+error);
-          }
-        });
       },
       error: function(xhr, status, error) {
           // Display error notification
@@ -134,9 +211,266 @@ function handleNotif(formId, successNotification, failedNotification, updateNoti
     });
   });
 }
-  
+
+function ApproveNotifPPDKoordinator(formId, successNotification, failedNotification, updateNotification) {
+  // Set the flag to true indicating that the form has been submitted
+  formSubmitted = true;
+
+  // Function to show the full-screen loading overlay with a progress bar
+  function showLoadingOverlay(message) {
+    var overlayHtml = '<div id="loading-overlay" class="loading-overlay"><div class="loading-spinner"></div><div class="loading-message">' + message + '</div><div class="progress-bar"><div class="progress"></div></div></div>';
+    $('body').append(overlayHtml);
+  }
+
+  $(formId).submit(function (event) {
+    showLoadingOverlay('Data sedang diproses, mohon ditunggu.');
+    
+    event.preventDefault(); // Prevent the default form submission
+
+    var formData = new FormData($(this)[0]); // Create FormData object from the form
+    var buttonId = $(event.originalEvent.submitter).attr('id'); // Retrieve button ID
+
+    // Manually add the button title or ID to the serialized data
+    formData.append(buttonId, 'edit');
+
+    var PPD_ID; // Declare PPD_ID here to make it accessible in the outer scope
+
+    $.ajax({
+      type: 'POST',
+      url: 'module/backend/transaksi/aktivitas/ppd/t_ppd.php',
+      data: formData,
+      processData: false, // Prevent jQuery from processing the data
+      contentType: false, // Prevent jQuery from setting content type
+      success: function (response) {
+        var parts = response.split(',');
+        var successMessage = parts[0];
+        PPD_ID = parts[1]; // Assign value to PPD_ID
+
+        if (successMessage === 'Success') {
+          successNotification('Data berhasil tersimpan!');
+
+          // Close the modal
+          $(formId.replace("-form", "")).modal('hide');
+
+          if ($.fn.DataTable.isDataTable('#ppdKoor-table')) {
+            $.ajax({
+              type: 'POST',
+              url: 'module/ajax/transaksi/aktivitas/ppd/aj_tableppdKoordinator.php',
+              success: function (response) {
+                $('#ppdKoor-table').DataTable().destroy();
+                $("#koordinatorppddata").html(response);
+                callTable();
+              },
+              error: function (xhr, status, error) {
+                // Handle any errors
+              }
+            });
+          }
+
+          if ($.fn.DataTable.isDataTable('#ppd-table')) {
+            $.ajax({
+              type: 'POST',
+              url: 'module/ajax/transaksi/aktivitas/ppd/aj_tableppd.php',
+              success: function (response) {
+                $('#ppd-table').DataTable().destroy();
+                $("#ppddata").html(response);
+                callTable();
+              },
+              error: function (xhr, status, error) {
+                // Handle any errors
+              }
+            });
+          }
+
+          if ($.fn.DataTable.isDataTable('#lapppd-table')) {
+            $.ajax({
+              type: 'POST',
+              url: 'module/ajax/transaksi/aktivitas/ppd/aj_tablelapppd.php',
+              success: function (response) {
+                $('#lapppd-table').DataTable().destroy();
+                $("#ppddata").html(response);
+                callTable();
+              },
+              error: function (xhr, status, error) {
+                // Handle any errors
+              }
+            });
+          }
+
+          hideLoadingOverlay();
+
+          showLoadingOverlay('Proses pembuatan dokumen...');
+
+          Promise.all([savePPDToDrive(PPD_ID)])
+            .then(function (responses) {
+              const pdfResponse = responses[0];
+            })
+            .catch(function (errors) {
+              for (const error of errors) {
+                errorNotification(error);
+              }
+            })
+            .finally(function () {
+              hideLoadingOverlay();
+            });
+        } else {
+          failedNotification(response);
+          hideLoadingOverlay();
+        }
+      },
+      error: function (xhr, status, error) {
+        // Handle any errors
+        hideLoadingOverlay();
+      }
+    });
+  });
+}
+
+function ApproveNotifUKTKoordinator(formId, successNotification, failedNotification, updateNotification) {
+  // Set the flag to true indicating that the form has been submitted
+  formSubmitted = true;
+  // Function to show the full-screen loading overlay with a progress bar
+  function showLoadingOverlay(message) {
+    var overlayHtml = '<div id="loading-overlay" class="loading-overlay"><div class="loading-spinner"></div><div class="loading-message">' + message + '</div><div class="progress-bar"><div class="progress"></div></div></div>';
+    $('body').append(overlayHtml);
+  }
+
+  $(formId).submit(function (event) {
+    // Example usage:
+    showLoadingOverlay('Data sedang diproses, mohon ditunggu.');
+    
+    event.preventDefault(); // Prevent the default form submission
+
+    var formData = new FormData($(this)[0]); // Create FormData object from the form
+    var buttonId = $(event.originalEvent.submitter).attr('id'); // Retrieve button ID);
+
+    // Manually add the button title or ID to the serialized data
+    formData.append(buttonId, 'edit');
+
+    var UKT_ID; // Declare UKT_ID here to make it accessible in the outer scope
+
+    $.ajax({
+      type: 'POST',
+      url: 'module/backend/transaksi/aktivitas/ukt/t_ukt.php',
+      data: formData,
+      processData: false, // Prevent jQuery from processing the data
+      contentType: false, // Prevent jQuery from setting content type
+      success: function (response) {
+        // Split the response into parts using a separator (assuming a dot in this case)
+        var parts = response.split(',');
+        var successMessage = parts[0];
+        UKT_ID = parts[1]; // Assign value to UKT_ID
+
+        // Check the response from the server
+        if (successMessage === 'Success') {
+          // Display success notification
+          successNotification('Data berhasil tersimpan!');
+
+          // Close the modal
+          $(formId.replace("-form", "")).modal('hide');
+
+          if ($.fn.DataTable.isDataTable('#uktkoor-table')) {
+            $.ajax({
+              type: 'POST',
+              url: 'module/ajax/transaksi/aktivitas/ukt/aj_tableuktkoor.php',
+              success: function (response) {
+                // Destroy the DataTable before updating
+                $('#uktkoor-table').DataTable().destroy();
+                $("#uktdatakoor").html(response);
+                // Reinitialize Sertifikat Table
+                callTable();
+              },
+              error: function (xhr, status, error) {
+                // Handle any errors
+              }
+            });
+          }
+
+          if ($.fn.DataTable.isDataTable('#ukt-table')) {
+            $.ajax({
+              type: 'POST',
+              url: 'module/ajax/transaksi/aktivitas/ukt/aj_tableukt.php',
+              success: function (response) {
+                // Destroy the DataTable before updating
+                $('#ukt-table').DataTable().destroy();
+                $("#uktdata").html(response);
+                // Reinitialize Sertifikat Table
+                callTable();
+              },
+              error: function (xhr, status, error) {
+                // Handle any errors
+              }
+            });
+          }
+          
+          if ($.fn.DataTable.isDataTable('#lapukt-table')) {
+            $.ajax({
+              type: 'POST',
+              url: 'module/ajax/transaksi/aktivitas/ukt/aj_tablelapukt.php',
+              success: function (response) {
+                // Destroy the DataTable before updating
+                $('#lapukt-table').DataTable().destroy();
+                $("#uktdata").html(response);
+                // Reinitialize Sertifikat Table
+                callTable();
+              },
+              error: function (xhr, status, error) {
+                // Handle any errors
+              }
+            });
+          }
+
+          // Hide the loading overlay after the initial processing
+          hideLoadingOverlay();
+
+          // Example usage:
+          showLoadingOverlay('Proses pembuatan dokumen...');
+
+          // Save PDF to Drive and send email notification concurrently
+          Promise.all([saveUKTToDrive(UKT_ID)])
+            .then(function (responses) {
+              // 
+            })
+            .catch(function (errors) {
+              // Handle errors
+              for (const error of errors) {
+                errorNotification(error);
+              }
+            })
+            .finally(function () {
+              // Hide the loading overlay after all asynchronous tasks are complete
+              hideLoadingOverlay();
+            });
+          
+        } else {
+          // Display error notification
+          failedNotification(response);
+
+          // Hide the loading overlay in case of an error
+          hideLoadingOverlay();
+        }
+      },
+      error: function (xhr, status, error) {
+        // Handle any errors
+
+        // Hide the loading overlay in case of an error
+        hideLoadingOverlay();
+      }
+    });
+  });
+}
   
 $(document).ready(function() {
+  loadAndRefresh();
+  
+  // Approve Anggota
+  handleNotif('#ApproveNotifMutasi-form', UpdateNotification, FailedNotification, UpdateNotification);
+
+  // Approve PPD Koordinator
+  ApproveNotifPPDKoordinator('#ApproveNotifPPDKoordinator-form', UpdateNotification, FailedNotification, UpdateNotification);
+
+  // Approve UKT Koordinator
+  ApproveNotifUKTKoordinator('#ApproveNotifUKTKoordinator-form', UpdateNotification, FailedNotification, UpdateNotification);
 
   $('#ChangeLog').on('shown.bs.modal', function () {
     if ($.fn.DataTable.isDataTable('#logversi-table')) {
@@ -164,9 +498,6 @@ $(document).ready(function() {
       }
     });
   });
-
-  // Approve Anggota
-  handleNotif('#ApproveNotifMutasi-form', UpdateNotification, FailedNotification, UpdateNotification);
 });
 
 function getNotif(obj) {
@@ -343,3 +674,219 @@ $(document).on("click", ".open-ViewNotifKas", function () {
   // console.log(id);
 });
 
+// View PPD
+$(document).on("click", ".open-ViewNotifPPD", function () {
+  
+  var key = $(this).data('dokumen');
+  var cabang = $(this).data('cabang');
+  
+  // Make an AJAX request to fetch additional data based on the selected value
+  $.ajax({
+    url: 'module/ajax/transaksi/aktivitas/ppd/aj_getdetailppd.php',
+    method: 'POST',
+    data: { PPD_ID: key },
+    success: function(data) {
+      console.log('response', data);
+      // Assuming data is a JSON object with the required information
+      // Make sure the keys match the fields in your returned JSON object
+      $("#ViewNotifPPD_DAERAH").val(data.DAERAH_DESKRIPSI);
+      $("#ViewNotifPPD_CABANG").val(data.CABANG_DESKRIPSI);
+      $("#ViewNotifPPD_TANGGAL").val(data.PPD_TANGGAL);
+      $("#ViewNotifPPD_JENIS").val(data.PPD_JENIS_DESKRIPSI);
+      $("#ViewNotifPPD_TINGKATAN").val(data.TINGKATAN_NAMA + ' - ' + data.TINGKATAN_SEBUTAN);
+      $("#ViewNotifPPD_ANGGOTA").val(data.ANGGOTA_NAMA);
+      $("#ViewNotifPPD_LOKASI").val(data.LOKASI_DAERAH + ' - ' + data.LOKASI_CABANG);
+      $("#ViewNotifPPD_DESKRIPSI").val(data.PPD_DESKRIPSI);
+
+      // Make an AJAX request to fetch data for the second dropdown based on the selected value
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+        data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: cabang },
+        success: function(result){
+          $("#notifpicppd").html(result);
+        }
+      });
+
+    },
+    error: function(error) {
+      console.error('Error fetching data:', error);
+    }
+  });
+});
+
+// Approve PPD Koordinator
+$(document).on("click", ".open-ApproveNotifPPDKoordinator", function () {
+  
+  var key = $(this).data('dokumen');
+  var cabang = $(this).data('cabang');
+  
+  // Make an AJAX request to fetch additional data based on the selected value
+  $.ajax({
+    url: 'module/ajax/transaksi/aktivitas/ppd/aj_getdetailppd.php',
+    method: 'POST',
+    data: { PPD_ID: key },
+    success: function(data) {
+      // console.log('response', data);
+      // Assuming data is a JSON object with the required information
+      // Make sure the keys match the fields in your returned JSON object
+      $("#notifKoordinatorPPD_ID").val(data.PPD_ID);
+      $("#notifKoordinatorPPD_DAERAH").val(data.DAERAH_DESKRIPSI);
+      $("#notifKoordinatorPPD_CABANG").val(data.CABANG_DESKRIPSI);
+      $("#notifKoordinatorPPD_TANGGAL").val(data.PPD_TANGGAL);
+      $("#notifKoordinatorPPD_JENIS").val(data.PPD_JENIS_DESKRIPSI);
+      $("#notifKoordinatorPPD_TINGKATAN").val(data.TINGKATAN_NAMA + ' - ' + data.TINGKATAN_SEBUTAN);
+      $("#notifKoordinatorPPD_ANGGOTA").val(data.ANGGOTA_NAMA);
+      $("#notifKoordinatorPPD_LOKASI").val(data.LOKASI_DAERAH + ' - ' + data.LOKASI_CABANG);
+      $("#notifKoordinatorPPD_DESKRIPSI").val(data.PPD_DESKRIPSI);
+
+      // Make an AJAX request to fetch data for the second dropdown based on the selected value
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+        data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: cabang },
+        success: function(result){
+          $("#notifpicppdkoor").html(result);
+        }
+      });
+
+    },
+    error: function(error) {
+      console.error('Error fetching data:', error);
+    }
+  });
+});
+
+// View UKT
+$(document).on("click", ".open-ViewNotifUKT", function () {
+  
+  var key = $(this).data('dokumen');
+  var cabang = $(this).data('cabang');
+  
+  // Make an AJAX request to fetch additional data based on the selected value
+  $.ajax({
+    url: 'module/ajax/transaksi/aktivitas/ukt/aj_getdetailukt.php',
+    method: 'POST',
+    data: { id: key, cabang: cabang },
+    success: function(data) {
+      // console.log('response', data);
+      // Assuming data is a JSON object with the required information
+      // Make sure the keys match the fields in your returned JSON object
+      $("#ViewNotifUKT_DAERAH").val(data.DAERAH_DESKRIPSI);
+      $("#ViewNotifUKT_CABANG").val(data.CABANG_DESKRIPSI);
+      $("#ViewNotifUKT_TANGGAL").val(data.UKT_TANGGAL_DESKRIPSI);
+      $("#ViewNotifUKT_ANGGOTA").val(data.ANGGOTA_ID + ' - ' + data.ANGGOTA_NAMA);
+      $("#ViewNotifUKT_TINGKATAN").val(data.UKT_TINGKATAN_NAMA + ' - ' + data.UKT_TINGKATAN_SEBUTAN);
+      $("#ViewNotifUKT_LOKASI").val(data.UKT_DAERAH + ' - ' + data.UKT_CABANG);
+      $("#ViewNotifUKT_DESKRIPSI").val(data.UKT_DESKRIPSI);
+      $("#ViewNotifUKT_TOTAL").html(data.UKT_TOTAL);
+      var iconHtml = '<i class="' + data.UKT_NILAI + '"></i>';
+      $("#ViewNotifUKT_NILAI").html(iconHtml);
+
+      // Make an AJAX request to fetch data for the second dropdown based on the selected value
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+        data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: data.CABANG_KEY },
+        success: function(result){
+          $("#loadpicnotifukt").html(result);
+        }
+      });
+
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/aktivitas/ukt/aj_getviewpengujiukt.php",
+        data: { id: key },
+        success: function(response){
+          // Destroy the DataTable before updating
+          $('#viewNotifPenguji-table').DataTable().destroy();
+          $("#viewNotifPengujiData").html(response);
+          // Reinitialize Sertifikat Table
+        }
+      });
+      
+      // AJAX request to fetch UKT Detail
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/aktivitas/ukt/aj_getviewkategoriukt.php",
+        data: { id: key },
+        success: function(data){
+          // console.log(data);
+          $("#viewnotifrincianukt").html(data);
+        }
+      });
+
+    },
+    error: function(error) {
+      console.error('Error fetching data:', error);
+    }
+  });
+});
+
+// Approve UKT Koordinator
+$(document).on("click", ".open-ApproveNotifUKTKoordinator", function () {
+  
+  var key = $(this).data('dokumen');
+  var cabang = $(this).data('cabang');
+  
+  // Make an AJAX request to fetch additional data based on the selected value
+  $.ajax({
+    url: 'module/ajax/transaksi/aktivitas/ukt/aj_getdetailukt.php',
+    method: 'POST',
+    data: { id: key, cabang: cabang },
+    success: function(data) {
+      // console.log('response', data);
+      // Assuming data is a JSON object with the required information
+      // Make sure the keys match the fields in your returned JSON object
+      $("#viewAppNotifUKT_ID").val(data.UKT_ID);
+      $("#viewAppNotifDAERAH_KEY").val(data.DAERAH_DESKRIPSI);
+      $("#viewAppNotifCABANG_KEY").val(data.CABANG_DESKRIPSI);
+      $("#viewAppNotifUKT_TANGGAL").val(data.UKT_TANGGAL_DESKRIPSI);
+      $("#viewAppNotifANGGOTA_ID").val(data.ANGGOTA_ID + ' - ' + data.ANGGOTA_NAMA);
+      $("#viewAppNotifTINGKATAN_ID").val(data.UKT_TINGKATAN_NAMA + ' - ' + data.UKT_TINGKATAN_SEBUTAN);
+      $("#viewAppNotifUKT_LOKASI").val(data.UKT_DAERAH + ' - ' + data.UKT_CABANG);
+      $("#viewAppNotifUKT_DESKRIPSI").val(data.UKT_DESKRIPSI);
+      $("#viewAppNotifUKT_TOTAL").html(data.UKT_TOTAL);
+      var iconHtml = '<i class="' + data.UKT_NILAI + '"></i>';
+      $("#viewAppNotifUKT_NILAI").html(iconHtml);
+
+      // GET ANGGOTA PIC
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+        data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: data.CABANG_KEY },
+        success: function(result){
+          $("#loadPicAppNotifUKT").html(result);
+        }
+      });
+
+      // GET PENGUJI UKT
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/aktivitas/ukt/aj_getviewpengujiukt.php",
+        data: { id: key },
+        success: function(response){
+          // Destroy the DataTable before updating
+          $('#viewAppNotifPenguji-table').DataTable().destroy();
+          $("#viewAppNotifPengujiData").html(response);
+          // Reinitialize Sertifikat Table
+        }
+      });
+      
+      // AJAX request to fetch UKT Detail
+      $.ajax({
+        type: "POST",
+        url: "module/ajax/transaksi/aktivitas/ukt/aj_getviewkategoriukt.php",
+        data: { id: key },
+        success: function(data){
+          // console.log(data);
+          $("#viewAppNotifrincianukt").html(data);
+        }
+      });
+
+    },
+    error: function(error) {
+      console.error('Error fetching data:', error);
+    }
+  });
+});

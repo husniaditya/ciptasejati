@@ -9,8 +9,11 @@ require_once('../../../../../assets/tcpdf/tcpdf.php');
 
 if (isset($_POST['id'])) {
     $PPD_ID = $_POST["id"];
+    $encodedKoor = encodeIdToBase64('Koor');
+    $encodedGuru = encodeIdToBase64('Guru');
 
-    $getData = GetQuery("SELECT p.*,a.ANGGOTA_NAMA,a.ANGGOTA_TEMPAT_LAHIR,a.ANGGOTA_TANGGAL_LAHIR,a.ANGGOTA_ALAMAT,a.ANGGOTA_PEKERJAAN,a.ANGGOTA_PIC,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,s.IDSERTIFIKAT_SERTIFIKATFILE,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL, DATE_FORMAT(p.INPUT_DATE, '%d %M %Y') INPUT_DATE, DATE_FORMAT(a.ANGGOTA_TANGGAL_LAHIR, '%d/%m/%Y') ANGGOTA_TANGGAL_LAHIR,REPEAT('_. ', CHAR_LENGTH(a.ANGGOTA_NAMA)) AS ANGGOTA_NAMA_DOT,REPEAT('. ', CHAR_LENGTH(CONCAT(a.ANGGOTA_TEMPAT_LAHIR,', ',DATE_FORMAT(p.PPD_TANGGAL, '%d/%m/%Y')))) AS ANGGOTA_LAHIR_DOT,REPEAT('. ', CHAR_LENGTH(a.ANGGOTA_ALAMAT)) AS ANGGOTA_ALAMAT_DOT,REPEAT('. ', CHAR_LENGTH(a.ANGGOTA_PEKERJAAN)) AS ANGGOTA_PEKERJAAN_DOT,REPEAT('. ', CHAR_LENGTH(p.PPD_DESKRIPSI)) AS PPD_DESKRIPSI_DOT,REPEAT('. ', CHAR_LENGTH(t.TINGKATAN_NAMA)) AS TINGKATAN_NAMA_DOT,REPEAT('. ', CHAR_LENGTH(t.TINGKATAN_SEBUTAN)) AS TINGKATAN_SEBUTAN_DOT,koor.ANGGOTA_ID KOOR_ID,koor.ANGGOTA_NAMA KOOR_NAMA,guru.ANGGOTA_ID GURU_ID,guru.ANGGOTA_NAMA GURU_NAMA
+
+    $getData = GetQuery("SELECT p.*,a.ANGGOTA_NAMA,a.ANGGOTA_TEMPAT_LAHIR,a.ANGGOTA_TANGGAL_LAHIR,a.ANGGOTA_ALAMAT,a.ANGGOTA_PEKERJAAN,a.ANGGOTA_PIC,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,s.IDSERTIFIKAT_SERTIFIKATFILE,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL, DATE_FORMAT(p.INPUT_DATE, '%d %M %Y') INPUT_DATE, DATE_FORMAT(a.ANGGOTA_TANGGAL_LAHIR, '%d/%m/%Y') ANGGOTA_TANGGAL_LAHIR,REPEAT('_. ', CHAR_LENGTH(a.ANGGOTA_NAMA)) AS ANGGOTA_NAMA_DOT,REPEAT('. ', CHAR_LENGTH(CONCAT(a.ANGGOTA_TEMPAT_LAHIR,', ',DATE_FORMAT(p.PPD_TANGGAL, '%d/%m/%Y')))) AS ANGGOTA_LAHIR_DOT,REPEAT('. ', CHAR_LENGTH(a.ANGGOTA_ALAMAT)) AS ANGGOTA_ALAMAT_DOT,REPEAT('. ', CHAR_LENGTH(a.ANGGOTA_PEKERJAAN)) AS ANGGOTA_PEKERJAAN_DOT,REPEAT('. ', CHAR_LENGTH(p.PPD_DESKRIPSI)) AS PPD_DESKRIPSI_DOT,REPEAT('. ', CHAR_LENGTH(t.TINGKATAN_NAMA)) AS TINGKATAN_NAMA_DOT,REPEAT('. ', CHAR_LENGTH(t.TINGKATAN_SEBUTAN)) AS TINGKATAN_SEBUTAN_DOT,koor.ANGGOTA_ID KOOR_ID,koor.ANGGOTA_NAMA KOOR_NAMA,guru.ANGGOTA_ID GURU_ID,guru.ANGGOTA_NAMA GURU_NAMA,t.TINGKATAN_LEVEL
     FROM t_ppd p
     LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY
     LEFT JOIN m_anggota koor on p.PPD_APPROVE_PELATIH_BY = koor.ANGGOTA_ID and p.CABANG_KEY = koor.CABANG_KEY
@@ -23,6 +26,7 @@ if (isset($_POST['id'])) {
     try {
         while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
             extract($data);
+            $encodedId = encodeIdToBase64($PPD_FILE_NAME);
 
             class MYPDF extends TCPDF {
                 //Page header
@@ -44,7 +48,7 @@ if (isset($_POST['id'])) {
 
                 // Page footer
                 public function Footer() {
-                    global $CABANG_DESKRIPSI, $GURU_ID, $GURU_NAMA, $PPD_TANGGAL;
+                    global $CABANG_DESKRIPSI, $encodedId, $encodedGuru, $PPD_TANGGAL;
 
                     $this->SetMargins(40, PDF_MARGIN_TOP, 40);
                     $pageWidth = $this->getPageWidth();
@@ -72,7 +76,7 @@ if (isset($_POST['id'])) {
                     $this->Cell($fullWidth,5,"Disetujui Oleh,",0,0,"R");
                     $this->Ln();
                     // QRCODE,H : QR-CODE Best error correction
-                    $this->write2DBarcode($GURU_ID.' - '.$GURU_NAMA, 'QRCODE,H', 230, 163, 50, 50, $style, 'N');
+                    $this->write2DBarcode('localhost/ciptasejati/assets/token/tokenverify.php?id='.$encodedId.'&'.$encodedGuru, 'QRCODE,H', 230, 163, 50, 50, $style, 'N');
                     // $this->Ln(-1);
                     // $this->SetFont('times', 'BU', 15); // Set font for body
                     // $this->Cell($fullWidth,5,$GURU_NAMA,0,0,"R");
@@ -199,24 +203,38 @@ if (isset($_POST['id'])) {
             ",0,0,"C");
             $pdf->Ln();
             $pdf->Cell(30,5,"",0,0,"C");
-            $pdf->Cell(35,5,"Sabuk Tingkatan : ",0,0,"L");
-            $pdf->Cell(55,5,$TINGKATAN_NAMA,0,0,"L");
-            $pdf->Cell(15,5,"Gelar : ",0,0,"L");
-            $pdf->Cell(75,5,$TINGKATAN_SEBUTAN,0,0,"L");
-            $pdf->Cell(30,5,"",0,0,"C");
-            $pdf->Ln(1); // Adjust the line break to suit your needs
-            $pdf->Cell(30,5,"",0,0,"C");
-            $pdf->Cell(35,5,"______________",0,0,"L");
-            $pdf->Cell(55,5,$TINGKATAN_NAMA_DOT,0,0,"L");
-            $pdf->Cell(15,5,"_____",0,0,"L");
-            $pdf->Cell(75,5,$TINGKATAN_SEBUTAN_DOT,0,0,"L");
+            if ($TINGKATAN_LEVEL >= 6) {
+                $pdf->Cell(35,5,"Sabuk Tingkatan : ",0,0,"L");
+                $pdf->Cell(55,5,$TINGKATAN_NAMA,0,0,"L");
+                $pdf->Cell(15,5,"Gelar : ",0,0,"L");
+                $pdf->Cell(75,5,$TINGKATAN_SEBUTAN,0,0,"L");
+                $pdf->Cell(30,5,"",0,0,"C");
+                $pdf->Ln(1); // Adjust the line break to suit your needs
+                $pdf->Cell(30,5,"",0,0,"C");
+                $pdf->Cell(35,5,"______________",0,0,"L");
+                $pdf->Cell(55,5,$TINGKATAN_NAMA_DOT,0,0,"L");
+                $pdf->Cell(15,5,"_____",0,0,"L");
+                $pdf->Cell(75,5,$TINGKATAN_SEBUTAN_DOT,0,0,"L");
+            } else {
+                $pdf->Cell(35,5,"Sabuk Tingkatan : ",0,0,"L");
+                $pdf->Cell(55,5,$TINGKATAN_NAMA . " / " . $TINGKATAN_SEBUTAN,0,0,"L");
+                $pdf->Cell(15,5,"Gelar : ",0,0,"L");
+                $pdf->Cell(75,5,"-",0,0,"L");
+                $pdf->Cell(30,5,"",0,0,"C");
+                $pdf->Ln(1); // Adjust the line break to suit your needs
+                $pdf->Cell(30,5,"",0,0,"C");
+                $pdf->Cell(35,5,"______________",0,0,"L");
+                $pdf->Cell(55,5,$TINGKATAN_NAMA_DOT,0,0,"L");
+                $pdf->Cell(15,5,"_____",0,0,"L");
+                $pdf->Cell(75,5,$TINGKATAN_SEBUTAN_DOT,0,0,"L");
+            }
             $pdf->Ln(4.5);
             $pdf->Cell(30,5,"",0,0,"C");
             $pdf->Cell(90,5,"Belt Level",0,0,"L");
             $pdf->Cell(90,5,"Degree",0,0,"L");
             $pdf->Cell(30,5,"",0,0,"C");
             $pdf->Ln();
-            $pdf->Image('../../../../.'.$ANGGOTA_PIC, 70, 155, 40, 40, '', '', 'T', false, 500, '', false, false, 1, false, false, false);
+            $pdf->Image('../../../../.'.$ANGGOTA_PIC, 70, 155, 30, 40, '', '', 'T', false, 500, '', false, false, 1, false, false, false);
 
             GetQuery("update t_ppd set PPD_FILE = './assets/sertifikat/$CABANG_DESKRIPSI/$ANGGOTA_ID $ANGGOTA_NAMA/$PPD_ID PPD $TINGKATAN_NAMA $ANGGOTA_NAMA $PPD_TANGGAL.pdf' where PPD_ID = '$PPD_ID'");
 

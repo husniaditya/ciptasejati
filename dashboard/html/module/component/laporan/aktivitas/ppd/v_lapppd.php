@@ -130,7 +130,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
         </a>
         <div id="collapseOne" class="panel-collapse collapse">
             <div class="panel-body">
-                <form method="post" class="form filterPPD resettable-form" id="filterPPD">
+                <form method="post" class="form filterLapPPD resettable-form" id="filterLapPPD">
                     <div class="row">
                         <?php
                         if ($USER_AKSES == "Administrator") {
@@ -237,7 +237,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="row">
                         <div class="col-md-12" align="center">
-                            <button type="button" id="reloadButton" onclick="clearForm()" class="submit btn btn-teal btn-outline mb5 btn-rounded"><span class="ico-refresh"></span> Reset Filter</button>
+                            <button type="button" id="reloadButton" onclick="clearLapForm()" class="submit btn btn-teal btn-outline mb5 btn-rounded"><span class="ico-refresh"></span> Reset Filter</button>
                         </div>
                     </div>
                 </form>
@@ -254,7 +254,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
             <div class="panel-heading">
                 <h3 class="panel-title">Tabel Pembukaan Pusat Daya</h3>
             </div>
-            <table class="table table-striped table-bordered" id="ppd-table">
+            <table class="table table-striped table-bordered" id="lapppd-table">
                 <thead>
                     <tr>
                         <th></th>
@@ -290,7 +290,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                         <ul class="dropdown-menu" role="menu">
                                             <li><a data-toggle="modal" href="#ViewPPD" class="open-ViewPPD" style="color:#222222;" data-id="<?= $PPD_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
                                             <li class="divider"></li>
-                                            <li><a href="assets/print/transaksi/aktivitas/ppd/print_ppdreportanggota.php?id=<?= $PPD_ID; ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
+                                            <li><a href="assets/print/transaksi/aktivitas/ppd/print_ppdreportanggota.php?id=<?= encodeIdToBase64($PPD_ID); ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
                                         </ul>
                                     </div>
                                 </form>

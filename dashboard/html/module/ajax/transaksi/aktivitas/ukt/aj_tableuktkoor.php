@@ -151,8 +151,7 @@ while ($rowUKT = $getUKT->fetch(PDO::FETCH_ASSOC)) {
         </td>
         <td>
             <?= $UKT_ID; ?><br> 
-            <span class="<?= $KOOR_BADGE; ?>"><i class="<?= $KOOR_CLASS; ?>"></i> Koordinator </span><br> 
-            <span class="<?= $GURU_BADGE; ?>"><i class="<?= $GURU_CLASS; ?>"></i> Guru Besar </span>
+            <span class="<?= $KOOR_BADGE; ?>"><i class="<?= $KOOR_CLASS; ?>"></i> Koordinator </span>
         </td>
         <td align="center"><?= $ANGGOTA_ID; ?></td>
         <td><?= $ANGGOTA_NAMA; ?></td>

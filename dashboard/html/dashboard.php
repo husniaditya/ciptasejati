@@ -75,6 +75,7 @@ if($CODE == 1)
         
         <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
         <?php include 'module/js.php';?>
+        <script type="text/javascript" src="../javascript/library.js"></script>
         <script type="text/javascript" src="module/javascript/component/dashboard/dataanggota.js"></script>
         <script type="text/javascript" src="module/javascript/component/dashboard/datatingkatan.js"></script>
         <script type="text/javascript" src="module/javascript/component/dashboard/dataaktivitas.js"></script>

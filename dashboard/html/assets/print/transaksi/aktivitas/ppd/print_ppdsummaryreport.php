@@ -8,6 +8,9 @@ $USER_NAMA = $_SESSION["LOGINNAME_CS"];
 if ($_GET["tgl"] && $_GET["cbg"]) {
     $PPD_TANGGAL = $_GET["tgl"];
     $PPD_LOKASI = $_GET["cbg"];
+    
+    $encodedKoor = encodeIdToBase64('Koor');
+    $encodedGuru = encodeIdToBase64('Guru');
 
     try {
         // Fetch main data
@@ -244,7 +247,7 @@ if ($_GET["tgl"] && $_GET["cbg"]) {
                 LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY
                 LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_LAMA = t.TINGKATAN_ID
                 LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID_BARU = t2.TINGKATAN_ID
-                WHERE p.PPD_TANGGAL = '$PPD_TANGGAL' AND p.PPD_LOKASI = '$PPD_LOKASI' AND p.TINGKATAN_ID_BARU = '$TINGKATAN_ID' AND p.PPD_APPROVE_PELATIH = 1");
+                WHERE p.PPD_TANGGAL = '$PPD_TANGGAL' AND p.PPD_LOKASI = '$PPD_LOKASI' AND p.TINGKATAN_ID_BARU = '$TINGKATAN_ID' AND p.PPD_APPROVE_PELATIH = 1 AND p.DELETION_STATUS = 0");
 
                 while ($dataAnggota = $getAnggotaTingkatan->fetch(PDO::FETCH_ASSOC)) {
                     extract($dataAnggota);

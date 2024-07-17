@@ -13,6 +13,30 @@ function callTable() {
           'copy', 'csv', 'excel', 'pdf'
       ]
   });
+  
+  $('#uktkoor-table').DataTable({
+      responsive: true,
+      order: [],
+      dom: 'Bfrtlip',
+      paging: true,
+      scrollX: true,
+      scrollY: '350px', // Set the desired height here
+      buttons: [
+          'copy', 'csv', 'excel', 'pdf'
+      ]
+  });
+  
+  $('#lapukt-table').DataTable({
+      responsive: true,
+      order: [],
+      dom: 'Bfrtlip',
+      paging: true,
+      scrollX: true,
+      scrollY: '350px', // Set the desired height here
+      buttons: [
+          'copy', 'csv', 'excel', 'pdf'
+      ]
+  });
 
   $('#ApprovePPDGuru, #ViewPPDGuru').on('shown.bs.modal', function () {
     // Destroy DataTable for riwayatmutasi-table if it exists
@@ -248,7 +272,7 @@ function handleFormKoordinator(formId, successNotification, failedNotification, 
             url: 'module/ajax/transaksi/aktivitas/ukt/aj_tableuktkoor.php',
             success: function (response) {
               // Destroy the DataTable before updating
-              $('#ukt-table').DataTable().destroy();
+              $('#uktkoor-table').DataTable().destroy();
               $("#uktdatakoor").html(response);
               // Reinitialize Sertifikat Table
               callTable();
@@ -846,7 +870,7 @@ function eventukt(value1,value2) {
         // Check the response from the server
         if (response === 'Success') {
           // Display success notification
-          if (value2 === 'reset') {
+          if (value2 === 'cancel') {
             UpdateNotification('Data berhasil direset!');
           } else {
             DeleteNotification('Data berhasil dihapus!');
@@ -1059,7 +1083,7 @@ $(document).on("click", ".open-ApproveUKTKoordinator", function () {
       var iconHtml = '<i class="' + data.UKT_NILAI + '"></i>';
       $("#viewUKT_NILAI").html(iconHtml);
 
-      // Make an AJAX request to fetch data for the second dropdown based on the selected value
+      // GET ANGGOTA PIC
       $.ajax({
         type: "POST",
         url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
@@ -1069,6 +1093,7 @@ $(document).on("click", ".open-ApproveUKTKoordinator", function () {
         }
       });
 
+      // GET PENGUJI UKT
       $.ajax({
         type: "POST",
         url: "module/ajax/transaksi/aktivitas/ukt/aj_getviewpengujiukt.php",
@@ -1191,19 +1216,36 @@ function filterUKTEvent() {
     TINGKATAN_ID: tingkatan,
     UKT_TANGGAL: tanggal
   };
+  
+  if ($.fn.DataTable.isDataTable('#ukt-table')) {
+    $.ajax({
+      type: "POST",
+      url: 'module/ajax/transaksi/aktivitas/ukt/aj_tableukt.php',
+      data: formData,
+      success: function(response){
+        // Destroy the DataTable before updating
+        $('#ukt-table').DataTable().destroy();
+        $("#uktdata").html(response);
+        // Reinitialize Sertifikat Table
+        callTable();
+      }
+    });
+  }
 
-  $.ajax({
-    type: "POST",
-    url: 'module/ajax/transaksi/aktivitas/ukt/aj_tableukt.php',
-    data: formData,
-    success: function(response){
-      // Destroy the DataTable before updating
-      $('#ukt-table').DataTable().destroy();
-      $("#uktdata").html(response);
-      // Reinitialize Sertifikat Table
-      callTable();
-    }
-  });
+  if ($.fn.DataTable.isDataTable('#lapukt-table')) {
+    $.ajax({
+      type: "POST",
+      url: 'module/ajax/transaksi/aktivitas/ukt/aj_tablelapukt.php',
+      data: formData,
+      success: function(response){
+        // Destroy the DataTable before updating
+        $('#lapukt-table').DataTable().destroy();
+        $("#uktdata").html(response);
+        // Reinitialize Sertifikat Table
+        callTable();
+      }
+    });
+  }
   // console.log(formData);
 }
 // UKT FILTERING KOORDINATOR
@@ -1237,7 +1279,7 @@ function filterUKTKoordinatorEvent() {
     data: formData,
     success: function(response){
       // Destroy the DataTable before updating
-      $('#ukt-table').DataTable().destroy();
+      $('#uktkoor-table').DataTable().destroy();
       $("#uktdatakoor").html(response);
       // Reinitialize Sertifikat Table
       callTable();
@@ -1321,9 +1363,12 @@ function clearForm() {
   
   // JavaScript to reset all forms with the class "resettable-form"
   document.querySelectorAll('.resettable-form').forEach(form => form.reset());
-  filterUKTEvent();
+  if ($.fn.DataTable.isDataTable('#ukt-table, #lapukt-table')) {
+    filterUKTEvent();
+  }
+  if ($.fn.DataTable.isDataTable('#uktkoor-table')) {
   filterUKTKoordinatorEvent();
-  filterUKTGuruEvent();
+  }
 }
 // ----- End of function to reset form ----- //
 

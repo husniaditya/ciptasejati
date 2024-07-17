@@ -9,6 +9,10 @@ require_once('../../../../../assets/tcpdf/tcpdf.php');
 
 if ($_POST["MUTASI_ID"]) {
     $MUTASI_ID = $_POST["MUTASI_ID"];
+    $id = encodeIdToBase64($_GET["id"]);
+    $encodedAnggota = encodeIdToBase64('Anggota');
+    $encodedKoor = encodeIdToBase64('Koor');
+    $encodedGuru = encodeIdToBase64('Guru');
 
     try {
         $getData = GetQuery("SELECT t.MUTASI_ID,daeawal.DAERAH_KEY AS DAERAH_AWAL_KEY,daeawal.DAERAH_DESKRIPSI AS DAERAH_AWAL_DES,t.CABANG_AWAL,cabawal.CABANG_DESKRIPSI AS CABANG_AWAL_DES,cabawal.CABANG_SEKRETARIAT,daetujuan.DAERAH_KEY AS DAERAH_TUJUAN_KEY,daetujuan.DAERAH_DESKRIPSI AS DAERAH_TUJUAN_DES,t.CABANG_TUJUAN,cabtujuan.CABANG_DESKRIPSI AS CABANG_TUJUAN_DES,cabtujuan.CABANG_SEKRETARIAT AS CABANG_TUJUAN_SEKRETARIAT,a.ANGGOTA_KEY,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t2.TINGKATAN_NAMA,t2.TINGKATAN_SEBUTAN,t.MUTASI_DESKRIPSI,t.MUTASI_TANGGAL,t.MUTASI_STATUS,t.MUTASI_STATUS_TANGGAL,t.MUTASI_APPROVE_TANGGAL,a2.ANGGOTA_NAMA INPUT_BY,a2.ANGGOTA_ID INPUT_BY_ID,DATE_FORMAT(t.INPUT_DATE, '%d %M %Y') INPUT_DATE,DATE_FORMAT(t.MUTASI_TANGGAL, '%d %M %Y %H:%i') MUTASI_TGL, DATE_FORMAT(t.MUTASI_STATUS_TANGGAL, '%d %M %Y %H:%i') MUTASI_STATUS_TANGGAL, DATE_FORMAT(t.MUTASI_TANGGAL, '%d %M %Y') TANGGAL_EFEKTIF, DATE_FORMAT(t.MUTASI_APPROVE_TANGGAL, '%d %M %Y') MUTASI_APPROVE_TANGGAL,a3.ANGGOTA_NAMA APPROVE_BY,a2.ANGGOTA_AKSES INPUT_AKSES,a3.ANGGOTA_AKSES APPROVE_AKSES,a3.ANGGOTA_ID APPROVE_BY_ID,
@@ -75,7 +79,7 @@ if ($_POST["MUTASI_ID"]) {
     
                 // Page footer
                 public function Footer() {
-                    global $USER_NAMA, $CABANG_TUJUAN_DES, $MUTASI_APPROVE_TANGGAL, $INPUT_BY, $INPUT_BY_ID, $APPROVE_BY, $APPROVE_BY_ID, $INPUT_AKSES, $APPROVE_AKSES, $CABANG_AWAL_DES, $DATENOW, $INPUT_DATE;
+                    global $id, $encodedKoor, $encodedGuru, $USER_NAMA, $CABANG_TUJUAN_DES, $MUTASI_APPROVE_TANGGAL, $INPUT_BY, $INPUT_BY_ID, $APPROVE_BY, $APPROVE_BY_ID, $INPUT_AKSES, $APPROVE_AKSES, $CABANG_AWAL_DES, $DATENOW, $INPUT_DATE;
     
                     // set style for barcode
                     $style = array(
@@ -100,9 +104,9 @@ if ($_POST["MUTASI_ID"]) {
                     $this->Cell(170,5,"Disetujui Oleh,",0,0,"R");
                     $this->Ln();
                     // QRCODE,H : QR-CODE Best error correction
-                    $this->write2DBarcode($INPUT_BY_ID.' - '.$INPUT_BY, 'QRCODE,H', 15, 240, 25, 25, $style, 'N');
-                    if ($APPROVE_BY) {
-                        $this->write2DBarcode($APPROVE_BY_ID.' - '.$APPROVE_BY, 'QRCODE,H', 160, 240, 25, 25, $style, 'N');
+                    $this->write2DBarcode('http://localhost/ciptasejati/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedKoor, 'QRCODE,H', 15, 240, 25, 25, $style, 'N');
+                    if ($INPUT_BY) {
+                        $this->write2DBarcode('http://localhost/ciptasejati/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedGuru, 'QRCODE,H', 160, 240, 25, 25, $style, 'N');
                     }
                     $this->Ln(3);
                     $this->SetFont('times', 'U', 12); // Set font for body

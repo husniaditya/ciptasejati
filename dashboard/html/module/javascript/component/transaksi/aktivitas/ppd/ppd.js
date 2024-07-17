@@ -14,6 +14,30 @@ function callTable() {
       ]
   });
 
+  $('#lapppd-table').DataTable({
+      responsive: true,
+      order: [],
+      dom: 'Bfrtlip',
+      paging: true,
+      scrollX: true,
+      scrollY: '350px', // Set the desired height here
+      buttons: [
+          'copy', 'csv', 'excel', 'pdf'
+      ]
+  });
+  
+  $('#ppdKoor-table').DataTable({
+    responsive: true,
+    order: [],
+    dom: 'Bfrtlip',
+    paging: true,
+    scrollX: true,
+    scrollY: '350px', // Set the desired height here
+    buttons: [
+        'copy', 'csv', 'excel', 'pdf'
+    ]
+});
+
   $('#ApprovePPDGuru, #ViewPPDGuru').on('shown.bs.modal', function () {
     // Destroy DataTable for riwayatmutasi-table if it exists
     if ($.fn.DataTable.isDataTable('#detailppd-table')) {
@@ -260,7 +284,7 @@ function handleFormApproveKoordinator(formId, successNotification, failedNotific
             url: 'module/ajax/transaksi/aktivitas/ppd/aj_tableppdKoordinator.php',
             success: function (response) {
               // Destroy the DataTable before updating
-              $('#ppd-table').DataTable().destroy();
+              $('#ppdKoor-table').DataTable().destroy();
               $("#koordinatorppddata").html(response);
               // Reinitialize Sertifikat Table
               callTable();
@@ -836,7 +860,7 @@ function eventppd(value1,value2) {
         // Check the response from the server
         if (response === 'Success') {
           // Display success notification
-          if (value2 === 'reset') {
+          if (value2 === 'cancel') {
             UpdateNotification('Data berhasil direset!');
           } else {
             DeleteNotification('Data berhasil dihapus!');
@@ -901,6 +925,7 @@ $(document).on("click", ".open-ViewPPD", function () {
         url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
         data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: cabang },
         success: function(result){
+          console.log(result);
           $("#loadpicview").html(result);
         }
       });
@@ -924,6 +949,7 @@ $(document).on("click", ".open-EditPPD", function () {
     method: 'POST',
     data: { PPD_ID: key },
     success: function(data) {
+      // console.log('response', data);
       // Assuming data is a JSON object with the required information
       // Make sure the keys match the fields in your returned JSON object
 
@@ -1211,7 +1237,7 @@ function filterPPDKoordinatorEvent() {
     data: formData,
     success: function(response){
       // Destroy the DataTable before updating
-      $('#ppd-table').DataTable().destroy();
+      $('#ppdKoor-table').DataTable().destroy();
       $("#koordinatorppddata").html(response);
       // Reinitialize Sertifikat Table
       callTable();
@@ -1274,6 +1300,47 @@ function filterPPDGuruReportEvent() {
   // console.log(formData);
 }
 
+$('.filterLapPPD select, .filterLapPPD input').on('change input', debounce(filterLapPPDEvent, 500));
+function filterLapPPDEvent() {
+  // Your event handling code here
+  const daerah = $('#selectize-select3').val();
+  const cabang = $('#selectize-select2').val();
+  const cabangPPD = $('#selectize-dropdown').val();
+  const ppd = $('#filterPPD_ID').val();
+  const id = $('#filterANGGOTA_ID').val();
+  const nama = $('#filterANGGOTA_NAMA').val();
+  const tingkatan = $('#selectize-select').val();
+  const jenis = $('#filterPPD_JENIS').val();
+  const tanggal = $('#datepicker42').val();
+
+  // Create a data object to hold the form data
+  const formData = {
+    DAERAH_KEY: daerah,
+    CABANG_KEY: cabang,
+    PPD_LOKASI: cabangPPD,
+    PPD_ID: ppd,
+    ANGGOTA_ID: id,
+    ANGGOTA_NAMA: nama,
+    TINGKATAN_ID: tingkatan,
+    PPD_JENIS: jenis,
+    PPD_TANGGAL: tanggal
+  };
+
+  $.ajax({
+    type: "POST",
+    url: 'module/ajax/transaksi/aktivitas/ppd/aj_tablelapppd.php',
+    data: formData,
+    success: function(response){
+      // Destroy the DataTable before updating
+      $('#lapppd-table').DataTable().destroy();
+      $("#ppddata").html(response);
+      // Reinitialize Sertifikat Table
+      callTable();
+    }
+  });
+  // console.log(formData);
+}
+
 // ----- Function to reset form ----- //
 function clearForm() {
   
@@ -1310,8 +1377,12 @@ function clearForm() {
   
   // JavaScript to reset all forms with the class "resettable-form"
   document.querySelectorAll('.resettable-form').forEach(form => form.reset());
-  filterPPDEvent();
-  filterPPDKoordinatorEvent();
+  if ($.fn.DataTable.isDataTable('#ppd-table')) {
+    filterPPDEvent();
+  }
+  if ($.fn.DataTable.isDataTable('#ppdKoor-table')) {
+    filterPPDKoordinatorEvent();
+  }
 }
 
 function clearFormGuru() {
@@ -1352,6 +1423,44 @@ function clearFormReportGuru() {
   // JavaScript to reset all forms with the class "resettable-form"
   document.querySelectorAll('.resettable-form').forEach(form => form.reset());
   filterPPDGuruReportEvent();
+}
+
+function clearLapForm() {
+  
+  // Check if the administrator-specific elements exist
+  var isExist = $('#selectize-select3').length > 0 && $('#selectize-select2').length > 0;
+
+  if (isExist) {
+    var selectizeInstance1 = $('#selectize-select3')[0].selectize;
+    var selectizeInstance2 = $('#selectize-select2')[0].selectize;
+    var selectizeInstance3 = $('#selectize-select')[0].selectize;
+    var selectizeInstance5 = $('#selectize-dropdown')[0].selectize;
+  } else {
+    var selectizeInstance3 = $('#selectize-select')[0].selectize;
+    var selectizeInstance5 = $('#selectize-dropdown')[0].selectize;
+
+  }
+  
+  // Clear the fifth Selectize dropdown
+  if (selectizeInstance5) {
+    selectizeInstance5.clear();
+  }
+  // Clear the second Selectize dropdown
+  if (selectizeInstance1) {
+    selectizeInstance1.clear();
+  }
+  // Clear the second Selectize dropdown
+  if (selectizeInstance2) {
+    selectizeInstance2.clear();
+  }
+  // Clear the third Selectize dropdown
+  if (selectizeInstance3) {
+    selectizeInstance3.clear();
+  }
+  
+  // JavaScript to reset all forms with the class "resettable-form"
+  document.querySelectorAll('.resettable-form').forEach(form => form.reset());
+  filterLapPPDEvent();
 }
 // ----- End of function to reset form ----- //
 

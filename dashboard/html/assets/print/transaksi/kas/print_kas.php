@@ -9,6 +9,10 @@ require_once('../../../tcpdf/tcpdf.php');
 
 if (isset($_GET['id'])) {
     $KAS_ID = $_GET["id"];
+    $id = encodeIdToBase64($_GET["id"]);
+    $encodedAnggota = encodeIdToBase64('Anggota');
+    $encodedKoor = encodeIdToBase64('Koor');
+    $encodedGuru = encodeIdToBase64('Guru');
 
     $getData = GetQuery("SELECT k.*,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_AKSES,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,c.CABANG_SEKRETARIAT,a2.ANGGOTA_ID INPUT_BY_ID,a2.ANGGOTA_NAMA INPUT_BY,a2.ANGGOTA_AKSES INPUT_AKSES, DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y') INPUT_DATE,
     CASE
@@ -149,7 +153,7 @@ if (isset($_GET['id'])) {
                 
                 // Page footer
                 public function Footer() {
-                    global $USER_NAMA, $CABANG_DESKRIPSI, $ANGGOTA_ID, $INPUT_BY, $INPUT_BY_ID, $APPROVE_BY, $ANGGOTA_NAMA, $INPUT_AKSES, $ANGGOTA_AKSES, $ANGOTA_NAMA, $DATENOW, $INPUT_DATE;
+                    global $id, $encodedAnggota, $encodedKoor, $USER_NAMA, $CABANG_DESKRIPSI, $ANGGOTA_ID, $INPUT_BY, $INPUT_BY_ID, $APPROVE_BY, $ANGGOTA_NAMA, $INPUT_AKSES, $ANGGOTA_AKSES, $ANGOTA_NAMA, $DATENOW, $INPUT_DATE;
 
                     // set style for barcode
                     $style = array(
@@ -174,9 +178,9 @@ if (isset($_GET['id'])) {
                     $this->Cell(170,5,"Diinput Oleh,",0,0,"R");
                     $this->Ln();
                     // QRCODE,H : QR-CODE Best error correction
-                    $this->write2DBarcode($ANGGOTA_ID.' - '.$ANGOTA_NAMA, 'QRCODE,H', 15, 240, 25, 25, $style, 'N');
+                    $this->write2DBarcode('http://localhost/ciptasejati/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedAnggota, 'QRCODE,H', 15, 240, 25, 25, $style, 'N');
                     if ($INPUT_BY) {
-                        $this->write2DBarcode($INPUT_BY_ID.' - '.$INPUT_BY, 'QRCODE,H', 160, 240, 25, 25, $style, 'N');
+                        $this->write2DBarcode('http://localhost/ciptasejati/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedKoor, 'QRCODE,H', 160, 240, 25, 25, $style, 'N');
                     }
                     $this->Ln(3);
                     $this->SetFont('times', 'U', 12); // Set font for body

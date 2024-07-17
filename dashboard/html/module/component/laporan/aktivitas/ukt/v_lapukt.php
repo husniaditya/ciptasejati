@@ -269,7 +269,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
             <div class="panel-heading">
                 <h3 class="panel-title">Tabel Uji Kenaikan Tingkat</h3>
             </div>
-            <table class="table table-striped table-bordered" id="ukt-table">
+            <table class="table table-striped table-bordered" id="lapukt-table">
                 <thead>
                     <tr>
                         <th></th>
@@ -315,8 +315,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                             </td>
                             <td>
                                 <?= $UKT_ID; ?><br> 
-                                <span class="<?= $KOOR_BADGE; ?>"><i class="<?= $KOOR_CLASS; ?>"></i> Koordinator </span><br> 
-                                <span class="<?= $GURU_BADGE; ?>"><i class="<?= $GURU_CLASS; ?>"></i> Guru Besar </span>
+                                <span class="<?= $KOOR_BADGE; ?>"><i class="<?= $KOOR_CLASS; ?>"></i> Koordinator </span>
                             </td>
                             <td align="center"><?= $ANGGOTA_ID; ?></td>
                             <td><?= $ANGGOTA_NAMA; ?></td>

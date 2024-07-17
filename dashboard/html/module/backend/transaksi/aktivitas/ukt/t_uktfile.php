@@ -7,6 +7,9 @@ $USER_NAMA = $_SESSION["LOGINNAME_CS"];
 
 if (isset($_POST['id'])) {
     $UKT_ID = $_POST["id"];
+    $id = encodeIdToBase64($UKT_ID);
+    $encodedKoor = encodeIdToBase64('Koor');
+    $encodedGuru = encodeIdToBase64('Guru');
 
     try {
         // Fetch main data
@@ -124,7 +127,7 @@ if (isset($_POST['id'])) {
                 }
 
                 public function Footer() {
-                    global $UKT_ID, $USER_NAMA, $UKT_APP_KOOR, $UKT_APP_KOOR_BY, $KOOR_ID, $DATENOW;
+                    global $id, $encodedKoor, $encodeAnggota, $UKT_ID, $USER_NAMA, $UKT_APP_KOOR, $UKT_APP_KOOR_BY, $KOOR_ID, $DATENOW;
                 
                     $style = array('border' => true, 'vpadding' => 'auto', 'hpadding' => 'auto', 'fgcolor' => array(0, 0, 0), 'bgcolor' => false, 'module_width' => 1, 'module_height' => 1);
                 
@@ -154,13 +157,14 @@ if (isset($_POST['id'])) {
                 
                     foreach ($rowNama as $index => $row) {
                         extract($row);
+                        $encodeAnggota = encodeIdToBase64($ANGGOTA_ID);
                 
                         // Calculate the X position for the QR code
                         $qrX = $startX + ($index * $cellWidth) + ($cellWidth / 2) - ($qrSize / 2);
                         $qrY = $startY;
                 
                         // Draw the QR code
-                        $this->write2DBarcode($ANGGOTA_ID . ' - ' . $ANGGOTA_NAMA, 'QRCODE,H', $qrX, $qrY, $qrSize, $qrSize, $style, 'N');
+                        $this->write2DBarcode('http://localhost/ciptasejati/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedKoor.'&pic='.$encodeAnggota, 'QRCODE,H', $qrX, $qrY, $qrSize, $qrSize, $style, 'N');
                 
                         // Set X and Y for the cell content below the QR code
                         $contentX = $startX + ($index * $cellWidth);

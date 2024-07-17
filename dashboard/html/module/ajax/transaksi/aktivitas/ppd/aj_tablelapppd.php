@@ -132,20 +132,8 @@ while ($rowPPD = $getPPD->fetch(PDO::FETCH_ASSOC)) {
                     <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                     <ul class="dropdown-menu" role="menu">
                         <li><a data-toggle="modal" href="#ViewPPD" class="open-ViewPPD" style="color:#222222;" data-id="<?= $PPD_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
-                        <?php
-                        if ($PPD_APPROVE_PELATIH == 0) {
-                            ?>
-                            <li><a data-toggle="modal" href="#EditPPD" class="open-EditPPD" style="color:#00a5d2;" data-id="<?= $PPD_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><span class="ico-edit"></span> Ubah</a></li>
-                            <?php
-                        } else if ($PPD_APPROVE_PELATIH <> 0) {
-                            ?>
-                            <li class="divider"></li>
-                            <li><a href="#" onclick="eventppd('<?= $PPD_ID;?>','cancel')"><i class="fa-solid fa-rotate-left"></i> Batal Persetujuan</a></li>
-                            <?php
-                        }
-                        ?>
                         <li class="divider"></li>
-                        <li><a href="#" onclick="eventppd('<?= $PPD_ID;?>','delete')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
+                        <li><a href="assets/print/transaksi/aktivitas/ppd/print_ppdreportanggota.php?id=<?= $PPD_ID; ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
                     </ul>
                 </div>
             </form>
