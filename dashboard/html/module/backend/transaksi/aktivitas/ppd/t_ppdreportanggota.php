@@ -111,10 +111,10 @@ if ($_GET["id"]) {
                     $this->Ln();
                     // QRCODE,H : QR-CODE Best error correction
                     if ($PPD_APPROVE_PELATIH == 1) {
-                        $this->write2DBarcode('http://localhost/ciptasejati/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedKoor, 'QRCODE,H', 15, 220, 25, 25, $style, 'N');
+                        $this->write2DBarcode('https://ciptasejatiindonesia.com/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedKoor, 'QRCODE,H', 15, 220, 25, 25, $style, 'N');
                     }
                     if ($PPD_APPROVE_GURU == 1) {
-                        $this->write2DBarcode('http://localhost/ciptasejati/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedGuru, 'QRCODE,H', 160, 220, 25, 25, $style, 'N');
+                        $this->write2DBarcode('https://ciptasejatiindonesia.com/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedGuru, 'QRCODE,H', 160, 220, 25, 25, $style, 'N');
                     }
                     $this->Ln(3);
                     $this->SetFont('times', 'U', 12); // Set font for body

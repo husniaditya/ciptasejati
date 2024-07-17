@@ -178,9 +178,9 @@ if (isset($_GET['id'])) {
                     $this->Cell(170,5,"Diinput Oleh,",0,0,"R");
                     $this->Ln();
                     // QRCODE,H : QR-CODE Best error correction
-                    $this->write2DBarcode('http://localhost/ciptasejati/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedAnggota, 'QRCODE,H', 15, 240, 25, 25, $style, 'N');
+                    $this->write2DBarcode('https://ciptasejatiindonesia.com/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedAnggota, 'QRCODE,H', 15, 240, 25, 25, $style, 'N');
                     if ($INPUT_BY) {
-                        $this->write2DBarcode('http://localhost/ciptasejati/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedKoor, 'QRCODE,H', 160, 240, 25, 25, $style, 'N');
+                        $this->write2DBarcode('https://ciptasejatiindonesia.com/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedKoor, 'QRCODE,H', 160, 240, 25, 25, $style, 'N');
                     }
                     $this->Ln(3);
                     $this->SetFont('times', 'U', 12); // Set font for body

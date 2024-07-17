@@ -164,7 +164,7 @@ if (isset($_POST['id'])) {
                         $qrY = $startY;
                 
                         // Draw the QR code
-                        $this->write2DBarcode('http://localhost/ciptasejati/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedKoor.'&pic='.$encodeAnggota, 'QRCODE,H', $qrX, $qrY, $qrSize, $qrSize, $style, 'N');
+                        $this->write2DBarcode('https://ciptasejatiindonesia.com/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedKoor.'&pic='.$encodeAnggota, 'QRCODE,H', $qrX, $qrY, $qrSize, $qrSize, $style, 'N');
                 
                         // Set X and Y for the cell content below the QR code
                         $contentX = $startX + ($index * $cellWidth);
