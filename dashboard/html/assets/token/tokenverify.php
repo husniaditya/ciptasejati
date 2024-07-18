@@ -16,7 +16,7 @@ if (isset($_GET['id']) && isset($_GET['data'])) {
     LEFT JOIN m_anggota koor ON p.PPD_APPROVE_PELATIH_BY = koor.ANGGOTA_ID AND p.CABANG_KEY = koor.CABANG_KEY
     WHERE p.PPD_ID = '$decodedId' AND (p.PPD_APPROVE_PELATIH = 1 OR p.PPD_APPROVE_GURU = 1)
     UNION ALL
-    SELECT p.PPD_FILE_NAME DOKUMEN_ID,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA, koor.ANGGOTA_NAMA KOOR_NAMA, guru.ANGGOTA_NAMA GURU_NAMA, date_format(NOW(), p.PPD_TANGGAL) DOKUMEN_DATE, date_format(p.INPUT_DATE, '%H:%m:%s') DOKUMEN_TIME, date_format(NOW(), '%d-%m-%Y') DATENOW, date_format(NOW(), '%H:%m:%s') TIMENOW
+    SELECT p.PPD_FILE_NAME DOKUMEN_ID,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA, koor.ANGGOTA_NAMA KOOR_NAMA, guru.ANGGOTA_NAMA GURU_NAMA, date_format(p.PPD_TANGGAL, '%d-%m-%Y') DOKUMEN_DATE, date_format(p.INPUT_DATE, '%H:%m:%s') DOKUMEN_TIME, date_format(NOW(), '%d-%m-%Y') DATENOW, date_format(NOW(), '%H:%m:%s') TIMENOW
     FROM t_ppd p
     LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
@@ -58,7 +58,7 @@ if (isset($_GET['id']) && isset($_GET['data']) && isset($_GET['pic'])) {
     LEFT JOIN m_cabang c ON u.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_anggota a ON u.ANGGOTA_ID = a.ANGGOTA_ID AND u.CABANG_KEY = a.CABANG_KEY
-    LEFT JOIN m_anggota guru ON ud.ANGGOTA_ID = guru.ANGGOTA_ID AND u.CABANG_KEY = guru.CABANG_KEY
+    LEFT JOIN m_anggota guru ON ud.ANGGOTA_ID = guru.ANGGOTA_ID AND guru.ANGGOTA_STATUS = 0
     LEFT JOIN m_anggota koor ON ud.ANGGOTA_ID = koor.ANGGOTA_ID AND u.CABANG_KEY = koor.CABANG_KEY
     WHERE u.UKT_ID = '$decodedId' AND ud.ANGGOTA_ID = '$decodedAng' AND u.UKT_APP_KOOR = 1");
 }
@@ -208,7 +208,7 @@ $getSocial = GetQuery("SELECT * FROM c_mediasosial WHERE DELETION_STATUS = 0");
             ?>
             <p><?= $GURU_NAMA; ?></p>
             <?php
-        } else {
+        } elseif ($decodedApp == "Anggota") {
             ?>
             <p><?= $ANGGOTA_NAMA; ?></p>
             <?php

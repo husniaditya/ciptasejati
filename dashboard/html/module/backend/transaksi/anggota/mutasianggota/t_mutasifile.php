@@ -32,6 +32,11 @@ if ($_POST["MUTASI_ID"]) {
         left join m_tingkatan t2 on a.TINGKATAN_ID = t2.TINGKATAN_ID
         WHERE t.MUTASI_ID = '$MUTASI_ID'
         ORDER BY t.MUTASI_STATUS ASC, t.MUTASI_TANGGAL DESC");
+
+        $getURL = GetQuery("SELECT * FROM p_param WHERE KATEGORI = 'url'");
+        while ($urlData = $getURL->fetch(PDO::FETCH_ASSOC)) {
+            $URL = $urlData["DESK"];
+        }
     
         while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
             extract($data);
@@ -79,7 +84,7 @@ if ($_POST["MUTASI_ID"]) {
     
                 // Page footer
                 public function Footer() {
-                    global $id, $encodedKoor, $encodedGuru, $USER_NAMA, $CABANG_TUJUAN_DES, $MUTASI_APPROVE_TANGGAL, $INPUT_BY, $INPUT_BY_ID, $APPROVE_BY, $APPROVE_BY_ID, $INPUT_AKSES, $APPROVE_AKSES, $CABANG_AWAL_DES, $DATENOW, $INPUT_DATE;
+                    global $URL, $id, $encodedKoor, $encodedGuru, $USER_NAMA, $CABANG_TUJUAN_DES, $MUTASI_APPROVE_TANGGAL, $INPUT_BY, $INPUT_BY_ID, $APPROVE_BY, $APPROVE_BY_ID, $INPUT_AKSES, $APPROVE_AKSES, $CABANG_AWAL_DES, $DATENOW, $INPUT_DATE;
     
                     // set style for barcode
                     $style = array(
@@ -104,9 +109,9 @@ if ($_POST["MUTASI_ID"]) {
                     $this->Cell(170,5,"Disetujui Oleh,",0,0,"R");
                     $this->Ln();
                     // QRCODE,H : QR-CODE Best error correction
-                    $this->write2DBarcode('https://ciptasejatiindonesia.com/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedKoor, 'QRCODE,H', 15, 240, 25, 25, $style, 'N');
+                    $this->write2DBarcode($URL.'/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedKoor, 'QRCODE,H', 15, 240, 25, 25, $style, 'N');
                     if ($INPUT_BY) {
-                        $this->write2DBarcode('https://ciptasejatiindonesia.com/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedGuru, 'QRCODE,H', 160, 240, 25, 25, $style, 'N');
+                        $this->write2DBarcode($URL.'/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedGuru, 'QRCODE,H', 160, 240, 25, 25, $style, 'N');
                     }
                     $this->Ln(3);
                     $this->SetFont('times', 'U', 12); // Set font for body

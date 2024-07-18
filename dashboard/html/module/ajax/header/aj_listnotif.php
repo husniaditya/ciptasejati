@@ -47,25 +47,23 @@ CASE
         END
 END AS NOTIF_ICON,
 CASE
-    WHEN TIMEDIFF(NOW(), n.INPUT_DATE) < '00:10:00' THEN
+    WHEN TIMESTAMPDIFF(MINUTE, n.INPUT_DATE, NOW()) < 10 THEN
+        ' Baru saja'
+    WHEN TIMESTAMPDIFF(HOUR, n.INPUT_DATE, NOW()) < 1 THEN
         CONCAT(
-            'Baru saja'
+            TIMESTAMPDIFF(MINUTE, n.INPUT_DATE, NOW()), ' Menit yang lalu'
         )
-    WHEN TIMEDIFF(NOW(), n.INPUT_DATE) > '00:10:00' THEN
+    WHEN TIMESTAMPDIFF(HOUR, n.INPUT_DATE, NOW()) < 24 THEN
         CONCAT(
-            MINUTE(TIMEDIFF(NOW(), n.INPUT_DATE)), ' Menit yang lalu'
+            TIMESTAMPDIFF(HOUR, n.INPUT_DATE, NOW()), ' Jam ',
+            MOD(TIMESTAMPDIFF(MINUTE, n.INPUT_DATE, NOW()), 60), ' Menit yang lalu'
         )
-    WHEN DATEDIFF(NOW(), n.INPUT_DATE) < 1 THEN
-        CONCAT(
-          HOUR(TIMEDIFF(NOW(), n.INPUT_DATE)), ' Jam ',
-          MINUTE(TIMEDIFF(NOW(), n.INPUT_DATE)), ' Menit yang lalu'
-      )
     ELSE
         CONCAT(
-			DATEDIFF(NOW(), n.INPUT_DATE), ' Hari ',
-			HOUR(TIMEDIFF(time(NOW()), time(n.INPUT_DATE))), ' Jam ',
-         MINUTE(TIMEDIFF(time(NOW()), time(n.INPUT_DATE))), ' Menit yang lalu'
-		)
+            TIMESTAMPDIFF(DAY, n.INPUT_DATE, NOW()), ' Hari ',
+            MOD(TIMESTAMPDIFF(HOUR, n.INPUT_DATE, NOW()), 24), ' Jam ',
+            MOD(TIMESTAMPDIFF(MINUTE, n.INPUT_DATE, NOW()), 60), ' Menit yang lalu'
+        )
 END AS difference
 FROM t_notifikasi n
 LEFT JOIN t_mutasi m ON n.DOKUMEN_ID = m.MUTASI_ID

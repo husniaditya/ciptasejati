@@ -4,7 +4,7 @@
 function callTable() {
   $('#idsertifikat-table').DataTable({
       responsive: true,
-      order: [[1, 'asc']],
+      order: [],
       dom: 'Bfrtlip',
       columnDefs: [
           { width: '100px', targets: 0 }, // Set width for column 1

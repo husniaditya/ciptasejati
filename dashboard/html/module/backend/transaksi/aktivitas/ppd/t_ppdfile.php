@@ -23,6 +23,11 @@ if (isset($_POST['id'])) {
     LEFT JOIN m_idsertifikat s ON t.TINGKATAN_ID = s.TINGKATAN_ID
     WHERE p.PPD_ID = '$PPD_ID'");
 
+    $getURL = GetQuery("SELECT * FROM p_param WHERE KATEGORI = 'url'");
+    while ($urlData = $getURL->fetch(PDO::FETCH_ASSOC)) {
+        $URL = $urlData["DESK"];
+    }
+
     try {
         while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
             extract($data);
@@ -48,9 +53,9 @@ if (isset($_POST['id'])) {
 
                 // Page footer
                 public function Footer() {
-                    global $CABANG_DESKRIPSI, $encodedId, $encodedGuru, $PPD_TANGGAL;
+                    global $URL, $CABANG_DESKRIPSI, $encodedId, $encodedGuru, $PPD_TANGGAL;
 
-                    $this->SetMargins(40, PDF_MARGIN_TOP, 40);
+                    $this->SetMargins(40, PDF_MARGIN_TOP, 25);
                     $pageWidth = $this->getPageWidth();
                     $leftMargin = $this->getMargins()['left'];
                     $rightMargin = $this->getMargins()['right'];
@@ -73,10 +78,10 @@ if (isset($_POST['id'])) {
                     // Draw a horizontal line under the header
                     $this->Cell($fullWidth,5,$CABANG_DESKRIPSI.', '.$PPD_TANGGAL,0,0,"R");
                     $this->Ln();
-                    $this->Cell($fullWidth,5,"Disetujui Oleh,",0,0,"R");
+                    $this->Cell(218,5,"Disetujui Oleh,",0,0,"R");
                     $this->Ln();
                     // QRCODE,H : QR-CODE Best error correction
-                    $this->write2DBarcode('https://ciptasejatiindonesia.com/assets/token/tokenverify.php?id='.$encodedId.'&'.$encodedGuru, 'QRCODE,H', 230, 163, 50, 50, $style, 'N');
+                    $this->write2DBarcode($URL.'/dashboard/html/assets/token/tokenverify.php?id='.$encodedId.'&data='.$encodedGuru, 'QRCODE,H', 230, 162, 27, 27, $style, 'N');
                     // $this->Ln(-1);
                     // $this->SetFont('times', 'BU', 15); // Set font for body
                     // $this->Cell($fullWidth,5,$GURU_NAMA,0,0,"R");

@@ -24,12 +24,17 @@ if ($_GET["id"]) {
         LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
         LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY
         LEFT JOIN m_anggota koor ON p.PPD_APPROVE_PELATIH_BY = koor.ANGGOTA_ID AND p.CABANG_KEY = koor.CABANG_KEY
-        LEFT JOIN m_anggota guru ON p.PPD_APPROVE_GURU_BY = guru.ANGGOTA_ID AND p.CABANG_KEY = guru.CABANG_KEY
+        LEFT JOIN m_anggota guru ON p.PPD_APPROVE_GURU_BY = guru.ANGGOTA_ID AND guru.ANGGOTA_STATUS = 0
         LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
         LEFT JOIN m_daerah d2 ON c2.DAERAH_KEY = d2.DAERAH_KEY
         LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_LAMA = t.TINGKATAN_ID
         LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID_BARU = t2.TINGKATAN_ID
         WHERE p.PPD_ID = '$PPD_ID'");
+
+        $getURL = GetQuery("SELECT * FROM p_param WHERE KATEGORI = 'url'");
+        while ($urlData = $getURL->fetch(PDO::FETCH_ASSOC)) {
+            $URL = $urlData["DESK"];
+        }
     
         while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
             extract($data);
@@ -85,7 +90,7 @@ if ($_GET["id"]) {
     
                 // Page footer
                 public function Footer() {
-                    global $id, $encodedKoor, $encodedGuru, $USER_NAMA, $CABANG_DESKRIPSI, $PPD_PELATIH_TGL, $PPD_GURU_TGL, $PPD_APPROVE_PELATIH, $PPD_APPROVE_GURU, $PPD_APPROVE_PELATIH_BY, $PPD_APPROVE_GURU_BY, $PPD_KOORDINATOR, $PPD_GURU, $DATENOW;
+                    global $URL, $id, $encodedKoor, $encodedGuru, $USER_NAMA, $CABANG_DESKRIPSI, $PPD_PELATIH_TGL, $PPD_GURU_TGL, $PPD_APPROVE_PELATIH, $PPD_APPROVE_GURU, $PPD_APPROVE_PELATIH_BY, $PPD_APPROVE_GURU_BY, $PPD_KOORDINATOR, $PPD_GURU, $DATENOW;
     
                     // set style for barcode
                     $style = array(
@@ -111,10 +116,10 @@ if ($_GET["id"]) {
                     $this->Ln();
                     // QRCODE,H : QR-CODE Best error correction
                     if ($PPD_APPROVE_PELATIH == 1) {
-                    $this->write2DBarcode('https://ciptasejatiindonesia.com/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedKoor, 'QRCODE,H', 15, 220, 25, 25, $style, 'N');
+                    $this->write2DBarcode($URL.'/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedKoor, 'QRCODE,H', 15, 220, 25, 25, $style, 'N');
                     }
                     if ($PPD_APPROVE_GURU == 1) {
-                        $this->write2DBarcode('https://ciptasejatiindonesia.com/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedGuru, 'QRCODE,H', 160, 220, 25, 25, $style, 'N');
+                        $this->write2DBarcode($URL.'/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedGuru, 'QRCODE,H', 160, 220, 25, 25, $style, 'N');
                     }
                     $this->Ln(3);
                     $this->SetFont('times', 'U', 12); // Set font for body

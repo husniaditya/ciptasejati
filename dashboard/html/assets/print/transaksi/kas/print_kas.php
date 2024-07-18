@@ -30,6 +30,11 @@ if (isset($_GET['id'])) {
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     WHERE k.KAS_ID = '$KAS_ID'");
 
+    $getURL = GetQuery("SELECT * FROM p_param WHERE KATEGORI = 'url'");
+    while ($urlData = $getURL->fetch(PDO::FETCH_ASSOC)) {
+        $URL = $urlData["DESK"];
+    }
+
     try {
         while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
             extract($data);
@@ -153,7 +158,7 @@ if (isset($_GET['id'])) {
                 
                 // Page footer
                 public function Footer() {
-                    global $id, $encodedAnggota, $encodedKoor, $USER_NAMA, $CABANG_DESKRIPSI, $ANGGOTA_ID, $INPUT_BY, $INPUT_BY_ID, $APPROVE_BY, $ANGGOTA_NAMA, $INPUT_AKSES, $ANGGOTA_AKSES, $ANGOTA_NAMA, $DATENOW, $INPUT_DATE;
+                    global $URL, $id, $encodedAnggota, $encodedKoor, $USER_NAMA, $CABANG_DESKRIPSI, $ANGGOTA_ID, $INPUT_BY, $INPUT_BY_ID, $APPROVE_BY, $ANGGOTA_NAMA, $INPUT_AKSES, $ANGGOTA_AKSES, $ANGOTA_NAMA, $DATENOW, $INPUT_DATE;
 
                     // set style for barcode
                     $style = array(
@@ -178,9 +183,9 @@ if (isset($_GET['id'])) {
                     $this->Cell(170,5,"Diinput Oleh,",0,0,"R");
                     $this->Ln();
                     // QRCODE,H : QR-CODE Best error correction
-                    $this->write2DBarcode('https://ciptasejatiindonesia.com/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedAnggota, 'QRCODE,H', 15, 240, 25, 25, $style, 'N');
+                    $this->write2DBarcode($URL.'/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedAnggota, 'QRCODE,M', 15, 240, 25, 25, $style, 'N');
                     if ($INPUT_BY) {
-                        $this->write2DBarcode('https://ciptasejatiindonesia.com/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedKoor, 'QRCODE,H', 160, 240, 25, 25, $style, 'N');
+                        $this->write2DBarcode($URL.'/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedKoor, 'QRCODE,M', 160, 240, 25, 25, $style, 'N');
                     }
                     $this->Ln(3);
                     $this->SetFont('times', 'U', 12); // Set font for body

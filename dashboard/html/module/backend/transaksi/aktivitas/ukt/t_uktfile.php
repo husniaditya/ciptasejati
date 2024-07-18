@@ -33,6 +33,11 @@ if (isset($_POST['id'])) {
         LEFT JOIN m_tingkatan t2 ON t2.TINGKATAN_ID = u.TINGKATAN_ID
         WHERE u.DELETION_STATUS = 0 AND u.UKT_ID = '$UKT_ID'");
 
+        $getURL = GetQuery("SELECT * FROM p_param WHERE KATEGORI = 'url'");
+        while ($urlData = $getURL->fetch(PDO::FETCH_ASSOC)) {
+            $URL = $urlData["DESK"];
+        }
+
         if ($getData->rowCount() > 0) {
             $data = $getData->fetch(PDO::FETCH_ASSOC);
 
@@ -127,7 +132,7 @@ if (isset($_POST['id'])) {
                 }
 
                 public function Footer() {
-                    global $id, $encodedKoor, $encodeAnggota, $UKT_ID, $USER_NAMA, $UKT_APP_KOOR, $UKT_APP_KOOR_BY, $KOOR_ID, $DATENOW;
+                    global $URL, $id, $encodedKoor, $encodeAnggota, $UKT_ID, $USER_NAMA, $UKT_APP_KOOR, $UKT_APP_KOOR_BY, $KOOR_ID, $DATENOW;
                 
                     $style = array('border' => true, 'vpadding' => 'auto', 'hpadding' => 'auto', 'fgcolor' => array(0, 0, 0), 'bgcolor' => false, 'module_width' => 1, 'module_height' => 1);
                 
@@ -164,7 +169,7 @@ if (isset($_POST['id'])) {
                         $qrY = $startY;
                 
                         // Draw the QR code
-                        $this->write2DBarcode('https://ciptasejatiindonesia.com/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedKoor.'&pic='.$encodeAnggota, 'QRCODE,H', $qrX, $qrY, $qrSize, $qrSize, $style, 'N');
+                        $this->write2DBarcode($URL.'/dashboard/html/assets/token/tokenverify.php?id='.$id.'&data='.$encodedKoor.'&pic='.$encodeAnggota, 'QRCODE,H', $qrX, $qrY, $qrSize, $qrSize, $style, 'N');
                 
                         // Set X and Y for the cell content below the QR code
                         $contentX = $startX + ($index * $cellWidth);

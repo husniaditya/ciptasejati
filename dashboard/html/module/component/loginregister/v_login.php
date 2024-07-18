@@ -1,5 +1,10 @@
 <?php
 include "module/backend/loginregister/t_login.php";
+
+$getURL = GetQuery("SELECT * FROM p_param WHERE KATEGORI = 'URL'");
+while ($urlData = $getURL->fetch(PDO::FETCH_ASSOC)) {
+    extract($urlData);
+}
 ?>
 <section class="container">
     <!-- START row -->
@@ -39,7 +44,7 @@ include "module/backend/loginregister/t_login.php";
                     <div class="form-group">
                         <div class="row">
                             <div class="col-xs-6">
-                                <a href="/../ciptasejati/"><i class="ico-globe form-control-icon"></i> Kembali ke website</a>
+                                <a href="<?= $DESK; ?>"><i class="ico-globe form-control-icon"></i> Kembali ke website</a>
                             </div>
                             <div class="col-xs-6 text-right">
                                 <a href="lupapassword">Lupa password?</a>

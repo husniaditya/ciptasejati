@@ -5,7 +5,8 @@ require_once ("../../../../module/connection/conn.php");
 $getSertifikat = GetQuery("SELECT s.*,t.TINGKATAN_NAMA,a.ANGGOTA_NAMA,DATE_FORMAT(s.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,case when s.DELETION_STATUS = 0 then 'Aktif' ELSE 'Tidak Aktif' END SERTIFIKAT_STATUS
 FROM m_idsertifikat s
 LEFT JOIN m_tingkatan t ON s.TINGKATAN_ID = t.TINGKATAN_ID
-LEFT JOIN m_anggota a ON s.INPUT_BY = a.ANGGOTA_ID");
+LEFT JOIN m_anggota a ON s.INPUT_BY = a.ANGGOTA_ID
+ORDER BY t.TINGKATAN_LEVEL");
 
 while ($rowSertifikat = $getSertifikat->fetch(PDO::FETCH_ASSOC)) {
     extract($rowSertifikat);
