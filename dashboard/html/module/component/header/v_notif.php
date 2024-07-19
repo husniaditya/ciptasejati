@@ -114,7 +114,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Close</button>
+                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Tutup</button>
                 </div>
             </div>
         </div>
@@ -249,7 +249,7 @@
                             <button type="submit" name="submit" id="notifrejectmutasianggota" class="submit btn btn-danger mb5 btn-rounded"><i class="fa-regular fa-rectangle-xmark"></i> Tolak</button>
                         </div>
                         <div class="col-md-6 text-right">
-                            <button type="button" class="btn btn-inverse btn-outline mb5 btn-rounded next" data-dismiss="modal"><span class="ico-cancel"></span> Close</button>
+                            <button type="button" class="btn btn-inverse btn-outline mb5 btn-rounded next" data-dismiss="modal"><span class="ico-cancel"></span> Tutup</button>
                         </div>
                     </div>
                 </div>
@@ -367,7 +367,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Close</button>
+                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Tutup</button>
                 </div>
             </div>
         </div>
@@ -441,7 +441,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Cancel</button>
+                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Tutup</button>
                 </div>
             </div>
         </div>
@@ -523,11 +523,11 @@
                 <div class="modal-footer">
                     <div class="row">
                         <div class="col-md-6 text-left">
-                            <button type="submit" name="submit" id="approveKoordinator" class="submit btn btn-success mb5 btn-rounded"><i class="fa-regular fa-square-check"></i> Setuju</button>
-                            <button type="submit" name="submit" id="rejectKoordinator" class="submit btn btn-danger mb5 btn-rounded"><i class="fa-regular fa-rectangle-xmark"></i> Tolak</button>
+                            <button type="submit" name="submit" id="approveNotifPPDKoordinator" class="submit btn btn-success mb5 btn-rounded"><i class="fa-regular fa-square-check"></i> Setuju</button>
+                            <button type="submit" name="submit" id="rejectNotifPPDKoordinator" class="submit btn btn-danger mb5 btn-rounded"><i class="fa-regular fa-rectangle-xmark"></i> Tolak</button>
                         </div>
                         <div class="col-md-6 text-right">
-                            <button type="button" class="btn btn-inverse btn-outline mb5 btn-rounded next" data-dismiss="modal"><span class="ico-cancel"></span> Close</button>
+                            <button type="button" class="btn btn-inverse btn-outline mb5 btn-rounded next" data-dismiss="modal"><span class="ico-cancel"></span> Tutup</button>
                         </div>
                     </div>
                 </div>
@@ -634,7 +634,7 @@
                     <div id="viewnotifrincianukt"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Cancel</button>
+                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Tutup</button>
                 </div>
             </div>
         </div>
@@ -747,11 +747,11 @@
                 <div class="modal-footer">
                     <div class="row">
                         <div class="col-md-6 text-left">
-                            <button type="submit" name="submit" id="approveKoordinator" class="submit btn btn-success mb5 btn-rounded"><i class="fa-regular fa-square-check"></i> Setuju</button>
-                            <button type="submit" name="submit" id="rejectKoordinator" class="submit btn btn-danger mb5 btn-rounded"><i class="fa-regular fa-rectangle-xmark"></i> Tolak</button>
+                            <button type="submit" name="submit" id="approveNotifUKTKoordinator" class="submit btn btn-success mb5 btn-rounded"><i class="fa-regular fa-square-check"></i> Setuju</button>
+                            <button type="submit" name="submit" id="rejectNotifUKTKoordinator" class="submit btn btn-danger mb5 btn-rounded"><i class="fa-regular fa-rectangle-xmark"></i> Tolak</button>
                         </div>
                         <div class="col-md-6 text-right">
-                            <button type="button" class="btn btn-inverse btn-outline mb5 btn-rounded next" data-dismiss="modal"><span class="ico-cancel"></span> Close</button>
+                            <button type="button" class="btn btn-inverse btn-outline mb5 btn-rounded next" data-dismiss="modal"><span class="ico-cancel"></span> Tutup</button>
                         </div>
                     </div>
                 </div>

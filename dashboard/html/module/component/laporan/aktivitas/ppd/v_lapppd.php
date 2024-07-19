@@ -412,7 +412,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Cancel</button>
+                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Tutup</button>
                 </div>
             </div>
         </div>
@@ -523,7 +523,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                     <div id="viewrincianukt"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Cancel</button>
+                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Tutup</button>
                 </div>
             </div>
         </div>

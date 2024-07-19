@@ -391,7 +391,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                             <button type="submit" name="submit" id="rejectmutasianggota" class="submit btn btn-danger mb5 btn-rounded"><i class="fa-regular fa-rectangle-xmark"></i> Tolak</button>
                         </div>
                         <div class="col-md-6 text-right">
-                            <button type="button" class="btn btn-inverse btn-outline mb5 btn-rounded next" data-dismiss="modal"><span class="ico-cancel"></span> Close</button>
+                            <button type="button" class="btn btn-inverse btn-outline mb5 btn-rounded next" data-dismiss="modal"><span class="ico-cancel"></span> Tutup</button>
                         </div>
                     </div>
                 </div>

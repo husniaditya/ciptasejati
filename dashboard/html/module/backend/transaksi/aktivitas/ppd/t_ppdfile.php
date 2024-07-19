@@ -7,8 +7,8 @@ $USER_NAMA = $_SESSION["LOGINNAME_CS"];
 // Include the main TCPDF library (search for installation path).
 require_once('../../../../../assets/tcpdf/tcpdf.php');
 
-if (isset($_POST['id'])) {
-    $PPD_ID = $_POST["id"];
+if (isset($_GET['id'])) {
+    $PPD_ID = $_GET["id"];
     $encodedKoor = encodeIdToBase64('Koor');
     $encodedGuru = encodeIdToBase64('Guru');
 
@@ -77,8 +77,6 @@ if (isset($_POST['id'])) {
                     $this->SetFont('times', '', 12); // Set font for body
                     // Draw a horizontal line under the header
                     $this->Cell($fullWidth,5,$CABANG_DESKRIPSI.', '.$PPD_TANGGAL,0,0,"R");
-                    $this->Ln();
-                    $this->Cell(218,5,"Disetujui Oleh,",0,0,"R");
                     $this->Ln();
                     // QRCODE,H : QR-CODE Best error correction
                     $this->write2DBarcode($URL.'/dashboard/html/assets/token/tokenverify.php?id='.$encodedId.'&data='.$encodedGuru, 'QRCODE,H', 230, 162, 27, 27, $style, 'N');

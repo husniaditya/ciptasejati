@@ -315,6 +315,146 @@ if (isset($_POST["rejectKoordinator"])) {
     }
 }
 
+if (isset($_POST["approveNotifPPDKoordinator"])) {
+    try {
+        $PPD_ID = $_POST["PPD_ID"];
+
+        $incNum = autoIncCert("t_ppd","PPD_FILE_NAME",5);
+        $getSertifikat = GetQuery("SELECT CONCAT('$incNum', '/', LEFT(a.ANGGOTA_ID, 7), '/', t.TINGKATAN_SERTIFIKAT, '/', 'ISBDS-CS/', 
+        CASE MONTH(p.PPD_TANGGAL)
+          WHEN 1 THEN 'I'
+          WHEN 2 THEN 'II'
+          WHEN 3 THEN 'III'
+          WHEN 4 THEN 'IV'
+          WHEN 5 THEN 'V'
+          WHEN 6 THEN 'VI'
+          WHEN 7 THEN 'VII'
+          WHEN 8 THEN 'VIII'
+          WHEN 9 THEN 'IX'
+          WHEN 10 THEN 'X'
+          WHEN 11 THEN 'XI'
+          WHEN 12 THEN 'XII'
+        END, 
+        '/', DATE_FORMAT(p.PPD_TANGGAL, '%Y')) AS PPD_FILE_NAME,
+        a.ANGGOTA_ID,
+        a.ANGGOTA_NAMA,
+        CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan' WHEN p.PPD_JENIS = 1 THEN 'Ulang' END AS PPD_JENIS_DESKRIPSI,
+        p.CABANG_KEY
+        FROM t_ppd p
+        LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY AND a.ANGGOTA_STATUS = 0
+        LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_BARU = t.TINGKATAN_ID
+        WHERE p.PPD_ID = '$PPD_ID'");
+        while ($rowSertifikat = $getSertifikat->fetch(PDO::FETCH_ASSOC)) {
+            extract($rowSertifikat);
+        }
+
+        GetQuery("update t_ppd set PPD_APPROVE_PELATIH = 1, PPD_APPROVE_PELATIH_BY = '$USER_ID', PPD_APPROVE_PELATIH_TGL = NOW(), PPD_FILE_NAME = '$PPD_FILE_NAME' where PPD_ID = '$PPD_ID'");
+
+        GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_ID, TINGKATAN_ID_LAMA, TINGKATAN_ID_BARU, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_FILE_NAME, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'U', '$USER_ID', now() from t_ppd where PPD_ID = '$PPD_ID'");
+        
+        // DELETE NOTIFIKASI BEFORE INSERT
+        GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$PPD_ID'");
+        
+        // INSERT NOTIFIKASI
+        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$PPD_ID',p.CABANG_KEY,p.PPD_LOKASI,'PPD','ViewNotifPPD','open-ViewNotifPPD',CONCAT('PPD ', CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan' else 'Ulang' END, ' ', t.TINGKATAN_NAMA,' - ', t.TINGKATAN_SEBUTAN),CONCAT(p.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),1,0,'$USER_ID',NOW()
+        FROM m_anggota a
+        LEFT JOIN t_ppd p ON a.ANGGOTA_ID = p.ANGGOTA_ID AND a.CABANG_KEY = p.CABANG_KEY
+        LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_BARU = t.TINGKATAN_ID 
+        LEFT JOIN 
+            (
+                SELECT 
+                    a.ANGGOTA_KEY,
+                    a.CABANG_KEY
+                FROM 
+                    m_anggota a
+                LEFT JOIN 
+                    t_ppd p ON a.CABANG_KEY = p.CABANG_KEY
+                WHERE 
+                    (a.ANGGOTA_AKSES = 'Administrator' OR 
+                    a.CABANG_KEY IN (p.CABANG_KEY, p.PPD_LOKASI) AND 
+                    (a.ANGGOTA_AKSES IN ('Koordinator', 'Pengurus') AND 
+                    a.CABANG_KEY = '$CABANG_KEY') OR 
+                    a.ANGGOTA_ID = '$ANGGOTA_ID') AND 
+                    a.ANGGOTA_STATUS = 0 AND 
+                    p.PPD_ID = '$PPD_ID'
+            ) n ON a.CABANG_KEY = n.CABANG_KEY
+        WHERE p.PPD_ID = '$PPD_ID'");
+
+        $response="Success,$PPD_ID";
+        echo $response;
+
+    } catch (Exception $e) {
+        // Generic exception handling
+        $response =  "Caught Exception: " . $e->getMessage();
+        echo $response;
+    }
+}
+
+if (isset($_POST["rejectNotifPPDKoordinator"])) {
+    try {
+        $PPD_ID = $_POST["PPD_ID"];
+        
+        $getDetailPPD = GetQuery("SELECT * FROM t_ppd WHERE PPD_ID = '$PPD_ID'");
+        while ($rowPPD = $getDetailPPD->fetch(PDO::FETCH_ASSOC)) {
+            extract($rowPPD);
+        }
+
+        GetQuery("update t_ppd set PPD_APPROVE_PELATIH = 2, PPD_APPROVE_PELATIH_BY = '$USER_ID', PPD_APPROVE_PELATIH_TGL = NOW() where PPD_ID = '$PPD_ID'");
+
+        GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_ID, TINGKATAN_ID_LAMA, TINGKATAN_ID_BARU, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_FILE_NAME, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'U', '$USER_ID', now() from t_ppd where PPD_ID = '$PPD_ID'");
+
+        // DELETE NOTIFIKASI BEFORE INSERT
+        GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$PPD_ID'");
+        
+        // INSERT NOTIFIKASI
+        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$PPD_ID',p.CABANG_KEY,p.PPD_LOKASI,'PPD',
+        CASE
+            WHEN n.ANGGOTA_AKSES IN ('Administrator','Koordinator') THEN
+            'ApproveNotifPPDKoordinator'
+            ELSE
+            'ViewNotifPPD'
+        END AS HREF,
+        CASE
+            WHEN n.ANGGOTA_AKSES IN ('Administrator','Koordinator') THEN
+            'open-ApproveNotifPPDKoordinator'
+            ELSE
+            'open-ViewNotifPPD'
+        END AS TOGGLE,
+        CONCAT('PPD ', CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan ' else 'Ulang ' END, t.TINGKATAN_NAMA),CONCAT(p.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),2,0,'$USER_ID',NOW()
+        FROM m_anggota a
+        LEFT JOIN t_ppd p ON a.ANGGOTA_ID = p.ANGGOTA_ID AND a.CABANG_KEY = p.CABANG_KEY
+        LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_BARU = t.TINGKATAN_ID 
+        LEFT JOIN 
+            (
+                SELECT 
+                    a.ANGGOTA_KEY,
+                    a.ANGGOTA_AKSES,
+                    a.CABANG_KEY
+                FROM 
+                    m_anggota a
+                LEFT JOIN 
+                    t_ppd p ON a.CABANG_KEY = p.CABANG_KEY
+                WHERE 
+                    (a.ANGGOTA_AKSES = 'Administrator' OR 
+                    a.CABANG_KEY IN (p.CABANG_KEY, p.PPD_LOKASI) AND 
+                    (a.ANGGOTA_AKSES IN ('Koordinator', 'Pengurus') AND 
+                    a.CABANG_KEY = '$CABANG_KEY') OR 
+                    a.ANGGOTA_ID = '$ANGGOTA_ID') AND 
+                    a.ANGGOTA_STATUS = 0 AND 
+                    p.PPD_ID = '$PPD_ID'
+            ) n ON a.CABANG_KEY = n.CABANG_KEY
+        WHERE p.PPD_ID = '$PPD_ID'");
+
+        $response="Success,$PPD_ID";
+        echo $response;
+
+    } catch (Exception $e) {
+        // Generic exception handling
+        $response =  "Caught Exception: " . $e->getMessage();
+        echo $response;
+    }
+}
+
 if (isset($_POST["approveGuru"])) {
     try {
         $PPD_LOKASI = $_POST["PPD_LOKASI"];

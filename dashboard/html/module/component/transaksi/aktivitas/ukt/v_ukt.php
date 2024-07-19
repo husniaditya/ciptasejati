@@ -499,8 +499,8 @@ $rowp = $getPenguji->fetchAll(PDO::FETCH_ASSOC);
                     <div id="addrincianukt"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Cancel</button>
-                    <button type="submit" name="submit" id="saveukt" class="submit btn btn-primary btn-outline mb5 btn-rounded"><span class="ico-save"></span> Save</button>
+                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Tutup</button>
+                    <button type="submit" name="submit" id="saveukt" class="submit btn btn-primary btn-outline mb5 btn-rounded"><span class="ico-save"></span> Simpan</button>
                 </div>
             </div>
         </div>
@@ -611,7 +611,7 @@ $rowp = $getPenguji->fetchAll(PDO::FETCH_ASSOC);
                     <div id="viewrincianukt"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Cancel</button>
+                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Tutup</button>
                 </div>
             </div>
         </div>
@@ -800,8 +800,8 @@ $rowp = $getPenguji->fetchAll(PDO::FETCH_ASSOC);
                     <div id="editrincianukt"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Cancel</button>
-                    <button type="submit" name="submit" id="updateukt" class="submit btn btn-primary btn-outline mb5 btn-rounded"><span class="ico-save"></span> Save</button>
+                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Tutup</button>
+                    <button type="submit" name="submit" id="updateukt" class="submit btn btn-primary btn-outline mb5 btn-rounded"><span class="ico-save"></span> Simpan</button>
                 </div>
             </div>
         </div>

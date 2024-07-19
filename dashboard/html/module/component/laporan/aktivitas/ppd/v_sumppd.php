@@ -215,7 +215,7 @@ $rowPPDTanggal = $getPPDTanggal->fetchAll(PDO::FETCH_ASSOC);
                 <div class="modal-footer">
                     <div class="row">
                         <div class="col-md-12 text-right">
-                            <button type="button" class="btn btn-inverse btn-outline mb5 btn-rounded next" data-dismiss="modal"><span class="ico-cancel"></span> Close</button>
+                            <button type="button" class="btn btn-inverse btn-outline mb5 btn-rounded next" data-dismiss="modal"><span class="ico-cancel"></span> Tutup</button>
                         </div>
                     </div>
                 </div>

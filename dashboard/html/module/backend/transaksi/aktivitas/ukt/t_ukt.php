@@ -399,6 +399,107 @@ if (isset($_POST["rejectKoordinator"])) {
     }
 }
 
+if (isset($_POST["approveNotifUKTKoordinator"])) {
+    try {
+        $UKT_ID = $_POST["UKT_ID"];
+
+        $getDetailUKT = GetQuery("SELECT * FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
+        while ($rowUKT = $getDetailUKT->fetch(PDO::FETCH_ASSOC)) {
+            extract($rowUKT);
+        }
+
+        // UPDATE APPROVAL KOORDINATOR STATUS
+        GetQuery("update t_ukt set UKT_APP_KOOR = 1, UKT_APP_KOOR_BY = '$USER_ID', UKT_APP_KOOR_DATE = NOW() where UKT_ID = '$UKT_ID'");
+
+        // INSERT LOG
+        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', now() FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
+
+        // DELETE NOTIFIKASI BEFORE RE-INSERT
+        GetQuery("DELETE FROM t_notifikasi WHERE DOKUMEN_ID = '$UKT_ID'");
+        
+        // INSERT NOTIFIKASI
+        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$UKT_ID',u.CABANG_KEY,u.UKT_LOKASI,'UKT','ViewNotifUKT','open-ViewNotifUKT',CONCAT('UKT ', t.TINGKATAN_NAMA, ' - ', t.TINGKATAN_SEBUTAN),CONCAT(u.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),1,0,'$USER_ID',NOW()
+        FROM m_anggota a
+        LEFT JOIN t_ukt u ON a.ANGGOTA_ID = u.ANGGOTA_ID AND a.CABANG_KEY = u.CABANG_KEY
+        LEFT JOIN m_tingkatan t ON u.TINGKATAN_ID = t.TINGKATAN_ID 
+        LEFT JOIN 
+            (
+                SELECT 
+                    a.ANGGOTA_KEY,
+                    a.CABANG_KEY,
+                    a.ANGGOTA_AKSES
+                FROM 
+                    m_anggota a
+                LEFT JOIN 
+                    t_ukt u ON a.CABANG_KEY = u.CABANG_KEY
+                WHERE 
+                    (a.ANGGOTA_AKSES = 'Administrator' OR 
+                    a.CABANG_KEY IN (u.CABANG_KEY, u.UKT_LOKASI) AND 
+                    (a.ANGGOTA_AKSES IN ('Koordinator', 'Pengurus') AND 
+                    a.CABANG_KEY = '$CABANG_KEY') OR 
+                    a.ANGGOTA_ID = '$ANGGOTA_ID') AND 
+                    a.ANGGOTA_STATUS = 0 AND 
+                    u.UKT_ID = '$UKT_ID'
+            ) n ON a.CABANG_KEY = n.CABANG_KEY
+        WHERE u.UKT_ID = '$UKT_ID'");
+
+        $response="Success,$UKT_ID";
+        echo $response;
+
+    } catch (Exception $e) {
+        // Generic exception handling
+        $response =  "Caught Exception: " . $e->getMessage();
+        echo $response;
+    }
+}
+
+if (isset($_POST["rejectNotifUKTKoordinator"])) {
+    try {
+        $UKT_ID = $_POST["UKT_ID"];
+        // UPDATE APPROVAL KOORDINATOR STATUS
+        GetQuery("update t_ukt set UKT_APP_KOOR = 2, UKT_APP_KOOR_BY = '$USER_ID', UKT_APP_KOOR_DATE = NOW() where UKT_ID = '$UKT_ID'");
+
+        // INSERT LOG
+        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', now() FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
+        
+        // DELETE NOTIFIKASI BEFORE RE-INSERT
+        GetQuery("DELETE FROM t_notifikasi WHERE DOKUMEN_ID = '$UKT_ID'");
+        
+        // INSERT NOTIFIKASI
+        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$UKT_ID',u.CABANG_KEY,u.UKT_LOKASI,'UKT','ViewNotifUKT','open-ViewNotifUKT',CONCAT('UKT ', t.TINGKATAN_NAMA, ' - ', t.TINGKATAN_SEBUTAN),CONCAT(u.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),2,0,'$USER_ID',NOW()
+        FROM m_anggota a
+        LEFT JOIN t_ukt u ON a.ANGGOTA_ID = u.ANGGOTA_ID AND a.CABANG_KEY = u.CABANG_KEY
+        LEFT JOIN m_tingkatan t ON u.TINGKATAN_ID = t.TINGKATAN_ID 
+        LEFT JOIN 
+            (
+                SELECT 
+                    a.ANGGOTA_KEY,
+                    a.CABANG_KEY
+                FROM 
+                    m_anggota a
+                LEFT JOIN 
+                    t_ukt u ON a.CABANG_KEY = u.CABANG_KEY
+                WHERE 
+                    (a.ANGGOTA_AKSES = 'Administrator' OR 
+                    a.CABANG_KEY IN (u.CABANG_KEY, u.UKT_LOKASI) AND 
+                    (a.ANGGOTA_AKSES IN ('Koordinator', 'Pengurus') AND 
+                    a.CABANG_KEY = '$CABANG_KEY') OR 
+                    a.ANGGOTA_ID = '$ANGGOTA_ID') AND 
+                    a.ANGGOTA_STATUS = 0 AND 
+                    u.UKT_ID = '$UKT_ID'
+            ) n ON a.CABANG_KEY = n.CABANG_KEY
+        WHERE u.UKT_ID = '$UKT_ID'");
+
+        $response="Success,$UKT_ID";
+        echo $response;
+
+    } catch (Exception $e) {
+        // Generic exception handling
+        $response =  "Caught Exception: " . $e->getMessage();
+        echo $response;
+    }
+}
+
 if (isset($_POST["approveGuru"])) {
     try {
         $UKT_ID = $_POST["UKT_ID"];

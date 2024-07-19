@@ -569,18 +569,18 @@ function callTable() {
         $("#viewMUTASI_APP_TANGGAL").text(data.MUTASI_APP_TANGGAL);
         $("#viewMUTASI_STATUS_DES").html(data.MUTASI_STATUS_DES);
   
+        $.ajax({
+          type: "POST",
+          url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+          data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: data.CABANG_AWAL },
+          success: function(data){
+            $("#loadpicview").html(data);
+          }
+        });
+  
       },
       error: function(error) {
         console.error('Error fetching data:', error);
-      }
-    });
-  
-    $.ajax({
-      type: "POST",
-      url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-      data:'ANGGOTA_KEY='+anggota,
-      success: function(data){
-        $("#loadpicview").html(data);
       }
     });
     
