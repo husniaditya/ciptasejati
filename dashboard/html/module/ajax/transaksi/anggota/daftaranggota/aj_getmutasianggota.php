@@ -36,7 +36,7 @@ if (isset($_POST['id'])) {
         extract($rowMutasi);
         ?>
         <tr>
-            <td align="center"><a href="assets/print/transaksi/mutasi/print_mutasi.php?id=<?=$MUTASI_ID; ?>" target="_blank" style="color: #00b1e1;"><i class="fa-solid fa-print"></i> Cetak</a></td>
+            <td align="center"><a href="assets/print/transaksi/mutasi/print_mutasi.php?id=<?= encodeIdToBase64($MUTASI_ID); ?>" target="_blank" style="color: #00b1e1;"><i class="fa-solid fa-print"></i> Cetak</a></td>
             <td><?= $MUTASI_ID; ?> <br> <span class="<?= $MUTASI_BADGE; ?>"><i class="<?= $MUTASI_CLASS; ?>"></i> <?= $MUTASI_STATUS_DES; ?></span></td>
             <td align="center"><?= $DAERAH_AWAL_DES; ?></td>
             <td align="center"><?= $CABANG_AWAL_DES; ?></td>

@@ -9,6 +9,7 @@ require_once('../../../../../assets/tcpdf/tcpdf.php');
 
 if (isset($_POST['id'])) {
     $KAS_ID = $_POST["id"];
+    $id = encodeIdToBase64($KAS_ID);
     $encodedAnggota = encodeIdToBase64('Anggota');
     $encodedKoor = encodeIdToBase64('Koor');
     $encodedGuru = encodeIdToBase64('Guru');
@@ -245,7 +246,7 @@ if (isset($_POST['id'])) {
     
             GetQuery("update t_kas set KAS_FILE = './assets/report/kas/$CABANG_DESKRIPSI/$KAS_ID Kas $KAS_JENIS $ANGGOTA_NAMA $FKAS_TANGGAL.pdf' where KAS_ID = '$KAS_ID'");
 
-            $pdfFilePath = '../../../../../assets/report/kas/'.$CABANG_DESKRIPSI;
+            $pdfFilePath = '../../../../../assets/report/kas/'.$CABANG_DESKRIPSI.'/'.$ANGGOTA_ID.' - '.$ANGGOTA_NAMA;
 
             // Create directory if not exists
             if (!file_exists($pdfFilePath)) {
@@ -254,7 +255,6 @@ if (isset($_POST['id'])) {
 
             //Close and output PDF document
             $pdf->Output(__DIR__ .'/'.$pdfFilePath.'/'.$KAS_ID. ' Kas ' . $KAS_JENIS . ' ' . $ANGGOTA_NAMA . ' ' . $FKAS_TANGGAL.'.pdf', 'F');
-            $pdf->Output($KAS_ID. ' Kas ' . $KAS_JENIS . ' ' . $ANGGOTA_NAMA . ' ' . $FKAS_TANGGAL.'.pdf', 'I');
 
             
             $response = "Success";

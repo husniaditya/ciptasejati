@@ -133,7 +133,7 @@ while ($rowPPD = $getPPD->fetch(PDO::FETCH_ASSOC)) {
                     <ul class="dropdown-menu" role="menu">
                         <li><a data-toggle="modal" href="#ViewPPD" class="open-ViewPPD" style="color:#222222;" data-id="<?= $PPD_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
                         <li class="divider"></li>
-                        <li><a href="assets/print/transaksi/aktivitas/ppd/print_ppdreportanggota.php?id=<?= $PPD_ID; ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
+                        <li><a href="assets/print/transaksi/aktivitas/ppd/print_ppdreportanggota.php?id=<?= encodeIdToBase64($PPD_ID); ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
                     </ul>
                 </div>
             </form>

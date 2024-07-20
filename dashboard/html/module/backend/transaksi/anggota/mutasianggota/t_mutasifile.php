@@ -9,7 +9,7 @@ require_once('../../../../../assets/tcpdf/tcpdf.php');
 
 if ($_POST["MUTASI_ID"]) {
     $MUTASI_ID = $_POST["MUTASI_ID"];
-    $id = encodeIdToBase64($_GET["id"]);
+    $id = encodeIdToBase64($MUTASI_ID);
     $encodedAnggota = encodeIdToBase64('Anggota');
     $encodedKoor = encodeIdToBase64('Koor');
     $encodedGuru = encodeIdToBase64('Guru');

@@ -254,7 +254,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                                 }
                                             }
                                             ?>
-                                            <li><a href="assets/print/transaksi/mutasi/print_mutasi.php?id=<?=$MUTASI_ID; ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
+                                            <li><a href="assets/print/transaksi/mutasi/print_mutasi.php?id=<?= encodeIdToBase64($MUTASI_ID); ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
                                             <?php
                                             if ($USER_AKSES == "Administrator") {
                                                 ?>

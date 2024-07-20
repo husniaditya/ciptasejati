@@ -240,7 +240,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                         <ul class="dropdown-menu" role="menu">
                                             <li><a data-toggle="modal" href="#ViewMutasiAnggota" class="open-ViewMutasiAnggota" style="color:#222222;" data-id="<?= $MUTASI_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
                                             <li class="divider"></li>
-                                            <li><a href="assets/print/transaksi/mutasi/print_mutasi.php?id=<?=$MUTASI_ID; ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
+                                            <li><a href="assets/print/transaksi/mutasi/print_mutasi.php?id=<?= encodeIdToBase64($MUTASI_ID); ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
                                         </ul>
                                     </div>
                                 </form>

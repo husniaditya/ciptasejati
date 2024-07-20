@@ -7,8 +7,8 @@ $USER_NAMA = $_SESSION["LOGINNAME_CS"];
 // Include the main TCPDF library (search for installation path).
 require_once('../../../../../assets/tcpdf/tcpdf.php');
 
-if (isset($_GET['id'])) {
-    $PPD_ID = $_GET["id"];
+if (isset($_POST['id'])) {
+    $PPD_ID = $_POST["id"];
     $encodedKoor = encodeIdToBase64('Koor');
     $encodedGuru = encodeIdToBase64('Guru');
 

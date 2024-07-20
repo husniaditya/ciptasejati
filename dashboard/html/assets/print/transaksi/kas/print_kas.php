@@ -8,8 +8,8 @@ $USER_NAMA = $_SESSION["LOGINNAME_CS"];
 require_once('../../../tcpdf/tcpdf.php');
 
 if (isset($_GET['id'])) {
-    $KAS_ID = $_GET["id"];
-    $id = encodeIdToBase64($_GET["id"]);
+    $KAS_ID = decodeBase64ToId($_GET['id']);
+    $id = $_GET['id'];
     $encodedAnggota = encodeIdToBase64('Anggota');
     $encodedKoor = encodeIdToBase64('Koor');
     $encodedGuru = encodeIdToBase64('Guru');
