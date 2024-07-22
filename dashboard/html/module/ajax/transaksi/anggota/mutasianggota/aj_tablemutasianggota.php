@@ -131,27 +131,11 @@ while ($rowMutasi = $getMutasi->fetch(PDO::FETCH_ASSOC)) {
                         ?>
                         <li><a href="assets/print/transaksi/mutasi/print_mutasi.php?id=<?= encodeIdToBase64($MUTASI_ID); ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
                         <?php
-                        if ($MUTASI_STATUS == 0 && ($USER_AKSES == "Administrator" || $USER_AKSES == "Koordinator")) {
-                            if ($USER_AKSES == "Administrator") {
-                                ?>
-                                <li class="divider"></li>
-                                <li><a data-toggle="modal" href="#ApproveMutasiAnggota" class="open-ApproveMutasiAnggota" style="color:forestgreen;" data-id="<?= $MUTASI_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>"><i class="fa-regular fa-circle-question"></i> Persetujuan</a></li>
-                                <?php
-                            }
-                            if ($USER_AKSES == "Koordinator" && $USER_CABANG <> $CABANG_AWAL) {
-                                ?>
-                                <li class="divider"></li>
-                                <li><a data-toggle="modal" href="#ApproveMutasiAnggota" class="open-ApproveMutasiAnggota" style="color:forestgreen;"><i class="fa-regular fa-circle-question"></i> Persetujuan</a></li>
-                                <?php
-                            }
-                        }
-                        else {
-                            if ($USER_AKSES == "Administrator") {
-                                ?>
-                                <li class="divider"></li>
-                                <li><a href="#" onclick="eventmutasi('<?= $MUTASI_ID;?>','reset')" style="color:#dimgrey;"><i class="fa-solid fa-clock-rotate-left"></i> Reset Persetujuan</a></li>
-                                <?php
-                            }
+                        if ($USER_AKSES == "Administrator" && $MUTASI_STATUS <> 0) {
+                            ?>
+                            <li class="divider"></li>
+                            <li><a href="#" onclick="eventmutasi('<?= $MUTASI_ID;?>','reset')" style="color:#dimgrey;"><i class="fa-solid fa-clock-rotate-left"></i> Reset Persetujuan</a></li>
+                            <?php
                         }
                         ?>
                         <li class="divider"></li>

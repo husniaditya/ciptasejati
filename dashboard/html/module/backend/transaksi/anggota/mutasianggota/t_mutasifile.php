@@ -47,10 +47,13 @@ if ($_POST["MUTASI_ID"]) {
                 //Page header
                 public function Header() {
                     global $DAERAH_AWAL_DES,$CABANG_AWAL_DES, $CABANG_SEKRETARIAT;
-                
+
                     // Logo
-                    $image_file = K_PATH_IMAGES.'/../../../../../../img/logo/logo_rev.png';
-                    $this->Image($image_file, 15, 9, 25, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+                    $image_ipsi = K_PATH_IMAGES.'/../../../../../../dashboard/html/assets/images/logo/IPSI.png';
+                    $this->Image($image_ipsi, 15, 9, 25, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+
+                    $image_cs = K_PATH_IMAGES.'/../../../../../../dashboard/html/assets/images/logo/Logo.png';
+                    $this->Image($image_cs, 170, 9, 25, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
                 
                     // Set font
                     $this->SetFont('helvetica', 'B', 14);
@@ -75,7 +78,9 @@ if ($_POST["MUTASI_ID"]) {
                     $this->Ln(-1);
                     $branchWidth = $this->GetStringWidth($CABANG_SEKRETARIAT);
                     $this->SetX(($pageWidth - $branchWidth) / 8);
-                    $this->Write(5, $CABANG_SEKRETARIAT, '', 0, 'C', true, 0, false, false, 0);
+                    $this->Cell(40,5,'',0,0,"L");
+                    $this->MultiCell(120, 5, $CABANG_SEKRETARIAT . "\n", 0, 'C', 0, 1);
+                    $this->Cell(40,5,'',0,0,"L");
                     $this->Ln(-1);
                     // Draw a horizontal line under the header
                     $this->Line(10, $this->GetY() + 2, $pageWidth - 10, $this->GetY() + 2);
@@ -237,9 +242,9 @@ if ($_POST["MUTASI_ID"]) {
             
     
             // ---------------------------------------------------------
-            GetQuery("update t_mutasi set MUTASI_FILE = './assets/report/mutasi/$CABANG_AWAL_DES/$MUTASI_ID Mutasi Anggota $ANGGOTA_NAMA $TANGGAL_EFEKTIF.pdf' where MUTASI_ID = '$MUTASI_ID'");
+            GetQuery("update t_mutasi set MUTASI_FILE = './assets/report/mutasi/$CABANG_AWAL_DES/$ANGGOTA_ID - $ANGGOTA_NAMA/$MUTASI_ID Mutasi Anggota $ANGGOTA_NAMA $TANGGAL_EFEKTIF.pdf' where MUTASI_ID = '$MUTASI_ID'");
     
-            $pdfFilePath = '../../../../../assets/report/mutasi/'.$CABANG_AWAL_DES;
+            $pdfFilePath = '../../../../../assets/report/mutasi/'.$CABANG_AWAL_DES.'/'.$ANGGOTA_ID.'-'.$ANGGOTA_NAMA;
     
             // Create directory if not exists
             if (!file_exists($pdfFilePath)) {

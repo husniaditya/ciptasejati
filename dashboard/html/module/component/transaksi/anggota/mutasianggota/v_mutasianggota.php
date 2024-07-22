@@ -256,7 +256,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                             ?>
                                             <li><a href="assets/print/transaksi/mutasi/print_mutasi.php?id=<?= encodeIdToBase64($MUTASI_ID); ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
                                             <?php
-                                            if ($USER_AKSES == "Administrator") {
+                                            if ($USER_AKSES == "Administrator" && $MUTASI_STATUS <> 0) {
                                                 ?>
                                                 <li class="divider"></li>
                                                 <li><a href="#" onclick="eventmutasi('<?= $MUTASI_ID;?>','reset')" style="color:#dimgrey;"><i class="fa-solid fa-clock-rotate-left"></i> Reset Persetujuan</a></li>

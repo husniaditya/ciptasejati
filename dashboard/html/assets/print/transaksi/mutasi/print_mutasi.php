@@ -15,7 +15,7 @@ if ($_GET["id"]) {
     $encodedGuru = encodeIdToBase64('Guru');
 
     try {
-        $getData = GetQuery("SELECT t.MUTASI_ID,daeawal.DAERAH_KEY AS DAERAH_AWAL_KEY,daeawal.DAERAH_DESKRIPSI AS DAERAH_AWAL_DES,t.CABANG_AWAL,cabawal.CABANG_DESKRIPSI AS CABANG_AWAL_DES,cabawal.CABANG_SEKRETARIAT,daetujuan.DAERAH_KEY AS DAERAH_TUJUAN_KEY,daetujuan.DAERAH_DESKRIPSI AS DAERAH_TUJUAN_DES,t.CABANG_TUJUAN,cabtujuan.CABANG_DESKRIPSI AS CABANG_TUJUAN_DES,cabtujuan.CABANG_SEKRETARIAT AS CABANG_TUJUAN_SEKRETARIAT,a.ANGGOTA_KEY,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t2.TINGKATAN_NAMA,t2.TINGKATAN_SEBUTAN,t.MUTASI_DESKRIPSI,t.MUTASI_TANGGAL,t.MUTASI_STATUS,t.MUTASI_STATUS_TANGGAL,t.MUTASI_APPROVE_TANGGAL,a2.ANGGOTA_NAMA INPUT_BY,a2.ANGGOTA_ID INPUT_BY_ID,DATE_FORMAT(t.INPUT_DATE, '%d %M %Y') INPUT_DATE,DATE_FORMAT(t.MUTASI_TANGGAL, '%d %M %Y %H:%i') MUTASI_TGL, DATE_FORMAT(t.MUTASI_STATUS_TANGGAL, '%d %M %Y %H:%i') MUTASI_STATUS_TANGGAL, DATE_FORMAT(t.MUTASI_TANGGAL, '%d %M %Y') TANGGAL_EFEKTIF, DATE_FORMAT(t.MUTASI_APPROVE_TANGGAL, '%d %M %Y') MUTASI_APPROVE_TANGGAL,a3.ANGGOTA_NAMA APPROVE_BY,a2.ANGGOTA_AKSES INPUT_AKSES,a3.ANGGOTA_AKSES APPROVE_AKSES,a3.ANGGOTA_ID APPROVE_BY_ID,
+        $getData = GetQuery("SELECT t.MUTASI_ID,daeawal.DAERAH_KEY AS DAERAH_AWAL_KEY,daeawal.DAERAH_DESKRIPSI AS DAERAH_AWAL_DES,t.CABANG_AWAL,cabawal.CABANG_DESKRIPSI AS CABANG_AWAL_DES,cabawal.CABANG_SEKRETARIAT,daetujuan.DAERAH_KEY AS DAERAH_TUJUAN_KEY,daetujuan.DAERAH_DESKRIPSI AS DAERAH_TUJUAN_DES,t.CABANG_TUJUAN,cabtujuan.CABANG_DESKRIPSI AS CABANG_TUJUAN_DES,cabtujuan.CABANG_SEKRETARIAT AS CABANG_TUJUAN_SEKRETARIAT,a.ANGGOTA_KEY,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t2.TINGKATAN_NAMA,t2.TINGKATAN_SEBUTAN,t.MUTASI_DESKRIPSI,t.MUTASI_TANGGAL,t.MUTASI_STATUS,t.MUTASI_STATUS_TANGGAL,t.MUTASI_APPROVE_TANGGAL,a2.ANGGOTA_NAMA INPUT_BY,a2.ANGGOTA_ID INPUT_BY_ID,DATE_FORMAT(t.INPUT_DATE, '%d %M %Y') INPUT_DATE,DATE_FORMAT(t.MUTASI_TANGGAL, '%d %M %Y %H:%i') MUTASI_TGL, DATE_FORMAT(t.MUTASI_STATUS_TANGGAL, '%d %M %Y %H:%i') MUTASI_STATUS_TANGGAL, DATE_FORMAT(t.MUTASI_TANGGAL, '%d %M %Y') TANGGAL_EFEKTIF, DATE_FORMAT(t.MUTASI_APPROVE_TANGGAL, '%d %M %Y') MUTASI_APPROVE_TANGGAL,a3.ANGGOTA_NAMA APPROVE_BY,a2.ANGGOTA_AKSES INPUT_AKSES,a3.ANGGOTA_AKSES APPROVE_AKSES,a3.ANGGOTA_ID APPROVE_BY_ID, CASE WHEN a.ANGGOTA_AKSES = 'User' THEN 'Anggota' ELSE a.ANGGOTA_AKSES END AS ANGGOTA_AKSES,
         CASE 
             WHEN t.MUTASI_STATUS = '0' THEN 'Menunggu' 
             WHEN t.MUTASI_STATUS = '1' THEN 'Disetujui' 
@@ -49,8 +49,11 @@ if ($_GET["id"]) {
                     global $DAERAH_AWAL_DES,$CABANG_AWAL_DES, $CABANG_SEKRETARIAT;
                 
                     // Logo
-                    $image_file = K_PATH_IMAGES.'/../../../../../../img/logo/logo_rev.png';
-                    $this->Image($image_file, 15, 9, 25, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+                    $image_ipsi = K_PATH_IMAGES.'../../../../assets/images/logo/ipsi.png';
+                    $this->Image($image_ipsi, 15, 9, 25, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+
+                    $image_cs = K_PATH_IMAGES.'../../../../assets/images/logo/logo.png';
+                    $this->Image($image_cs, 170, 9, 25, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
                 
                     // Set font
                     $this->SetFont('helvetica', 'B', 14);
@@ -75,7 +78,9 @@ if ($_GET["id"]) {
                     $this->Ln(-1);
                     $branchWidth = $this->GetStringWidth($CABANG_SEKRETARIAT);
                     $this->SetX(($pageWidth - $branchWidth) / 8);
-                    $this->Write(5, $CABANG_SEKRETARIAT, '', 0, 'C', true, 0, false, false, 0);
+                    $this->Cell(40,5,'',0,0,"L");
+                    $this->MultiCell(120, 5, $CABANG_SEKRETARIAT . "\n", 0, 'C', 0, 1);
+                    $this->Cell(40,5,'',0,0,"L");
                     $this->Ln(-1);
                     // Draw a horizontal line under the header
                     $this->Line(10, $this->GetY() + 2, $pageWidth - 10, $this->GetY() + 2);

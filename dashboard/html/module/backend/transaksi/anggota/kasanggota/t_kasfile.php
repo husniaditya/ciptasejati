@@ -14,7 +14,7 @@ if (isset($_POST['id'])) {
     $encodedKoor = encodeIdToBase64('Koor');
     $encodedGuru = encodeIdToBase64('Guru');
 
-    $getData = GetQuery("SELECT k.*,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_AKSES,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,c.CABANG_SEKRETARIAT,a2.ANGGOTA_ID INPUT_BY_ID,a2.ANGGOTA_NAMA INPUT_BY,a2.ANGGOTA_AKSES INPUT_AKSES, DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y') INPUT_DATE,
+    $getData = GetQuery("SELECT k.*,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_AKSES,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,c.CABANG_SEKRETARIAT,a2.ANGGOTA_ID INPUT_BY_ID,a2.ANGGOTA_NAMA INPUT_BY,a2.ANGGOTA_AKSES INPUT_AKSES, DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y') INPUT_DATE,CASE WHEN a.ANGGOTA_AKSES = 'User' THEN 'ANGGOTA' ELSE ANGGOTA_AKSES END AS ANGGOTA_AKSES,
     CASE
         WHEN k.KAS_JUMLAH < 0 THEN CONCAT('(', FORMAT(ABS(k.KAS_JUMLAH), 0), ')')
         ELSE FORMAT(k.KAS_JUMLAH, 0)
@@ -85,8 +85,11 @@ if (isset($_POST['id'])) {
                     global $DAERAH_DESKRIPSI,$CABANG_DESKRIPSI, $CABANG_SEKRETARIAT, $KAS_JENIS, $KAS_ID, $FKAS_TANGGAL, $ANGGOTA_ID, $ANGGOTA_NAMA, $SALDOAWAL;
                 
                     // Logo
-                    $image_file = K_PATH_IMAGES.'/../../../../../../img/logo/logo_rev.png';
-                    $this->Image($image_file, 15, 9, 25, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+                    $image_ipsi = K_PATH_IMAGES.'/../../../../../../dashboard/html/assets/images/logo/IPSI.png';
+                    $this->Image($image_ipsi, 15, 9, 25, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+
+                    $image_cs = K_PATH_IMAGES.'/../../../../../../dashboard/html/assets/images/logo/Logo.png';
+                    $this->Image($image_cs, 170, 9, 25, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
                 
                     // Set font
                     $this->SetFont('helvetica', 'B', 14);
@@ -111,10 +114,13 @@ if (isset($_POST['id'])) {
                     $this->Ln(-1);
                     $branchWidth = $this->GetStringWidth($CABANG_SEKRETARIAT);
                     $this->SetX(($pageWidth - $branchWidth) / 8);
-                    $this->Write(5, $CABANG_SEKRETARIAT, '', 0, 'C', true, 0, false, false, 0);
+                    $this->Cell(40,5,'',0,0,"L");
+                    $this->MultiCell(120, 5, $CABANG_SEKRETARIAT . "\n", 0, 'C', 0, 1);
+                    $this->Cell(40,5,'',0,0,"L");
                     $this->Ln(-1);
                     // Draw a horizontal line under the header
                     $this->Line(10, $this->GetY() + 2, $pageWidth - 10, $this->GetY() + 2);
+
                     $this->Ln(5);
                     $this->SetFont('helvetica', 'BU', 13);
                     $this->Cell($pageWidth-15,10,"Formulir Kas " .$KAS_JENIS,0,0,"C");
@@ -244,7 +250,7 @@ if (isset($_POST['id'])) {
             $pdf->Ln(5);
             $pdf->MultiCell(190,5,"Demikian formulir kas anggota ini disampaikan dengan sebenarnya untuk digunakan sebagaimana mestinya. Kami berharap agar ke depannya, manajemen keuangan perusahaan dapat terus ditingkatkan demi mencapai tujuan dan pertumbuhan yang lebih baik. \n", 0, 'J', false, 1, '', '', true);
     
-            GetQuery("update t_kas set KAS_FILE = './assets/report/kas/$CABANG_DESKRIPSI/$KAS_ID Kas $KAS_JENIS $ANGGOTA_NAMA $FKAS_TANGGAL.pdf' where KAS_ID = '$KAS_ID'");
+            GetQuery("update t_kas set KAS_FILE = './assets/report/kas/$CABANG_DESKRIPSI/$ANGGOTA_ID - $ANGGOTA_NAMA/$KAS_ID Kas $KAS_JENIS $ANGGOTA_NAMA $FKAS_TANGGAL.pdf' where KAS_ID = '$KAS_ID'");
 
             $pdfFilePath = '../../../../../assets/report/kas/'.$CABANG_DESKRIPSI.'/'.$ANGGOTA_ID.' - '.$ANGGOTA_NAMA;
 
