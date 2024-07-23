@@ -22,7 +22,7 @@ if (isset($_POST["savepusat"])) {
         $PUSAT_LAT = $_POST["PUSAT_LAT"];
         $PUSAT_LONG = $_POST["PUSAT_LONG"];
 
-        GetQuery("insert into m_pusat select uuid(),'$PUSAT_ID','$PUSAT_DESKRIPSI','$PUSAT_SEKRETARIAT','$PUSAT_KEPENGURUSAN','$PUSAT_MAP','$PUSAT_LAT','$PUSAT_LONG',0,'$USER_ID',now()");
+        GetQuery("insert into m_pusat select uuid(),'$PUSAT_ID','$PUSAT_DESKRIPSI','$PUSAT_SEKRETARIAT','$PUSAT_KEPENGURUSAN','$PUSAT_MAP','$PUSAT_LAT','$PUSAT_LONG',0,'$USER_ID','$localDateTime'");
 
         $response="Success";
         echo $response;
@@ -46,7 +46,7 @@ if (isset($_POST["editpusat"])) {
         $PUSAT_LAT = $_POST["PUSAT_LAT"];
         $PUSAT_LONG = $_POST["PUSAT_LONG"];
 
-        $response = GetQuery("update m_pusat set PUSAT_DESKRIPSI = '$PUSAT_DESKRIPSI', PUSAT_SEKRETARIAT = '$PUSAT_SEKRETARIAT', PUSAT_KEPENGURUSAN = '$PUSAT_KEPENGURUSAN', PUSAT_MAP = '$PUSAT_MAP', PUSAT_LAT = '$PUSAT_LAT', PUSAT_LONG = '$PUSAT_LONG', INPUT_BY = '$USER_ID', INPUT_DATE = now() where PUSAT_KEY = '$PUSAT_KEY'");
+        $response = GetQuery("update m_pusat set PUSAT_DESKRIPSI = '$PUSAT_DESKRIPSI', PUSAT_SEKRETARIAT = '$PUSAT_SEKRETARIAT', PUSAT_KEPENGURUSAN = '$PUSAT_KEPENGURUSAN', PUSAT_MAP = '$PUSAT_MAP', PUSAT_LAT = '$PUSAT_LAT', PUSAT_LONG = '$PUSAT_LONG', INPUT_BY = '$USER_ID', INPUT_DATE = '$localDateTime' where PUSAT_KEY = '$PUSAT_KEY'");
 
         $response="Success";
         echo $response;

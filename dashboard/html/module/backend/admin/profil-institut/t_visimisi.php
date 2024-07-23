@@ -11,7 +11,7 @@ if (isset($_POST["savevisimisi"])) {
         $VISIMISI_DESKRIPSI = $_POST["VISIMISI_DESKRIPSI"];
 
 
-        GetQuery("INSERT INTO c_visimisi (VISIMISI_ID, VISIMISI_KATEGORI, VISIMISI_DESKRIPSI, DELETION_STATUS, INPUT_BY, INPUT_DATE) VALUES ('$VISIMISI_ID', '$VISIMISI_KATEGORI', '$VISIMISI_DESKRIPSI', 0, '$USER_ID', now())");
+        GetQuery("INSERT INTO c_visimisi (VISIMISI_ID, VISIMISI_KATEGORI, VISIMISI_DESKRIPSI, DELETION_STATUS, INPUT_BY, INPUT_DATE) VALUES ('$VISIMISI_ID', '$VISIMISI_KATEGORI', '$VISIMISI_DESKRIPSI', 0, '$USER_ID', '$localDateTime')");
 
         $response="Success";
         echo $response;
@@ -31,7 +31,7 @@ if (isset($_POST["editvisimisi"])) {
         $VISIMISI_DESKRIPSI = $_POST["VISIMISI_DESKRIPSI"];
 
 
-        GetQuery("UPDATE c_visimisi SET VISIMISI_KATEGORI = '$VISIMISI_KATEGORI', VISIMISI_DESKRIPSI = '$VISIMISI_DESKRIPSI', INPUT_BY = '$USER_ID', INPUT_DATE = now() WHERE VISIMISI_ID = '$VISIMISI_ID'");
+        GetQuery("UPDATE c_visimisi SET VISIMISI_KATEGORI = '$VISIMISI_KATEGORI', VISIMISI_DESKRIPSI = '$VISIMISI_DESKRIPSI', INPUT_BY = '$USER_ID', INPUT_DATE = '$localDateTime' WHERE VISIMISI_ID = '$VISIMISI_ID'");
 
         $response="Success";
         echo $response;
@@ -48,7 +48,7 @@ if (isset($_POST["EVENT_ACTION"])) {
     try {
         $VISIMISI_ID = $_POST["id"];
     
-        GetQuery("update c_visimisi set DELETION_STATUS = 1, INPUT_BY = '$USER_ID', INPUT_DATE = now()  where VISIMISI_ID = '$VISIMISI_ID'");
+        GetQuery("update c_visimisi set DELETION_STATUS = 1, INPUT_BY = '$USER_ID', INPUT_DATE = '$localDateTime'  where VISIMISI_ID = '$VISIMISI_ID'");
         $response="Success";
         echo $response;
 

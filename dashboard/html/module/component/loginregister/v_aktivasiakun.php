@@ -10,7 +10,7 @@ if (isset($_GET["token"])) {
 
         if ($C_ANGGOTA == 1) {
             GetQuery("UPDATE m_user SET USER_STATUS = 0 WHERE ANGGOTA_KEY = '$ANGGOTA_KEY'");
-            GetQuery("insert into m_user_log select UUID(), ANGGOTA_KEY, ANGGOTA_ID, USER_PASSWORD, '', USER_STATUS, 'System', NOW(), 'U' from m_user where ANGGOTA_KEY = '$ANGGOTA_KEY'");
+            GetQuery("insert into m_user_log select UUID(), ANGGOTA_KEY, ANGGOTA_ID, USER_PASSWORD, '', USER_STATUS, 'System', '$localDateTime', 'U' from m_user where ANGGOTA_KEY = '$ANGGOTA_KEY'");
             ?>
             <div class="row">
                 <div class="col-md-3"></div>

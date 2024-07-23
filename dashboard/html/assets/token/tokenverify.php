@@ -7,7 +7,7 @@ if (isset($_GET['id']) && isset($_GET['data'])) {
     $decodedId = decodeBase64ToId($encodedId);
     $decodedApp = decodeBase64ToId($encodedApp);
 
-    $getData = GetQuery("SELECT p.PPD_ID DOKUMEN_ID,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA, koor.ANGGOTA_NAMA KOOR_NAMA, guru.ANGGOTA_NAMA GURU_NAMA, date_format(p.PPD_TANGGAL, '%d-%m-%Y') DOKUMEN_DATE, date_format(p.INPUT_DATE, '%H:%m:%s') DOKUMEN_TIME, date_format(NOW(), '%d-%m-%Y') DATENOW, date_format(NOW(), '%H:%m:%s') TIMENOW
+    $getData = GetQuery("SELECT p.PPD_ID DOKUMEN_ID,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA, koor.ANGGOTA_NAMA KOOR_NAMA, guru.ANGGOTA_NAMA GURU_NAMA, date_format(p.PPD_TANGGAL, '%d-%m-%Y') DOKUMEN_DATE, date_format(p.INPUT_DATE, '%H:%m:%s') DOKUMEN_TIME, date_format($localDateTime, '%d-%m-%Y') DATENOW, date_format($localDateTime, '%H:%m:%s') TIMENOW
     FROM t_ppd p
     LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
@@ -16,7 +16,7 @@ if (isset($_GET['id']) && isset($_GET['data'])) {
     LEFT JOIN m_anggota koor ON p.PPD_APPROVE_PELATIH_BY = koor.ANGGOTA_ID AND p.CABANG_KEY = koor.CABANG_KEY
     WHERE p.PPD_ID = '$decodedId' AND (p.PPD_APPROVE_PELATIH = 1 OR p.PPD_APPROVE_GURU = 1)
     UNION ALL
-    SELECT p.PPD_FILE_NAME DOKUMEN_ID,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA, koor.ANGGOTA_NAMA KOOR_NAMA, guru.ANGGOTA_NAMA GURU_NAMA, date_format(p.PPD_TANGGAL, '%d-%m-%Y') DOKUMEN_DATE, date_format(p.INPUT_DATE, '%H:%m:%s') DOKUMEN_TIME, date_format(NOW(), '%d-%m-%Y') DATENOW, date_format(NOW(), '%H:%m:%s') TIMENOW
+    SELECT p.PPD_FILE_NAME DOKUMEN_ID,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA, koor.ANGGOTA_NAMA KOOR_NAMA, guru.ANGGOTA_NAMA GURU_NAMA, date_format(p.PPD_TANGGAL, '%d-%m-%Y') DOKUMEN_DATE, date_format(p.INPUT_DATE, '%H:%m:%s') DOKUMEN_TIME, date_format($localDateTime, '%d-%m-%Y') DATENOW, date_format($localDateTime, '%H:%m:%s') TIMENOW
     FROM t_ppd p
     LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
@@ -25,7 +25,7 @@ if (isset($_GET['id']) && isset($_GET['data'])) {
     LEFT JOIN m_anggota koor ON p.PPD_APPROVE_PELATIH_BY = koor.ANGGOTA_ID AND p.CABANG_KEY = koor.CABANG_KEY
     WHERE p.PPD_FILE_NAME = '$decodedId' AND (p.PPD_APPROVE_PELATIH = 1 OR p.PPD_APPROVE_GURU = 1)
     UNION ALL
-    SELECT k.KAS_ID DOKUMEN_ID,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA, koor.ANGGOTA_NAMA KOOR_NAMA, guru.ANGGOTA_NAMA GURU_NAMA, date_format(k.KAS_TANGGAL, '%d-%m-%Y') DOKUMEN_DATE, date_format(k.INPUT_DATE, '%H:%m:%s') DOKUMEN_TIME, date_format(NOW(), '%d-%m-%Y') DATENOW, date_format(NOW(), '%H:%m:%s') TIMENOW
+    SELECT k.KAS_ID DOKUMEN_ID,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA, koor.ANGGOTA_NAMA KOOR_NAMA, guru.ANGGOTA_NAMA GURU_NAMA, date_format(k.KAS_TANGGAL, '%d-%m-%Y') DOKUMEN_DATE, date_format(k.INPUT_DATE, '%H:%m:%s') DOKUMEN_TIME, date_format($localDateTime, '%d-%m-%Y') DATENOW, date_format($localDateTime, '%H:%m:%s') TIMENOW
     FROM t_kas k
     LEFT JOIN m_cabang c ON k.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
@@ -34,7 +34,7 @@ if (isset($_GET['id']) && isset($_GET['data'])) {
     LEFT JOIN m_anggota koor ON k.INPUT_BY = koor.ANGGOTA_ID AND k.CABANG_KEY = koor.CABANG_KEY
     WHERE k.KAS_ID = '$decodedId'
     UNION ALL
-    SELECT m.MUTASI_ID DOKUMEN_ID,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA, koor.ANGGOTA_NAMA KOOR_NAMA, guru.ANGGOTA_NAMA GURU_NAMA, date_format(m.INPUT_DATE, '%d-%m-%Y') DOKUMEN_DATE, date_format(m.INPUT_DATE, '%H:%m:%s') DOKUMEN_TIME, date_format(NOW(), '%d-%m-%Y') DATENOW, date_format(NOW(), '%H:%m:%s') TIMENOW
+    SELECT m.MUTASI_ID DOKUMEN_ID,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA, koor.ANGGOTA_NAMA KOOR_NAMA, guru.ANGGOTA_NAMA GURU_NAMA, date_format(m.INPUT_DATE, '%d-%m-%Y') DOKUMEN_DATE, date_format(m.INPUT_DATE, '%H:%m:%s') DOKUMEN_TIME, date_format($localDateTime, '%d-%m-%Y') DATENOW, date_format($localDateTime, '%H:%m:%s') TIMENOW
     FROM t_mutasi m
     LEFT JOIN m_cabang c ON m.CABANG_AWAL = c.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
@@ -52,7 +52,7 @@ if (isset($_GET['id']) && isset($_GET['data']) && isset($_GET['pic'])) {
     $decodedApp = decodeBase64ToId($encodedApp);
     $decodedAng = decodeBase64ToId($encodedAng);
 
-    $getData = GetQuery("SELECT u.UKT_ID DOKUMEN_ID,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA, koor.ANGGOTA_NAMA KOOR_NAMA, guru.ANGGOTA_NAMA GURU_NAMA, date_format(u.INPUT_DATE, '%d-%m-%Y') DOKUMEN_DATE, date_format(u.INPUT_DATE, '%H:%m:%s') DOKUMEN_TIME, date_format(NOW(), '%d-%m-%Y') DATENOW, date_format(NOW(), '%H:%m:%s') TIMENOW
+    $getData = GetQuery("SELECT u.UKT_ID DOKUMEN_ID,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA, koor.ANGGOTA_NAMA KOOR_NAMA, guru.ANGGOTA_NAMA GURU_NAMA, date_format(u.INPUT_DATE, '%d-%m-%Y') DOKUMEN_DATE, date_format(u.INPUT_DATE, '%H:%m:%s') DOKUMEN_TIME, date_format($localDateTime, '%d-%m-%Y') DATENOW, date_format($localDateTime, '%H:%m:%s') TIMENOW
     FROM t_ukt u
     LEFT JOIN t_ukt_penguji ud ON u.UKT_ID = ud.UKT_ID
     LEFT JOIN m_cabang c ON u.CABANG_KEY = c.CABANG_KEY

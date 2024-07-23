@@ -10,7 +10,7 @@ if (isset($_POST["saveblog"])) {
         $BLOG_TITLE = $_POST["BLOG_TITLE"];
         $BLOG_MESSAGE = $_POST["BLOG_MESSAGE"];
 
-        GetQuery("insert into c_blog (BLOG_ID, BLOG_TITLE, BLOG_MESSAGE, INPUT_BY, INPUT_DATE) values ('$BLOG_ID', '$BLOG_TITLE', '$BLOG_MESSAGE', '$USER_ID', now())");
+        GetQuery("insert into c_blog (BLOG_ID, BLOG_TITLE, BLOG_MESSAGE, INPUT_BY, INPUT_DATE) values ('$BLOG_ID', '$BLOG_TITLE', '$BLOG_MESSAGE', '$USER_ID', '$localDateTime')");
 
         // Directory to store files
         $directory = "../../../../assets/images/blog";
@@ -47,7 +47,7 @@ if (isset($_POST["updateblog"])) {
         $BLOG_MESSAGE = $_POST["BLOG_MESSAGE"];
         $DELETION_STATUS = $_POST["DELETION_STATUS"];
 
-        GetQuery("UPDATE c_blog SET BLOG_TITLE = '$BLOG_TITLE', BLOG_MESSAGE = '$BLOG_MESSAGE', DELETION_STATUS = '$DELETION_STATUS', INPUT_BY = '$USER_ID', INPUT_DATE = now() WHERE BLOG_ID = '$BLOG_ID'");
+        GetQuery("UPDATE c_blog SET BLOG_TITLE = '$BLOG_TITLE', BLOG_MESSAGE = '$BLOG_MESSAGE', DELETION_STATUS = '$DELETION_STATUS', INPUT_BY = '$USER_ID', INPUT_DATE = '$localDateTime' WHERE BLOG_ID = '$BLOG_ID'");
 
         // Directory to store files
         $directory = "../../../../assets/images/blog";

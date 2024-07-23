@@ -25,7 +25,7 @@ if (isset($_POST["saveukt"])) {
         }
         // INSERT DATA
         // Prepare the query
-        $query = "INSERT INTO t_ukt SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, null, null, 0, null, null, 0, null, null, 0, '$USER_ID', now()";
+        $query = "INSERT INTO t_ukt SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, null, null, 0, null, null, 0, null, null, 0, '$USER_ID', '$localDateTime'";
 
         // Execute the query with parameters
         GetQuery2($query, [$UKT_ID, $CABANG_KEY, $TINGKATAN_ID, $ANGGOTA_ID, $UKT_LOKASI, $UKT_TANGGAL, $UKT_TOTAL, $UKT_NILAI, $UKT_DESKRIPSI]);
@@ -63,7 +63,7 @@ if (isset($_POST["saveukt"])) {
         WHERE UKT_ID = '$UKT_ID'");
 
         // INSERT LOG
-        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'I', '$USER_ID', now() FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
+        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'I', '$USER_ID', '$localDateTime' FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
        
         // INSERT NOTIFIKASI
         GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$UKT_ID',u.CABANG_KEY,u.UKT_LOKASI,'UKT',
@@ -79,7 +79,7 @@ if (isset($_POST["saveukt"])) {
             ELSE
             'open-ViewNotifUKT'
         END AS TOGGLE,
-        CONCAT('UKT ', t.TINGKATAN_NAMA, ' - ', t.TINGKATAN_SEBUTAN),CONCAT(u.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),0,0,'$USER_ID',NOW()
+        CONCAT('UKT ', t.TINGKATAN_NAMA, ' - ', t.TINGKATAN_SEBUTAN),CONCAT(u.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),0,0,'$USER_ID','$localDateTime'
         FROM m_anggota a
         LEFT JOIN t_ukt u ON a.ANGGOTA_ID = u.ANGGOTA_ID AND a.CABANG_KEY = u.CABANG_KEY
         LEFT JOIN m_tingkatan t ON u.TINGKATAN_ID = t.TINGKATAN_ID 
@@ -131,7 +131,7 @@ if (isset($_POST["updateukt"])) {
         }
         // INSERT DATA
         // Prepare the query
-        $query = "UPDATE t_ukt SET TINGKATAN_ID = ?, ANGGOTA_ID = ?, UKT_LOKASI = ?, UKT_TANGGAL = ?, UKT_TOTAL = ?, UKT_NILAI = ?, UKT_DESKRIPSI = ?, CABANG_KEY = ?, INPUT_BY = ?, INPUT_DATE = now() WHERE UKT_ID = ?";
+        $query = "UPDATE t_ukt SET TINGKATAN_ID = ?, ANGGOTA_ID = ?, UKT_LOKASI = ?, UKT_TANGGAL = ?, UKT_TOTAL = ?, UKT_NILAI = ?, UKT_DESKRIPSI = ?, CABANG_KEY = ?, INPUT_BY = ?, INPUT_DATE = '$localDateTime' WHERE UKT_ID = ?";
 
         // Execute the query with parameters
         GetQuery2($query, [$TINGKATAN_ID, $ANGGOTA_ID, $UKT_LOKASI, $UKT_TANGGAL, $UKT_TOTAL, $UKT_NILAI, $UKT_DESKRIPSI, $CABANG_KEY, $USER_ID, $UKT_ID]);
@@ -166,7 +166,7 @@ if (isset($_POST["updateukt"])) {
         )
         WHERE UKT_ID = '$UKT_ID'");
         // INSERT LOG
-        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', now() FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
+        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', '$localDateTime' FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
 
         // DELETE NOTIFIKASI BEFORE RE-INSERT
         GetQuery("DELETE FROM t_notifikasi WHERE DOKUMEN_ID = '$UKT_ID'");
@@ -185,7 +185,7 @@ if (isset($_POST["updateukt"])) {
             ELSE
             'open-ViewNotifUKT'
         END AS TOGGLE,
-        CONCAT('UKT ', t.TINGKATAN_NAMA, ' - ', t.TINGKATAN_SEBUTAN),CONCAT(u.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),0,0,'$USER_ID',NOW()
+        CONCAT('UKT ', t.TINGKATAN_NAMA, ' - ', t.TINGKATAN_SEBUTAN),CONCAT(u.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),0,0,'$USER_ID','$localDateTime'
         FROM m_anggota a
         LEFT JOIN t_ukt u ON a.ANGGOTA_ID = u.ANGGOTA_ID AND a.CABANG_KEY = u.CABANG_KEY
         LEFT JOIN m_tingkatan t ON u.TINGKATAN_ID = t.TINGKATAN_ID 
@@ -308,16 +308,16 @@ if (isset($_POST["approveKoordinator"])) {
         }
 
         // UPDATE APPROVAL KOORDINATOR STATUS
-        GetQuery("update t_ukt set UKT_APP_KOOR = 1, UKT_APP_KOOR_BY = '$USER_ID', UKT_APP_KOOR_DATE = NOW() where UKT_ID = '$UKT_ID'");
+        GetQuery("update t_ukt set UKT_APP_KOOR = 1, UKT_APP_KOOR_BY = '$USER_ID', UKT_APP_KOOR_DATE = '$localDateTime' where UKT_ID = '$UKT_ID'");
 
         // INSERT LOG
-        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', now() FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
+        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', '$localDateTime' FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
 
         // DELETE NOTIFIKASI BEFORE RE-INSERT
         GetQuery("DELETE FROM t_notifikasi WHERE DOKUMEN_ID = '$UKT_ID'");
         
         // INSERT NOTIFIKASI
-        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$UKT_ID',u.CABANG_KEY,u.UKT_LOKASI,'UKT','ViewNotifUKT','open-ViewNotifUKT',CONCAT('UKT ', t.TINGKATAN_NAMA, ' - ', t.TINGKATAN_SEBUTAN),CONCAT(u.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),1,0,'$USER_ID',NOW()
+        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$UKT_ID',u.CABANG_KEY,u.UKT_LOKASI,'UKT','ViewNotifUKT','open-ViewNotifUKT',CONCAT('UKT ', t.TINGKATAN_NAMA, ' - ', t.TINGKATAN_SEBUTAN),CONCAT(u.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),1,0,'$USER_ID','$localDateTime'
         FROM m_anggota a
         LEFT JOIN t_ukt u ON a.ANGGOTA_ID = u.ANGGOTA_ID AND a.CABANG_KEY = u.CABANG_KEY
         LEFT JOIN m_tingkatan t ON u.TINGKATAN_ID = t.TINGKATAN_ID 
@@ -356,16 +356,16 @@ if (isset($_POST["rejectKoordinator"])) {
     try {
         $UKT_ID = $_POST["UKT_ID"];
         // UPDATE APPROVAL KOORDINATOR STATUS
-        GetQuery("update t_ukt set UKT_APP_KOOR = 2, UKT_APP_KOOR_BY = '$USER_ID', UKT_APP_KOOR_DATE = NOW() where UKT_ID = '$UKT_ID'");
+        GetQuery("update t_ukt set UKT_APP_KOOR = 2, UKT_APP_KOOR_BY = '$USER_ID', UKT_APP_KOOR_DATE = '$localDateTime' where UKT_ID = '$UKT_ID'");
 
         // INSERT LOG
-        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', now() FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
+        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', '$localDateTime' FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
         
         // DELETE NOTIFIKASI BEFORE RE-INSERT
         GetQuery("DELETE FROM t_notifikasi WHERE DOKUMEN_ID = '$UKT_ID'");
         
         // INSERT NOTIFIKASI
-        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$UKT_ID',u.CABANG_KEY,u.UKT_LOKASI,'UKT','ViewNotifUKT','open-ViewNotifUKT',CONCAT('UKT ', t.TINGKATAN_NAMA, ' - ', t.TINGKATAN_SEBUTAN),CONCAT(u.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),2,0,'$USER_ID',NOW()
+        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$UKT_ID',u.CABANG_KEY,u.UKT_LOKASI,'UKT','ViewNotifUKT','open-ViewNotifUKT',CONCAT('UKT ', t.TINGKATAN_NAMA, ' - ', t.TINGKATAN_SEBUTAN),CONCAT(u.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),2,0,'$USER_ID','$localDateTime'
         FROM m_anggota a
         LEFT JOIN t_ukt u ON a.ANGGOTA_ID = u.ANGGOTA_ID AND a.CABANG_KEY = u.CABANG_KEY
         LEFT JOIN m_tingkatan t ON u.TINGKATAN_ID = t.TINGKATAN_ID 
@@ -409,16 +409,16 @@ if (isset($_POST["approveNotifUKTKoordinator"])) {
         }
 
         // UPDATE APPROVAL KOORDINATOR STATUS
-        GetQuery("update t_ukt set UKT_APP_KOOR = 1, UKT_APP_KOOR_BY = '$USER_ID', UKT_APP_KOOR_DATE = NOW() where UKT_ID = '$UKT_ID'");
+        GetQuery("update t_ukt set UKT_APP_KOOR = 1, UKT_APP_KOOR_BY = '$USER_ID', UKT_APP_KOOR_DATE = '$localDateTime' where UKT_ID = '$UKT_ID'");
 
         // INSERT LOG
-        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', now() FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
+        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', '$localDateTime' FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
 
         // DELETE NOTIFIKASI BEFORE RE-INSERT
         GetQuery("DELETE FROM t_notifikasi WHERE DOKUMEN_ID = '$UKT_ID'");
         
         // INSERT NOTIFIKASI
-        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$UKT_ID',u.CABANG_KEY,u.UKT_LOKASI,'UKT','ViewNotifUKT','open-ViewNotifUKT',CONCAT('UKT ', t.TINGKATAN_NAMA, ' - ', t.TINGKATAN_SEBUTAN),CONCAT(u.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),1,0,'$USER_ID',NOW()
+        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$UKT_ID',u.CABANG_KEY,u.UKT_LOKASI,'UKT','ViewNotifUKT','open-ViewNotifUKT',CONCAT('UKT ', t.TINGKATAN_NAMA, ' - ', t.TINGKATAN_SEBUTAN),CONCAT(u.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),1,0,'$USER_ID','$localDateTime'
         FROM m_anggota a
         LEFT JOIN t_ukt u ON a.ANGGOTA_ID = u.ANGGOTA_ID AND a.CABANG_KEY = u.CABANG_KEY
         LEFT JOIN m_tingkatan t ON u.TINGKATAN_ID = t.TINGKATAN_ID 
@@ -457,16 +457,16 @@ if (isset($_POST["rejectNotifUKTKoordinator"])) {
     try {
         $UKT_ID = $_POST["UKT_ID"];
         // UPDATE APPROVAL KOORDINATOR STATUS
-        GetQuery("update t_ukt set UKT_APP_KOOR = 2, UKT_APP_KOOR_BY = '$USER_ID', UKT_APP_KOOR_DATE = NOW() where UKT_ID = '$UKT_ID'");
+        GetQuery("update t_ukt set UKT_APP_KOOR = 2, UKT_APP_KOOR_BY = '$USER_ID', UKT_APP_KOOR_DATE = '$localDateTime' where UKT_ID = '$UKT_ID'");
 
         // INSERT LOG
-        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', now() FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
+        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', '$localDateTime' FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
         
         // DELETE NOTIFIKASI BEFORE RE-INSERT
         GetQuery("DELETE FROM t_notifikasi WHERE DOKUMEN_ID = '$UKT_ID'");
         
         // INSERT NOTIFIKASI
-        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$UKT_ID',u.CABANG_KEY,u.UKT_LOKASI,'UKT','ViewNotifUKT','open-ViewNotifUKT',CONCAT('UKT ', t.TINGKATAN_NAMA, ' - ', t.TINGKATAN_SEBUTAN),CONCAT(u.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),2,0,'$USER_ID',NOW()
+        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$UKT_ID',u.CABANG_KEY,u.UKT_LOKASI,'UKT','ViewNotifUKT','open-ViewNotifUKT',CONCAT('UKT ', t.TINGKATAN_NAMA, ' - ', t.TINGKATAN_SEBUTAN),CONCAT(u.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),2,0,'$USER_ID','$localDateTime'
         FROM m_anggota a
         LEFT JOIN t_ukt u ON a.ANGGOTA_ID = u.ANGGOTA_ID AND a.CABANG_KEY = u.CABANG_KEY
         LEFT JOIN m_tingkatan t ON u.TINGKATAN_ID = t.TINGKATAN_ID 
@@ -504,10 +504,10 @@ if (isset($_POST["approveGuru"])) {
     try {
         $UKT_ID = $_POST["UKT_ID"];
         // UPDATE APPROVAL GURU STATUS
-        GetQuery("update t_ukt set UKT_APP_GURU = 1, UKT_APP_GURU_BY = '$USER_ID', UKT_APP_GURU_DATE = NOW() where UKT_ID = '$UKT_ID'");
+        GetQuery("update t_ukt set UKT_APP_GURU = 1, UKT_APP_GURU_BY = '$USER_ID', UKT_APP_GURU_DATE = '$localDateTime' where UKT_ID = '$UKT_ID'");
 
         // INSERT LOG
-        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', now() FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
+        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', '$localDateTime' FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
 
         $response="Success,null";
         echo $response;
@@ -523,10 +523,10 @@ if (isset($_POST["rejectGuru"])) {
     try {
         $UKT_ID = $_POST["UKT_ID"];
         // UPDATE APPROVAL GURU STATUS
-        GetQuery("update t_ukt set UKT_APP_GURU = 2, UKT_APP_GURU_BY = '$USER_ID', UKT_APP_GURU_DATE = NOW() where UKT_ID = '$UKT_ID'");
+        GetQuery("update t_ukt set UKT_APP_GURU = 2, UKT_APP_GURU_BY = '$USER_ID', UKT_APP_GURU_DATE = '$localDateTime' where UKT_ID = '$UKT_ID'");
 
         // INSERT LOG
-        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', now() FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
+        GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', '$localDateTime' FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
 
         $response="Success,null";
         echo $response;
@@ -553,7 +553,7 @@ if (isset($_POST["EVENT_ACTION"])) {
             GetQuery("update t_ukt set UKT_APP_KOOR = 0, UKT_APP_KOOR_BY = null, UKT_APP_KOOR_DATE = null, UKT_APP_GURU = 0, UKT_APP_GURU_BY = null, UKT_APP_GURU_DATE = null where UKT_ID = '$UKT_ID'");
     
             // INSERT LOG
-            GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', now() FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
+            GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'U', '$USER_ID', '$localDateTime' FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
 
             // DELETE NOTIFIKASI BEFORE RE-INSERT
             GetQuery("DELETE FROM t_notifikasi WHERE DOKUMEN_ID = '$UKT_ID'");
@@ -572,7 +572,7 @@ if (isset($_POST["EVENT_ACTION"])) {
                 ELSE
                 'open-ViewNotifUKT'
             END AS TOGGLE,
-            CONCAT('UKT ', t.TINGKATAN_NAMA, ' - ', t.TINGKATAN_SEBUTAN),CONCAT(u.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),0,0,'$USER_ID',NOW()
+            CONCAT('UKT ', t.TINGKATAN_NAMA, ' - ', t.TINGKATAN_SEBUTAN),CONCAT(u.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),0,0,'$USER_ID','$localDateTime'
             FROM m_anggota a
             LEFT JOIN t_ukt u ON a.ANGGOTA_ID = u.ANGGOTA_ID AND a.CABANG_KEY = u.CABANG_KEY
             LEFT JOIN m_tingkatan t ON u.TINGKATAN_ID = t.TINGKATAN_ID 
@@ -601,7 +601,7 @@ if (isset($_POST["EVENT_ACTION"])) {
             GetQuery("update t_ukt_detail set DELETION_STATUS = 1 where UKT_ID = '$UKT_ID'");
     
             // INSERT LOG
-            GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'D', '$USER_ID', now() FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
+            GetQuery("INSERT INTO t_ukt_log SELECT uuid(), UKT_ID, CABANG_KEY, TINGKATAN_ID, ANGGOTA_ID, UKT_LOKASI, UKT_TANGGAL, UKT_TOTAL, UKT_NILAI, UKT_DESKRIPSI, UKT_FILE, UKT_FILE_NAME, UKT_APP_KOOR, UKT_APP_KOOR_BY, UKT_APP_KOOR_DATE, UKT_APP_GURU, UKT_APP_GURU_BY, UKT_APP_GURU_DATE, DELETION_STATUS, 'D', '$USER_ID', '$localDateTime' FROM t_ukt WHERE UKT_ID = '$UKT_ID'");
         }
         
         $response="Success";

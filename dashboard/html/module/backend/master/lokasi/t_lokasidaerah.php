@@ -20,7 +20,7 @@ if (isset($_POST["savedaerah"])) {
             extract($rowPusatID);
         }
 
-        GetQuery("insert into m_daerah select uuid(),'$PUSAT_KEY','$PUSAT_ID.$DAERAH_ID','$DAERAH_DESKRIPSI',null,null,null,0,'$USER_ID',now()");
+        GetQuery("insert into m_daerah select uuid(),'$PUSAT_KEY','$PUSAT_ID.$DAERAH_ID','$DAERAH_DESKRIPSI',null,null,null,0,'$USER_ID','$localDateTime'");
 
         $response="Success";
         echo $response;
@@ -48,7 +48,7 @@ if (isset($_POST["editdaerah"])) {
             extract($rowPusatID);
         }
 
-        GetQuery("update m_daerah set DAERAH_ID= '$PUSAT_ID.$DAERAH_ID', PUSAT_KEY = '$PUSAT_KEY', DAERAH_DESKRIPSI = '$DAERAH_DESKRIPSI', DELETION_STATUS = '$DELETION_STATUS', INPUT_BY = '$USER_ID', INPUT_DATE = now() where DAERAH_KEY = '$DAERAH_KEY'");
+        GetQuery("update m_daerah set DAERAH_ID= '$PUSAT_ID.$DAERAH_ID', PUSAT_KEY = '$PUSAT_KEY', DAERAH_DESKRIPSI = '$DAERAH_DESKRIPSI', DELETION_STATUS = '$DELETION_STATUS', INPUT_BY = '$USER_ID', INPUT_DATE = '$localDateTime' where DAERAH_KEY = '$DAERAH_KEY'");
 
         $response="Success";
         echo $response;

@@ -42,7 +42,7 @@ if (isset($_POST["saveidsertifikat"])) {
             $sertifikatFileDestination = "";
         }
 
-        GetQuery("insert into m_idsertifikat select uuid(), '$TINGKATAN_ID', '$IDSERTIFIKAT_DESKRIPSI', '$idCardFileDestination','$idCardFileName','$sertifikatFileDestination','$sertifikatFileName', '0', '$USER_ID', now()");
+        GetQuery("insert into m_idsertifikat select uuid(), '$TINGKATAN_ID', '$IDSERTIFIKAT_DESKRIPSI', '$idCardFileDestination','$idCardFileName','$sertifikatFileDestination','$sertifikatFileName', '0', '$USER_ID', '$localDateTime'");
 
         $response="Success";
         echo $response;
@@ -94,7 +94,7 @@ if (isset($_POST["editsertifikat"])) {
             }
         }
 
-        GetQuery("update m_idsertifikat set TINGKATAN_ID = '$TINGKATAN_ID', IDSERTIFIKAT_DESKRIPSI = '$IDSERTIFIKAT_DESKRIPSI', DELETION_STATUS = '$DELETION_STATUS', INPUT_BY = '$USER_ID', INPUT_DATE = now() where IDSERTIFIKAT_ID = '$IDSERTIFIKAT_ID'");
+        GetQuery("update m_idsertifikat set TINGKATAN_ID = '$TINGKATAN_ID', IDSERTIFIKAT_DESKRIPSI = '$IDSERTIFIKAT_DESKRIPSI', DELETION_STATUS = '$DELETION_STATUS', INPUT_BY = '$USER_ID', INPUT_DATE = '$localDateTime' where IDSERTIFIKAT_ID = '$IDSERTIFIKAT_ID'");
 
         $response="Success";
         echo $response;

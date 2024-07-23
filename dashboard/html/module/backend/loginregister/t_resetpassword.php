@@ -19,8 +19,8 @@ if (isset($_POST["sendemail"])) {
 
         if ($getEmail->rowCount() > 0) {
             while ($dataEmail = $getEmail->fetch(PDO::FETCH_ASSOC)) {
-                GetQuery("update m_user set USER_PASSWORD = '$PASSWORD', INPUT_BY = 'Reset', INPUT_DATE = NOW() WHERE  ANGGOTA_ID = '$ANGGOTA_ID'");
-                GetQuery("insert into m_user_log select UUID(), ANGGOTA_KEY, ANGGOTA_ID, '$PASSWORD', '$NEWPASSWORD', USER_STATUS, 'Reset', NOW(), 'U' from m_user where ANGGOTA_ID = '$ANGGOTA_ID'");
+                GetQuery("update m_user set USER_PASSWORD = '$PASSWORD', INPUT_BY = 'Reset', INPUT_DATE = '$localDateTime' WHERE  ANGGOTA_ID = '$ANGGOTA_ID'");
+                GetQuery("insert into m_user_log select UUID(), ANGGOTA_KEY, ANGGOTA_ID, '$PASSWORD', '$NEWPASSWORD', USER_STATUS, 'Reset', '$localDateTime', 'U' from m_user where ANGGOTA_ID = '$ANGGOTA_ID'");
 
                 $response="Success,$ANGGOTA_ID,$NEWPASSWORD";
                 echo $response;

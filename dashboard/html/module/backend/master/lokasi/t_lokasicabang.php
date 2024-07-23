@@ -21,7 +21,7 @@ if (isset($_POST["savecabang"])) {
             extract($rowDaerahID);
         }
 
-        GetQuery("insert into m_cabang select uuid(),'$DAERAH_KEY','$DAERAH_ID.$CABANG_ID','$CABANG_DESKRIPSI','$CABANG_SEKRETARIAT','$CABANG_PENGURUS','$CABANG_MAP','$CABANG_LAT','$CABANG_LONG',0,'$USER_ID',now()");
+        GetQuery("insert into m_cabang select uuid(),'$DAERAH_KEY','$DAERAH_ID.$CABANG_ID','$CABANG_DESKRIPSI','$CABANG_SEKRETARIAT','$CABANG_PENGURUS','$CABANG_MAP','$CABANG_LAT','$CABANG_LONG',0,'$USER_ID','$localDateTime'");
 
         $response="Success";
         echo $response;
@@ -52,7 +52,7 @@ if (isset($_POST["editcabang"])) {
             extract($rowDaerahID);
         }
 
-        $response = GetQuery("update m_cabang set CABANG_ID = '$DAERAH_ID.$CABANG_ID',DAERAH_KEY = '$DAERAH_KEY', CABANG_DESKRIPSI = '$CABANG_DESKRIPSI', CABANG_SEKRETARIAT = '$CABANG_SEKRETARIAT', CABANG_PENGURUS = '$CABANG_PENGURUS', CABANG_MAP = '$CABANG_MAP', CABANG_LAT = '$CABANG_LAT', CABANG_LONG = '$CABANG_LONG', INPUT_BY = '$USER_ID', INPUT_DATE = now() where CABANG_KEY = '$CABANG_KEY'");
+        $response = GetQuery("update m_cabang set CABANG_ID = '$DAERAH_ID.$CABANG_ID',DAERAH_KEY = '$DAERAH_KEY', CABANG_DESKRIPSI = '$CABANG_DESKRIPSI', CABANG_SEKRETARIAT = '$CABANG_SEKRETARIAT', CABANG_PENGURUS = '$CABANG_PENGURUS', CABANG_MAP = '$CABANG_MAP', CABANG_LAT = '$CABANG_LAT', CABANG_LONG = '$CABANG_LONG', INPUT_BY = '$USER_ID', INPUT_DATE = '$localDateTime' where CABANG_KEY = '$CABANG_KEY'");
 
         $response="Success";
         echo $response;

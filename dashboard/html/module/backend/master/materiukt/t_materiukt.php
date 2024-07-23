@@ -22,7 +22,7 @@ if (isset($_POST["savemateri"])) {  // Add a new materi
         $MATERI_BOBOT = $_POST["MATERI_BOBOT"];
         $TINGKATAN_ID = $_POST["TINGKATAN_ID"];
 
-        GetQuery("insert into m_materi select '$MATERI_ID', '$CABANG_KEY', '$TINGKATAN_ID', '$MATERI_DESKRIPSI', '$MATERI_BOBOT', '0', '$USER_ID', now()");
+        GetQuery("insert into m_materi select '$MATERI_ID', '$CABANG_KEY', '$TINGKATAN_ID', '$MATERI_DESKRIPSI', '$MATERI_BOBOT', '0', '$USER_ID', '$localDateTime'");
 
         GetQuery("UPDATE m_materi_detail SET MATERI_ID = '$MATERI_ID' WHERE MATERI_ID = '$USER_KEY'");
 
@@ -49,7 +49,7 @@ if (isset($_POST["updatemateri"])) { // Update an existing materi
         $MATERI_BOBOT = $_POST["MATERI_BOBOT"];
         $TINGKATAN_ID = $_POST["TINGKATAN_ID"];
 
-        GetQuery("UPDATE m_materi SET CABANG_KEY = '$CABANG_KEY', TINGKATAN_ID = '$TINGKATAN_ID', MATERI_DESKRIPSI = '$MATERI_DESKRIPSI', MATERI_BOBOT = '$MATERI_BOBOT', INPUT_BY = '$USER_ID', INPUT_DATE = now() WHERE MATERI_ID = '$MATERI_ID'");
+        GetQuery("UPDATE m_materi SET CABANG_KEY = '$CABANG_KEY', TINGKATAN_ID = '$TINGKATAN_ID', MATERI_DESKRIPSI = '$MATERI_DESKRIPSI', MATERI_BOBOT = '$MATERI_BOBOT', INPUT_BY = '$USER_ID', INPUT_DATE = '$localDateTime' WHERE MATERI_ID = '$MATERI_ID'");
 
         $response="Success,$MATERI_ID";
         echo $response;
@@ -81,7 +81,7 @@ if (isset($_POST["ADD_MODAL_DETAIL"])) { // Add a new detail ADD MODAL
             echo $response;
         } else if ($TOTAL_BOBOT + $DETAIL_BOBOT <= $MATERI_BOBOT) {
             // Prepare the query
-            $query = "INSERT INTO m_materi_detail SELECT UUID(), ?, ?, ?, '0', ?, NOW()";
+            $query = "INSERT INTO m_materi_detail SELECT UUID(), ?, ?, ?, '0', ?, '$localDateTime'";
 
             // Execute the query with parameters
             GetQuery2($query, [$MATERI_ID, $DETAIL_DESKRIPSI, $DETAIL_BOBOT, $USER_ID]);
@@ -135,7 +135,7 @@ if (isset($_POST["ADD_DETAIL"])) { // Add a new detail EDIT MODAL
             echo $response;
         } else if ($TOTAL_BOBOT + $DETAIL_BOBOT <= $MATERI_BOBOT) {
             // Prepare the query
-            $query = "INSERT INTO m_materi_detail SELECT UUID(), ?, ?, ?, '0', ?, NOW()";
+            $query = "INSERT INTO m_materi_detail SELECT UUID(), ?, ?, ?, '0', ?, '$localDateTime'";
 
             // Execute the query with parameters
             GetQuery2($query, [$MATERI_ID, $DETAIL_DESKRIPSI, $DETAIL_BOBOT, $USER_ID]);

@@ -34,8 +34,8 @@ if (isset($_POST["savedaftaruser"])) {
                             $response="User tidak terdaftar!";
                             echo $response;
                         } else {
-                            GetQuery("insert into m_user select '$ANGGOTA_KEY', '$ANGGOTA_ID', '$PASSWORD', '1', 'System', NOW()");
-                            GetQuery("insert into m_user_log select UUID(), ANGGOTA_KEY, ANGGOTA_ID, '$PASSWORD', '$CONFIRMPASSWORD', USER_STATUS, 'System', NOW(), 'I' from m_user where ANGGOTA_KEY = '$ANGGOTA_KEY' and ANGGOTA_ID = '$ANGGOTA_ID'");
+                            GetQuery("insert into m_user select '$ANGGOTA_KEY', '$ANGGOTA_ID', '$PASSWORD', '1', 'System', '$localDateTime'");
+                            GetQuery("insert into m_user_log select UUID(), ANGGOTA_KEY, ANGGOTA_ID, '$PASSWORD', '$CONFIRMPASSWORD', USER_STATUS, 'System', '$localDateTime', 'I' from m_user where ANGGOTA_KEY = '$ANGGOTA_KEY' and ANGGOTA_ID = '$ANGGOTA_ID'");
                             
                             $response="Success,$ANGGOTA_ID";
                             echo $response;
@@ -87,7 +87,7 @@ if (isset($_POST["resendemail"])) {
                             echo $response;
                         } else {
                             GetQuery("update m_user set USER_PASSWORD = '$PASSWORD' where ANGGOTA_ID = '$ANGGOTA_ID'");
-                            GetQuery("insert into m_user_log select UUID(), ANGGOTA_KEY, ANGGOTA_ID, '$PASSWORD', '$CONFIRMPASSWORD', USER_STATUS, 'System', NOW(), 'U' from m_user where ANGGOTA_KEY = '$ANGGOTA_KEY' and ANGGOTA_ID = '$ANGGOTA_ID'");
+                            GetQuery("insert into m_user_log select UUID(), ANGGOTA_KEY, ANGGOTA_ID, '$PASSWORD', '$CONFIRMPASSWORD', USER_STATUS, 'System', '$localDateTime', 'U' from m_user where ANGGOTA_KEY = '$ANGGOTA_KEY' and ANGGOTA_ID = '$ANGGOTA_ID'");
 
                             $response="Success,$ANGGOTA_ID";
                             echo $response;

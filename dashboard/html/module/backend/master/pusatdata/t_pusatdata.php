@@ -46,7 +46,7 @@ if (isset($_POST["savepusatdata"])) {
             $idCardFileName="";
         }
 
-        GetQuery("insert into m_pusatdata select uuid(), '$CABANG_KEY', '$PUSATDATA_KATEGORI', '$PUSATDATA_JUDUL', '$PUSATDATA_DESKRIPSI', '$idCardFileDestination','$idCardFileName', '0', '$USER_ID', now()");
+        GetQuery("insert into m_pusatdata select uuid(), '$CABANG_KEY', '$PUSATDATA_KATEGORI', '$PUSATDATA_JUDUL', '$PUSATDATA_DESKRIPSI', '$idCardFileDestination','$idCardFileName', '0', '$USER_ID', '$localDateTime'");
 
         $response="Success";
         echo $response;
@@ -100,7 +100,7 @@ if (isset($_POST["editpusatdata"])) {
             }
         }
 
-        GetQuery("update m_pusatdata set CABANG_KEY = '$CABANG_KEY', PUSATDATA_KATEGORI = '$PUSATDATA_KATEGORI', PUSATDATA_JUDUL = '$PUSATDATA_JUDUL', PUSATDATA_DESKRIPSI = '$PUSATDATA_DESKRIPSI', DELETION_STATUS = '$DELETION_STATUS', INPUT_BY = '$USER_ID', INPUT_DATE = now() where PUSATDATA_ID = '$PUSATDATA_ID'");
+        GetQuery("update m_pusatdata set CABANG_KEY = '$CABANG_KEY', PUSATDATA_KATEGORI = '$PUSATDATA_KATEGORI', PUSATDATA_JUDUL = '$PUSATDATA_JUDUL', PUSATDATA_DESKRIPSI = '$PUSATDATA_DESKRIPSI', DELETION_STATUS = '$DELETION_STATUS', INPUT_BY = '$USER_ID', INPUT_DATE = '$localDateTime' where PUSATDATA_ID = '$PUSATDATA_ID'");
 
         $response="Update";
         echo $response;

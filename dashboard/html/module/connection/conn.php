@@ -20,6 +20,8 @@ try {
     setlocale(LC_TIME, 'id_ID');
 	ini_set('max_execution_time', 300); //300 seconds = 5 minutes
 	ini_set('upload_max_filesize', '10M');
+    // Get the current date and time
+    $localDateTime = date('Y-m-d H:i:s');
     session_start();
 	
 

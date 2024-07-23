@@ -19,7 +19,7 @@ if (isset($_POST["savetingkatan"])) {
         $TINGKATAN_LEVEL = $_POST["TINGKATAN_LEVEL"];
         $TINGKATAN_SERTIFIKAT = $_POST["TINGKATAN_SERTIFIKAT"];
 
-        GetQuery("insert into m_tingkatan select uuid(),'$TINGKATAN_NAMA','$TINGKATAN_GELAR','$TINGKATAN_SEBUTAN','$TINGKATAN_SERTIFIKAT','$TINGKATAN_LEVEL',null,0,'$USER_ID',now()");
+        GetQuery("insert into m_tingkatan select uuid(),'$TINGKATAN_NAMA','$TINGKATAN_GELAR','$TINGKATAN_SEBUTAN','$TINGKATAN_SERTIFIKAT','$TINGKATAN_LEVEL',null,0,'$USER_ID','$localDateTime'");
 
         $response="Success";
         echo $response;
@@ -44,7 +44,7 @@ if (isset($_POST["edittingkatan"])) {
         $TINGKATAN_LEVEL = $_POST["TINGKATAN_LEVEL"];
         $DELETION_STATUS = $_POST["DELETION_STATUS"];
 
-        $response = GetQuery("update m_tingkatan set TINGKATAN_NAMA = '$TINGKATAN_NAMA', TINGKATAN_SEBUTAN = '$TINGKATAN_SEBUTAN', TINGKATAN_SERTIFIKAT = '$TINGKATAN_SERTIFIKAT', TINGKATAN_GELAR = '$TINGKATAN_GELAR', TINGKATAN_LEVEL = '$TINGKATAN_LEVEL', DELETION_STATUS = '$DELETION_STATUS', INPUT_BY = '$USER_ID', INPUT_DATE = now() where TINGKATAN_ID = '$TINGKATAN_ID'");
+        $response = GetQuery("update m_tingkatan set TINGKATAN_NAMA = '$TINGKATAN_NAMA', TINGKATAN_SEBUTAN = '$TINGKATAN_SEBUTAN', TINGKATAN_SERTIFIKAT = '$TINGKATAN_SERTIFIKAT', TINGKATAN_GELAR = '$TINGKATAN_GELAR', TINGKATAN_LEVEL = '$TINGKATAN_LEVEL', DELETION_STATUS = '$DELETION_STATUS', INPUT_BY = '$USER_ID', INPUT_DATE = '$localDateTime' where TINGKATAN_ID = '$TINGKATAN_ID'");
 
         $response="Success";
         echo $response;

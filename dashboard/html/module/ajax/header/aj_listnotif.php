@@ -47,22 +47,22 @@ CASE
         END
 END AS NOTIF_ICON,
 CASE
-    WHEN TIMESTAMPDIFF(MINUTE, n.INPUT_DATE, NOW()) < 10 THEN
+    WHEN TIMESTAMPDIFF(MINUTE, n.INPUT_DATE, '$localDateTime') < 10 THEN
         ' Baru saja'
-    WHEN TIMESTAMPDIFF(HOUR, n.INPUT_DATE, NOW()) < 1 THEN
+    WHEN TIMESTAMPDIFF(HOUR, n.INPUT_DATE, '$localDateTime') < 1 THEN
         CONCAT(
-            TIMESTAMPDIFF(MINUTE, n.INPUT_DATE, NOW()), ' Menit yang lalu'
+            TIMESTAMPDIFF(MINUTE, n.INPUT_DATE, '$localDateTime'), ' Menit yang lalu'
         )
-    WHEN TIMESTAMPDIFF(HOUR, n.INPUT_DATE, NOW()) < 24 THEN
+    WHEN TIMESTAMPDIFF(HOUR, n.INPUT_DATE, '$localDateTime') < 24 THEN
         CONCAT(
-            TIMESTAMPDIFF(HOUR, n.INPUT_DATE, NOW()), ' Jam ',
-            MOD(TIMESTAMPDIFF(MINUTE, n.INPUT_DATE, NOW()), 60), ' Menit yang lalu'
+            TIMESTAMPDIFF(HOUR, n.INPUT_DATE, '$localDateTime'), ' Jam ',
+            MOD(TIMESTAMPDIFF(MINUTE, n.INPUT_DATE, '$localDateTime'), 60), ' Menit yang lalu'
         )
     ELSE
         CONCAT(
-            TIMESTAMPDIFF(DAY, n.INPUT_DATE, NOW()), ' Hari ',
-            MOD(TIMESTAMPDIFF(HOUR, n.INPUT_DATE, NOW()), 24), ' Jam ',
-            MOD(TIMESTAMPDIFF(MINUTE, n.INPUT_DATE, NOW()), 60), ' Menit yang lalu'
+            TIMESTAMPDIFF(DAY, n.INPUT_DATE, '$localDateTime'), ' Hari ',
+            MOD(TIMESTAMPDIFF(HOUR, n.INPUT_DATE, '$localDateTime'), 24), ' Jam ',
+            MOD(TIMESTAMPDIFF(MINUTE, n.INPUT_DATE, '$localDateTime'), 60), ' Menit yang lalu'
         )
 END AS difference
 FROM t_notifikasi n

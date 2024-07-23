@@ -15,7 +15,7 @@ if (isset($_POST["savekegiatan"])) {
         
         // INSERT DATA
         // Prepare the query
-        $query = "INSERT INTO c_kegiatan SELECT '$KEGIATAN_ID', ?, ?, null, null, 0, '$USER_ID', now()";
+        $query = "INSERT INTO c_kegiatan SELECT '$KEGIATAN_ID', ?, ?, null, null, 0, '$USER_ID', '$localDateTime'";
 
         // Execute the query with parameters
         GetQuery2($query, [$KEGIATAN_JUDUL, $KEGIATAN_DESKRIPSI]);

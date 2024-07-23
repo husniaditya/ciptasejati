@@ -16,7 +16,7 @@ if (isset($_POST["saveinformasi"])) {
         
         // INSERT DATA
         // Prepare the query
-        $query = "INSERT INTO c_informasi SELECT '$INFORMASI_ID', ?, ?, ?, 0, '$USER_ID', now()";
+        $query = "INSERT INTO c_informasi SELECT '$INFORMASI_ID', ?, ?, ?, 0, '$USER_ID', '$localDateTime'";
 
         // Execute the query with parameters
         GetQuery2($query, [$INFORMASI_KATEGORI, $INFORMASI_JUDUL, $INFORMASI_DESKRIPSI]);
@@ -43,7 +43,7 @@ if (isset($_POST["updateinformasi"])) {
         
         // INSERT DATA
         // Prepare the query
-        $query = "UPDATE c_informasi SET INFORMASI_JUDUL = ?, INFORMASI_KATEGORI = ?, INFORMASI_DESKRIPSI = ?, DELETION_STATUS = ?, INPUT_BY = '$USER_ID', INPUT_DATE = NOW() WHERE INFORMASI_ID = '$INFORMASI_ID'";
+        $query = "UPDATE c_informasi SET INFORMASI_JUDUL = ?, INFORMASI_KATEGORI = ?, INFORMASI_DESKRIPSI = ?, DELETION_STATUS = ?, INPUT_BY = '$USER_ID', INPUT_DATE = '$localDateTime' WHERE INFORMASI_ID = '$INFORMASI_ID'";
 
         // Execute the query with parameters
         GetQuery2($query, [$INFORMASI_JUDUL, $INFORMASI_KATEGORI, $INFORMASI_DESKRIPSI, $DELETION_STATUS]);

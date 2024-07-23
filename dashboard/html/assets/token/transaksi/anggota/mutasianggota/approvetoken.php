@@ -14,9 +14,9 @@ if (isset($_GET["token"])) {
     }
 
     if ($MUTASI_STATUS == 0) {
-        GetQuery("update t_mutasi set MUTASI_STATUS = 1, MUTASI_APPROVE_BY = '$USER_ID', MUTASI_APPROVE_TANGGAL = now() where MUTASI_ID = '$MUTASI_ID'");
+        GetQuery("update t_mutasi set MUTASI_STATUS = 1, MUTASI_APPROVE_BY = '$USER_ID', MUTASI_APPROVE_TANGGAL = '$localDateTime' where MUTASI_ID = '$MUTASI_ID'");
 
-        GetQuery("insert into t_mutasi_log select uuid(), MUTASI_ID, CABANG_AWAL, CABANG_TUJUAN, ANGGOTA_KEY, MUTASI_DESKRIPSI, MUTASI_TANGGAL, MUTASI_STATUS, MUTASI_STATUS_TANGGAL, MUTASI_APPROVE_BY, MUTASI_APPROVE_TANGGAL, MUTASI_FILE, DELETION_STATUS, 'U', '$USER_ID', now() from t_mutasi where MUTASI_ID = '$MUTASI_ID'");
+        GetQuery("insert into t_mutasi_log select uuid(), MUTASI_ID, CABANG_AWAL, CABANG_TUJUAN, ANGGOTA_KEY, MUTASI_DESKRIPSI, MUTASI_TANGGAL, MUTASI_STATUS, MUTASI_STATUS_TANGGAL, MUTASI_APPROVE_BY, MUTASI_APPROVE_TANGGAL, MUTASI_FILE, DELETION_STATUS, 'U', '$USER_ID', '$localDateTime' from t_mutasi where MUTASI_ID = '$MUTASI_ID'");
 
         $getDataMutasi =  GetQuery("SELECT m.*,a.ANGGOTA_ID,m.CABANG_AWAL,m.CABANG_TUJUAN,m.ANGGOTA_KEY,a.ANGGOTA_NAMA,c.CABANG_DESKRIPSI CABANG_AWAL,d.DAERAH_DESKRIPSI DAERAH_AWAL,c2.CABANG_DESKRIPSI CABANG_TUJUAN,d2.DAERAH_DESKRIPSI DAERAH_TUJUAN,DATE_FORMAT(m.MUTASI_TANGGAL, '%d %M %Y') TANGGAL_EFEKTIF
         FROM t_mutasi m
@@ -33,7 +33,7 @@ if (isset($_GET["token"])) {
         GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$MUTASI_ID'");
 
         GetQuery("insert into t_notifikasi
-        select uuid(),ANGGOTA_KEY,'$MUTASI_ID','$CABANG_AWAL','$CABANG_TUJUAN','Mutasi','ViewNotifMutasi','open-ViewNotifMutasi','Persetujuan Mutasi Anggota','Mutasi a.n $ANGGOTA_NAMA dari cabang $CABANG_AWAL', 1, 0, '$USER_ID', NOW()
+        select uuid(),ANGGOTA_KEY,'$MUTASI_ID','$CABANG_AWAL','$CABANG_TUJUAN','Mutasi','ViewNotifMutasi','open-ViewNotifMutasi','Persetujuan Mutasi Anggota','Mutasi a.n $ANGGOTA_NAMA dari cabang $CABANG_AWAL', 1, 0, '$USER_ID', '$localDateTime'
         FROM m_anggota
         WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN ('$CABANG_AWAL','$CABANG_TUJUAN') AND ANGGOTA_AKSES = 'Koordinator' OR ANGGOTA_KEY = '$ANGGOTA_KEY') AND ANGGOTA_STATUS = 0");
     }

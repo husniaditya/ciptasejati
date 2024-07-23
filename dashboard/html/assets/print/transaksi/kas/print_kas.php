@@ -14,7 +14,7 @@ if (isset($_GET['id'])) {
     $encodedKoor = encodeIdToBase64('Koor');
     $encodedGuru = encodeIdToBase64('Guru');
 
-    $getData = GetQuery("SELECT k.*,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_AKSES,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,c.CABANG_SEKRETARIAT,a2.ANGGOTA_ID INPUT_BY_ID,a2.ANGGOTA_NAMA INPUT_BY,a2.ANGGOTA_AKSES INPUT_AKSES, DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y') INPUT_DATECASE, CASE WHEN a.ANGGOTA_AKSES = 'User' THEN 'Anggota' ELSE a.ANGGOTA_AKSES END AS ANGGOTA_AKSES,
+    $getData = GetQuery("SELECT k.*,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_AKSES,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,c.CABANG_SEKRETARIAT,a2.ANGGOTA_ID INPUT_BY_ID,a2.ANGGOTA_NAMA INPUT_BY,a2.ANGGOTA_AKSES INPUT_AKSES, DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y') INPUT_DATE, CASE WHEN a.ANGGOTA_AKSES = 'User' THEN 'Anggota' ELSE a.ANGGOTA_AKSES END AS ANGGOTA_AKSES,
     CASE
         WHEN k.KAS_JUMLAH < 0 THEN CONCAT('(', FORMAT(ABS(k.KAS_JUMLAH), 0), ')')
         ELSE FORMAT(k.KAS_JUMLAH, 0)
@@ -235,7 +235,7 @@ if (isset($_GET['id'])) {
 
             $pdf->SetFont('times', '', 11); // Set font for body
 
-            $pdf->Ln(96.5);
+            $pdf->Ln(93.5);
             $pdf->Cell(30,15,$INPUT_DATE,1,0,"C");
             $pdf->Cell(35,15,$KAS_ID,1,0,"C");
             $pdf->Cell(15,15,$KAS_DK_DES,1,0,"C");

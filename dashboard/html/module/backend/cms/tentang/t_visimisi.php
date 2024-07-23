@@ -27,7 +27,7 @@ if (isset($_POST["updatevisimisi"])) {
             }
         }
 
-        GetQuery("update cms_visimisi set CMS_VISIMISI_KATEGORI = '$CMS_VISIMISI_KATEGORI', INPUT_BY = '$USER_ID', INPUT_DATE = now() where CMS_VISIMISI_ID = '$CMS_VISIMISI_ID'");
+        GetQuery("update cms_visimisi set CMS_VISIMISI_KATEGORI = '$CMS_VISIMISI_KATEGORI', INPUT_BY = '$USER_ID', INPUT_DATE = '$localDateTime' where CMS_VISIMISI_ID = '$CMS_VISIMISI_ID'");
 
         $response="Success";
         echo $response;

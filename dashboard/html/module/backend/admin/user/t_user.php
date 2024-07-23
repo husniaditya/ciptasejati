@@ -17,13 +17,13 @@ if (isset($_POST["updateuser"])) {
         $PASSWORD = password_hash($USER_PASSWORD, PASSWORD_BCRYPT, $options);
 
         if ($USER_PASSWORD = "") {
-            GetQuery("update m_user set INPUT_BY = '$USER_ID', INPUT_DATE = now() where ANGGOTA_ID = '$ANGGOTA_ID'");
+            GetQuery("update m_user set INPUT_BY = '$USER_ID', INPUT_DATE = '$localDateTime' where ANGGOTA_ID = '$ANGGOTA_ID'");
 
-            GetQuery("update m_anggota set ANGGOTA_AKSES = '$ANGGOTA_AKSES', INPUT_BY = '$USER_ID', INPUT_DATE = now() where ANGGOTA_ID = '$ANGGOTA_ID' and ANGGOTA_STATUS = 0 and DELETION_STATUS = 0");
+            GetQuery("update m_anggota set ANGGOTA_AKSES = '$ANGGOTA_AKSES', INPUT_BY = '$USER_ID', INPUT_DATE = '$localDateTime' where ANGGOTA_ID = '$ANGGOTA_ID' and ANGGOTA_STATUS = 0 and DELETION_STATUS = 0");
         } else {
-            GetQuery("update m_user set USER_PASSWORD = '$PASSWORD', INPUT_BY = '$USER_ID', INPUT_DATE = now() where ANGGOTA_ID = '$ANGGOTA_ID'");
+            GetQuery("update m_user set USER_PASSWORD = '$PASSWORD', INPUT_BY = '$USER_ID', INPUT_DATE = '$localDateTime' where ANGGOTA_ID = '$ANGGOTA_ID'");
 
-            GetQuery("update m_anggota set ANGGOTA_AKSES = '$ANGGOTA_AKSES', INPUT_BY = '$USER_ID', INPUT_DATE = now() where ANGGOTA_ID = '$ANGGOTA_ID' and ANGGOTA_STATUS = 0 and DELETION_STATUS = 0");
+            GetQuery("update m_anggota set ANGGOTA_AKSES = '$ANGGOTA_AKSES', INPUT_BY = '$USER_ID', INPUT_DATE = '$localDateTime' where ANGGOTA_ID = '$ANGGOTA_ID' and ANGGOTA_STATUS = 0 and DELETION_STATUS = 0");
         }
 
         $response="Success";
