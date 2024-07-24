@@ -238,8 +238,15 @@ if (isset($_POST['id'])) {
             $pdf->Cell(30,5,"",0,0,"C");
             $pdf->Ln();
             $pdf->Image('../../../../.'.$ANGGOTA_PIC, 70, 155, 30, 40, '', '', 'T', false, 500, '', false, false, 1, false, false, false);
+            
+            // Prepare the parameters
+            $file_db = "./assets/sertifikat/$CABANG_DESKRIPSI/$ANGGOTA_ID $ANGGOTA_NAMA/$PPD_ID PPD $TINGKATAN_NAMA $ANGGOTA_NAMA $PPD_TANGGAL.pdf";
 
-            GetQuery("update t_ppd set PPD_FILE = './assets/sertifikat/$CABANG_DESKRIPSI/$ANGGOTA_ID $ANGGOTA_NAMA/$PPD_ID PPD $TINGKATAN_NAMA $ANGGOTA_NAMA $PPD_TANGGAL.pdf' where PPD_ID = '$PPD_ID'");
+            // Define the query with placeholders
+            $query = "UPDATE t_ppd SET PPD_FILE = ? WHERE PPD_ID = '$PPD_ID'";
+
+            // Execute the query with the parameters
+            GetQuery2($query, [$file_db]);
 
             $pdfFilePath = '../../../../../assets/sertifikat/'.$CABANG_DESKRIPSI.'/'.$ANGGOTA_ID.' '.$ANGGOTA_NAMA;
 

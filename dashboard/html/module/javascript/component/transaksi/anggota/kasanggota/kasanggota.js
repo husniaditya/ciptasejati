@@ -406,7 +406,7 @@ $(document).ready(function() {
   // Attach an event listener to the "Jumlah" input
   function updateSaldoAkhir(jumlahElement, saldoAwalElement, kategoriElement, saldoAkhirElement) {
     // Get values
-    var saldoAwal = parseFloat($(saldoAwalElement).val().replace(/\D/g, '')) || 0;
+    var saldoAwal = parseFloat($(saldoAwalElement).val().replace(/[^0-9.-]/g, '')) || 0;
     var jumlah = parseFloat($(jumlahElement).val().replace(/\D/g, '')) || 0;
     var kategori = $(kategoriElement).val() || "";
   

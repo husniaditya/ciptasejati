@@ -250,7 +250,14 @@ if (isset($_POST['id'])) {
             $pdf->Ln(5);
             $pdf->MultiCell(190,5,"Demikian formulir kas anggota ini disampaikan dengan sebenarnya untuk digunakan sebagaimana mestinya. Kami berharap agar ke depannya, manajemen keuangan perusahaan dapat terus ditingkatkan demi mencapai tujuan dan pertumbuhan yang lebih baik. \n", 0, 'J', false, 1, '', '', true);
     
-            GetQuery("update t_kas set KAS_FILE = './assets/report/kas/$CABANG_DESKRIPSI/$ANGGOTA_ID - $ANGGOTA_NAMA/$KAS_ID Kas $KAS_JENIS $ANGGOTA_NAMA $FKAS_TANGGAL.pdf' where KAS_ID = '$KAS_ID'");
+            // Prepare the parameters
+            $file_db = "./assets/report/kas/$CABANG_DESKRIPSI/$ANGGOTA_ID - $ANGGOTA_NAMA/$KAS_ID Kas $KAS_JENIS $ANGGOTA_NAMA $FKAS_TANGGAL.pdf";
+
+            // Define the query with placeholders
+            $query = "UPDATE t_kas SET KAS_FILE = ? WHERE KAS_ID = '$KAS_ID'";
+
+            // Execute the query with the parameters
+            GetQuery2($query, [$file_db]);
 
             $pdfFilePath = '../../../../../assets/report/kas/'.$CABANG_DESKRIPSI.'/'.$ANGGOTA_ID.' - '.$ANGGOTA_NAMA;
 

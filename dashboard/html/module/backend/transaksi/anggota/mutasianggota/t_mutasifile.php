@@ -240,9 +240,14 @@ if ($_POST["MUTASI_ID"]) {
             $pdf->Ln(5);
             $pdf->MultiCell(180,5,"Demikian formulir mutasi anggota ini disampaikan dengan sebenarnya untuk digunakan sebagaimana mestinya.", 0, 'J', false, 1, '', '', true);
             
-    
-            // ---------------------------------------------------------
-            GetQuery("update t_mutasi set MUTASI_FILE = './assets/report/mutasi/$CABANG_AWAL_DES/$ANGGOTA_ID - $ANGGOTA_NAMA/$MUTASI_ID Mutasi Anggota $ANGGOTA_NAMA $TANGGAL_EFEKTIF.pdf' where MUTASI_ID = '$MUTASI_ID'");
+            // Prepare the parameters
+            $file_db = "./assets/report/mutasi/$CABANG_AWAL_DES/$ANGGOTA_ID - $ANGGOTA_NAMA/$MUTASI_ID Mutasi Anggota $ANGGOTA_NAMA $TANGGAL_EFEKTIF.pdf";
+
+            // Define the query with placeholders
+            $query = "UPDATE t_mutasi SET MUTASI_FILE = ? WHERE MUTASI_ID = '$MUTASI_ID'";
+
+            // Execute the query with the parameters
+            GetQuery2($query, [$file_db]);
     
             $pdfFilePath = '../../../../../assets/report/mutasi/'.$CABANG_AWAL_DES.'/'.$ANGGOTA_ID.'-'.$ANGGOTA_NAMA;
     

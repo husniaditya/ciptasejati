@@ -308,7 +308,14 @@ if (isset($_POST['id'])) {
             $pdf->Cell(5, 5, " : ", 0, 0, "L");
             $pdf->Cell(130, 5, $UKT_DESKRIPSI, 0, 0, "L");
 
-            GetQuery("update t_ukt set UKT_FILE = './assets/report/ukt/$CABANG_DESKRIPSI/$ANGGOTA_ID $ANGGOTA_NAMA/$UKT_ID UKT $UKT_TINGKATAN_NAMA $ANGGOTA_NAMA $UKT_TANGGAL.pdf' where UKT_ID = '$UKT_ID'");
+            // Prepare the parameters
+            $file_db = "./assets/report/ukt/$CABANG_DESKRIPSI/$ANGGOTA_ID $ANGGOTA_NAMA/$UKT_ID UKT $UKT_TINGKATAN_NAMA $ANGGOTA_NAMA $UKT_TANGGAL.pdf";
+
+            // Define the query with placeholders
+            $query = "UPDATE t_ukt SET UKT_FILE = ? WHERE UKT_ID = '$UKT_ID'";
+
+            // Execute the query with the parameters
+            GetQuery2($query, [$file_db]);
 
             $pdfFilePath = '../../../../../assets/report/ukt/'.$CABANG_DESKRIPSI.'/'.$ANGGOTA_ID.' '.$ANGGOTA_NAMA;
 
