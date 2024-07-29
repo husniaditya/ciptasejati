@@ -168,6 +168,7 @@ $(document).ready(function() {
 
     if (!pattern.test(password.value)) {
       // Display error notification
+      FailedNotification("Password tidak memenuhi kriteria!");
       return;
     } else {
       $.ajax({

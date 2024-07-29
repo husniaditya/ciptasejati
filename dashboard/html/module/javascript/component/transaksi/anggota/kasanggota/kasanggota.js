@@ -288,7 +288,7 @@ function sendEmailNotification(ID) { // Function Send Email Notification
 }
 
 
-// ----- Start of Anggota Section ----- //
+// ----- Start of Kas Section ----- //
 function handleForm(formId, successNotification, failedNotification, updateNotification) {
   // Function to show the full-screen loading overlay with a progress bar
   function showLoadingOverlay(message) {
@@ -543,7 +543,7 @@ $(document).ready(function() {
   }
 });
 
-// Delete Anggota
+// Delete Kas
 function eventkas(value1,value2) {
   // Ask for confirmation
   if (confirm("Apakah anda yakin untuk menghapus data ini?")) {
@@ -593,7 +593,7 @@ function eventkas(value1,value2) {
   }
 }
 
-// View Anggota
+// View Kas
 $(document).on("click", ".open-ViewKasAnggota", function () {
   
   var key = $(this).data('id');
@@ -647,7 +647,7 @@ $(document).on("click", ".open-ViewKasAnggota", function () {
   });
 });
 
-// Edit Anggota
+// Edit Kas
 $(document).on("click", ".open-EditKasAnggota", function () {
   
   var key = $(this).data('id');
@@ -731,7 +731,7 @@ $(document).on("click", ".open-EditKasAnggota", function () {
   });
 });
 
-// Mutasi Anggota Filtering
+// Kas Anggota Filtering
 // Attach debounced event handler to form inputs
 $('.filterKasAnggota select, .filterKasAnggota input').on('change input', debounce(filterKasAnggotaEvent, 500));
 function filterKasAnggotaEvent() {

@@ -624,7 +624,7 @@ $(document).on("click", ".open-ApproveNotifMutasi", function () {
 $(document).on("click", ".open-ViewNotifKas", function () {
   
   var key = $(this).data('dokumen');
-  var anggota = $(this).data('anggotaid');
+  var anggota = $(this).data('anggota');
   var jenis = $(this).data('jenis');
   var cabang = $(this).data('cabang');
   

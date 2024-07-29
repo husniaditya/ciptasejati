@@ -1,5 +1,5 @@
 <?php
-require_once ("../../module/connection/conn.php");
+require_once ("../../../module/connection/conn.php");
 
 $OLDPASSWORD = "";
 $NEWPASSWORD = "";
