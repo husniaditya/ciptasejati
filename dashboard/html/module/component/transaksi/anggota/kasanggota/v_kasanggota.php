@@ -254,12 +254,30 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewKasAnggota" class="open-ViewKasAnggota" style="color:#222222;" data-id="<?= $KAS_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-jenis="<?= $KAS_JENIS; ?>" data-cabang="<?= $CABANG_KEY; ?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
-                                            <li><a data-toggle="modal" href="#EditKasAnggota" class="open-EditKasAnggota" style="color:#00a5d2;" data-id="<?= $KAS_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-jenis="<?= $KAS_JENIS; ?>" data-cabang="<?= $CABANG_KEY; ?>"><span class="ico-edit"></span> Ubah</a></li>
-                                            <li class="divider"></li>
-                                            <li><a href="assets/print/transaksi/kas/print_kas.php?id=<?= encodeIdToBase64($KAS_ID); ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
-                                            <li class="divider"></li>
-                                            <li><a href="#" onclick="eventkas('<?= $KAS_ID;?>','delete')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
+                                            <?php
+                                            if ($_SESSION['VIEW_KasAnggota'] == "Y") {
+                                                ?>
+                                                <li><a data-toggle="modal" href="#ViewKasAnggota" class="open-ViewKasAnggota" style="color:#222222;" data-id="<?= $KAS_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-jenis="<?= $KAS_JENIS; ?>" data-cabang="<?= $CABANG_KEY; ?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
+                                                <?php
+                                            }
+                                            if ($_SESSION['EDIT_KasAnggota'] == "Y") {
+                                                ?>
+                                                <li><a data-toggle="modal" href="#EditKasAnggota" class="open-EditKasAnggota" style="color:#00a5d2;" data-id="<?= $KAS_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-jenis="<?= $KAS_JENIS; ?>" data-cabang="<?= $CABANG_KEY; ?>"><span class="ico-edit"></span> Ubah</a></li>
+                                                <?php
+                                            }
+                                            if ($_SESSION['PRINT_KasAnggota'] == "Y") {
+                                                ?>
+                                                <li class="divider"></li>
+                                                <li><a href="assets/print/transaksi/kas/print_kas.php?id=<?= encodeIdToBase64($KAS_ID); ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
+                                                <?php
+                                            }
+                                            if ($_SESSION['DELETE_KasAnggota'] == "Y") {
+                                                ?>
+                                                <li class="divider"></li>
+                                                <li><a href="#" onclick="eventkas('<?= $KAS_ID;?>','delete')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
+                                                <?php
+                                            }
+                                            ?>
                                         </ul>
                                     </div>
                                 </form>

@@ -264,7 +264,13 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ApproveUKTGuru" class="open-ApproveUKTGuru" style="color:#00a5d2;" data-id="<?= $UKT_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><span class="ico-edit"></span> Persetujuan</a></li>
+                                            <?php
+                                            if ($_SESSION['APPROVE_PersetujuanUKTGuru'] == "Y") {
+                                                ?>
+                                                <li><a data-toggle="modal" href="#ApproveUKTGuru" class="open-ApproveUKTGuru" style="color:#00a5d2;" data-id="<?= $UKT_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><span class="ico-edit"></span> Persetujuan</a></li>
+                                                <?php
+                                            }
+                                            ?>
                                         </ul>
                                     </div>
                                 </form>

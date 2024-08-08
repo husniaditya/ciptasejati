@@ -239,32 +239,42 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewMutasiAnggota" class="open-ViewMutasiAnggota" style="color:#222222;" data-id="<?= $MUTASI_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-cabang="<?= $CABANG_KEY; ?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
                                             <?php
+                                            if ($_SESSION['VIEW_MutasiAnggota'] == "Y") {
+                                                ?>
+                                                <li><a data-toggle="modal" href="#ViewMutasiAnggota" class="open-ViewMutasiAnggota" style="color:#222222;" data-id="<?= $MUTASI_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-cabang="<?= $CABANG_KEY; ?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
+                                                <?php
+                                            }
                                             if ($MUTASI_STATUS == 0 && ($USER_AKSES == "Administrator" || $USER_AKSES == "Koordinator")) {
-                                                if ($USER_AKSES == "Administrator") {
+                                                if ($USER_AKSES == "Administrator" && $_SESSION['EDIT_MutasiAnggota'] == "Y") {
                                                     ?>
                                                     <li><a data-toggle="modal" href="#EditMutasiAnggota" class="open-EditMutasiAnggota" style="color:#00a5d2;" data-id="<?= $MUTASI_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-cabang="<?= $CABANG_KEY; ?>"><span class="ico-edit"></span> Ubah</a></li>
                                                     <?php
                                                 }
-                                                if ($USER_AKSES == "Koordinator" && $USER_CABANG == $CABANG_AWAL) {
+                                                if ($USER_AKSES == "Koordinator" && $USER_CABANG == $CABANG_AWAL && $_SESSION['EDIT_MutasiAnggota'] == "Y") {
                                                     ?>
                                                     <li><a data-toggle="modal" href="#EditMutasiAnggota" class="open-EditMutasiAnggota" style="color:#00a5d2;" data-id="<?= $MUTASI_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-cabang="<?= $CABANG_KEY; ?>"><span class="ico-edit"></span> Ubah</a></li>
                                                     <?php
                                                 }
                                             }
-                                            ?>
-                                            <li><a href="assets/print/transaksi/mutasi/print_mutasi.php?id=<?= encodeIdToBase64($MUTASI_ID); ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
-                                            <?php
-                                            if ($USER_AKSES == "Administrator" && $MUTASI_STATUS <> 0) {
+                                            if ($_SESSION['PRINT_MutasiAnggota'] == "Y") {
+                                                ?>
+                                                <li><a href="assets/print/transaksi/mutasi/print_mutasi.php?id=<?= encodeIdToBase64($MUTASI_ID); ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
+                                                <?php
+                                            }
+                                            if ($USER_AKSES == "Administrator" && $MUTASI_STATUS <> 0 && $_SESSION['APPROVE_MutasiAnggota'] == "Y") {
                                                 ?>
                                                 <li class="divider"></li>
                                                 <li><a href="#" onclick="eventmutasi('<?= $MUTASI_ID;?>','reset')" style="color:#dimgrey;"><i class="fa-solid fa-clock-rotate-left"></i> Reset Persetujuan</a></li>
                                                 <?php
                                             }
+                                            if ($_SESSION['DELETE_MutasiAnggota'] == "Y") {
+                                                ?>
+                                                <li class="divider"></li>
+                                                <li><a href="#" onclick="eventmutasi('<?= $MUTASI_ID;?>','delete')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
+                                                <?php
+                                            }
                                             ?>
-                                            <li class="divider"></li>
-                                            <li><a href="#" onclick="eventmutasi('<?= $MUTASI_ID;?>','delete')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
                                         </ul>
                                     </div>
                                 </form>

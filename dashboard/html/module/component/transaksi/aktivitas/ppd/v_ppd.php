@@ -262,15 +262,26 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewPPD" class="open-ViewPPD" style="color:#222222;" data-id="<?= $PPD_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
                                             <?php
-                                            if ($PPD_APPROVE_PELATIH == 0) {
+                                            if ($_SESSION['VIEW_PembukaanPusatDaya'] == "Y") {
+                                                ?>
+                                                <li><a data-toggle="modal" href="#ViewPPD" class="open-ViewPPD" style="color:#222222;" data-id="<?= $PPD_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
+                                                <?php
+                                            }
+                                            ?>
+                                            <?php
+                                            if ($PPD_APPROVE_PELATIH == 0 && $_SESSION['EDIT_PembukaanPusatDaya'] == "Y") {
                                                 ?>
                                                 <li><a data-toggle="modal" href="#EditPPD" class="open-EditPPD" style="color:#00a5d2;" data-id="<?= $PPD_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><span class="ico-edit"></span> Ubah</a></li>
+                                                <?php
+                                            }
+                                            if ($PPD_APPROVE_PELATIH == 0 && $_SESSION['DELETE_PembukaanPusatDaya'] == "Y") {
+                                                ?>
                                                 <li class="divider"></li>
                                                 <li><a href="#" onclick="eventppd('<?= $PPD_ID;?>','delete')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
                                                 <?php
-                                            } else {
+                                            }
+                                            if ($PPD_APPROVE_PELATIH <> 0 && $_SESSION['APPROVE_PembukaanPusatDaya'] == "Y") {
                                                 ?>
                                                 <li class="divider"></li>
                                                 <li><a href="#" onclick="eventppd('<?= $PPD_ID;?>','cancel')"><i class="fa-solid fa-rotate-left"></i> Batal Persetujuan</a></li>

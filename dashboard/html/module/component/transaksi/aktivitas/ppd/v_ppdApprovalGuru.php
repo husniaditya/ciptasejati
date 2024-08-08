@@ -128,7 +128,13 @@ $rowPPDTanggal = $getPPDTanggal->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ApprovePPDGuru" class="open-ApprovePPDGuru" style="color:#00a5d2;" data-tanggal="<?= $PPD_TANGGAL; ?>" data-cabangppd="<?= $PPD_LOKASI; ?>"><span class="ico-edit"></span> Persetujuan</a></li>
+                                            <?php
+                                            if ($_SESSION['APPROVE_PersetujuanPPDGuru'] == "Y") {
+                                                ?>
+                                                <li><a data-toggle="modal" href="#ApprovePPDGuru" class="open-ApprovePPDGuru" style="color:#00a5d2;" data-tanggal="<?= $PPD_TANGGAL; ?>" data-cabangppd="<?= $PPD_LOKASI; ?>"><span class="ico-edit"></span> Persetujuan</a></li>
+                                                <?php
+                                            }
+                                            ?>
                                         </ul>
                                     </div>
                                 </form>

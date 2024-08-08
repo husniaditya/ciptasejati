@@ -6,6 +6,8 @@ FROM m_menuakses m
 LEFT JOIN m_menu u ON m.MENU_ID = u.MENU_ID
 LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID
 ORDER BY m.USER_AKSES,m.MENU_ID");
+$getAkses = GetQuery("select * from p_param where KATEGORI = 'USER_AKSES' ORDER BY TEXT");
+$rowakses = $getAkses->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!-- Filter Section -->
@@ -38,10 +40,15 @@ ORDER BY m.USER_AKSES,m.MENU_ID");
                             <div class="form-group">
                                 <label>Akses User</label>
                                 <select id="filterUSER_AKSES" name="USER_AKSES" class="form-control"  data-parsley-required required>
-                                    <option value="">Tampilkan semua</option>
-                                    <option value="User">User</option>
-                                    <option value="Koordinator">Koordinator</option>
-                                    <option value="Pengurus">Pengurus</option>
+                                    <option value="">-- Tampilkan semua --</option>
+                                    <?php
+                                    foreach ($rowakses as $dataAkses) {
+                                        extract($dataAkses);
+                                        ?>
+                                        <option value="<?= $TEXT; ?>"> <?= $TEXT; ?> </option>
+                                        <?php
+                                    }
+                                    ?>
                                 </select>
                             </div> 
                         </div>

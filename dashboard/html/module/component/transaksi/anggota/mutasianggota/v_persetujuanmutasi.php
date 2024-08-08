@@ -222,12 +222,12 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                         <ul class="dropdown-menu" role="menu">
                                             <?php
                                             if ($MUTASI_STATUS == 0 && ($USER_AKSES == "Administrator" || $USER_AKSES == "Koordinator")) {
-                                                if ($USER_AKSES == "Administrator") {
+                                                if ($USER_AKSES == "Administrator" && $_SESSION['APPROVE_PersetujuanMutasi'] == "Y") {
                                                     ?>
                                                     <li><a data-toggle="modal" href="#ApproveMutasiAnggota" class="open-ApproveMutasiAnggota" style="color:forestgreen;" data-id="<?= $MUTASI_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-cabang="<?= $CABANG_KEY; ?>"><i class="fa-regular fa-circle-question"></i> Persetujuan</a></li>
                                                     <?php
                                                 }
-                                                if ($USER_AKSES == "Koordinator" && $USER_CABANG <> $CABANG_AWAL) {
+                                                if ($USER_AKSES == "Koordinator" && $USER_CABANG <> $CABANG_AWAL && $_SESSION['APPROVE_PersetujuanMutasi'] == "Y") {
                                                     ?>
                                                     <li><a data-toggle="modal" href="#ApproveMutasiAnggota" class="open-ApproveMutasiAnggota" style="color:forestgreen;"><i class="fa-regular fa-circle-question"></i> Persetujuan</a></li>
                                                     <?php

@@ -16,6 +16,7 @@ if ($USER_AKSES == "Administrator") {
     WHERE a.CABANG_KEY = '$USER_CABANG' and a.ANGGOTA_AKSES != 'Administrator'");
 }
 
+$getAkses = GetQuery("select * from p_param where KATEGORI = 'USER_AKSES' ORDER BY TEXT");
 $getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0");
 $getCabang = GetQuery("select * from m_cabang where DELETION_STATUS = 0");
 $getTingkatan = GetQuery("select * from m_tingkatan where DELETION_STATUS = 0 order by TINGKATAN_LEVEL");
@@ -23,6 +24,7 @@ $getTingkatan = GetQuery("select * from m_tingkatan where DELETION_STATUS = 0 or
 $rowd = $getDaerah->fetchAll(PDO::FETCH_ASSOC);
 $rows = $getCabang->fetchAll(PDO::FETCH_ASSOC);
 $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
+$rowakses = $getAkses->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <style>
@@ -443,9 +445,15 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                             <div class="form-group">
                                 <label>Akses Anggota</label><span class="text-danger">*</span></label>
                                 <select id="ANGGOTA_AKSES" name="ANGGOTA_AKSES" class="form-control" data-parsley-required required>
-                                    <option value="User">User</option>
-                                    <option value="Koordinator">Koordinator</option>
-                                    <option value="Pengurus">Pengurus</option>
+                                    <option value="">-- Pilih Akses --</option>
+                                    <?php
+                                    foreach ($rowakses as $dataAkses) {
+                                        extract($dataAkses);
+                                        ?>
+                                        <option value="<?= $TEXT; ?>"> <?= $TEXT; ?> </option>
+                                        <?php
+                                    }
+                                    ?>
                                 </select>
                             </div> 
                         </div>
@@ -960,9 +968,15 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                             <div class="form-group">
                                 <label>Akses Anggota</label><span class="text-danger">*</span></label>
                                 <select id="editANGGOTA_AKSES" name="ANGGOTA_AKSES" class="form-control" data-parsley-required required>
-                                    <option value="User">User</option>
-                                    <option value="Koordinator">Koordinator</option>
-                                    <option value="Pengurus">Pengurus</option>
+                                    <option value="">-- Pilih Akses --</option>
+                                    <?php
+                                    foreach ($rowakses as $dataAkses) {
+                                        extract($dataAkses);
+                                        ?>
+                                        <option value="<?= $TEXT; ?>"> <?= $TEXT; ?> </option>
+                                        <?php
+                                    }
+                                    ?>
                                 </select>
                             </div> 
                         </div>

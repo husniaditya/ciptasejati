@@ -281,15 +281,24 @@ $rowp = $getPenguji->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="btn-group" style="margin-bottom:5px;">
                                         <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewUKT" class="open-ViewUKT" style="color:#222222;" data-id="<?= $UKT_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
                                             <?php
-                                            if ($UKT_APP_KOOR == 0) {
+                                            if ($_SESSION['VIEW_UjianKenaikanTingkat'] == "Y") {
+                                                ?>
+                                                <li><a data-toggle="modal" href="#ViewUKT" class="open-ViewUKT" style="color:#222222;" data-id="<?= $UKT_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
+                                                <?php
+                                            }
+                                            if ($UKT_APP_KOOR == 0 && $_SESSION['EDIT_UjianKenaikanTingkat'] == "Y") {
                                                 ?>
                                                 <li><a data-toggle="modal" href="#EditUKT" class="open-EditUKT" style="color:#00a5d2;" data-id="<?= $UKT_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><span class="ico-edit"></span> Ubah</a></li>
+                                                <?php
+                                            }
+                                            if ($UKT_APP_KOOR == 0 && $_SESSION['DELETE_UjianKenaikanTingkat'] == "Y") {
+                                                ?>
                                                 <li class="divider"></li>
                                                 <li><a href="#" onclick="eventukt('<?= $UKT_ID;?>','delete')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
                                                 <?php
-                                            } else {
+                                            }
+                                            if ($UKT_APP_KOOR <> 0 && $_SESSION['APPROVE_UjianKenaikanTingkat'] == "Y") {
                                                 ?>
                                                 <li class="divider"></li>
                                                 <li><a href="#" onclick="eventukt('<?= $UKT_ID;?>','cancel')"><i class="fa-solid fa-rotate-left"></i> Batal Persetujuan</a></li>
