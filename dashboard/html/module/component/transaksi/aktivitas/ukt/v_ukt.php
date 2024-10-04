@@ -38,7 +38,6 @@ if ($USER_AKSES == "Administrator") {
     WHERE u.DELETION_STATUS = 0
     ORDER BY u.UKT_ID DESC");
 
-    $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 ORDER BY ANGGOTA_NAMA ASC");
     $getPenguji = GetQuery("SELECT * FROM m_anggota a
     LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
     WHERE a.ANGGOTA_STATUS = 0 AND t.TINGKATAN_LEVEL >= 6 AND a.ANGGOTA_AKSES <> 'Administrator'
@@ -78,7 +77,6 @@ if ($USER_AKSES == "Administrator") {
     WHERE u.DELETION_STATUS = 0 AND u.CABANG_KEY = '$USER_CABANG'
     ORDER BY u.UKT_ID DESC");
 
-    $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 and CABANG_KEY = '$USER_CABANG' ORDER BY ANGGOTA_NAMA ASC");
     $getPenguji = GetQuery("SELECT * FROM m_anggota a
     LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
     WHERE a.ANGGOTA_STATUS = 0 AND t.TINGKATAN_LEVEL >= 6 AND a.CABANG_KEY = '$USER_CABANG' AND a.ANGGOTA_AKSES <> 'Administrator'
@@ -95,7 +93,6 @@ ORDER BY CABANG_DESKRIPSI ASC");
 $rowPPDCabang = $getPPDCabang->fetchAll(PDO::FETCH_ASSOC);
 $rowd = $getDaerah->fetchAll(PDO::FETCH_ASSOC);
 $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
-$rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
 $rowp = $getPenguji->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -401,14 +398,6 @@ $rowp = $getPenguji->fetchAll(PDO::FETCH_ASSOC);
                                     <div id="selectize-wrapper4" style="position: relative;">
                                         <select name="ANGGOTA_ID" id="selectize-dropdown4" required="" class="form-control" data-parsley-required>
                                             <option value="">-- Pilih Anggota --</option>
-                                            <?php
-                                            foreach ($rowa as $rowAnggota) {
-                                                extract($rowAnggota);
-                                                ?>
-                                                <option value="<?= $ANGGOTA_ID; ?>"><?= $ANGGOTA_ID; ?> - <?= $ANGGOTA_NAMA; ?></option>
-                                                <?php
-                                            }
-                                            ?>
                                         </select>
                                     </div>
                                 </div> 
@@ -702,14 +691,6 @@ $rowp = $getPenguji->fetchAll(PDO::FETCH_ASSOC);
                                     <div id="selectize-wrapper5" style="position: relative;">
                                         <select name="ANGGOTA_ID" id="selectize-dropdown5" required="" class="form-control" data-parsley-required>
                                             <option value="">-- Pilih Anggota --</option>
-                                            <?php
-                                            foreach ($rowa as $rowAnggota) {
-                                                extract($rowAnggota);
-                                                ?>
-                                                <option value="<?= $ANGGOTA_ID; ?>"><?= $ANGGOTA_ID; ?> - <?= $ANGGOTA_NAMA; ?></option>
-                                                <?php
-                                            }
-                                            ?>
                                         </select>
                                     </div>
                                 </div> 
