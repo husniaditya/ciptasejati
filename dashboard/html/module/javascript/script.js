@@ -684,30 +684,39 @@ $(document).on("click", ".open-ViewNotifPPD", function () {
   $.ajax({
     url: 'module/ajax/transaksi/aktivitas/ppd/aj_getdetailppd.php',
     method: 'POST',
-    data: { PPD_ID: key },
-    success: function(data) {
-      console.log('response', data);
-      // Assuming data is a JSON object with the required information
-      // Make sure the keys match the fields in your returned JSON object
-      $("#ViewNotifPPD_DAERAH").val(data.DAERAH_DESKRIPSI);
-      $("#ViewNotifPPD_CABANG").val(data.CABANG_DESKRIPSI);
-      $("#ViewNotifPPD_TANGGAL").val(data.PPD_TANGGAL);
-      $("#ViewNotifPPD_JENIS").val(data.PPD_JENIS_DESKRIPSI);
-      $("#ViewNotifPPD_TINGKATAN").val(data.TINGKATAN_NAMA + ' - ' + data.TINGKATAN_SEBUTAN);
-      $("#ViewNotifPPD_ANGGOTA").val(data.ANGGOTA_NAMA);
-      $("#ViewNotifPPD_LOKASI").val(data.LOKASI_DAERAH + ' - ' + data.LOKASI_CABANG);
-      $("#ViewNotifPPD_DESKRIPSI").val(data.PPD_DESKRIPSI);
+    data: JSON.stringify({ // Convert data to JSON string before sending
+      PPD_ID: key
+    }),
+    contentType: 'application/json', // Set the Content-Type as JSON
+    dataType: 'json', // Specify the expected data type as JSON
+    success: function(response) {
+      // console.log('response', data);
+      
+      // Correct the condition to check response.message
+      if (response.result.message === "OK" && response.data && response.data.length > 0) {
+        var data = response.data[0];
 
-      // Make an AJAX request to fetch data for the second dropdown based on the selected value
-      $.ajax({
-        type: "POST",
-        url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-        data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: cabang },
-        success: function(result){
-          $("#notifpicppd").html(result);
-        }
-      });
+        $("#ViewNotifPPD_DAERAH").val(data.DAERAH_DESKRIPSI);
+        $("#ViewNotifPPD_CABANG").val(data.CABANG_DESKRIPSI);
+        $("#ViewNotifPPD_TANGGAL").val(data.PPD_TANGGAL);
+        $("#ViewNotifPPD_JENIS").val(data.PPD_JENIS_DESKRIPSI);
+        $("#ViewNotifPPD_TINGKATAN").val(data.TINGKATAN_NAMA + ' - ' + data.TINGKATAN_SEBUTAN);
+        $("#ViewNotifPPD_ANGGOTA").val(data.ANGGOTA_NAMA);
+        $("#ViewNotifPPD_LOKASI").val(data.LOKASI_DAERAH + ' - ' + data.LOKASI_CABANG);
+        $("#ViewNotifPPD_DESKRIPSI").val(data.PPD_DESKRIPSI);
 
+        // Make an AJAX request to fetch data for the second dropdown based on the selected value
+        $.ajax({
+          type: "POST",
+          url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+          data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: cabang },
+          success: function(result){
+            $("#notifpicppd").html(result);
+          }
+        });
+      } else {
+        console.error('Error: Invalid response or no data available');
+      }
     },
     error: function(error) {
       console.error('Error fetching data:', error);
@@ -725,31 +734,40 @@ $(document).on("click", ".open-ApproveNotifPPDKoordinator", function () {
   $.ajax({
     url: 'module/ajax/transaksi/aktivitas/ppd/aj_getdetailppd.php',
     method: 'POST',
-    data: { PPD_ID: key },
-    success: function(data) {
+    data: JSON.stringify({ // Convert data to JSON string before sending
+      PPD_ID: key
+    }),
+    contentType: 'application/json', // Set the Content-Type as JSON
+    dataType: 'json', // Specify the expected data type as JSON
+    success: function(response) {
       // console.log('response', data);
-      // Assuming data is a JSON object with the required information
-      // Make sure the keys match the fields in your returned JSON object
-      $("#notifKoordinatorPPD_ID").val(data.PPD_ID);
-      $("#notifKoordinatorPPD_DAERAH").val(data.DAERAH_DESKRIPSI);
-      $("#notifKoordinatorPPD_CABANG").val(data.CABANG_DESKRIPSI);
-      $("#notifKoordinatorPPD_TANGGAL").val(data.PPD_TANGGAL);
-      $("#notifKoordinatorPPD_JENIS").val(data.PPD_JENIS_DESKRIPSI);
-      $("#notifKoordinatorPPD_TINGKATAN").val(data.TINGKATAN_NAMA + ' - ' + data.TINGKATAN_SEBUTAN);
-      $("#notifKoordinatorPPD_ANGGOTA").val(data.ANGGOTA_NAMA);
-      $("#notifKoordinatorPPD_LOKASI").val(data.LOKASI_DAERAH + ' - ' + data.LOKASI_CABANG);
-      $("#notifKoordinatorPPD_DESKRIPSI").val(data.PPD_DESKRIPSI);
+      
+      // Correct the condition to check response.message
+      if (response.result.message === "OK" && response.data && response.data.length > 0) {
+        var data = response.data[0];
+        
+        $("#notifKoordinatorPPD_ID").val(data.PPD_ID);
+        $("#notifKoordinatorPPD_DAERAH").val(data.DAERAH_DESKRIPSI);
+        $("#notifKoordinatorPPD_CABANG").val(data.CABANG_DESKRIPSI);
+        $("#notifKoordinatorPPD_TANGGAL").val(data.PPD_TANGGAL);
+        $("#notifKoordinatorPPD_JENIS").val(data.PPD_JENIS_DESKRIPSI);
+        $("#notifKoordinatorPPD_TINGKATAN").val(data.TINGKATAN_NAMA + ' - ' + data.TINGKATAN_SEBUTAN);
+        $("#notifKoordinatorPPD_ANGGOTA").val(data.ANGGOTA_NAMA);
+        $("#notifKoordinatorPPD_LOKASI").val(data.LOKASI_DAERAH + ' - ' + data.LOKASI_CABANG);
+        $("#notifKoordinatorPPD_DESKRIPSI").val(data.PPD_DESKRIPSI);
 
-      // Make an AJAX request to fetch data for the second dropdown based on the selected value
-      $.ajax({
-        type: "POST",
-        url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-        data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: cabang },
-        success: function(result){
-          $("#notifpicppdkoor").html(result);
-        }
-      });
-
+        // Make an AJAX request to fetch data for the second dropdown based on the selected value
+        $.ajax({
+          type: "POST",
+          url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+          data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: cabang },
+          success: function(result){
+            $("#notifpicppdkoor").html(result);
+          }
+        });
+      } else {
+        console.error('Error: Invalid response or no data available');
+      }
     },
     error: function(error) {
       console.error('Error fetching data:', error);
@@ -767,55 +785,64 @@ $(document).on("click", ".open-ViewNotifUKT", function () {
   $.ajax({
     url: 'module/ajax/transaksi/aktivitas/ukt/aj_getdetailukt.php',
     method: 'POST',
-    data: { id: key, cabang: cabang },
-    success: function(data) {
+    data: JSON.stringify({ // Convert data to JSON string before sending
+      id: key,
+      cabang: cabang
+    }),
+    contentType: 'application/json', // Set the Content-Type as JSON
+    dataType: 'json', // Specify the expected data type as JSON
+    success: function(response) {
       // console.log('response', data);
-      // Assuming data is a JSON object with the required information
-      // Make sure the keys match the fields in your returned JSON object
-      $("#ViewNotifUKT_DAERAH").val(data.DAERAH_DESKRIPSI);
-      $("#ViewNotifUKT_CABANG").val(data.CABANG_DESKRIPSI);
-      $("#ViewNotifUKT_TANGGAL").val(data.UKT_TANGGAL_DESKRIPSI);
-      $("#ViewNotifUKT_ANGGOTA").val(data.ANGGOTA_ID + ' - ' + data.ANGGOTA_NAMA);
-      $("#ViewNotifUKT_TINGKATAN").val(data.UKT_TINGKATAN_NAMA + ' - ' + data.UKT_TINGKATAN_SEBUTAN);
-      $("#ViewNotifUKT_LOKASI").val(data.UKT_DAERAH + ' - ' + data.UKT_CABANG);
-      $("#ViewNotifUKT_DESKRIPSI").val(data.UKT_DESKRIPSI);
-      $("#ViewNotifUKT_TOTAL").html(data.UKT_TOTAL);
-      var iconHtml = '<i class="' + data.UKT_NILAI + '"></i>';
-      $("#ViewNotifUKT_NILAI").html(iconHtml);
-
-      // Make an AJAX request to fetch data for the second dropdown based on the selected value
-      $.ajax({
-        type: "POST",
-        url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-        data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: data.CABANG_KEY },
-        success: function(result){
-          $("#loadpicnotifukt").html(result);
-        }
-      });
-
-      $.ajax({
-        type: "POST",
-        url: "module/ajax/transaksi/aktivitas/ukt/aj_getviewpengujiukt.php",
-        data: { id: key },
-        success: function(response){
-          // Destroy the DataTable before updating
-          $('#viewNotifPenguji-table').DataTable().destroy();
-          $("#viewNotifPengujiData").html(response);
-          // Reinitialize Sertifikat Table
-        }
-      });
       
-      // AJAX request to fetch UKT Detail
-      $.ajax({
-        type: "POST",
-        url: "module/ajax/transaksi/aktivitas/ukt/aj_getviewkategoriukt.php",
-        data: { id: key },
-        success: function(data){
-          // console.log(data);
-          $("#viewnotifrincianukt").html(data);
-        }
-      });
+      if (response.result.message === 'OK' && response.data && response.data.length > 0) {
+        var data = response.data[0];
+        
+        $("#ViewNotifUKT_DAERAH").val(data.DAERAH_DESKRIPSI);
+        $("#ViewNotifUKT_CABANG").val(data.CABANG_DESKRIPSI);
+        $("#ViewNotifUKT_TANGGAL").val(data.UKT_TANGGAL_DESKRIPSI);
+        $("#ViewNotifUKT_ANGGOTA").val(data.ANGGOTA_ID + ' - ' + data.ANGGOTA_NAMA);
+        $("#ViewNotifUKT_TINGKATAN").val(data.UKT_TINGKATAN_NAMA + ' - ' + data.UKT_TINGKATAN_SEBUTAN);
+        $("#ViewNotifUKT_LOKASI").val(data.UKT_DAERAH + ' - ' + data.UKT_CABANG);
+        $("#ViewNotifUKT_DESKRIPSI").val(data.UKT_DESKRIPSI);
+        $("#ViewNotifUKT_TOTAL").html(data.UKT_TOTAL);
+        var iconHtml = '<i class="' + data.UKT_NILAI + '"></i>';
+        $("#ViewNotifUKT_NILAI").html(iconHtml);
 
+        // Make an AJAX request to fetch data for the second dropdown based on the selected value
+        $.ajax({
+          type: "POST",
+          url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+          data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: data.CABANG_KEY },
+          success: function(result){
+            $("#loadpicnotifukt").html(result);
+          }
+        });
+
+        $.ajax({
+          type: "POST",
+          url: "module/ajax/transaksi/aktivitas/ukt/aj_getviewpengujiukt.php",
+          data: { id: key },
+          success: function(response){
+            // Destroy the DataTable before updating
+            $('#viewNotifPenguji-table').DataTable().destroy();
+            $("#viewNotifPengujiData").html(response);
+            // Reinitialize Sertifikat Table
+          }
+        });
+        
+        // AJAX request to fetch UKT Detail
+        $.ajax({
+          type: "POST",
+          url: "module/ajax/transaksi/aktivitas/ukt/aj_getviewkategoriukt.php",
+          data: { id: key },
+          success: function(data){
+            // console.log(data);
+            $("#viewnotifrincianukt").html(data);
+          }
+        });
+      } else {
+        console.error('Error: Invalid response or no data available');
+      }
     },
     error: function(error) {
       console.error('Error fetching data:', error);
@@ -833,57 +860,64 @@ $(document).on("click", ".open-ApproveNotifUKTKoordinator", function () {
   $.ajax({
     url: 'module/ajax/transaksi/aktivitas/ukt/aj_getdetailukt.php',
     method: 'POST',
-    data: { id: key, cabang: cabang },
-    success: function(data) {
+    data: JSON.stringify({ // Convert data to JSON string before sending
+      id: key,
+      cabang: cabang
+    }),
+    contentType: 'application/json', // Set the Content-Type as JSON
+    dataType: 'json', // Specify the expected data type as JSON
+    success: function(response) {
       // console.log('response', data);
-      // Assuming data is a JSON object with the required information
-      // Make sure the keys match the fields in your returned JSON object
-      $("#viewAppNotifUKT_ID").val(data.UKT_ID);
-      $("#viewAppNotifDAERAH_KEY").val(data.DAERAH_DESKRIPSI);
-      $("#viewAppNotifCABANG_KEY").val(data.CABANG_DESKRIPSI);
-      $("#viewAppNotifUKT_TANGGAL").val(data.UKT_TANGGAL_DESKRIPSI);
-      $("#viewAppNotifANGGOTA_ID").val(data.ANGGOTA_ID + ' - ' + data.ANGGOTA_NAMA);
-      $("#viewAppNotifTINGKATAN_ID").val(data.UKT_TINGKATAN_NAMA + ' - ' + data.UKT_TINGKATAN_SEBUTAN);
-      $("#viewAppNotifUKT_LOKASI").val(data.UKT_DAERAH + ' - ' + data.UKT_CABANG);
-      $("#viewAppNotifUKT_DESKRIPSI").val(data.UKT_DESKRIPSI);
-      $("#viewAppNotifUKT_TOTAL").html(data.UKT_TOTAL);
-      var iconHtml = '<i class="' + data.UKT_NILAI + '"></i>';
-      $("#viewAppNotifUKT_NILAI").html(iconHtml);
 
-      // GET ANGGOTA PIC
-      $.ajax({
-        type: "POST",
-        url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-        data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: data.CABANG_KEY },
-        success: function(result){
-          $("#loadPicAppNotifUKT").html(result);
-        }
-      });
+      if (response.result.message === 'OK' && response.data && response.data.length > 0) {
+        $("#viewAppNotifUKT_ID").val(data.UKT_ID);
+        $("#viewAppNotifDAERAH_KEY").val(data.DAERAH_DESKRIPSI);
+        $("#viewAppNotifCABANG_KEY").val(data.CABANG_DESKRIPSI);
+        $("#viewAppNotifUKT_TANGGAL").val(data.UKT_TANGGAL_DESKRIPSI);
+        $("#viewAppNotifANGGOTA_ID").val(data.ANGGOTA_ID + ' - ' + data.ANGGOTA_NAMA);
+        $("#viewAppNotifTINGKATAN_ID").val(data.UKT_TINGKATAN_NAMA + ' - ' + data.UKT_TINGKATAN_SEBUTAN);
+        $("#viewAppNotifUKT_LOKASI").val(data.UKT_DAERAH + ' - ' + data.UKT_CABANG);
+        $("#viewAppNotifUKT_DESKRIPSI").val(data.UKT_DESKRIPSI);
+        $("#viewAppNotifUKT_TOTAL").html(data.UKT_TOTAL);
+        var iconHtml = '<i class="' + data.UKT_NILAI + '"></i>';
+        $("#viewAppNotifUKT_NILAI").html(iconHtml);
 
-      // GET PENGUJI UKT
-      $.ajax({
-        type: "POST",
-        url: "module/ajax/transaksi/aktivitas/ukt/aj_getviewpengujiukt.php",
-        data: { id: key },
-        success: function(response){
-          // Destroy the DataTable before updating
-          $('#viewAppNotifPenguji-table').DataTable().destroy();
-          $("#viewAppNotifPengujiData").html(response);
-          // Reinitialize Sertifikat Table
-        }
-      });
-      
-      // AJAX request to fetch UKT Detail
-      $.ajax({
-        type: "POST",
-        url: "module/ajax/transaksi/aktivitas/ukt/aj_getviewkategoriukt.php",
-        data: { id: key },
-        success: function(data){
-          // console.log(data);
-          $("#viewAppNotifrincianukt").html(data);
-        }
-      });
+        // GET ANGGOTA PIC
+        $.ajax({
+          type: "POST",
+          url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+          data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: data.CABANG_KEY },
+          success: function(result){
+            $("#loadPicAppNotifUKT").html(result);
+          }
+        });
 
+        // GET PENGUJI UKT
+        $.ajax({
+          type: "POST",
+          url: "module/ajax/transaksi/aktivitas/ukt/aj_getviewpengujiukt.php",
+          data: { id: key },
+          success: function(response){
+            // Destroy the DataTable before updating
+            $('#viewAppNotifPenguji-table').DataTable().destroy();
+            $("#viewAppNotifPengujiData").html(response);
+            // Reinitialize Sertifikat Table
+          }
+        });
+        
+        // AJAX request to fetch UKT Detail
+        $.ajax({
+          type: "POST",
+          url: "module/ajax/transaksi/aktivitas/ukt/aj_getviewkategoriukt.php",
+          data: { id: key },
+          success: function(data){
+            // console.log(data);
+            $("#viewAppNotifrincianukt").html(data);
+          }
+        });
+      } else {
+        console.error('Error: Invalid response or no data available');
+      }
     },
     error: function(error) {
       console.error('Error fetching data:', error);
