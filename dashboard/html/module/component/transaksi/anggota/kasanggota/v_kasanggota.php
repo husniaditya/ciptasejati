@@ -24,6 +24,7 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
     WHERE k.DELETION_STATUS = 0 AND a.DELETION_STATUS=0
+    GROUP BY k.KAS_ID
     ORDER BY k.KAS_ID");
     
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0");
@@ -48,6 +49,7 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
     WHERE k.DELETION_STATUS = 0 AND a.DELETION_STATUS=0 and a.CABANG_KEY = '$USER_CABANG'
+    GROUP BY k.KAS_ID
     ORDER BY k.KAS_ID");
 
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 AND CABANG_KEY = '$USER_CABANG'");

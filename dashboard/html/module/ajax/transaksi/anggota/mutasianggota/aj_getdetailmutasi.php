@@ -10,7 +10,7 @@ CASE
     ELSE 'Status Persetujuan : <b><span class=\"badge badge-danger\"><i class=\"fa-solid fa-xmark\"></i> Dokumen Mutasi Ditolak</span></b>' 
 END AS MUTASI_STATUS_DES
 FROM t_mutasi t
-LEFT JOIN m_anggota a ON t.ANGGOTA_KEY = a.ANGGOTA_KEY
+LEFT JOIN m_anggota a ON t.ANGGOTA_ID = a.ANGGOTA_ID
 LEFT JOIN m_anggota a2 ON t.INPUT_BY = a2.ANGGOTA_ID
 LEFT JOIN m_anggota a3 ON t.MUTASI_APPROVE_BY = a3.ANGGOTA_ID
 LEFT JOIN m_cabang cabawal ON t.CABANG_AWAL = cabawal.CABANG_KEY
@@ -19,6 +19,7 @@ LEFT JOIN m_cabang cabtujuan ON t.CABANG_TUJUAN = cabtujuan.CABANG_KEY
 LEFT JOIN m_daerah daetujuan ON cabtujuan.DAERAH_KEY = daetujuan.DAERAH_KEY
 left join m_tingkatan t2 on a.TINGKATAN_ID = t2.TINGKATAN_ID
 WHERE t.MUTASI_ID = '$MUTASI_ID'
+GROUP BY t.MUTASI_ID
 ORDER BY t.MUTASI_STATUS ASC, t.MUTASI_TANGGAL DESC");
 
 // Initialize an associative array to hold the data

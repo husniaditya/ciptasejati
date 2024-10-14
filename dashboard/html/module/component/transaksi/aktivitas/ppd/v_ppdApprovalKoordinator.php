@@ -33,6 +33,7 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_LAMA = t.TINGKATAN_ID
     LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID_BARU = t2.TINGKATAN_ID
     WHERE p.DELETION_STATUS = 0 AND p.PPD_APPROVE_PELATIH = 0
+    GROUP BY p.PPD_ID
     ORDER BY p.PPD_TANGGAL DESC");
 
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0");
@@ -66,6 +67,7 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_LAMA = t.TINGKATAN_ID
     LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID_BARU = t2.TINGKATAN_ID
     WHERE p.DELETION_STATUS = 0 AND p.CABANG_KEY = '$USER_CABANG' AND p.PPD_APPROVE_PELATIH = 0
+    GROUP BY p.PPD_ID
     ORDER BY p.PPD_TANGGAL DESC");
 
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 and CABANG_KEY = '$USER_CABANG'");

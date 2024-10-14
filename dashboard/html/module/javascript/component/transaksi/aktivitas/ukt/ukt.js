@@ -476,10 +476,10 @@ $(document).ready(function() {
           contentType: 'application/json', // Set the Content-Type as JSON
           dataType: 'json', // Specify the expected data type as JSON
           success: function (response) {
-            console.log(response);
-            if (response.result.message === "OK" && response.data) {
+            // console.log(response);
+            if (response.result.message === "OK" && response.data && response.data.length > 0) {
                 // Extract the data array
-                var anggotaData = response.data.anggota_id;
+                var anggotaData = response.data;
                 
                 // Get the instance of the selectize dropdown
                 var selectizeSelect3 = $('#selectize-dropdown4').selectize();
@@ -849,6 +849,7 @@ $(document).on("click", ".addtambahdetail", function () {
           url: "module/ajax/transaksi/aktivitas/ukt/aj_getpengujiukt.php",
           data: eventdata,
           success: function(response){
+            console.log(response);
             // Destroy the DataTable before updating
             $('#addPenguji-table').DataTable().destroy();
             $("#addPengujiData").html(response);

@@ -51,7 +51,9 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
     } elseif ($TANGGAL_AWAL == "" && $TANGGAL_AKHIR != "") {
         $sql .= " AND (k.KAS_TANGGAL BETWEEN '$TANGGAL_AKHIR' AND '$TANGGAL_AKHIR')";
     }
-    $sql .= "ORDER BY k.KAS_ID";
+    $sql .= "
+    GROUP BY k.KAS_ID
+    ORDER BY k.KAS_ID";
 
     $getKas = GetQuery($sql);
 
@@ -77,6 +79,7 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
         LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
         LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
         WHERE k.DELETION_STATUS = 0 AND a.DELETION_STATUS=0
+        GROUP BY k.KAS_ID
         ORDER BY k.KAS_ID");
     } else {
         $getKas = GetQuery("SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
@@ -99,6 +102,7 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
         LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
         LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
         WHERE k.DELETION_STATUS = 0 AND a.DELETION_STATUS=0 and a.CABANG_KEY = '$USER_CABANG'
+        GROUP BY k.KAS_ID
         ORDER BY k.KAS_ID");
     }
     

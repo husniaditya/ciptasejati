@@ -28,6 +28,7 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_cabang cabtujuan ON t.CABANG_TUJUAN = cabtujuan.CABANG_KEY
     LEFT JOIN m_daerah daetujuan ON cabtujuan.DAERAH_KEY = daetujuan.DAERAH_KEY
     left join m_tingkatan t2 on a.TINGKATAN_ID = t2.TINGKATAN_ID
+    GROUP BY t.MUTASI_ID
     WHERE t.DELETION_STATUS = 0 and t.MUTASI_STATUS = 0
     ORDER BY t.MUTASI_STATUS ASC, t.MUTASI_TANGGAL DESC");
 
@@ -58,6 +59,7 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_daerah daetujuan ON cabtujuan.DAERAH_KEY = daetujuan.DAERAH_KEY
     left join m_tingkatan t2 on a.TINGKATAN_ID = t2.TINGKATAN_ID
     WHERE t.DELETION_STATUS = 0 and (t.CABANG_AWAL = '$USER_CABANG' or t.CABANG_TUJUAN = '$USER_CABANG') and t.MUTASI_STATUS = 0
+    GROUP BY t.MUTASI_ID
     ORDER BY t.MUTASI_STATUS ASC, t.MUTASI_TANGGAL DESC");
 
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 and CABANG_KEY = '$USER_CABANG'");
@@ -227,9 +229,9 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                                     <li><a data-toggle="modal" href="#ApproveMutasiAnggota" class="open-ApproveMutasiAnggota" style="color:forestgreen;" data-id="<?= $MUTASI_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-cabang="<?= $CABANG_KEY; ?>"><i class="fa-regular fa-circle-question"></i> Persetujuan</a></li>
                                                     <?php
                                                 }
-                                                if ($USER_AKSES == "Koordinator" && $USER_CABANG <> $CABANG_AWAL && $_SESSION['APPROVE_PersetujuanMutasi'] == "Y") {
+                                                if ($USER_AKSES == "Koordinator" && ($USER_CABANG == $CABANG_AWAL || $USER_CABANG == $CABANG_TUJUAN) && $_SESSION['APPROVE_PersetujuanMutasi'] == "Y") {
                                                     ?>
-                                                    <li><a data-toggle="modal" href="#ApproveMutasiAnggota" class="open-ApproveMutasiAnggota" style="color:forestgreen;"><i class="fa-regular fa-circle-question"></i> Persetujuan</a></li>
+                                                    <li><a data-toggle="modal" href="#ApproveMutasiAnggota" class="open-ApproveMutasiAnggota" style="color:forestgreen;" data-id="<?= $MUTASI_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-cabang="<?= $CABANG_KEY; ?>"><i class="fa-regular fa-circle-question"></i> Persetujuan</a></li>
                                                     <?php
                                                 }
                                             }

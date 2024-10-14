@@ -34,21 +34,20 @@ if (!$rowDetail || !password_verify($PASSWORD, $rowDetail['USER_PASSWORD'])) {
     exit;
 }
 
-// Prepare Anggota details
-$ANGGOTA = extractAnggotaDetails($rowDetail);
-
-// Fetch Pengurus and Koordinator details
-$PENGURUS = fetchAnggotaDetails($ANGGOTA_ID, $CABANG_ID, 'Pengurus');
-$KOORDINATOR = fetchAnggotaDetails($ANGGOTA_ID, $CABANG_ID, 'Koordinator');
+// Fetch Anggota, Pengurus, Koordinator, and Kas details
+$ANGGOTA = fetchAnggotaDetails($ANGGOTA_ID, $CABANG_ID, 'Anggota');
+$PENGURUS = fetchJabatanDetails($ANGGOTA_ID, $CABANG_ID, 'Pengurus');
+$KOORDINATOR = fetchJabatanDetails($ANGGOTA_ID, $CABANG_ID, 'Koordinator');
+$KAS = fetchKasDetails($ANGGOTA_ID, $CABANG_ID, 'Kas');
 
 // Send success response
-$options[] = ['Anggota' => $ANGGOTA, 'Pengurus' => $PENGURUS, 'Koordinator' => $KOORDINATOR];
+$options[] = ['Anggota' => $ANGGOTA, 'Pengurus' => $PENGURUS, 'Koordinator' => $KOORDINATOR, 'Kas' => $KAS];
 sendSuccessResponse($options);
 
 /**
  * Fetch Anggota details based on type
  */
-function fetchAnggotaDetails($ANGGOTA_ID, $CABANG_ID, $type) {
+function fetchJabatanDetails($ANGGOTA_ID, $CABANG_ID, $type) {
     $GetDetails = GetQuery("call zsp_getAnggota('$ANGGOTA_ID','$CABANG_ID','$type')");
     $details = [];
     while ($row = $GetDetails->fetch(PDO::FETCH_ASSOC)) {
@@ -69,21 +68,50 @@ function fetchAnggotaDetails($ANGGOTA_ID, $CABANG_ID, $type) {
 /**
  * Extract Anggota details from row
  */
-function extractAnggotaDetails($row) {
-    return array(
-        'ANGGOTA_ID' => $row['ANGGOTA_ID'],
-        'ANGGOTA_NAMA' => $row['ANGGOTA_NAMA'],
-        'ANGGOTA_KELAMIN' => $row['ANGGOTA_KELAMIN'],
-        'ANGGOTA_PIC' => $row['ANGGOTA_PIC'],
-        'ANGGOTA_JOIN' => $row['ANGGOTA_JOIN'],
-        'ANGGOTA_RESIGN' => $row['ANGGOTA_RESIGN'],
-        'ANGGOTA_STATUS' => $row['ANGGOTA_STATUS'],
-        'TINGKATAN' => $row['TINGKATAN_NAMA'],
-        'GELAR' => $row['TINGKATAN_GELAR'],
-        'SEBUTAN' => $row['TINGKATAN_SEBUTAN'],
-        'LEVEL' => $row['TINGKATAN_LEVEL'],
-        'ANGGOTA_AKSES' => $row['ANGGOTA_AKSES'],
-    );
+function fetchAnggotaDetails($ANGGOTA_ID, $CABANG_ID, $type) {
+    $GetDetails = GetQuery("call zsp_getAnggota('$ANGGOTA_ID','$CABANG_ID','$type')");
+    $details = [];
+    while ($row = $GetDetails->fetch(PDO::FETCH_ASSOC)) {
+        $details[] = array(
+            'ANGGOTA_ID' => $row['ANGGOTA_ID'],
+            'ANGGOTA_NAMA' => $row['ANGGOTA_NAMA'],
+            'ANGGOTA_KELAMIN' => $row['ANGGOTA_KELAMIN'],
+            'ANGGOTA_PIC' => $row['ANGGOTA_PIC'],
+            'CABANG_ID' => $row['CABANG_ID'],
+            'CABANG_DESKRIPSI' => $row['CABANG_DESKRIPSI'].' - '.$row['DAERAH_DESKRIPSI'],
+            'TANGGAL_JOIN' => $row['ANGGOTA_JOIN'],
+            'TANGGAL_RESIGN' => $row['ANGGOTA_RESIGN'],
+            'ANGGOTA_STATUS' => $row['ANGGOTA_STATUS'],
+            'TINGKATAN' => $row['TINGKATAN_NAMA'],
+            'GELAR' => $row['TINGKATAN_GELAR'],
+            'SEBUTAN' => $row['TINGKATAN_SEBUTAN'],
+            'LEVEL' => $row['TINGKATAN_LEVEL'],
+            'ANGGOTA_AKSES' => $row['ANGGOTA_AKSES'],
+        );
+    }
+    $GetDetails->closeCursor();
+    return $details;
+}
+
+/**
+ * Extract Kas details from row
+ */
+function fetchKasDetails($ANGGOTA_ID, $CABANG_ID, $type) {
+    $GetDetails = GetQuery("call zsp_getAnggota('$ANGGOTA_ID','$CABANG_ID','$type')");
+    $details = [];
+    while ($row = $GetDetails->fetch(PDO::FETCH_ASSOC)) {
+        $details[] = array(
+            'KAS_ID' => $row['KAS_ID'],
+            'KAS_CABANG' => $row['CABANG_DESKRIPSI'].' - '.$row['DAERAH_DESKRIPSI'],
+            'KAS_TANGGAL' => $row['KAS_TANGGAL'],
+            'KAS_JENIS' => $row['KAS_JENIS'],
+            'KAS_DK' => $row['KAS_DK'],
+            'KAS_JUMLAH' => $row['KAS_JUMLAH'],
+            'SALDO_AKHIR' => $row['SALDO_AKHIR'],
+        );
+    }
+    $GetDetails->closeCursor();
+    return $details;
 }
 
 /**
