@@ -59,6 +59,8 @@ function callTable() {
         order: [], // Adjust the column index and order direction
         dom: 'Bfrtlip',
         paging: true,
+        scrollX: true,
+        scrollY: '350px', // Set the desired height here
         buttons: [
             {
                 extend: 'copy',

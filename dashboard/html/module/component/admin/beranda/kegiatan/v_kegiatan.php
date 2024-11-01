@@ -4,7 +4,7 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
 
 $getKegiatan = GetQuery("SELECT k.*,case when k.DELETION_STATUS = 0 then 'Aktif' ELSE 'Tidak Aktif' END KEGIATAN_STATUS,a.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE
 FROM c_kegiatan k 
-LEFT JOIN m_anggota a ON k.INPUT_BY = a.ANGGOTA_ID");
+LEFT JOIN m_anggota a ON k.INPUT_BY = a.ANGGOTA_ID AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0");
 
 $getStatus = GetQuery("SELECT * FROM p_param WHERE KATEGORI = 'status'");
 $rows = $getStatus->fetchAll(PDO::FETCH_ASSOC);

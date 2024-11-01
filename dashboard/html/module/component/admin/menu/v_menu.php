@@ -4,11 +4,31 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
 $getMenu = GetQuery("SELECT m.*,u.MENU_NAMA,a.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(m.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE
 FROM m_menuakses m
 LEFT JOIN m_menu u ON m.MENU_ID = u.MENU_ID
-LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID
+LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0
 ORDER BY m.USER_AKSES,m.MENU_ID");
 $getAkses = GetQuery("select * from p_param where KATEGORI = 'USER_AKSES' ORDER BY TEXT");
 $rowakses = $getAkses->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
+<style>
+    .dataTables_wrapper {
+        width: 100%;
+        overflow: auto;
+    }
+    table.dataTable {
+        width: 100% !important;
+    }
+    .icon-circle {
+        display: inline-block;
+        width: 40px;  /* Adjust the size as needed */
+        height: 40px; /* Adjust the size as needed */
+        border: 2px solid black; /* Circle outline color */
+        border-radius: 50%; /* Makes it a circle */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
 
 <!-- Filter Section -->
 <div class="panel-group" id="accordion1">

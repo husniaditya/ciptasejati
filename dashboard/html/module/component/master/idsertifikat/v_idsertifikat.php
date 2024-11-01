@@ -4,7 +4,7 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
 $getSertifikat = GetQuery("SELECT s.*,t.TINGKATAN_NAMA,a.ANGGOTA_NAMA,DATE_FORMAT(s.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,case when s.DELETION_STATUS = 0 then 'Aktif' ELSE 'Tidak Aktif' END SERTIFIKAT_STATUS
 FROM m_idsertifikat s
 LEFT JOIN m_tingkatan t ON s.TINGKATAN_ID = t.TINGKATAN_ID
-LEFT JOIN m_anggota a ON s.INPUT_BY = a.ANGGOTA_ID
+LEFT JOIN m_anggota a ON s.INPUT_BY = a.ANGGOTA_ID AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0
 ORDER BY t.TINGKATAN_LEVEL");
 
 $getTingkatan = GetQuery("select * from m_tingkatan where DELETION_STATUS = 0");

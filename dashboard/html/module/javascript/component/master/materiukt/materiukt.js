@@ -57,10 +57,7 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
             url: 'module/ajax/master/materiukt/aj_tablemateriukt.php',
             success: function (response) {
               // Destroy the DataTable before updating
-              $('#materi-table').DataTable().destroy();
-              $("#materidata").html(response);
-              // Reinitialize Sertifikat Table
-              callTable();
+              filterMateriUKTEvent();
             },
             error: function (xhr, status, error) {
               // Handle any errors
@@ -628,7 +625,7 @@ $(document).on("click", ".hapusdetail", function () {
 
 // Filtering
 // Attach debounced event handler to form inputs
-$('.filterMateriUKT select, .filterMateriUKT input').on('change input', debounce(filterMateriUKTEvent, 500));
+$('.filterMateriUKT select, .filterMateriUKT input').on('input', debounce(filterMateriUKTEvent, 500));
 function filterMateriUKTEvent() {
   // Your event handling code here
   const daerah = $('#selectize-select').val();
@@ -679,5 +676,6 @@ function clearForm() {
   }
   selectizeInstance3.clear();
   document.getElementById("filterMateriUKT").reset();
+  filterMateriUKTEvent();
 }
 // ----- End of Pusat Section ----- //

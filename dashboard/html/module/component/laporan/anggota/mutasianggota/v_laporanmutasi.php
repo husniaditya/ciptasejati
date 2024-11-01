@@ -22,8 +22,8 @@ if ($USER_AKSES == "Administrator") {
         ELSE 'fa-solid fa-xmark' 
     END AS MUTASI_CLASS
     FROM t_mutasi t
-    LEFT JOIN m_anggota a ON t.ANGGOTA_KEY = a.ANGGOTA_KEY
-    LEFT JOIN m_anggota a2 ON t.INPUT_BY = a2.ANGGOTA_ID
+    LEFT JOIN m_anggota a ON t.ANGGOTA_ID = a.ANGGOTA_ID AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0
+    LEFT JOIN m_anggota a2 ON t.INPUT_BY = a2.ANGGOTA_ID AND a2.ANGGOTA_STATUS = 0 AND a2.DELETION_STATUS = 0
     LEFT JOIN m_cabang cabawal ON t.CABANG_AWAL = cabawal.CABANG_KEY
     LEFT JOIN m_daerah daeawal ON cabawal.DAERAH_KEY = daeawal.DAERAH_KEY
     LEFT JOIN m_cabang cabtujuan ON t.CABANG_TUJUAN = cabtujuan.CABANG_KEY
@@ -51,8 +51,8 @@ if ($USER_AKSES == "Administrator") {
         ELSE 'fa-solid fa-xmark' 
     END AS MUTASI_CLASS
     FROM t_mutasi t
-    LEFT JOIN m_anggota a ON t.ANGGOTA_KEY = a.ANGGOTA_KEY
-    LEFT JOIN m_anggota a2 ON t.INPUT_BY = a2.ANGGOTA_ID
+    LEFT JOIN m_anggota a ON t.ANGGOTA_ID = a.ANGGOTA_ID AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0
+    LEFT JOIN m_anggota a2 ON t.INPUT_BY = a2.ANGGOTA_ID AND a2.ANGGOTA_STATUS = 0 AND a2.DELETION_STATUS = 0
     LEFT JOIN m_cabang cabawal ON t.CABANG_AWAL = cabawal.CABANG_KEY
     LEFT JOIN m_daerah daeawal ON cabawal.DAERAH_KEY = daeawal.DAERAH_KEY
     LEFT JOIN m_cabang cabtujuan ON t.CABANG_TUJUAN = cabtujuan.CABANG_KEY

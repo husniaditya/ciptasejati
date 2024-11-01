@@ -7,7 +7,7 @@ $GetDetail = GetQuery("SELECT m.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_DESKR
     FROM m_materi m
     LEFT JOIN m_cabang c ON m.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-    LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID
+    LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0
     LEFT JOIN m_tingkatan t ON m.TINGKATAN_ID = t.TINGKATAN_ID
     WHERE m.MATERI_ID = '$MATERI_ID'");
 

@@ -6,13 +6,13 @@ $USER_CABANG = $_SESSION["LOGINCAB_CS"];
 if ($USER_AKSES == "Administrator") {
     $getPusatdata = GetQuery("SELECT p.*,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,case when p.DELETION_STATUS = 0 then 'Aktif' ELSE 'Tidak Aktif' END PUSATDATA_STATUS FROM m_pusatdata p
     LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
-    LEFT JOIN m_anggota a ON p.INPUT_BY = a.ANGGOTA_ID");
+    LEFT JOIN m_anggota a ON p.INPUT_BY = a.ANGGOTA_ID AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0");
     
     $getKategori = GetQuery("SELECT DISTINCT(PUSATDATA_KATEGORI) FROM m_pusatdata WHERE DELETION_STATUS = 0");
 } else {
     $getPusatdata = GetQuery("SELECT p.*,c.CABANG_DESKRIPSI,a.ANGGOTA_NAMA,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,case when p.DELETION_STATUS = 0 then 'Aktif' ELSE 'Tidak Aktif' END PUSATDATA_STATUS FROM m_pusatdata p
     LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
-    LEFT JOIN m_anggota a ON p.INPUT_BY = a.ANGGOTA_ID
+    LEFT JOIN m_anggota a ON p.INPUT_BY = a.ANGGOTA_ID AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0
     WHERE p.CABANG_KEY = '$USER_CABANG'");
 
     $getKategori = GetQuery("SELECT DISTINCT(PUSATDATA_KATEGORI) FROM m_pusatdata WHERE DELETION_STATUS = 0 AND CABANG_KEY = '$USER_CABANG'");

@@ -2,7 +2,7 @@
 require_once ("../../../../module/connection/conn.php");
 
 
-$getPusat = GetQuery("select * from m_pusat p left join m_anggota a on p.INPUT_BY = a.ANGGOTA_ID where p.DELETION_STATUS = 0");
+$getPusat = GetQuery("select * from m_pusat p left join m_anggota a on p.INPUT_BY = a.ANGGOTA_ID AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0 where p.DELETION_STATUS = 0");
 
 while ($rowPusat = $getPusat->fetch(PDO::FETCH_ASSOC)) {
     extract($rowPusat);

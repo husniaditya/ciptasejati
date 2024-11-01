@@ -18,7 +18,7 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
         FROM m_materi m
         LEFT JOIN m_cabang c ON m.CABANG_KEY = c.CABANG_KEY
         LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-        LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID
+        LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0
         LEFT JOIN m_tingkatan t ON m.TINGKATAN_ID = t.TINGKATAN_ID
         WHERE m.DELETION_STATUS = 0 AND (d.DAERAH_KEY LIKE CONCAT('%','$DAERAH_KEY','%')) AND (m.CABANG_KEY LIKE CONCAT('%','$CABANG_KEY','%')) AND (m.TINGKATAN_ID LIKE CONCAT('%','$TINGKATAN_ID','%')) AND (m.MATERI_ID LIKE CONCAT('%','$MATERI_ID','%')) AND (m.MATERI_DESKRIPSI LIKE CONCAT('%','$MATERI_DESKRIPSI','%'))
         ORDER BY t.TINGKATAN_LEVEL");
@@ -27,7 +27,7 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
         FROM m_materi m
         LEFT JOIN m_cabang c ON m.CABANG_KEY = c.CABANG_KEY
         LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-        LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID
+        LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0
         LEFT JOIN m_tingkatan t ON m.TINGKATAN_ID = t.TINGKATAN_ID
         WHERE m.DELETION_STATUS = 0 AND m.CABANG_KEY = '$USER_CABANG' AND (m.TINGKATAN_ID LIKE CONCAT('%','$TINGKATAN_ID','%')) AND (m.MATERI_ID LIKE CONCAT('%','$MATERI_ID','%')) AND (m.MATERI_DESKRIPSI LIKE CONCAT('%','$MATERI_DESKRIPSI','%'))
         ORDER BY t.TINGKATAN_LEVEL");
@@ -39,7 +39,7 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
         FROM m_materi m
         LEFT JOIN m_cabang c ON m.CABANG_KEY = c.CABANG_KEY
         LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-        LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID
+        LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0
         LEFT JOIN m_tingkatan t ON m.TINGKATAN_ID = t.TINGKATAN_ID
         WHERE m.DELETION_STATUS = 0
         ORDER BY t.TINGKATAN_LEVEL");
@@ -47,7 +47,7 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
         $getMateri = GetQuery("SELECT m.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a.ANGGOTA_NAMA,DATE_FORMAT(m.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE FROM m_materi m
         LEFT JOIN m_cabang c ON m.CABANG_KEY = c.CABANG_KEY
         LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-        LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID
+        LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0
         LEFT JOIN m_tingkatan t ON m.TINGKATAN_ID = t.TINGKATAN_ID
         WHERE m.DELETION_STATUS = 0 AND m.CABANG_KEY = '$USER_CABANG'
         ORDER BY t.TINGKATAN_LEVEL");

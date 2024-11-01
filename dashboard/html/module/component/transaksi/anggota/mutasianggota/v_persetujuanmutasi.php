@@ -28,8 +28,8 @@ if ($USER_AKSES == "Administrator") {
     LEFT JOIN m_cabang cabtujuan ON t.CABANG_TUJUAN = cabtujuan.CABANG_KEY
     LEFT JOIN m_daerah daetujuan ON cabtujuan.DAERAH_KEY = daetujuan.DAERAH_KEY
     left join m_tingkatan t2 on a.TINGKATAN_ID = t2.TINGKATAN_ID
-    GROUP BY t.MUTASI_ID
     WHERE t.DELETION_STATUS = 0 and t.MUTASI_STATUS = 0
+    GROUP BY t.MUTASI_ID
     ORDER BY t.MUTASI_STATUS ASC, t.MUTASI_TANGGAL DESC");
 
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0");

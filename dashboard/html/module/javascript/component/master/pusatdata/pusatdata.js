@@ -70,7 +70,7 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
           $(formId.replace("-form", "")).modal('hide');
           
           // Reload DataTable
-          reloadDataTable();
+          filterPusatDataEvent();
         } else {
           failedNotification(response);
         }
