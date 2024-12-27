@@ -1,7 +1,7 @@
 <?php
 $GetVersi = GetQuery("SELECT c.*,DATE_FORMAT(c.CHANGELOG_DATE, '%d %M %Y') CHANGELOG_DATE,DATE_FORMAT(c.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,a.ANGGOTA_NAMA INPUT_BY
 FROM p_changelog c
-LEFT JOIN m_anggota a ON c.CHANGELOG_BY = a.ANGGOTA_ID
+LEFT JOIN m_anggota a ON c.CHANGELOG_BY = a.ANGGOTA_ID AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0
 ORDER BY c.CHANGELOG_DATE desc");
 ?>
 <div id="ChangeLog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
