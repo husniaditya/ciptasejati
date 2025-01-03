@@ -625,7 +625,7 @@ $(document).on("click", ".hapusdetail", function () {
 
 // Filtering
 // Attach debounced event handler to form inputs
-$('.filterMateriUKT select, .filterMateriUKT input').on('input', debounce(filterMateriUKTEvent, 500));
+$('.filterMateriUKT select, .filterMateriUKT input').on('change input', debounce(filterMateriUKTEvent, 500));
 function filterMateriUKTEvent() {
   // Your event handling code here
   const daerah = $('#selectize-select').val();
@@ -648,6 +648,7 @@ function filterMateriUKTEvent() {
     url: 'module/ajax/master/materiukt/aj_tablemateriukt.php',
     data: formData,
     success: function(response){
+      console.log(response);
       // Destroy the DataTable before updating
       $('#materi-table').DataTable().destroy();
       $("#materidata").html(response);
