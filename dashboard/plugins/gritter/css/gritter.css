@@ -47,6 +47,142 @@
     left: 20px;
   }
 }
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-30px);
+  }
+  60% {
+    transform: translateY(-15px);
+  }
+}
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  20% {
+    transform: scale(1.1);
+  }
+  40% {
+    transform: scale(0.9);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+  80% {
+    transform: scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes jello {
+  0% {
+    transform: none;
+  }
+  11.1% {
+    transform: skewX(-12.5deg) skewY(-12.5deg);
+  }
+  22.2% {
+    transform: skewX(6.25deg) skewY(6.25deg);
+  }
+  33.3% {
+    transform: skewX(-3.125deg) skewY(-3.125deg);
+  }
+  44.4% {
+    transform: skewX(1.5625deg) skewY(1.5625deg);
+  }
+  55.5% {
+    transform: skewX(-0.78125deg) skewY(-0.78125deg);
+  }
+  66.6% {
+    transform: skewX(0.390625deg) skewY(0.390625deg);
+  }
+  77.7% {
+    transform: skewX(-0.1953125deg) skewY(-0.1953125deg);
+  }
+  88.8% {
+    transform: skewX(0.09765625deg) skewY(0.09765625deg);
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-10px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+@keyframes tada {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  10%, 20% {
+    transform: scale(0.9) rotate(-3deg);
+  }
+  30%, 50%, 70% {
+    transform: scale(1.1) rotate(3deg);
+  }
+  40%, 60% {
+    transform: scale(1.1) rotate(-3deg);
+  }
+  80% {
+    transform: scale(1) rotate(0deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+@keyframes swing {
+  0% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(15deg);
+  }
+  40% {
+    transform: rotate(-10deg);
+  }
+  60% {
+    transform: rotate(5deg);
+  }
+  80% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+@keyframes flipInX {
+  0% {
+    transform: perspective(400px) rotateX(90deg);
+    opacity: 0;
+  }
+  40% {
+    transform: perspective(400px) rotateX(-10deg);
+    opacity: 1;
+  }
+  70% {
+    transform: perspective(400px) rotateX(10deg);
+  }
+  100% {
+    transform: perspective(400px) rotateX(0deg);
+  }
+}
 .gritter-item-wrapper {
   position: relative;
   margin: 0 0 10px 0;
@@ -58,18 +194,38 @@
   margin: 0 0 10px 0;
   background-color: rgba(0, 0, 0, 0.9);
   border-radius: 4px;
+
+  /* Add bounce animation */
+  animation: bounceIn 1s ease-in-out both;
+  backface-visibility: hidden; /* Ensures smooth rendering during the animation */
 }
 .gritter-item-wrapper.gritter-error {
   position: relative;
   margin: 0 0 10px 0;
   background-color: darkred;
   border-radius: 4px;
+  /* Add tada animation */
+  animation: tada 1s ease-in-out both;
 }
 .gritter-item-wrapper.gritter-success {
   position: relative;
   margin: 0 0 10px 0;
   background-color: forestgreen;
   border-radius: 4px;
+
+  /* Add swing animation */
+  animation: flipInX 1s ease-in both;
+  backface-visibility: hidden; /* Ensures smooth rendering during the flip */
+}
+.gritter-item-wrapper.gritter-update {
+  position: relative;
+  margin: 0 0 10px 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  border-radius: 4px;
+
+  /* Add swing animation */
+  animation: flipInX 1s ease-in both;
+  backface-visibility: hidden; /* Ensures smooth rendering during the flip */
 }
 .gritter-item-wrapper.gritter-info {
   position: relative;
