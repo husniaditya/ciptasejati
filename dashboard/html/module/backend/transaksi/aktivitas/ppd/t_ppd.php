@@ -42,7 +42,7 @@ if (isset($_POST["saveppd"])) {
         GetQuery("insert into t_ppd_log select uuid(), PPD_ID, CABANG_KEY, ANGGOTA_ID, TINGKATAN_ID_LAMA, TINGKATAN_ID_BARU, PPD_JENIS, PPD_LOKASI, PPD_TANGGAL, PPD_DESKRIPSI, PPD_FILE, PPD_FILE_NAME, PPD_APPROVE_PELATIH, PPD_APPROVE_PELATIH_TGL, PPD_APPROVE_GURU, PPD_APPROVE_GURU_TGL, DELETION_STATUS, 'I', '$USER_ID', '$localDateTime' from t_ppd where PPD_ID = '$PPD_ID'");
 
         // INSERT NOTIFIKASI
-        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$PPD_ID',p.CABANG_KEY,p.PPD_LOKASI,'PPD',
+        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,n.ANGGOTA_ID,'$PPD_ID',p.CABANG_KEY,p.PPD_LOKASI,'PPD',
         CASE
             WHEN n.ANGGOTA_AKSES IN ('Administrator','Koordinator') THEN
             'ApproveNotifPPD'
@@ -63,6 +63,7 @@ if (isset($_POST["saveppd"])) {
             (
                 SELECT 
                     a.ANGGOTA_KEY,
+                    a.ANGGOTA_ID,
                     a.ANGGOTA_AKSES,
                     a.CABANG_KEY
                 FROM 
@@ -127,7 +128,7 @@ if (isset($_POST["updateppd"])) {
         GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$PPD_ID'");
 
         // INSERT NOTIFIKASI
-        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$PPD_ID',p.CABANG_KEY,p.PPD_LOKASI,'PPD',
+        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,n.ANGGOTA_ID,'$PPD_ID',p.CABANG_KEY,p.PPD_LOKASI,'PPD',
         CASE
             WHEN n.ANGGOTA_AKSES IN ('Administrator','Koordinator') THEN
             'ApproveNotifPPDKoordinator'
@@ -148,6 +149,7 @@ if (isset($_POST["updateppd"])) {
             (
                 SELECT 
                     a.ANGGOTA_KEY,
+                    a.ANGGOTA_ID,
                     a.ANGGOTA_AKSES,
                     a.CABANG_KEY
                 FROM 
@@ -216,7 +218,7 @@ if (isset($_POST["approveKoordinator"])) {
         GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$PPD_ID'");
         
         // INSERT NOTIFIKASI
-        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$PPD_ID',p.CABANG_KEY,p.PPD_LOKASI,'PPD','ViewNotifPPD','open-ViewNotifPPD',CONCAT('PPD ', CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan' else 'Ulang' END, ' ', t.TINGKATAN_NAMA,' - ', t.TINGKATAN_SEBUTAN),CONCAT(p.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),1,0,'$USER_ID','$localDateTime'
+        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,n.ANGGOTA_ID,'$PPD_ID',p.CABANG_KEY,p.PPD_LOKASI,'PPD','ViewNotifPPD','open-ViewNotifPPD',CONCAT('PPD ', CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan' else 'Ulang' END, ' ', t.TINGKATAN_NAMA,' - ', t.TINGKATAN_SEBUTAN),CONCAT(p.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),1,0,'$USER_ID','$localDateTime'
         FROM m_anggota a
         LEFT JOIN t_ppd p ON a.ANGGOTA_ID = p.ANGGOTA_ID AND a.CABANG_KEY = p.CABANG_KEY
         LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_BARU = t.TINGKATAN_ID 
@@ -224,6 +226,7 @@ if (isset($_POST["approveKoordinator"])) {
             (
                 SELECT 
                     a.ANGGOTA_KEY,
+                    a.ANGGOTA_ID,
                     a.CABANG_KEY
                 FROM 
                     m_anggota a
@@ -267,7 +270,7 @@ if (isset($_POST["rejectKoordinator"])) {
         GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$PPD_ID'");
         
         // INSERT NOTIFIKASI
-        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$PPD_ID',p.CABANG_KEY,p.PPD_LOKASI,'PPD',
+        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,n.ANGGOTA_ID,'$PPD_ID',p.CABANG_KEY,p.PPD_LOKASI,'PPD',
         CASE
             WHEN n.ANGGOTA_AKSES IN ('Administrator','Koordinator') THEN
             'ApproveNotifPPDKoordinator'
@@ -288,6 +291,7 @@ if (isset($_POST["rejectKoordinator"])) {
             (
                 SELECT 
                     a.ANGGOTA_KEY,
+                    a.ANGGOTA_ID,
                     a.ANGGOTA_AKSES,
                     a.CABANG_KEY
                 FROM 
@@ -356,7 +360,7 @@ if (isset($_POST["approveNotifPPDKoordinator"])) {
         GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$PPD_ID'");
         
         // INSERT NOTIFIKASI
-        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$PPD_ID',p.CABANG_KEY,p.PPD_LOKASI,'PPD','ViewNotifPPD','open-ViewNotifPPD',CONCAT('PPD ', CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan' else 'Ulang' END, ' ', t.TINGKATAN_NAMA,' - ', t.TINGKATAN_SEBUTAN),CONCAT(p.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),1,0,'$USER_ID','$localDateTime'
+        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,n.ANGGOTA_ID,'$PPD_ID',p.CABANG_KEY,p.PPD_LOKASI,'PPD','ViewNotifPPD','open-ViewNotifPPD',CONCAT('PPD ', CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan' else 'Ulang' END, ' ', t.TINGKATAN_NAMA,' - ', t.TINGKATAN_SEBUTAN),CONCAT(p.ANGGOTA_ID, ' - ', a.ANGGOTA_NAMA),1,0,'$USER_ID','$localDateTime'
         FROM m_anggota a
         LEFT JOIN t_ppd p ON a.ANGGOTA_ID = p.ANGGOTA_ID AND a.CABANG_KEY = p.CABANG_KEY
         LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_BARU = t.TINGKATAN_ID 
@@ -364,6 +368,7 @@ if (isset($_POST["approveNotifPPDKoordinator"])) {
             (
                 SELECT 
                     a.ANGGOTA_KEY,
+                    a.ANGGOTA_ID,
                     a.CABANG_KEY
                 FROM 
                     m_anggota a
@@ -407,7 +412,7 @@ if (isset($_POST["rejectNotifPPDKoordinator"])) {
         GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$PPD_ID'");
         
         // INSERT NOTIFIKASI
-        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$PPD_ID',p.CABANG_KEY,p.PPD_LOKASI,'PPD',
+        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,n.ANGGOTA_ID,'$PPD_ID',p.CABANG_KEY,p.PPD_LOKASI,'PPD',
         CASE
             WHEN n.ANGGOTA_AKSES IN ('Administrator','Koordinator') THEN
             'ApproveNotifPPDKoordinator'
@@ -428,6 +433,7 @@ if (isset($_POST["rejectNotifPPDKoordinator"])) {
             (
                 SELECT 
                     a.ANGGOTA_KEY,
+                    a.ANGGOTA_ID,
                     a.ANGGOTA_AKSES,
                     a.CABANG_KEY
                 FROM 
@@ -528,7 +534,7 @@ if (isset($_POST["EVENT_ACTION"])) {
             GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$PPD_ID'");
 
             // INSERT NOTIFIKASI
-            GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$PPD_ID',p.CABANG_KEY,p.PPD_LOKASI,'PPD',
+            GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,n.ANGGOTA_ID,'$PPD_ID',p.CABANG_KEY,p.PPD_LOKASI,'PPD',
             CASE
                 WHEN n.ANGGOTA_AKSES IN ('Administrator','Koordinator') THEN
                 'ApproveNotifPPDKoordinator'
@@ -549,6 +555,7 @@ if (isset($_POST["EVENT_ACTION"])) {
                 (
                     SELECT 
                         a.ANGGOTA_KEY,
+                        a.ANGGOTA_ID,
                         a.ANGGOTA_AKSES,
                         a.CABANG_KEY
                     FROM 

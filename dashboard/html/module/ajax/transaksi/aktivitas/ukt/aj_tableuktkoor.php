@@ -46,7 +46,7 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
     END AS GURU_BADGE
     FROM t_ukt u
     LEFT JOIN m_anggota a ON u.ANGGOTA_ID = a.ANGGOTA_ID AND u.CABANG_KEY = a.CABANG_KEY
-    LEFT JOIN m_anggota a2 ON u.INPUT_BY = a2.ANGGOTA_ID AND u.CABANG_KEY = a2.CABANG_KEY
+    LEFT JOIN m_anggota a2 ON u.INPUT_BY = a2.ANGGOTA_ID AND u.CABANG_KEY = a2.CABANG_KEY AND a2.ANGGOTA_STATUS = 0
     LEFT JOIN m_cabang c ON u.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_cabang c2 ON u.UKT_LOKASI = c2.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
@@ -81,7 +81,7 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
         END AS GURU_BADGE
         FROM t_ukt u
         LEFT JOIN m_anggota a ON u.ANGGOTA_ID = a.ANGGOTA_ID AND u.CABANG_KEY = a.CABANG_KEY
-        LEFT JOIN m_anggota a2 ON u.INPUT_BY = a2.ANGGOTA_ID AND u.CABANG_KEY = a2.CABANG_KEY
+        LEFT JOIN m_anggota a2 ON u.INPUT_BY = a2.ANGGOTA_ID AND u.CABANG_KEY = a2.CABANG_KEY AND a2.ANGGOTA_STATUS = 0
         LEFT JOIN m_cabang c ON u.CABANG_KEY = c.CABANG_KEY
         LEFT JOIN m_cabang c2 ON u.UKT_LOKASI = c2.CABANG_KEY
         LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
@@ -115,7 +115,7 @@ if (isset($_POST["DAERAH_KEY"]) || isset($_POST["CABANG_KEY"]) || isset($_POST["
         END AS GURU_BADGE
         FROM t_ukt u
         LEFT JOIN m_anggota a ON u.ANGGOTA_ID = a.ANGGOTA_ID AND u.CABANG_KEY = a.CABANG_KEY
-        LEFT JOIN m_anggota a2 ON u.INPUT_BY = a2.ANGGOTA_ID AND u.CABANG_KEY = a2.CABANG_KEY
+        LEFT JOIN m_anggota a2 ON u.INPUT_BY = a2.ANGGOTA_ID AND u.CABANG_KEY = a2.CABANG_KEY AND a2.ANGGOTA_STATUS = 0
         LEFT JOIN m_cabang c ON u.CABANG_KEY = c.CABANG_KEY
         LEFT JOIN m_cabang c2 ON u.UKT_LOKASI = c2.CABANG_KEY
         LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY

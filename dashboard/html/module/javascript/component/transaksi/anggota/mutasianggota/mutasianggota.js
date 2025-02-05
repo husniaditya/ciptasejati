@@ -762,7 +762,7 @@ $(document).on("click", ".open-ViewMutasiAnggota", function () {
   // console.log(id);
 });
 
-// Edit Anggota
+// Edit Mutasi Anggota
 $(document).on("click", ".open-EditMutasiAnggota", function () {
   
   var key = $(this).data('id');
@@ -810,34 +810,30 @@ $(document).on("click", ".open-EditMutasiAnggota", function () {
       var isExist = $('#selectize-dropdown11').length > 0 && $('#selectize-dropdown12').length > 0;
 
       if (isExist) {
-
-        $(".modal-body #selectize-dropdown11")[0].selectize.setValue(daerahawal);
-        // Wait for the options in the second dropdown to be populated before setting its value
-        setTimeout(function () {
-        $(".modal-body #selectize-dropdown12")[0].selectize.setValue(cabangawal);
-        }, 200); // You may need to adjust the delay based on your application's behavior
-        setTimeout(function () {
-        $(".modal-body #selectize-dropdown4")[0].selectize.setValue(data.ANGGOTA_ID);
-        }, 400); // You may need to adjust the delay based on your application's behavior
-        // Wait for the options in the second dropdown to be populated before setting its value
-        setTimeout(function () {
-          $(".modal-body #selectize-dropdown5")[0].selectize.setValue(daerahtujuan);
-        }, 500); // You may need to adjust the delay based on your application's behavior
-        setTimeout(function () {
-          $(".modal-body #selectize-dropdown6")[0].selectize.setValue(cabangtujuan);
-        }, 850); // You may need to adjust the delay based on your application's behavior
+        function delay(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        
+        delay(0)
+            .then(() => $(".modal-body #selectize-dropdown11")[0].selectize.setValue(daerahawal))
+            .then(() => delay(100))
+            .then(() => $(".modal-body #selectize-dropdown12")[0].selectize.setValue(cabangawal))
+            .then(() => delay(100))
+            .then(() => $(".modal-body #selectize-dropdown4")[0].selectize.setValue(data.ANGGOTA_ID))
+            .then(() => delay(100))
+            .then(() => $(".modal-body #selectize-dropdown5")[0].selectize.setValue(daerahtujuan))
+            .then(() => delay(100))
+            .then(() => $(".modal-body #selectize-dropdown6")[0].selectize.setValue(cabangtujuan));
 
       } else {
-        
-        $(".modal-body #selectize-dropdown4")[0].selectize.setValue(data.ANGGOTA_ID);
-        // Wait for the options in the second dropdown to be populated before setting its value
-        setTimeout(function () {
-          $(".modal-body #selectize-dropdown5")[0].selectize.setValue(daerahtujuan);
-        }, 100); // You may need to adjust the delay based on your application's behavior
+        function delay(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+        }
 
-        setTimeout(function () {
-          $(".modal-body #selectize-dropdown6")[0].selectize.setValue(cabangtujuan);
-        }, 500); // You may need to adjust the delay based on your application's behavior
+        delay(0)
+            .then(() => $(".modal-body #selectize-dropdown5")[0].selectize.setValue(daerahtujuan))
+            .then(() => delay(100))
+            .then(() => $(".modal-body #selectize-dropdown6")[0].selectize.setValue(cabangtujuan));
         
       }
       

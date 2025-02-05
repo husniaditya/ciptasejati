@@ -29,7 +29,7 @@ if (isset($_GET["token"])) {
         GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$MUTASI_ID'");
 
         GetQuery("insert into t_notifikasi
-        select uuid(),ANGGOTA_KEY,'$MUTASI_ID','$CABANG_AWAL','$CABANG_TUJUAN','Mutasi','ViewNotifMutasi','open-ViewNotifMutasi','Persetujuan Mutasi Anggota','Mutasi a.n $ANGGOTA_NAMA dari cabang $CABANG_DESKRIPSI', 2, 0, '$USER_ID', '$localDateTime'
+        select uuid(),ANGGOTA_KEY,'$USER_ID','$MUTASI_ID','$CABANG_AWAL','$CABANG_TUJUAN','Mutasi','ViewNotifMutasi','open-ViewNotifMutasi','Persetujuan Mutasi Anggota','Mutasi a.n $ANGGOTA_NAMA dari cabang $CABANG_DESKRIPSI', 2, 0, '$USER_ID', '$localDateTime'
         FROM m_anggota
         WHERE (ANGGOTA_AKSES = 'Administrator' or CABANG_KEY IN ('$CABANG_AWAL','$CABANG_TUJUAN') AND ANGGOTA_AKSES = 'Koordinator' OR ANGGOTA_KEY = '$ANGGOTA_KEY') AND ANGGOTA_STATUS = 0");
     }

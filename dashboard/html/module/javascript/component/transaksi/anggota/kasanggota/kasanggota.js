@@ -688,21 +688,29 @@ $(document).on("click", ".open-EditKasAnggota", function () {
       if (isExist) {
         $(".modal-body #selectize-dropdown11")[0].selectize.setValue(data.DAERAH_KEY);
         // Wait for the options in the second dropdown to be populated before setting its value
-        setTimeout(function () {
-        $(".modal-body #selectize-dropdown12")[0].selectize.setValue(data.CABANG_KEY);
-        }, 200); // You may need to adjust the delay based on your application's behavior
-        setTimeout(function () {
-        $(".modal-body #selectize-dropdown4")[0].selectize.setValue(data.ANGGOTA_ID);
-        }, 300); // You may need to adjust the delay based on your application's behavior
-        setTimeout(function () {
-        $("#editKAS_JENIS").val(data.KAS_JENIS);
-        }, 500); // You may need to adjust the delay based on your application's behavior
-        setTimeout(function () {
-          $("#editKAS_SALDOAWAL").val(data.SALDOAWAL);
-          $("#editKAS_DK").val(data.KAS_DK);
-          $("#editKAS_JUMLAH").val(data.KAS_JUMLAH);
-          $("#editKAS_SALDOAKHIR").val(data.FKAS_SALDO);
-        }, 600); // You may need to adjust the delay based on your application's behavior
+        
+        function delay(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        
+        delay(300)
+            .then(() => $(".modal-body #selectize-dropdown12")[0].selectize.setValue(data.CABANG_KEY))
+            .then(() => delay(100))
+            .then(() => $(".modal-body #selectize-dropdown4")[0].selectize.setValue(data.ANGGOTA_ID))
+            .then(() => delay(100))
+            .then(() => $("#editKAS_JENIS").val(data.KAS_JENIS))
+            .then(() => delay(100))
+            .then(() => {
+                $("#editKAS_SALDOAWAL").val(data.SALDOAWAL);
+                $("#editKAS_DK").val(data.KAS_DK);
+                $("#editKAS_JUMLAH").val(data.KAS_JUMLAH);
+                $("#editKAS_SALDOAKHIR").val(data.FKAS_SALDO);
+            });
+      
+        
+        // Call the function with your data object
+        populateForm(data);
+      
       } else {
         $(".modal-body #selectize-dropdown4")[0].selectize.setValue(data.ANGGOTA_ID);
         setTimeout(function () {

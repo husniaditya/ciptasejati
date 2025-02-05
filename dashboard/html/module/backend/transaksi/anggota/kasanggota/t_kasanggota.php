@@ -57,13 +57,14 @@ if (isset($_POST["savekasanggota"])) {
         GetQuery("insert into t_kas_log select uuid(), KAS_ID, CABANG_KEY, ANGGOTA_KEY, KAS_JENIS, KAS_TANGGAL, KAS_DK,KAS_JUMLAH, KAS_SALDO, KAS_DESKRIPSI, KAS_FILE, DELETION_STATUS, 'I', '$USER_ID', '$localDateTime' from t_kas where KAS_ID = '$KAS_ID'");
 
         // INSERT NOTIFIKASI
-        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$KAS_ID',k.CABANG_KEY,k.CABANG_KEY,'Kas','ViewNotifKas','open-ViewNotifKas','Kas $KAS_JENIS',CONCAT('[$KAS_DK] Kas a.n ',a.ANGGOTA_NAMA,' dengan jumlah Rp $rawKAS_JUMLAH'),0,0,'$USER_ID','$localDateTime'
+        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,n.ANGGOTA_ID,'$KAS_ID',k.CABANG_KEY,k.CABANG_KEY,'Kas','ViewNotifKas','open-ViewNotifKas','Kas $KAS_JENIS',CONCAT('[$KAS_DK] Kas a.n ',a.ANGGOTA_NAMA,' dengan jumlah Rp $rawKAS_JUMLAH'),0,0,'$USER_ID','$localDateTime'
         FROM m_anggota a
         LEFT JOIN t_kas k ON a.ANGGOTA_ID = k.ANGGOTA_ID AND a.CABANG_KEY = k.CABANG_KEY
         LEFT JOIN 
             (
                 SELECT 
                     a.ANGGOTA_KEY,
+                    a.ANGGOTA_ID,
                     a.CABANG_KEY
                 FROM 
                     m_anggota a
@@ -141,13 +142,14 @@ if (isset($_POST["editkasanggota"])) {
         GetQuery("delete from t_notifikasi where DOKUMEN_ID = '$KAS_ID'");
 
         // INSERT NOTIFIKASI
-        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,'$KAS_ID',k.CABANG_KEY,k.CABANG_KEY,'Kas','ViewNotifKas','open-ViewNotifKas','Kas $KAS_JENIS',CONCAT('[$KAS_DK] Kas a.n ',a.ANGGOTA_NAMA,' dengan jumlah Rp $rawKAS_JUMLAH'),0,0,'$USER_ID','$localDateTime'
+        GetQuery("INSERT into t_notifikasi SELECT UUID(),n.ANGGOTA_KEY,n.ANGGOTA_ID,'$KAS_ID',k.CABANG_KEY,k.CABANG_KEY,'Kas','ViewNotifKas','open-ViewNotifKas','Kas $KAS_JENIS',CONCAT('[$KAS_DK] Kas a.n ',a.ANGGOTA_NAMA,' dengan jumlah Rp $rawKAS_JUMLAH'),0,0,'$USER_ID','$localDateTime'
         FROM m_anggota a
         LEFT JOIN t_kas k ON a.ANGGOTA_ID = k.ANGGOTA_ID AND a.CABANG_KEY = k.CABANG_KEY
         LEFT JOIN 
             (
                 SELECT 
                     a.ANGGOTA_KEY,
+                    a.ANGGOTA_ID,
                     a.CABANG_KEY
                 FROM 
                     m_anggota a
