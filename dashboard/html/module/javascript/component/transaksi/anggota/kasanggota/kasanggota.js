@@ -675,7 +675,6 @@ $(document).on("click", ".open-EditKasAnggota", function () {
       $("#editANGGOTA_IDNAMA").val(data.ANGGOTA_IDNAMA);
       $("#editTINGKATAN_NAMA").val(data.TINGKATAN_NAMA);
       $("#editTINGKATAN_SEBUTAN").val(data.TINGKATAN_SEBUTAN);
-      $("#editKAS_JUMLAH").val(data.KAS_JUMLAH);
       $("#editFKAS_JUMLAH").val(data.FKAS_JUMLAH);
       $("#editKAS_SALDO").val(data.KAS_SALDO);
       $("#editKAS_DESKRIPSI").val(data.KAS_DESKRIPSI);
@@ -691,25 +690,21 @@ $(document).on("click", ".open-EditKasAnggota", function () {
         
         function delay(ms) {
           return new Promise(resolve => setTimeout(resolve, ms));
-        }
-        
-        delay(300)
-            .then(() => $(".modal-body #selectize-dropdown12")[0].selectize.setValue(data.CABANG_KEY))
-            .then(() => delay(100))
-            .then(() => $(".modal-body #selectize-dropdown4")[0].selectize.setValue(data.ANGGOTA_ID))
-            .then(() => delay(100))
-            .then(() => $("#editKAS_JENIS").val(data.KAS_JENIS))
-            .then(() => delay(100))
-            .then(() => {
-                $("#editKAS_SALDOAWAL").val(data.SALDOAWAL);
-                $("#editKAS_DK").val(data.KAS_DK);
-                $("#editKAS_JUMLAH").val(data.KAS_JUMLAH);
-                $("#editKAS_SALDOAKHIR").val(data.FKAS_SALDO);
-            });
+      }
       
-        
-        // Call the function with your data object
-        populateForm(data);
+      delay(300)
+          .then(() => $(".modal-body #selectize-dropdown12")[0].selectize.setValue(data.CABANG_KEY))
+          .then(() => delay(200))
+          .then(() => $(".modal-body #selectize-dropdown4")[0].selectize.setValue(data.ANGGOTA_ID))
+          .then(() => delay(200))
+          .then(() => $("#editKAS_JENIS").val(data.KAS_JENIS))
+          .then(() => delay(200))
+          .then(() => {
+              $("#editKAS_SALDOAWAL").val(data.SALDOAWAL);
+              $("#editKAS_DK").val(data.KAS_DK);
+              $("#editKAS_JUMLAH").val(data.KAS_JUMLAH);
+              $("#editKAS_SALDOAKHIR").val(data.FKAS_SALDO);
+          });
       
       } else {
         $(".modal-body #selectize-dropdown4")[0].selectize.setValue(data.ANGGOTA_ID);

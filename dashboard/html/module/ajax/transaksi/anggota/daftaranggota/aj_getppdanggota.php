@@ -26,8 +26,8 @@ if (isset($_POST['id'])) {
     ELSE 'badge badge-danger' 
     END AS GURU_BADGE
     FROM t_ppd p
-    LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY
-    LEFT JOIN m_anggota a2 ON p.INPUT_BY = a2.ANGGOTA_ID
+    LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY AND a.ANGGOTA_STATUS = 0
+    LEFT JOIN m_anggota a2 ON p.INPUT_BY = a2.ANGGOTA_ID AND a2.ANGGOTA_STATUS = 0
     LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY

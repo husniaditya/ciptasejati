@@ -35,7 +35,7 @@ t_kas k
 LEFT JOIN 
 m_anggota a ON k.ANGGOTA_KEY = a.ANGGOTA_KEY
 LEFT JOIN 
-m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID
+m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID AND a2.ANGGOTA_STATUS = 0
 LEFT JOIN 
 m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
 LEFT JOIN 

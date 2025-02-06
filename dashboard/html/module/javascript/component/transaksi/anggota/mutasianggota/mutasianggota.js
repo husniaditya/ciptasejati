@@ -816,13 +816,13 @@ $(document).on("click", ".open-EditMutasiAnggota", function () {
         
         delay(0)
             .then(() => $(".modal-body #selectize-dropdown11")[0].selectize.setValue(daerahawal))
-            .then(() => delay(100))
+            .then(() => delay(200))
             .then(() => $(".modal-body #selectize-dropdown12")[0].selectize.setValue(cabangawal))
-            .then(() => delay(100))
+            .then(() => delay(200))
             .then(() => $(".modal-body #selectize-dropdown4")[0].selectize.setValue(data.ANGGOTA_ID))
-            .then(() => delay(100))
+            .then(() => delay(200))
             .then(() => $(".modal-body #selectize-dropdown5")[0].selectize.setValue(daerahtujuan))
-            .then(() => delay(100))
+            .then(() => delay(200))
             .then(() => $(".modal-body #selectize-dropdown6")[0].selectize.setValue(cabangtujuan));
 
       } else {

@@ -20,8 +20,8 @@ if (isset($_POST['id'])) {
         ELSE 'color: red;' 
     END AS KAS_COLOR
     FROM t_kas k
-    LEFT JOIN m_anggota a ON k.ANGGOTA_ID = a.ANGGOTA_ID AND k.CABANG_KEY = a.CABANG_KEY
-    LEFT JOIN m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID
+    LEFT JOIN m_anggota a ON k.ANGGOTA_ID = a.ANGGOTA_ID AND k.CABANG_KEY = a.CABANG_KEY AND a.ANGGOTA_STATUS = 0
+    LEFT JOIN m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID AND a2.ANGGOTA_STATUS = 0
     LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
