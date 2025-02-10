@@ -1,14 +1,14 @@
 <?php
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 
-$getCabang = GetQuery("SELECT c.*,d.DAERAH_DESKRIPSI,RIGHT(c.CABANG_ID,3) SHORT_ID FROM m_cabang c
-LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-WHERE c.DELETION_STATUS = 0
-ORDER BY c.CABANG_ID");
+$PLOKASI = "Cabang";
+$params = ['GET', $PLOKASI] + array_fill(0, 14, '');
+$getCabang = GetQueryParam("zsp_m_cabang", $params);
 
-$getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0 order by DAERAH_ID");
-// Fetch all rows into an array
-$rows = $getDaerah->fetchAll(PDO::FETCH_ASSOC);
+$PLOKASI = "Daerah";
+$params = ['GET', $PLOKASI] + array_fill(0, 14, '');
+$getDaerah = GetQueryParam("zsp_m_cabang", $params);
+
 ?>
 
 <?php
@@ -49,7 +49,7 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                 </thead>
                 <tbody id="cabangdata">
                     <?php
-                    while ($rowCabang = $getCabang->fetch(PDO::FETCH_ASSOC)) {
+                    foreach ($getCabang as $rowCabang) {
                         extract($rowCabang);
                         ?>
                         <tr>
@@ -118,8 +118,8 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                                     <select name="DAERAH_KEY" id="selectize-dropdown" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Daerah --</option>
                                         <?php
-                                        foreach ($rows as $rowCabang) {
-                                            extract($rowCabang);
+                                        foreach ($getDaerah as $rowDaerah) {
+                                            extract($rowDaerah);
                                             ?>
                                             <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
                                             <?php
@@ -304,8 +304,8 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                                     <select name="DAERAH_KEY" id="selectize-dropdown2" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Daerah --</option>
                                         <?php
-                                        foreach ($rows as $rowCabang) {
-                                            extract($rowCabang);
+                                        foreach ($getDaerah as $rowDaerah) {
+                                            extract($rowDaerah);
                                             ?>
                                             <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
                                             <?php

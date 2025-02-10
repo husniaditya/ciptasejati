@@ -1177,55 +1177,63 @@ $(document).on("click", ".open-ViewUKT", function () {
   $.ajax({
     url: 'module/ajax/transaksi/aktivitas/ukt/aj_getdetailukt.php',
     method: 'POST',
-    data: { id: key, cabang: cabang },
-    success: function(data) {
+    data: JSON.stringify({ // Convert data to JSON string before sending
+      id: key
+    }),
+    contentType: 'application/json', // Set the Content-Type as JSON
+    dataType: 'json', // Specify the expected data type as JSON
+    success: function(response) {
       // console.log('response', data);
-      // Assuming data is a JSON object with the required information
-      // Make sure the keys match the fields in your returned JSON object
-      $("#viewDAERAH_KEY").val(data.DAERAH_DESKRIPSI);
-      $("#viewCABANG_KEY").val(data.CABANG_DESKRIPSI);
-      $("#viewUKT_TANGGAL").val(data.UKT_TANGGAL_DESKRIPSI);
-      $("#viewANGGOTA_ID").val(data.ANGGOTA_ID + ' - ' + data.ANGGOTA_NAMA);
-      $("#viewTINGKATAN_ID").val(data.UKT_TINGKATAN_NAMA + ' - ' + data.UKT_TINGKATAN_SEBUTAN);
-      $("#viewUKT_LOKASI").val(data.UKT_DAERAH + ' - ' + data.UKT_CABANG);
-      $("#viewUKT_DESKRIPSI").val(data.UKT_DESKRIPSI);
-      $("#viewUKT_TOTAL").html(data.UKT_TOTAL);
-      var iconHtml = '<i class="' + data.UKT_NILAI + '"></i>';
-      $("#viewUKT_NILAI").html(iconHtml);
+      if (response.result.message === "OK" && response.data && response.data.length > 0) {
+        var data = response.data[0];
 
-      // Make an AJAX request to fetch data for the second dropdown based on the selected value
-      $.ajax({
-        type: "POST",
-        url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-        data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: data.CABANG_KEY },
-        success: function(result){
-          $("#loadpicukt").html(result);
-        }
-      });
+        $("#viewDAERAH_KEY").val(data.DAERAH_DESKRIPSI);
+        $("#viewCABANG_KEY").val(data.CABANG_DESKRIPSI);
+        $("#viewUKT_TANGGAL").val(data.UKT_TANGGAL_DESKRIPSI);
+        $("#viewANGGOTA_ID").val(data.ANGGOTA_ID + ' - ' + data.ANGGOTA_NAMA);
+        $("#viewTINGKATAN_ID").val(data.UKT_TINGKATAN_NAMA + ' - ' + data.UKT_TINGKATAN_SEBUTAN);
+        $("#viewUKT_LOKASI").val(data.UKT_DAERAH + ' - ' + data.UKT_CABANG);
+        $("#viewUKT_DESKRIPSI").val(data.UKT_DESKRIPSI);
+        $("#viewUKT_TOTAL").html(data.UKT_TOTAL);
+        var iconHtml = '<i class="' + data.UKT_NILAI + '"></i>';
+        $("#viewUKT_NILAI").html(iconHtml);
 
-      $.ajax({
-        type: "POST",
-        url: "module/ajax/transaksi/aktivitas/ukt/aj_getviewpengujiukt.php",
-        data: { id: key },
-        success: function(response){
-          // Destroy the DataTable before updating
-          $('#viewPenguji-table').DataTable().destroy();
-          $("#viewPengujiData").html(response);
-          // Reinitialize Sertifikat Table
-        }
-      });
-      
-      // AJAX request to fetch UKT Detail
-      $.ajax({
-        type: "POST",
-        url: "module/ajax/transaksi/aktivitas/ukt/aj_getviewkategoriukt.php",
-        data: { id: key },
-        success: function(data){
-          // console.log(data);
-          $("#viewrincianukt").html(data);
-        }
-      });
+        // Make an AJAX request to fetch data for the second dropdown based on the selected value
+        $.ajax({
+          type: "POST",
+          url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+          data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: data.CABANG_KEY },
+          success: function(result){
+            $("#loadpicukt").html(result);
+          }
+        });
 
+        $.ajax({
+          type: "POST",
+          url: "module/ajax/transaksi/aktivitas/ukt/aj_getviewpengujiukt.php",
+          data: { id: key },
+          success: function(response){
+            // Destroy the DataTable before updating
+            $('#viewPenguji-table').DataTable().destroy();
+            $("#viewPengujiData").html(response);
+            // Reinitialize Sertifikat Table
+          }
+        });
+        
+        // AJAX request to fetch UKT Detail
+        $.ajax({
+          type: "POST",
+          url: "module/ajax/transaksi/aktivitas/ukt/aj_getviewkategoriukt.php",
+          data: { id: key },
+          success: function(data){
+            // console.log(data);
+            $("#viewrincianukt").html(data);
+          }
+        });
+        
+      } else {
+        console.error('Error: Invalid response or no data available');
+      }
     },
     error: function(error) {
       console.error('Error fetching data:', error);

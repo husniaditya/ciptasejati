@@ -56,6 +56,23 @@ try {
         return $result;
     }
 
+    function GetQueryParam($procedure, $params = [])
+    {
+        global $db1;
+    
+        // Generate the correct number of placeholders automatically
+        $placeholders = implode(',', array_fill(0, count($params), '?'));
+        $query = "CALL $procedure($placeholders)";
+    
+        $stmt = $db1->prepare($query);
+        $stmt->execute($params);
+        
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor(); // Free the connection for the next query
+    
+        return $data;
+    }
+
     function createKode($namaTabel, $namaKolom, $awalan, $jumlahAngka)
     {
         global $db1, $YEAR, $MONTH;

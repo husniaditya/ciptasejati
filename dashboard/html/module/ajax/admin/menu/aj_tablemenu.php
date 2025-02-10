@@ -1,16 +1,23 @@
 <?php
 require_once("../../../../module/connection/conn.php");
 
-if (isset($_POST["MENU_ID"]) || isset($_POST["MENU_NAMA"]) || isset($_POST["ANGGOTA_AKSES"])) {
+if (isset($_POST["MENU_ID"]) || isset($_POST["GRUP_ID"]) || isset($_POST["MENU_NAMA"]) || isset($_POST["ANGGOTA_AKSES"])) {
     $MENU_ID = $_POST["MENU_ID"];
+    $GRUP_ID = $_POST["GRUP_ID"];
     $MENU_NAMA = $_POST["MENU_NAMA"];
     $USER_AKSES = $_POST["USER_AKSES"];
+    
+    // count length chars of GRUP_ID
+    $LEN_GRUP_ID = strlen($GRUP_ID);
     
     $getMenu = GetQuery("SELECT m.*,u.MENU_NAMA,a.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(m.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE
     FROM m_menuakses m
     LEFT JOIN m_menu u ON m.MENU_ID = u.MENU_ID
     LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID
-    WHERE (u.MENU_ID LIKE CONCAT('%','$MENU_ID','%')) AND (u.MENU_NAMA LIKE CONCAT('%','$MENU_NAMA','%')) AND (m.USER_AKSES LIKE CONCAT('%','$USER_AKSES','%'))
+    WHERE (u.MENU_ID LIKE CONCAT('%','$MENU_ID','%')) 
+    AND (u.MENU_NAMA LIKE CONCAT('%','$MENU_NAMA','%')) 
+    AND (m.USER_AKSES LIKE CONCAT('%','$USER_AKSES','%'))
+    AND ('$GRUP_ID' = '' OR (LEFT(u.MENU_ID,$LEN_GRUP_ID) = '$GRUP_ID'))
     ORDER BY m.USER_AKSES,m.MENU_ID");
 } else {
     $getMenu = GetQuery("SELECT m.*,u.MENU_NAMA,a.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(m.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE

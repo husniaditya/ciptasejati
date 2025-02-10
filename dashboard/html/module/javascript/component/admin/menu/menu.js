@@ -125,12 +125,14 @@ $('.filterMenu select, .filterMenu input').on('change input', debounce(filterMen
 function filterMenuEvent() {
   // Your event handling code here
   const id = $('#filterMENU_ID').val();
+  const grup = $('#selectize-dropdown3').val();
   const nama = $('#filterMENU_NAMA').val();
   const akses = $('#filterUSER_AKSES').val();
 
   // Create a data object to hold the form data
   const formData = {
     MENU_ID: id,
+    GRUP_ID: grup,
     MENU_NAMA: nama,
     USER_AKSES: akses
   };
@@ -154,6 +156,10 @@ function filterMenuEvent() {
 // ----- Function to reset form ----- //
 function clearForm() {
 
+  var selectizeInstance1 = $('#selectize-dropdown3')[0].selectize;
+  if (selectizeInstance1) {
+    selectizeInstance1.clear();
+  }
   document.getElementById("filterMenu").reset();
   // Call the reloadDataTable() function after inserting data to reload the DataTable
   $.ajax({

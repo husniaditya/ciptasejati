@@ -15,13 +15,31 @@ if (isset($_POST["savecabang"])) {
         $CABANG_MAP = $_POST["CABANG_MAP"];
         $CABANG_LAT = $_POST["CABANG_LAT"];
         $CABANG_LONG = $_POST["CABANG_LONG"];
-
-        $getDaerahID = GetQuery("select DAERAH_ID from m_daerah where DAERAH_KEY = '$DAERAH_KEY'");
-        while ($rowDaerahID = $getDaerahID->fetch(PDO::FETCH_ASSOC)) {
-            extract($rowDaerahID);
+        
+        // GET DAERAH
+        $params = array_fill(0, 14, '');
+        $params[0] = 'GET';
+        $params[2] = $DAERAH_KEY;
+        $getDaerah = GetQueryParam("zsp_m_cabang", $params);
+        foreach ($getDaerah as $rowDaerah) {
+            extract($rowDaerah);
         }
 
-        GetQuery("insert into m_cabang select uuid(),'$DAERAH_KEY','$DAERAH_ID.$CABANG_ID','$CABANG_DESKRIPSI','$CABANG_SEKRETARIAT','$CABANG_PENGURUS','$CABANG_MAP','$CABANG_LAT','$CABANG_LONG',0,'$USER_ID','$localDateTime'");
+        // INSERT
+        $params = array_fill(0, 14, '');
+        $params[0] = 'INSERT';
+        $params[2] = $DAERAH_KEY;
+        $params[3] = $DAERAH_ID;
+        $params[5] = $CABANG_ID;
+        $params[6] = $CABANG_DESKRIPSI;
+        $params[7] = $CABANG_PENGURUS;
+        $params[8] = $CABANG_SEKRETARIAT;
+        $params[9] = $CABANG_MAP;
+        $params[10] = $CABANG_LAT;
+        $params[11] = $CABANG_LONG;
+        $params[12] = $USER_ID;
+        $params[13] = $localDateTime;
+        GetQueryParam("zsp_m_cabang", $params);
 
         $response="Success";
         echo $response;
@@ -47,12 +65,31 @@ if (isset($_POST["editcabang"])) {
         $CABANG_LAT = $_POST["CABANG_LAT"];
         $CABANG_LONG = $_POST["CABANG_LONG"];
 
-        $getDaerahID = GetQuery("select DAERAH_ID from m_daerah where DAERAH_KEY = '$DAERAH_KEY'");
-        while ($rowDaerahID = $getDaerahID->fetch(PDO::FETCH_ASSOC)) {
-            extract($rowDaerahID);
+        // GET DAERAH
+        $params = array_fill(0, 14, '');
+        $params[0] = 'GET';
+        $params[2] = $DAERAH_KEY;
+        $getDaerah = GetQueryParam("zsp_m_cabang", $params);
+        foreach ($getDaerah as $rowDaerah) {
+            extract($rowDaerah);
         }
 
-        $response = GetQuery("update m_cabang set CABANG_ID = '$DAERAH_ID.$CABANG_ID',DAERAH_KEY = '$DAERAH_KEY', CABANG_DESKRIPSI = '$CABANG_DESKRIPSI', CABANG_SEKRETARIAT = '$CABANG_SEKRETARIAT', CABANG_PENGURUS = '$CABANG_PENGURUS', CABANG_MAP = '$CABANG_MAP', CABANG_LAT = '$CABANG_LAT', CABANG_LONG = '$CABANG_LONG', INPUT_BY = '$USER_ID', INPUT_DATE = '$localDateTime' where CABANG_KEY = '$CABANG_KEY'");
+        // UPDATE
+        $params = array_fill(0, 14, '');
+        $params[0] = 'UPDATE';
+        $params[2] = $DAERAH_KEY;
+        $params[3] = $DAERAH_ID;
+        $params[4] = $CABANG_KEY;
+        $params[5] = $CABANG_ID;
+        $params[6] = $CABANG_DESKRIPSI;
+        $params[7] = $CABANG_SEKRETARIAT;
+        $params[8] = $CABANG_PENGURUS;
+        $params[9] = $CABANG_MAP;
+        $params[10] = $CABANG_LAT;
+        $params[11] = $CABANG_LONG;
+        $params[12] = $USER_ID;
+        $params[13] = $localDateTime;
+        GetQueryParam("zsp_m_cabang", $params);
 
         $response="Success";
         echo $response;
@@ -68,8 +105,13 @@ if (isset($_POST["EVENT_ACTION"])) {
 
     try {
         $CABANG_KEY = $_POST["ID"];
-    
-        GetQuery("delete from m_cabang where CABANG_KEY = '$CABANG_KEY'");
+        
+        // DELETE
+        $params = array_fill(0, 14, '');
+        $params[0] = 'DELETE';
+        $params[4] = $CABANG_KEY;
+        GetQueryParam("zsp_m_cabang", $params);
+        
         $response="Success";
         echo $response;
     } catch (\Throwable $th) {

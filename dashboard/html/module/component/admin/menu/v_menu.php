@@ -6,7 +6,9 @@ FROM m_menuakses m
 LEFT JOIN m_menu u ON m.MENU_ID = u.MENU_ID
 LEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0
 ORDER BY m.USER_AKSES,m.MENU_ID");
+$getGrup = GetQuery("SELECT * FROM m_menu WHERE LENGTH(MENU_ID) <= 1 ORDER BY MENU_ID");
 $getAkses = GetQuery("select * from p_param where KATEGORI = 'USER_AKSES' ORDER BY TEXT");
+$rowGrup = $getGrup->fetchAll(PDO::FETCH_ASSOC);
 $rowakses = $getAkses->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -48,6 +50,24 @@ $rowakses = $getAkses->fetchAll(PDO::FETCH_ASSOC);
                             <div class="form-group">
                                 <label>ID Menu</label>
                                 <input type="text" class="form-control" id="filterMENU_ID" name="MENU_ID" value="" placeholder="Input Nama Menu">
+                            </div> 
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Grup Menu</label>
+                                <div id="selectize-wrapper3" style="position: relative;">
+                                    <select name="GRUP_MENU" id="selectize-dropdown3" required="" class="form-control" >
+                                    <option value="">-- Tampilkan semua --</option>
+                                        <?php
+                                        foreach ($rowGrup as $dataGrup) {
+                                            extract($dataGrup);
+                                            ?>
+                                            <option value="<?= $MENU_ID; ?>"> <?= $MENU_ID . '. ' .$MENU_NAMA; ?> </option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
                             </div> 
                         </div>
                         <div class="col-md-3">
