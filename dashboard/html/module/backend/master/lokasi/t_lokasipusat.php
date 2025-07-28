@@ -11,65 +11,46 @@ $PUSAT_LAT="";
 $PUSAT_LONG="";
 
 
-if (isset($_POST["savepusat"])) {
-
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     try {
-        $PUSAT_ID = autoInc("m_pusat","PUSAT_ID",3);
-        $PUSAT_DESKRIPSI = $_POST["PUSAT_DESKRIPSI"];
-        $PUSAT_SEKRETARIAT = $_POST["PUSAT_SEKRETARIAT"];
-        $PUSAT_KEPENGURUSAN = $_POST["PUSAT_KEPENGURUSAN"];
-        $PUSAT_MAP = $_POST["PUSAT_MAP"];
-        $PUSAT_LAT = $_POST["PUSAT_LAT"];
-        $PUSAT_LONG = $_POST["PUSAT_LONG"];
+        if (isset($_POST["savepusat"])) {
+            $action = "INSERT";
+        } elseif (isset($_POST["editpusat"])) {
+            $action = "UPDATE";
+        } elseif (isset($_POST["EVENT_ACTION"])) {
+            $action = "DELETE";
+        } else {
+            die("Invalid action received.");
+        }
 
-        GetQuery("insert into m_pusat select uuid(),'$PUSAT_ID','$PUSAT_DESKRIPSI','$PUSAT_SEKRETARIAT','$PUSAT_KEPENGURUSAN','$PUSAT_MAP','$PUSAT_LAT','$PUSAT_LONG',0,'$USER_ID','$localDateTime'");
+        $params = array_fill(0, 12, '');
+        $params[0] = $action;
 
-        $response="Success";
-        echo $response;
+        if ($action === "INSERT") {
+            $params[3] = autoInc("m_pusat", "PUSAT_ID", 3);
+        } elseif ($action === "UPDATE" || $action === "DELETE") {
+            $params[2] = $_POST["PUSAT_KEY"] ?? '';
+        }
 
-    } catch (Exception $e) {
-        // Generic exception handling
-        $response =  "Caught Exception: " . $e->getMessage();
-        echo $response;
-    }
-}
+        // Assign remaining parameters
+        $params[4] = $_POST["PUSAT_DESKRIPSI"] ?? '';
+        $params[5] = $_POST["PUSAT_SEKRETARIAT"] ?? '';
+        $params[6] = $_POST["PUSAT_KEPENGURUSAN"] ?? '';
+        $params[7] = $_POST["PUSAT_MAP"] ?? '';
+        $params[8] = $_POST["PUSAT_LAT"] ?? '';
+        $params[9] = $_POST["PUSAT_LONG"] ?? '';
+        $params[10] = $USER_ID;
+        $params[11] = $localDateTime;
 
+        GetQueryParam("zsp_m_pusat", $params);
 
-if (isset($_POST["editpusat"])) {
-
-    try {
-        $PUSAT_KEY = $_POST["PUSAT_KEY"];
-        $PUSAT_DESKRIPSI = $_POST["PUSAT_DESKRIPSI"];
-        $PUSAT_SEKRETARIAT = $_POST["PUSAT_SEKRETARIAT"];
-        $PUSAT_KEPENGURUSAN = $_POST["PUSAT_KEPENGURUSAN"];
-        $PUSAT_MAP = $_POST["PUSAT_MAP"];
-        $PUSAT_LAT = $_POST["PUSAT_LAT"];
-        $PUSAT_LONG = $_POST["PUSAT_LONG"];
-
-        $response = GetQuery("update m_pusat set PUSAT_DESKRIPSI = '$PUSAT_DESKRIPSI', PUSAT_SEKRETARIAT = '$PUSAT_SEKRETARIAT', PUSAT_KEPENGURUSAN = '$PUSAT_KEPENGURUSAN', PUSAT_MAP = '$PUSAT_MAP', PUSAT_LAT = '$PUSAT_LAT', PUSAT_LONG = '$PUSAT_LONG', INPUT_BY = '$USER_ID', INPUT_DATE = '$localDateTime' where PUSAT_KEY = '$PUSAT_KEY'");
-
-        $response="Success";
-        echo $response;
-
-    } catch (Exception $e) {
-        // Generic exception handling
-        $response =  "Caught Exception: " . $e->getMessage();
-        echo $response;
-    }
-}
-
-if (isset($_POST["EVENT_ACTION"])) {
-
-    try {
-        $PUSAT_KEY = $_POST["PUSAT_KEY"];
-    
-        GetQuery("delete from m_pusat where PUSAT_KEY = '$PUSAT_KEY'");
         $response="Success";
         echo $response;
     } catch (\Throwable $th) {
         // Generic exception handling
-        $response =  "Caught Exception: " . $e->getMessage();
+        $response =  "Caught Exception: " . $th->getMessage();
         echo $response;
     }
 }
+
 ?>

@@ -1,11 +1,13 @@
 <?php
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 
-$getDaerah = GetQuery("select d.*,p.PUSAT_DESKRIPSI,a.ANGGOTA_NAMA,case when d.DELETION_STATUS = 0 then 'Aktif' ELSE 'Tidak Aktif' END DAERAH_STATUS,DATE_FORMAT(d.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE, RIGHT(DAERAH_ID,3) SHORT_ID from m_daerah d left join m_pusat p on d.PUSAT_KEY = p.PUSAT_KEY left join m_anggota a on d.INPUT_BY = a.ANGGOTA_ID AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0 order by d.PUSAT_KEY asc");
+$PPARAM = "Daerah";
+$params = ['GET', $PPARAM] + array_fill(0, 10, '');
+$getDaerah = GetQueryParam("zsp_m_daerah", $params);
 
-$getPusat = GetQuery("select * from m_pusat where DELETION_STATUS = 0");
-// Fetch all rows into an array
-$rows = $getPusat->fetchAll(PDO::FETCH_ASSOC);
+$PPARAM = "Pusat";
+$params = ['GET', $PPARAM] + array_fill(0, 10, '');
+$getPusat = GetQueryParam("zsp_m_daerah", $params);
 ?>
 
 <?php
@@ -44,7 +46,7 @@ if ($_SESSION["ADD_LokasiDaerah"] == "Y") {
                 </thead>
                 <tbody id="daerahdata">
                     <?php
-                    while ($rowDaerah = $getDaerah->fetch(PDO::FETCH_ASSOC)) {
+                    foreach ($getDaerah as $rowDaerah) {
                         extract($rowDaerah);
                         ?>
                         <tr>
@@ -110,7 +112,7 @@ if ($_SESSION["ADD_LokasiDaerah"] == "Y") {
                                     <select name="PUSAT_KEY" id="selectize-dropdown" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Pusat --</option>
                                         <?php
-                                        foreach ($rows as $rowPusat) {
+                                        foreach ($getPusat as $rowPusat) {
                                             extract($rowPusat);
                                             ?>
                                             <option value="<?= $PUSAT_KEY; ?>"><?= $PUSAT_DESKRIPSI; ?></option>
@@ -218,8 +220,8 @@ if ($_SESSION["ADD_LokasiDaerah"] == "Y") {
                                 <select name="PUSAT_KEY" id="editPUSAT_KEY" required="" class="form-control" data-parsley-required>
                                     <option value="">-- Pilih Pusat --</option>
                                     <?php
-                                    foreach ($rows as $rowEditPusat) {
-                                        extract($rowEditPusat);
+                                    foreach ($getPusat as $EditPusat) {
+                                        extract($EditPusat);
                                         ?>
                                         <option value="<?= $PUSAT_KEY; ?>"><?= $PUSAT_DESKRIPSI; ?></option>
                                         <?php

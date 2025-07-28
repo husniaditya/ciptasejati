@@ -14,13 +14,26 @@ if (isset($_POST["savedaerah"])) {
         $DAERAH_ID = $_POST["DAERAH_ID"];
         $PUSAT_KEY = $_POST["PUSAT_KEY"];
         $DAERAH_DESKRIPSI = $_POST["DAERAH_DESKRIPSI"];
-
-        $GetPusatID = GetQuery("select PUSAT_ID from m_pusat where PUSAT_KEY = '$PUSAT_KEY'");
-        while ($rowPusatID = $GetPusatID->fetch(PDO::FETCH_ASSOC)) {
-            extract($rowPusatID);
+        
+        // GET PUSAT
+        $params = array_fill(0, 10, '');
+        $params[0] = 'GET';
+        $params[2] = $PUSAT_KEY;
+        $getPusat = GetQueryParam("zsp_m_daerah", $params);
+        foreach ($getPusat as $rowPusat) {
+            extract($rowPusat);
         }
 
-        GetQuery("insert into m_daerah select uuid(),'$PUSAT_KEY','$PUSAT_ID.$DAERAH_ID','$DAERAH_DESKRIPSI',null,null,null,0,'$USER_ID','$localDateTime'");
+        // INSERT
+        $params = array_fill(0, 10, '');
+        $params[0] = 'INSERT';
+        $params[2] = $PUSAT_KEY;
+        $params[4] = $PUSAT_ID;
+        $params[5] = $DAERAH_ID;
+        $params[6] = $DAERAH_DESKRIPSI;
+        $params[8] = $USER_ID;
+        $params[9] = $localDateTime;
+        GetQueryParam("zsp_m_daerah", $params);
 
         $response="Success";
         echo $response;
@@ -43,12 +56,27 @@ if (isset($_POST["editdaerah"])) {
         $DAERAH_DESKRIPSI = $_POST["DAERAH_DESKRIPSI"];
         $DELETION_STATUS = $_POST["DELETION_STATUS"];
 
-        $GetPusatID = GetQuery("select PUSAT_ID from m_pusat where PUSAT_KEY = '$PUSAT_KEY'");
-        while ($rowPusatID = $GetPusatID->fetch(PDO::FETCH_ASSOC)) {
-            extract($rowPusatID);
+        // GET PUSAT
+        $params = array_fill(0, 10, '');
+        $params[0] = 'GET';
+        $params[2] = $PUSAT_KEY;
+        $getPusat = GetQueryParam("zsp_m_daerah", $params);
+        foreach ($getPusat as $rowPusat) {
+            extract($rowPusat);
         }
-
-        GetQuery("update m_daerah set DAERAH_ID= '$PUSAT_ID.$DAERAH_ID', PUSAT_KEY = '$PUSAT_KEY', DAERAH_DESKRIPSI = '$DAERAH_DESKRIPSI', DELETION_STATUS = '$DELETION_STATUS', INPUT_BY = '$USER_ID', INPUT_DATE = '$localDateTime' where DAERAH_KEY = '$DAERAH_KEY'");
+        
+        // UPDATE
+        $params = array_fill(0, 10, '');
+        $params[0] = 'UPDATE';
+        $params[2] = $PUSAT_KEY;
+        $params[3] = $DAERAH_KEY;
+        $params[4] = $PUSAT_ID;
+        $params[5] = $DAERAH_ID;
+        $params[6] = $DAERAH_DESKRIPSI;
+        $params[7] = $DELETION_STATUS;
+        $params[8] = $USER_ID;
+        $params[9] = $localDateTime;
+        $asd = GetQueryParam("zsp_m_daerah", $params);
 
         $response="Success";
         echo $response;
@@ -65,7 +93,12 @@ if (isset($_POST["EVENT_ACTION"])) {
     try {
         $DAERAH_KEY = $_POST["DAERAH_KEY"];
     
-        GetQuery("delete from m_daerah where DAERAH_KEY = '$DAERAH_KEY'");
+        // DELETE
+        $params = array_fill(0, 10, '');
+        $params[0] = 'DELETE';
+        $params[3] = $DAERAH_KEY;
+        GetQueryParam("zsp_m_daerah", $params);
+
         $response="Success";
         echo $response;
     } catch (\Throwable $th) {

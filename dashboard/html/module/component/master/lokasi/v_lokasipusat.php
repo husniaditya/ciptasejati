@@ -1,7 +1,9 @@
 <?php
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 
-$getPusat = GetQuery("select * from m_pusat p left join m_anggota a on p.INPUT_BY = a.ANGGOTA_ID AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0 where p.DELETION_STATUS = 0");
+$PPARAM = "Pusat";
+$params = ['GET', $PPARAM] + array_fill(0, 12, '');
+$getPusat = GetQueryParam("zsp_m_pusat", $params);
 ?>
 
 <?php
@@ -41,7 +43,7 @@ if ($_SESSION["ADD_LokasiPusat"] == "Y") {
                 </thead>
                 <tbody id="pusatdata">
                     <?php
-                    while($rowPusat = $getPusat->fetch(PDO::FETCH_ASSOC)) {
+                    foreach ($getPusat as $rowPusat) {
                         extract($rowPusat);
                         ?>
                         <tr>

@@ -1,435 +1,40 @@
-
-
 // PPD Table
 function callTable() {
-  $('#ppd-table').DataTable({
-      responsive: true,
-      order: [],
-      dom: 'Bfrtlip',
-      paging: true,
-      scrollX: true,
-      scrollY: '350px', // Set the desired height here
-      buttons: [
-          'copy', 'csv', 'excel', 'pdf'
-      ]
+  ['#ppd-table', '#lapppd-table', '#ppdKoor-table'].forEach(id => {
+    if ($(id).length) {
+      $(id).DataTable({
+        responsive: true,
+        order: [],
+        dom: 'Bfrtlip',
+        paging: true,
+        scrollX: true,
+        scrollY: '350px',
+        buttons: ['copy', 'csv', 'excel', 'pdf']
+      });
+    }
   });
-
-  $('#lapppd-table').DataTable({
-      responsive: true,
-      order: [],
-      dom: 'Bfrtlip',
-      paging: true,
-      scrollX: true,
-      scrollY: '350px', // Set the desired height here
-      buttons: [
-          'copy', 'csv', 'excel', 'pdf'
-      ]
-  });
-  
-  $('#ppdKoor-table').DataTable({
-    responsive: true,
-    order: [],
-    dom: 'Bfrtlip',
-    paging: true,
-    scrollX: true,
-    scrollY: '350px', // Set the desired height here
-    buttons: [
-        'copy', 'csv', 'excel', 'pdf'
-    ]
-});
 
   $('#ApprovePPDGuru, #ViewPPDGuru').on('shown.bs.modal', function () {
-    // Destroy DataTable for riwayatmutasi-table if it exists
     if ($.fn.DataTable.isDataTable('#detailppd-table')) {
       $('#detailppd-table').DataTable().destroy();
     }
-
     $('#detailppd-table').DataTable({
       responsive: true,
       order: [],
       dom: 'Bfrtlip',
       paging: true,
       scrollX: true,
-      scrollY: '350px', // Set the desired height here
-      buttons: [
-          'copy', 'csv', 'excel', 'pdf'
-      ]
+      scrollY: '350px',
+      buttons: ['copy', 'csv', 'excel', 'pdf']
     });
   });
-}
-
-// Call the function when the document is ready
-$(document).ready(function() { // Function Call Table
-  callTable();
-});
-
-function resetPreview() { // Function Reset Preview Dropdown Value
-  var selectizeInstance2 = $('#selectize-dropdown2')[0].selectize; // Add Tingkatan
-  var selectizeInstance4 = $('#selectize-dropdown4')[0].selectize; // Add Anggota
-  var selectizeInstance8 = $('#selectize-dropdown8')[0].selectize; // Add Lokasi PPD
-  var selectizeInstance6 = $('#selectize-dropdown6')[0].selectize; // Edit Tingkatan
-  var selectizeInstance7 = $('#selectize-dropdown7')[0].selectize; // Edit Anggota
-  var selectizeInstance11 = $('#selectize-dropdown11')[0].selectize; // Edit Lokasi PPD
-
-  var isExist = $('#selectize-dropdown9').length > 0 && $('#selectize-dropdown10').length > 0 && $('#selectize-dropdown3').length > 0 && $('#selectize-dropdown5').length > 0;
-
-  if (isExist) {
-    var selectizeInstance9 = $('#selectize-dropdown9')[0].selectize;
-    var selectizeInstance10 = $('#selectize-dropdown10')[0].selectize;
-    var selectizeInstance3 = $('#selectize-dropdown3')[0].selectize;
-    var selectizeInstance5 = $('#selectize-dropdown5')[0].selectize;
-  }
-
-  if (selectizeInstance9) {
-    selectizeInstance9.clear();
-  }
-  if (selectizeInstance10) {
-    selectizeInstance10.clear();
-  }
-  if (selectizeInstance3) {
-    selectizeInstance3.clear();
-  }
-  if (selectizeInstance5) {
-    selectizeInstance5.clear();
-  }
-  if (selectizeInstance2) {
-    selectizeInstance2.clear();
-  }
-  if (selectizeInstance4) {
-    selectizeInstance4.clear();
-  }
-  if (selectizeInstance8) {
-    selectizeInstance8.clear();
-  }
-  if (selectizeInstance6) {
-    selectizeInstance6.clear();
-  }
-  if (selectizeInstance7) {
-    selectizeInstance7.clear();
-  }
-  if (selectizeInstance11) {
-    selectizeInstance11.clear();
-  }
-}
-
-function savePDFToDrive(PPD_ID) { // Function Save PDF to Drive
-  return new Promise(function(resolve, reject) {
-    $.ajax({
-      type: 'POST',
-      url: 'module/backend/transaksi/aktivitas/ppd/t_ppdfile.php',
-      data: { id: PPD_ID },
-      success: function(response) {
-        // Check the response from the server
-        // console.log(response);
-        resolve(response);
-      },
-      error: function(xhr, status, error) {
-        reject('Error! ' + xhr.status + ' ' + error);
-      }
-    });
-  });
-}
-
-function sendEmailNotification(MUTASI_ID) { // Function Send Email Notification
-  return new Promise(function(resolve, reject) {
-    $.ajax({
-      type: 'POST',
-      url: 'module/backend/transaksi/anggota/mutasianggota/t_mutasimail.php',
-      data: { MUTASI_ID: MUTASI_ID },
-      success: function(response) {
-        // Check the response from the server
-        resolve(response);
-      },
-      error: function(xhr, status, error) {
-        reject('Error! ' + xhr.status + ' ' + error);
-      }
-    });
-  });
-}
-
-// Assuming you have a Bootstrap modal with the ID "myModal"
-
-$('#EditPPD').on('hidden.bs.modal', handleModalHidden);
-$('#AddPPD').on('hidden.bs.modal', handleModalHidden);
-
-var formSubmitted = false; // Flag to indicate whether the form has been submitted
-
-// ----- Start of Anggota Section ----- //
-function handleForm(formId, successNotification, failedNotification, updateNotification) {
-  // Set the flag to true indicating that the form has been submitted
-  formSubmitted = true;
-  // Function to show the full-screen loading overlay with a progress bar
-  function showLoadingOverlay(message) {
-    var overlayHtml = '<div id="loading-overlay" class="loading-overlay"><div class="loading-spinner"></div><div class="loading-message">' + message + '</div><div class="progress-bar"><div class="progress"></div></div></div>';
-    $('body').append(overlayHtml);
-  }
-
-  $(formId).submit(function (event) {
-    // Example usage:
-    showLoadingOverlay('Data sedang diproses, mohon ditunggu.');
-    
-    event.preventDefault(); // Prevent the default form submission
-
-    var formData = new FormData($(this)[0]); // Create FormData object from the form
-    var buttonId = $(event.originalEvent.submitter).attr('id'); // Retrieve button ID);
-
-    // Manually add the button title or ID to the serialized data
-    formData.append(buttonId, 'edit');
-
-    var PPD_ID; // Declare MUTASI_ID here to make it accessible in the outer scope
-
-    $.ajax({
-      type: 'POST',
-      url: 'module/backend/transaksi/aktivitas/ppd/t_ppd.php',
-      data: formData,
-      processData: false, // Prevent jQuery from processing the data
-      contentType: false, // Prevent jQuery from setting content type
-      success: function (response) {
-        // Split the response into parts using a separator (assuming a dot in this case)
-        var parts = response.split(',');
-        var successMessage = parts[0];
-        PPD_ID = parts[1]; // Assign value to MUTASI_ID
-
-        // Check the response from the server
-        if (successMessage === 'Success') {
-          // Display success notification
-          successNotification('Data berhasil tersimpan!');
-
-          // Close the modal
-          $(formId.replace("-form", "")).modal('hide');
-
-          // Call the reloadDataTable() function after inserting data to reload the DataTable
-          $.ajax({
-            type: 'POST',
-            url: 'module/ajax/transaksi/aktivitas/ppd/aj_tableppd.php',
-            success: function (response) {
-              // Destroy the DataTable before updating
-              $('#ppd-table').DataTable().destroy();
-              $("#ppddata").html(response);
-              // Reinitialize Sertifikat Table
-              callTable();
-            },
-            error: function (xhr, status, error) {
-              // Handle any errors
-            }
-          });
-
-          // Hide the loading overlay after the initial processing
-          hideLoadingOverlay();
-          
-        } else {
-          // Display error notification
-          failedNotification(response);
-
-          // Hide the loading overlay in case of an error
-          hideLoadingOverlay();
-        }
-      },
-      error: function (xhr, status, error) {
-        // Handle any errors
-
-        // Hide the loading overlay in case of an error
-        hideLoadingOverlay();
-      }
-    });
-  });
-}
-
-function handleFormApproveKoordinator(formId, successNotification, failedNotification, updateNotification) {
-  // Set the flag to true indicating that the form has been submitted
-  formSubmitted = true;
-  // Function to show the full-screen loading overlay with a progress bar
-  function showLoadingOverlay(message) {
-    var overlayHtml = '<div id="loading-overlay" class="loading-overlay"><div class="loading-spinner"></div><div class="loading-message">' + message + '</div><div class="progress-bar"><div class="progress"></div></div></div>';
-    $('body').append(overlayHtml);
-  }
-
-  $(formId).submit(function (event) {
-    // Example usage:
-    showLoadingOverlay('Data sedang diproses, mohon ditunggu.');
-    
-    event.preventDefault(); // Prevent the default form submission
-
-    var formData = new FormData($(this)[0]); // Create FormData object from the form
-    var buttonId = $(event.originalEvent.submitter).attr('id'); // Retrieve button ID);
-
-    // Manually add the button title or ID to the serialized data
-    formData.append(buttonId, 'edit');
-
-    var PPD_ID; // Declare MUTASI_ID here to make it accessible in the outer scope
-
-    $.ajax({
-      type: 'POST',
-      url: 'module/backend/transaksi/aktivitas/ppd/t_ppd.php',
-      data: formData,
-      processData: false, // Prevent jQuery from processing the data
-      contentType: false, // Prevent jQuery from setting content type
-      success: function (response) {
-        // Split the response into parts using a separator (assuming a dot in this case)
-        var parts = response.split(',');
-        var successMessage = parts[0];
-        PPD_ID = parts[1]; // Assign value to MUTASI_ID
-
-        // Check the response from the server
-        if (successMessage === 'Success') {
-          // Display success notification
-          successNotification('Data berhasil tersimpan!');
-
-          // Close the modal
-          $(formId.replace("-form", "")).modal('hide');
-
-          // Call the reloadDataTable() function after inserting data to reload the DataTable
-          $.ajax({
-            type: 'POST',
-            url: 'module/ajax/transaksi/aktivitas/ppd/aj_tableppdKoordinator.php',
-            success: function (response) {
-              // Destroy the DataTable before updating
-              $('#ppdKoor-table').DataTable().destroy();
-              $("#koordinatorppddata").html(response);
-              // Reinitialize Sertifikat Table
-              callTable();
-            },
-            error: function (xhr, status, error) {
-              // Handle any errors
-            }
-          });
-
-          // Hide the loading overlay after the initial processing
-          hideLoadingOverlay();
-
-          // Example usage:
-          showLoadingOverlay('Proses pembuatan dokumen...');
-
-          // Save PDF to Drive and send email notification concurrently
-          Promise.all([savePDFToDrive(PPD_ID)])
-            .then(function (responses) {
-              const pdfResponse = responses[0];
-
-              // Handle the responses if needed
-              if (pdfResponse) {
-              }
-            })
-            .catch(function (errors) {
-              // Handle errors
-              for (const error of errors) {
-                errorNotification(error);
-              }
-            })
-            .finally(function () {
-              // Hide the loading overlay after all asynchronous tasks are complete
-              hideLoadingOverlay();
-            });
-        } else {
-          // Display error notification
-          failedNotification(response);
-
-          // Hide the loading overlay in case of an error
-          hideLoadingOverlay();
-        }
-      },
-      error: function (xhr, status, error) {
-        // Handle any errors
-
-        // Hide the loading overlay in case of an error
-        hideLoadingOverlay();
-      }
-    });
-  });
-}
-
-function handleFormApproveGuru(formId, successNotification, failedNotification, updateNotification) {
-  // Set the flag to true indicating that the form has been submitted
-  formSubmitted = true;
-  // Function to show the full-screen loading overlay with a progress bar
-  function showLoadingOverlay(message) {
-    var overlayHtml = '<div id="loading-overlay" class="loading-overlay"><div class="loading-spinner"></div><div class="loading-message">' + message + '</div><div class="progress-bar"><div class="progress"></div></div></div>';
-    $('body').append(overlayHtml);
-  }
-
-  $(formId).submit(function (event) {
-    // Example usage:
-    showLoadingOverlay('Data sedang diproses, mohon ditunggu.');
-    
-    event.preventDefault(); // Prevent the default form submission
-
-    var formData = new FormData($(this)[0]); // Create FormData object from the form
-    var buttonId = $(event.originalEvent.submitter).attr('id'); // Retrieve button ID);
-
-    // Manually add the button title or ID to the serialized data
-    formData.append(buttonId, 'edit');
-
-    var PPD_ID; // Declare MUTASI_ID here to make it accessible in the outer scope
-
-    $.ajax({
-      type: 'POST',
-      url: 'module/backend/transaksi/aktivitas/ppd/t_ppd.php',
-      data: formData,
-      processData: false, // Prevent jQuery from processing the data
-      contentType: false, // Prevent jQuery from setting content type
-      success: function (response) {
-        // Split the response into parts using a separator (assuming a dot in this case)
-        var parts = response.split(',');
-        var successMessage = parts[0];
-        PPD_ID = parts[1]; // Assign value to MUTASI_ID
-
-        // Check the response from the server
-        if (successMessage === 'Success') {
-          // Display success notification
-          successNotification('Data berhasil tersimpan!');
-
-          // Close the modal
-          $(formId.replace("-form", "")).modal('hide');
-
-          // Call the reloadDataTable() function after inserting data to reload the DataTable
-          $.ajax({
-            type: 'POST',
-            url: 'module/ajax/transaksi/aktivitas/ppd/aj_tableppdGuru.php',
-            success: function (response) {
-              // Destroy the DataTable before updating
-              $('#ppd-table').DataTable().destroy();
-              $("#ppddata").html(response);
-              // Reinitialize Sertifikat Table
-              callTable();
-            },
-            error: function (xhr, status, error) {
-              // Handle any errors
-            }
-          });
-
-          // Hide the loading overlay after the initial processing
-          hideLoadingOverlay();
-
-        } else {
-          // Display error notification
-          failedNotification(response);
-
-          // Hide the loading overlay in case of an error
-          hideLoadingOverlay();
-        }
-      },
-      error: function (xhr, status, error) {
-        // Handle any errors
-
-        // Hide the loading overlay in case of an error
-        hideLoadingOverlay();
-      }
-    });
-  });
-}
-
-function handleModalHidden() {
-
-  resetPreview();
 }
 
 $(document).ready(function() {
-  // add PPD
+  callTable();
   handleForm('#AddPPD-form', SuccessNotification, FailedNotification, UpdateNotification);
-  // edit PPD
   handleForm('#EditPPD-form', UpdateNotification, FailedNotification, UpdateNotification);
-  // Approve PPD Koordinator
   handleFormApproveKoordinator('#ApprovePPDKoordinator-form', UpdateNotification, FailedNotification, UpdateNotification);
-  // Approve PPD Guru
   handleFormApproveGuru('#ApprovePPDGuru-form', UpdateNotification, FailedNotification, UpdateNotification);
 
   // Event listener for the daerah awal dropdown change
@@ -889,75 +494,167 @@ $(document).ready(function() {
   });
 });
 
-// Delete PPD
-function eventppd(value1,value2) {
-  // Ask for confirmation
-  if (confirm("Apakah anda yakin untuk mereset / menghapus data ini?")) {
-    // Create the data object
-    var eventdata = {
-      PPD_ID: value1,
-      EVENT_ACTION: value2
-    };
+// Utility: reload DataTable and update HTML
+function reloadTable(tableId, url, htmlId, cb) {
+  $.post(url, response => {
+    if ($.fn.DataTable.isDataTable(tableId)) $(tableId).DataTable().destroy();
+    $(htmlId).html(response);
+    callTable();
+    if (cb) cb();
+  });
+}
 
-    // Perform the AJAX request
+// Reset Selectize dropdowns utility
+function clearSelectize(ids) {
+  ids.forEach(id => {
+    let s = $(id)[0]?.selectize;
+    if (s) s.clear();
+  });
+}
+
+// Reset preview dropdowns
+function resetPreview() {
+  clearSelectize([
+    '#selectize-dropdown2', '#selectize-dropdown4', '#selectize-dropdown8',
+    '#selectize-dropdown6', '#selectize-dropdown7', '#selectize-dropdown11',
+    '#selectize-dropdown9', '#selectize-dropdown10', '#selectize-dropdown3', '#selectize-dropdown5'
+  ]);
+}
+
+// Save PDF to Drive
+function savePDFToDrive(PPD_ID) {
+  return $.post('module/backend/transaksi/aktivitas/ppd/t_ppdfile.php', { id: PPD_ID });
+}
+
+// Send Email Notification
+function sendEmailNotification(MUTASI_ID) {
+  return $.post('module/backend/transaksi/anggota/mutasianggota/t_mutasimail.php', { MUTASI_ID });
+}
+
+// ----- Start of Anggota Section ----- //
+function handleForm(formId, successNotification, failedNotification) {
+  $(formId).submit(function (event) {
+    showLoadingOverlay('Data sedang diproses, mohon ditunggu.');
+    event.preventDefault();
+    var formData = new FormData(this);
+    var buttonId = $(event.originalEvent.submitter).attr('id');
+    formData.append(buttonId, 'edit');
     $.ajax({
       type: 'POST',
       url: 'module/backend/transaksi/aktivitas/ppd/t_ppd.php',
-      data: eventdata,
-      success: function(response) {
-        // Check the response from the server
-        if (response === 'Success') {
-          // Display success notification
-          if (value2 === 'cancel') {
-            UpdateNotification('Data berhasil direset!');
-          } else {
-            DeleteNotification('Data berhasil dihapus!');
-          }
-          
-          // Call the reloadDataTable() function after inserting data to reload the DataTable
-          $.ajax({
-            type: 'POST',
-            url: 'module/ajax/transaksi/aktivitas/ppd/aj_tableppd.php',
-            success: function (response) {
-              // Destroy the DataTable before updating
-              $('#ppd-table').DataTable().destroy();
-              $("#ppddata").html(response);
-              // Reinitialize Sertifikat Table
-              callTable();
-            },
-            error: function (xhr, status, error) {
-              // Handle any errors
-            }
-          });
-
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (response) {
+        var [successMessage, PPD_ID] = response.split(',');
+        if (successMessage === 'Success') {
+          successNotification('Data berhasil tersimpan!');
+          $(formId.replace("-form", "")).modal('hide');
+          reloadTable('#ppd-table', 'module/ajax/transaksi/aktivitas/ppd/aj_tableppd.php', '#ppddata');
         } else {
-          // Display error notification
-          FailedNotification(response);
+          failedNotification(response);
+        }
+        hideLoadingOverlay();
+      },
+      error: function () { hideLoadingOverlay(); }
+    });
+  });
+}
+
+function handleFormApproveKoordinator(formId, successNotification, failedNotification) {
+  $(formId).submit(function (event) {
+    showLoadingOverlay('Data sedang diproses, mohon ditunggu.');
+    event.preventDefault();
+    var formData = new FormData(this);
+    var buttonId = $(event.originalEvent.submitter).attr('id');
+    formData.append(buttonId, 'edit');
+    $.ajax({
+      type: 'POST',
+      url: 'module/backend/transaksi/aktivitas/ppd/t_ppd.php',
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (response) {
+        var [successMessage, PPD_ID] = response.split(',');
+        if (successMessage === 'Success') {
+          successNotification('Data berhasil tersimpan!');
+          $(formId.replace("-form", "")).modal('hide');
+          reloadTable('#ppdKoor-table', 'module/ajax/transaksi/aktivitas/ppd/aj_tableppdKoordinator.php', '#koordinatorppddata', () => {
+            showLoadingOverlay('Proses pembuatan dokumen...');
+            savePDFToDrive(PPD_ID).always(hideLoadingOverlay);
+          });
+        } else {
+          failedNotification(response);
+          hideLoadingOverlay();
         }
       },
-      error: function(xhr, status, error) {
-        console.error('Request failed. Status: ' + xhr.status);
-      }
+      error: function () { hideLoadingOverlay(); }
     });
-    // console.log(response);
+  });
+}
+
+function handleFormApproveGuru(formId, successNotification, failedNotification) {
+  $(formId).submit(function (event) {
+    showLoadingOverlay('Data sedang diproses, mohon ditunggu.');
+    event.preventDefault();
+    var formData = new FormData(this);
+    var buttonId = $(event.originalEvent.submitter).attr('id');
+    formData.append(buttonId, 'edit');
+    $.ajax({
+      type: 'POST',
+      url: 'module/backend/transaksi/aktivitas/ppd/t_ppd.php',
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (response) {
+        var [successMessage] = response.split(',');
+        if (successMessage === 'Success') {
+          successNotification('Data berhasil tersimpan!');
+          $(formId.replace("-form", "")).modal('hide');
+          reloadTable('#ppd-table', 'module/ajax/transaksi/aktivitas/ppd/aj_tableppdGuru.php', '#ppddata');
+        } else {
+          failedNotification(response);
+        }
+        hideLoadingOverlay();
+      },
+      error: function () { hideLoadingOverlay(); }
+    });
+  });
+}
+
+function handleModalHidden() { resetPreview(); }
+$('#EditPPD, #AddPPD').on('hidden.bs.modal', handleModalHidden);
+
+// Delete PPD
+function eventppd(value1, value2) {
+  if (confirm("Apakah anda yakin untuk mereset / menghapus data ini?")) {
+    $.post('module/backend/transaksi/aktivitas/ppd/t_ppd.php', {
+      PPD_ID: value1,
+      EVENT_ACTION: value2
+    }, function(response) {
+      if (response === 'Success') {
+        value2 === 'cancel' ? UpdateNotification('Data berhasil direset!') : DeleteNotification('Data berhasil dihapus!');
+        reloadTable('#ppd-table', 'module/ajax/transaksi/aktivitas/ppd/aj_tableppd.php', '#ppddata');
+      } else {
+        FailedNotification(response);
+      }
+    }).fail(xhr => console.error('Request failed. Status: ' + xhr.status));
   }
 }
 
 // View PPD
 $(document).on("click", ".open-ViewPPD", function () {
-  
   var key = $(this).data('id');
   var cabang = $(this).data('cabang');
-  
-  // Make an AJAX request to fetch additional data based on the selected value
   $.ajax({
       url: 'module/ajax/transaksi/aktivitas/ppd/aj_getdetailppd.php',
       method: 'POST',
-      data: JSON.stringify({ // Convert data to JSON string before sending
-        PPD_ID: key
-      }),
-      contentType: 'application/json', // Set the Content-Type as JSON
-      dataType: 'json', // Specify the expected data type as JSON
+      data: JSON.stringify({ PPD_ID: key }),
+      contentType: 'application/json',
+      dataType: 'json',
+      headers: {
+        'X-Api-Key': '$2y$12$NMxDXU77/MPLgD44nkvdB.jPdB.n5kJLWcYGe8lxBoBiGyk/Jeysu'
+      },
       success: function(response) {
         // console.log('response', response);
         
@@ -1009,6 +706,9 @@ $(document).on("click", ".open-EditPPD", function () {
     }),
     contentType: 'application/json', // Set the Content-Type as JSON
     dataType: 'json', // Specify the expected data type as JSON
+    headers: {
+      'X-Api-Key': '$2y$12$NMxDXU77/MPLgD44nkvdB.jPdB.n5kJLWcYGe8lxBoBiGyk/Jeysu'
+    },
     success: function(response) {
       // console.log('response', response);
       if (response.result.message === "OK" && response.data && response.data.length > 0) {
@@ -1082,6 +782,9 @@ $(document).on("click", ".open-ApprovePPDKoordinator", function () {
     }),
     contentType: 'application/json', // Set the Content-Type as JSON
     dataType: 'json', // Specify the expected data type as JSON
+    headers: {
+      'X-Api-Key': '$2y$12$NMxDXU77/MPLgD44nkvdB.jPdB.n5kJLWcYGe8lxBoBiGyk/Jeysu'
+    },
     success: function(response) {
       // console.log('response', data);
       if (response.result.message === "OK" && response.data && response.data.length > 0) {
@@ -1241,308 +944,98 @@ $(document).on("click", ".open-ViewUKT", function () {
   });
 });
 
-
-// Mutasi Anggota Filtering
-// Attach debounced event handler to form inputs
-$('.filterPPD select, .filterPPD input').on('change input', debounce(filterPPDEvent, 500));
+// Filtering utilities
 function filterPPDEvent() {
-  // Your event handling code here
-  const daerah = $('#selectize-select3').val();
-  const cabang = $('#selectize-select2').val();
-  const cabangPPD = $('#selectize-dropdown').val();
-  const ppd = $('#filterPPD_ID').val();
-  const id = $('#filterANGGOTA_ID').val();
-  const nama = $('#filterANGGOTA_NAMA').val();
-  const tingkatan = $('#selectize-select').val();
-  const jenis = $('#filterPPD_JENIS').val();
-  const tanggal = $('#datepicker42').val();
-
-  // Create a data object to hold the form data
   const formData = {
-    DAERAH_KEY: daerah,
-    CABANG_KEY: cabang,
-    PPD_LOKASI: cabangPPD,
-    PPD_ID: ppd,
-    ANGGOTA_ID: id,
-    ANGGOTA_NAMA: nama,
-    TINGKATAN_ID: tingkatan,
-    PPD_JENIS: jenis,
-    PPD_TANGGAL: tanggal
+    DAERAH_KEY: $('#selectize-select3').val(),
+    CABANG_KEY: $('#selectize-select2').val(),
+    PPD_LOKASI: $('#selectize-dropdown').val(),
+    PPD_ID: $('#filterPPD_ID').val(),
+    ANGGOTA_ID: $('#filterANGGOTA_ID').val(),
+    ANGGOTA_NAMA: $('#filterANGGOTA_NAMA').val(),
+    TINGKATAN_ID: $('#selectize-select').val(),
+    PPD_JENIS: $('#filterPPD_JENIS').val(),
+    PPD_TANGGAL: $('#datepicker42').val()
   };
-
-  $.ajax({
-    type: "POST",
-    url: 'module/ajax/transaksi/aktivitas/ppd/aj_tableppd.php',
-    data: formData,
-    success: function(response){
-      // Destroy the DataTable before updating
-      $('#ppd-table').DataTable().destroy();
-      $("#ppddata").html(response);
-      // Reinitialize Sertifikat Table
-      callTable();
-    }
-  });
-  // console.log(formData);
+  reloadTable('#ppd-table', 'module/ajax/transaksi/aktivitas/ppd/aj_tableppd.php', '#ppddata');
 }
 
-$('.filterPPDKoordinator select, .filterPPDKoordinator input').on('change input', debounce(filterPPDKoordinatorEvent, 500));
 function filterPPDKoordinatorEvent() {
-  // Your event handling code here
-  const daerah = $('#selectize-select3').val();
-  const cabang = $('#selectize-select2').val();
-  const cabangPPD = $('#selectize-dropdown').val();
-  const ppd = $('#filterPPD_ID').val();
-  const id = $('#filterANGGOTA_ID').val();
-  const nama = $('#filterANGGOTA_NAMA').val();
-  const tingkatan = $('#selectize-select').val();
-  const jenis = $('#filterPPD_JENIS').val();
-  const tanggal = $('#datepicker42').val();
-
-  // Create a data object to hold the form data
   const formData = {
-    DAERAH_KEY: daerah,
-    CABANG_KEY: cabang,
-    PPD_LOKASI: cabangPPD,
-    PPD_ID: ppd,
-    ANGGOTA_ID: id,
-    ANGGOTA_NAMA: nama,
-    TINGKATAN_ID: tingkatan,
-    PPD_JENIS: jenis,
-    PPD_TANGGAL: tanggal
+    DAERAH_KEY: $('#selectize-select3').val(),
+    CABANG_KEY: $('#selectize-select2').val(),
+    PPD_LOKASI: $('#selectize-dropdown').val(),
+    PPD_ID: $('#filterPPD_ID').val(),
+    ANGGOTA_ID: $('#filterANGGOTA_ID').val(),
+    ANGGOTA_NAMA: $('#filterANGGOTA_NAMA').val(),
+    TINGKATAN_ID: $('#selectize-select').val(),
+    PPD_JENIS: $('#filterPPD_JENIS').val(),
+    PPD_TANGGAL: $('#datepicker42').val()
   };
-  // console.log(formData);
-
-  $.ajax({
-    type: "POST",
-    url: 'module/ajax/transaksi/aktivitas/ppd/aj_tableppdKoordinator.php',
-    data: formData,
-    success: function(response){
-      // Destroy the DataTable before updating
-      $('#ppdKoor-table').DataTable().destroy();
-      $("#koordinatorppddata").html(response);
-      // Reinitialize Sertifikat Table
-      callTable();
-    }
-  });
-  // console.log(formData);
+  reloadTable('#ppdKoor-table', 'module/ajax/transaksi/aktivitas/ppd/aj_tableppdKoordinator.php', '#koordinatorppddata');
 }
 
-$('.filterPPDGuru select, .filterPPDGuru input').on('change input', debounce(filterPPDGuruEvent, 500));
 function filterPPDGuruEvent() {
-  // Your event handling code here
   const cabangPPD = $('#selectize-dropdown').val();
   const tanggal = $('#selectize-dropdown2').val();
-
-  // Create a data object to hold the form data
-  const formData = {
-    PPD_LOKASI: cabangPPD,
-    PPD_TANGGAL: tanggal
-  };
-
-  $.ajax({
-    type: "POST",
-    url: 'module/ajax/transaksi/aktivitas/ppd/aj_tableppdGuru.php',
-    data: formData,
-    success: function(response){
-      // Destroy the DataTable before updating
-      $('#ppd-table').DataTable().destroy();
-      $("#ppddata").html(response);
-      // Reinitialize Sertifikat Table
-      callTable();
-    }
-  });
-  // console.log(formData);
+  const formData = { PPD_LOKASI: cabangPPD, PPD_TANGGAL: tanggal };
+  reloadTable('#ppd-table', 'module/ajax/transaksi/aktivitas/ppd/aj_tableppdGuru.php', '#ppddata');
 }
 
-$('.filterPPDGuruReport select, .filterPPDGuruReport input').on('change input', debounce(filterPPDGuruReportEvent, 500));
 function filterPPDGuruReportEvent() {
-  // Your event handling code here
   const cabangPPD = $('#selectize-dropdown').val();
   const tanggal = $('#selectize-dropdown2').val();
-
-  // Create a data object to hold the form data
-  const formData = {
-    PPD_LOKASI: cabangPPD,
-    PPD_TANGGAL: tanggal
-  };
-
-  $.ajax({
-    type: "POST",
-    url: 'module/ajax/transaksi/aktivitas/ppd/aj_tableppdGuruReport.php',
-    data: formData,
-    success: function(response){
-      // Destroy the DataTable before updating
-      $('#ppd-table').DataTable().destroy();
-      $("#ppddata").html(response);
-      // Reinitialize Sertifikat Table
-      callTable();
-    }
-  });
-  // console.log(formData);
+  const formData = { PPD_LOKASI: cabangPPD, PPD_TANGGAL: tanggal };
+  reloadTable('#ppd-table', 'module/ajax/transaksi/aktivitas/ppd/aj_tableppdGuruReport.php', '#ppddata');
 }
 
-$('.filterLapPPD select, .filterLapPPD input').on('change input', debounce(filterLapPPDEvent, 500));
 function filterLapPPDEvent() {
-  // Your event handling code here
-  const daerah = $('#selectize-select3').val();
-  const cabang = $('#selectize-select2').val();
-  const cabangPPD = $('#selectize-dropdown').val();
-  const ppd = $('#filterPPD_ID').val();
-  const id = $('#filterANGGOTA_ID').val();
-  const nama = $('#filterANGGOTA_NAMA').val();
-  const tingkatan = $('#selectize-select').val();
-  const jenis = $('#filterPPD_JENIS').val();
-  const tanggal = $('#datepicker42').val();
-
-  // Create a data object to hold the form data
   const formData = {
-    DAERAH_KEY: daerah,
-    CABANG_KEY: cabang,
-    PPD_LOKASI: cabangPPD,
-    PPD_ID: ppd,
-    ANGGOTA_ID: id,
-    ANGGOTA_NAMA: nama,
-    TINGKATAN_ID: tingkatan,
-    PPD_JENIS: jenis,
-    PPD_TANGGAL: tanggal
+    DAERAH_KEY: $('#selectize-select3').val(),
+    CABANG_KEY: $('#selectize-select2').val(),
+    PPD_LOKASI: $('#selectize-dropdown').val(),
+    PPD_ID: $('#filterPPD_ID').val(),
+    ANGGOTA_ID: $('#filterANGGOTA_ID').val(),
+    ANGGOTA_NAMA: $('#filterANGGOTA_NAMA').val(),
+    TINGKATAN_ID: $('#selectize-select').val(),
+    PPD_JENIS: $('#filterPPD_JENIS').val(),
+    PPD_TANGGAL: $('#datepicker42').val()
   };
-
-  $.ajax({
-    type: "POST",
-    url: 'module/ajax/transaksi/aktivitas/ppd/aj_tablelapppd.php',
-    data: formData,
-    success: function(response){
-      // Destroy the DataTable before updating
-      $('#lapppd-table').DataTable().destroy();
-      $("#ppddata").html(response);
-      // Reinitialize Sertifikat Table
-      callTable();
-    }
-  });
-  // console.log(formData);
+  reloadTable('#lapppd-table', 'module/ajax/transaksi/aktivitas/ppd/aj_tablelapppd.php', '#ppddata');
 }
+
+// Attach debounced event handlers
+$('.filterPPD select, .filterPPD input').on('change input', debounce(filterPPDEvent, 500));
+$('.filterPPDKoordinator select, .filterPPDKoordinator input').on('change input', debounce(filterPPDKoordinatorEvent, 500));
+$('.filterPPDGuru select, .filterPPDGuru input').on('change input', debounce(filterPPDGuruEvent, 500));
+$('.filterPPDGuruReport select, .filterPPDGuruReport input').on('change input', debounce(filterPPDGuruReportEvent, 500));
+$('.filterLapPPD select, .filterLapPPD input').on('change input', debounce(filterLapPPDEvent, 500));
 
 // ----- Function to reset form ----- //
 function clearForm() {
-  
-  // Check if the administrator-specific elements exist
-  var isExist = $('#selectize-select3').length > 0 && $('#selectize-select2').length > 0;
-
-  if (isExist) {
-    var selectizeInstance1 = $('#selectize-select3')[0].selectize;
-    var selectizeInstance2 = $('#selectize-select2')[0].selectize;
-    var selectizeInstance3 = $('#selectize-select')[0].selectize;
-    var selectizeInstance5 = $('#selectize-dropdown')[0].selectize;
-  } else {
-    var selectizeInstance3 = $('#selectize-select')[0].selectize;
-    var selectizeInstance5 = $('#selectize-dropdown')[0].selectize;
-
-  }
-  
-  // Clear the fifth Selectize dropdown
-  if (selectizeInstance5) {
-    selectizeInstance5.clear();
-  }
-  // Clear the second Selectize dropdown
-  if (selectizeInstance1) {
-    selectizeInstance1.clear();
-  }
-  // Clear the second Selectize dropdown
-  if (selectizeInstance2) {
-    selectizeInstance2.clear();
-  }
-  // Clear the third Selectize dropdown
-  if (selectizeInstance3) {
-    selectizeInstance3.clear();
-  }
-  
-  // JavaScript to reset all forms with the class "resettable-form"
+  clearSelectize(['#selectize-select3', '#selectize-select2', '#selectize-select', '#selectize-dropdown']);
   document.querySelectorAll('.resettable-form').forEach(form => form.reset());
-  if ($.fn.DataTable.isDataTable('#ppd-table')) {
-    filterPPDEvent();
-  }
-  if ($.fn.DataTable.isDataTable('#ppdKoor-table')) {
-    filterPPDKoordinatorEvent();
-  }
+  if ($.fn.DataTable.isDataTable('#ppd-table')) filterPPDEvent();
+  if ($.fn.DataTable.isDataTable('#ppdKoor-table')) filterPPDKoordinatorEvent();
 }
 
 function clearFormGuru() {
-  
-  // Check if the administrator-specific elements exist
-
-  var selectizeInstance1 = $('#selectize-dropdown')[0].selectize;
-  var selectizeInstance2 = $('#selectize-dropdown2')[0].selectize;
-  
-  // Clear the third Selectize dropdown
-  if (selectizeInstance1) {
-    selectizeInstance1.clear();
-  }
-  if (selectizeInstance2) {
-    selectizeInstance2.clear();
-  }
-  
-  // JavaScript to reset all forms with the class "resettable-form"
+  clearSelectize(['#selectize-dropdown', '#selectize-dropdown2']);
   document.querySelectorAll('.resettable-form').forEach(form => form.reset());
   filterPPDGuruEvent();
 }
 
 function clearFormReportGuru() {
-  
-  // Check if the administrator-specific elements exist
-
-  var selectizeInstance1 = $('#selectize-dropdown')[0].selectize;
-  var selectizeInstance2 = $('#selectize-dropdown2')[0].selectize;
-  
-  // Clear the third Selectize dropdown
-  if (selectizeInstance1) {
-    selectizeInstance1.clear();
-  }
-  if (selectizeInstance2) {
-    selectizeInstance2.clear();
-  }
-  
-  // JavaScript to reset all forms with the class "resettable-form"
+  clearSelectize(['#selectize-dropdown', '#selectize-dropdown2']);
   document.querySelectorAll('.resettable-form').forEach(form => form.reset());
   filterPPDGuruReportEvent();
 }
 
 function clearLapForm() {
-  
-  // Check if the administrator-specific elements exist
-  var isExist = $('#selectize-select3').length > 0 && $('#selectize-select2').length > 0;
-
-  if (isExist) {
-    var selectizeInstance1 = $('#selectize-select3')[0].selectize;
-    var selectizeInstance2 = $('#selectize-select2')[0].selectize;
-    var selectizeInstance3 = $('#selectize-select')[0].selectize;
-    var selectizeInstance5 = $('#selectize-dropdown')[0].selectize;
-  } else {
-    var selectizeInstance3 = $('#selectize-select')[0].selectize;
-    var selectizeInstance5 = $('#selectize-dropdown')[0].selectize;
-
-  }
-  
-  // Clear the fifth Selectize dropdown
-  if (selectizeInstance5) {
-    selectizeInstance5.clear();
-  }
-  // Clear the second Selectize dropdown
-  if (selectizeInstance1) {
-    selectizeInstance1.clear();
-  }
-  // Clear the second Selectize dropdown
-  if (selectizeInstance2) {
-    selectizeInstance2.clear();
-  }
-  // Clear the third Selectize dropdown
-  if (selectizeInstance3) {
-    selectizeInstance3.clear();
-  }
-  
-  // JavaScript to reset all forms with the class "resettable-form"
+  clearSelectize(['#selectize-select3', '#selectize-select2', '#selectize-select', '#selectize-dropdown']);
   document.querySelectorAll('.resettable-form').forEach(form => form.reset());
   filterLapPPDEvent();
 }
-// ----- End of function to reset form ----- //
 
+// ...existing code for showLoadingOverlay/hideLoadingOverlay and other helpers...
 // ----- End of Anggota Section ----- //

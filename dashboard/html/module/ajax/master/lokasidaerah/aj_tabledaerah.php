@@ -2,9 +2,11 @@
 require_once ("../../../../module/connection/conn.php");
 
 
-$getDaerah = GetQuery("select d.*,p.PUSAT_DESKRIPSI,a.ANGGOTA_NAMA,case when d.DELETION_STATUS = 0 then 'Aktif' ELSE 'Tidak Aktif' END DAERAH_STATUS,DATE_FORMAT(d.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,RIGHT(DAERAH_ID,3) SHORT_ID from m_daerah d left join m_pusat p on d.PUSAT_KEY = p.PUSAT_KEY left join m_anggota a on d.INPUT_BY = a.ANGGOTA_ID AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0 order by d.PUSAT_KEY asc");
+$PPARAM = "Daerah";
+$params = ['GET', $PPARAM] + array_fill(0, 10, '');
+$getDaerah = GetQueryParam("zsp_m_daerah", $params);
 
-while ($rowDaerah = $getDaerah->fetch(PDO::FETCH_ASSOC)) {
+foreach ($getDaerah as $rowDaerah) {
     extract($rowDaerah);
     ?>
     <tr>

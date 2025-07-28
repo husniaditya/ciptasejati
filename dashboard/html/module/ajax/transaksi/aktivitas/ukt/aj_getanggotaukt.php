@@ -1,9 +1,17 @@
 <?php
 require_once("../../../../../module/connection/conn.php");
 
+// Enforce HTTPS
+if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+    sendErrorResponse('HTTPS is required', 403);
+    exit;
+}
+
 // Check if the request method is POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    sendErrorResponse('Invalid request method', 405); // Method Not Allowed
+    http_response_code(405); // Method Not Allowed
+    header('Content-Type: application/json');
+    echo json_encode(['result' => ['message' => 'Invalid request method']]);
     exit;
 }
 
@@ -18,7 +26,14 @@ $CABANG_KEY = $inputData["CABANG_KEY"] ?? null;
 
 // Validate if necessary data is provided
 if (empty($CABANG_KEY)) {
-    sendErrorResponse('Missing or invalid data', 400); // Bad Request
+    // Return empty data array instead of error
+    echo json_encode([
+        'result' => [
+            'message' => 'OK',
+            'id' => bin2hex(random_bytes(16))
+        ],
+        'data' => []
+    ]);
     exit;
 }
 

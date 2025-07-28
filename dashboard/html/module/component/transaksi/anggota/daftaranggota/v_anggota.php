@@ -216,6 +216,9 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                             <li><a data-toggle="modal" href="#EditAnggota" class="open-EditAnggota" style="color:cornflowerblue;" data-key="<?= $ANGGOTA_KEY; ?>" data-id="<?= $ANGGOTA_ID; ?>" data-shortid="<?= $SHORT_ID; ?>" data-daerahkey="<?= $DAERAH_KEY;?>" data-daerahdes="<?= $DAERAH_DESKRIPSI;?>" data-cabangkey="<?= $CABANG_KEY; ?>" data-cabangdes="<?= $CABANG_DESKRIPSI; ?>" data-tingkatanid=<?= $TINGKATAN_ID; ?> data-tingkatannama="<?= $TINGKATAN_NAMA; ?>" data-ktp="<?= $ANGGOTA_KTP; ?>" data-nama="<?= $ANGGOTA_NAMA; ?>" data-alamat="<?= $ANGGOTA_ALAMAT;?>" data-pekerjaan="<?= $ANGGOTA_PEKERJAAN; ?>" data-agama="<?= $ANGGOTA_AGAMA; ?>" data-kelamin="<?= $ANGGOTA_KELAMIN; ?>" data-tempatlahir="<?= $ANGGOTA_TEMPAT_LAHIR; ?>" data-tanggallahir="<?= $ANGGOTA_TANGGAL_LAHIR; ?>" data-hp="<?= $ANGGOTA_HP; ?>" data-email="<?= $ANGGOTA_EMAIL; ?>" data-pic="<?= $ANGGOTA_PIC; ?>" data-join="<?= $ANGGOTA_JOIN; ?>" data-resign="<?= $ANGGOTA_RESIGN; ?>" data-akses="<?= $ANGGOTA_AKSES; ?>" data-status="<?= $ANGGOTA_STATUS; ?>" data-statusdes="<?= $STATUS_DES; ?>" data-ranting="<?= $ANGGOTA_RANTING; ?>"><span class="ico-edit"></span> Ubah</a></li>
                                             <?php
                                         }
+                                        ?>
+                                        <li><a href="assets/print/transaksi/anggota/print_idanggota.php?id=<?= encodeIdToBase64($ANGGOTA_ID); ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-regular fa-id-card"></i> Kartu ID Anggota</a></li>
+                                        <?php
                                         if ($_SESSION['DELETE_DaftarAnggota'] == "Y") {
                                             ?>
                                             <li class="divider"></li>
@@ -509,7 +512,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                             </div>
                             <div class="short-div">
                                 <div class="form-group">
-                                    <label>No Urut Anggota<span class="text-danger">*</span></label>
+                                    <label>ID Anggota<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="viewANGGOTA_ID" name="ANGGOTA_ID" value="" data-parsley-required readonly>
                                 </div>
                             </div>

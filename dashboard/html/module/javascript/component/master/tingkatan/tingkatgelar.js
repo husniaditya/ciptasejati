@@ -1,38 +1,52 @@
-
 // Declare dataTable globally
-var dataTable;
+let dataTable;
 
 // Tingkatan Table
 function callTable() {
-    datatable = $('#tingkatgelar-table').DataTable({
-      responsive: true,
-      columnDefs: [
-        { width: '10%', targets: 0 }, // Set width for column 1
-        { width: '20%', targets: 2 }, // Set width for column 3
-        { width: '20%', targets: 3 }, // Set width for column 4
-        { width: '10%', targets: 4 }, // Set width for column 5
-        // { width: '10%', targets: 5 }, // Set width for column 6
-        { width: '10%', targets: 6 }, // Set width for column 6
-        { width: '10%', targets: 7 }, // Set width for column 6
-        // Add more columnDefs as needed
-      ],
-      dom: 'Bfrtlip',
-      // "pageLength": 7,
-      scrollX: true,
-      buttons: [
-          'copy', 'csv', 'excel', 'pdf'
-      ]
-    });
-  }
-
-  // Call the function when the document is ready
-  $(document).ready(function() {
-    callTable();
+  dataTable = $('#tingkatgelar-table').DataTable({
+    responsive: true,
+    columnDefs: [
+      { width: '10%', targets: 0 }, // Set width for column 1
+      { width: '20%', targets: 2 }, // Set width for column 3
+      { width: '20%', targets: 3 }, // Set width for column 4
+      { width: '10%', targets: 4 }, // Set width for column 5
+      // { width: '10%', targets: 5 }, // Set width for column 6
+      { width: '10%', targets: 6 }, // Set width for column 6
+      { width: '10%', targets: 7 }, // Set width for column 6
+      // Add more columnDefs as needed
+    ],
+    dom: 'Bfrtlip',
+    // "pageLength": 7,
+    scrollX: true,
+    buttons: [
+        'copy', 'csv', 'excel', 'pdf'
+    ]
   });
+}
 
+function reloadDataTable(currentPage = 0) {
+  $.post('module/ajax/master/tingkatan/aj_tingkatgelar.php', response => {
+    if ($.fn.DataTable.isDataTable('#tingkatgelar-table')) {
+      $('#tingkatgelar-table').DataTable().destroy();
+    }
+    $("#tingkatgelardata").html(response);
+    callTable();
+    if (dataTable) dataTable.page(currentPage).draw('page');
+  });
+}
+
+// Call the function when the document is ready
+$(document).ready(function() {
+  callTable();
+  // add Daerah
+  handleForm('#AddTingkatGelar-form', SuccessNotification, FailedNotification);
+
+  // edit Daerah
+  handleForm('#EditTingkatGelar-form', UpdateNotification, FailedNotification);
+});
 
 // ----- Start of Tingkatan Section ----- //
-function handleForm(formId, successNotification, failedNotification, updateNotification) {
+function handleForm(formId, successNotification, failedNotification) {
   $(formId).submit(function(event) {
     event.preventDefault(); // Prevent the default form submission
 
@@ -58,22 +72,7 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
           $(formId.replace("-form", "")).modal('hide');
 
           // Call the reloadDataTable() function after inserting data to reload the DataTable
-          $.ajax({
-            type: 'POST',
-            url: 'module/ajax/master/tingkatan/aj_tingkatgelar.php',
-            success: function(response) {
-              // Destroy the DataTable before updating
-              $('#tingkatgelar-table').DataTable().destroy();
-              $("#tingkatgelardata").html(response);
-              // Reinitialize Daerah Table
-              callTable();
-              // Stay on the Same Page
-              dataTable.page(currentPage).draw('page');
-            },
-            error: function(xhr, status, error) {
-              // Handle any errors
-            }
-          });
+          reloadDataTable();
         } else {
           // Display error notification
           failedNotification(response);
@@ -86,17 +85,8 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
   });
 }
 
-
-$(document).ready(function() {
-  // add Daerah
-  handleForm('#AddTingkatGelar-form', SuccessNotification, FailedNotification, UpdateNotification);
-
-  // edit Daerah
-  handleForm('#EditTingkatGelar-form', UpdateNotification, FailedNotification, UpdateNotification);
-});
-
 // Delete Tingkatan
-function deleteTingkatan(value1,value2) {
+function deleteTingkatan(value1, value2) {
   // Ask for confirmation
   if (confirm("Apakah anda yakin untuk menghapus data ini?")) {
     // Create the data object
@@ -106,42 +96,20 @@ function deleteTingkatan(value1,value2) {
     };
 
     // Perform the AJAX request
-    $.ajax({
-      type: 'POST',
-      url: 'module/backend/master/tingkatan/t_tingkatgelar.php',
-      data: eventdata,
-      success: function(response) {
-        // Check the response from the server
-        if (response === 'Success') {
-          // Display success notification
-          DeleteNotification('Data berhasil dihapus!');
-          
-          // Call the reloadDataTable() function after inserting data to reload the DataTable
-          $.ajax({
-            type: 'POST',
-            url: 'module/ajax/master/tingkatan/aj_tingkatgelar.php',
-            success: function(response) {
-              // Destroy the DataTable before updating
-              $('#tingkatgelar-table').DataTable().destroy();
-              $("#tingkatgelardata").html(response);
-              // Reinitialize Daerah Table
-              callTable();
-            },
-            error: function(xhr, status, error) {
-              // Handle any errors
-            }
-          });
+    $.post('module/backend/master/tingkatan/t_tingkatgelar.php', eventdata, function(response) {
+      // Check the response from the server
+      if (response === 'Success') {
+        // Display success notification
+        DeleteNotification('Data berhasil dihapus!');
+        
+        // Call the reloadDataTable() function after inserting data to reload the DataTable
+        reloadDataTable();
 
-        } else {
-          // Display error notification
-          FailedNotification(response);
-        }
-      },
-      error: function(xhr, status, error) {
-        console.error('Request failed. Status: ' + xhr.status);
+      } else {
+        // Display error notification
+        FailedNotification(response);
       }
-    });
-    // console.log(response);
+    }).fail(xhr => console.error('Request failed. Status: ' + xhr.status));
   }
 }
 

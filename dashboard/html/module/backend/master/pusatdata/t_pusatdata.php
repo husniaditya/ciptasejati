@@ -46,7 +46,18 @@ if (isset($_POST["savepusatdata"])) {
             $idCardFileName="";
         }
 
-        GetQuery("insert into m_pusatdata select uuid(), '$CABANG_KEY', '$PUSATDATA_KATEGORI', '$PUSATDATA_JUDUL', '$PUSATDATA_DESKRIPSI', '$idCardFileDestination','$idCardFileName', '0', '$USER_ID', '$localDateTime'");
+        // INSERT
+        $params = array_fill(0, 12, '');
+        $params[0] = 'INSERT';
+        $params[4] = $CABANG_KEY;
+        $params[5] = $PUSATDATA_KATEGORI;
+        $params[6] = $PUSATDATA_JUDUL;
+        $params[7] = $PUSATDATA_DESKRIPSI;
+        $params[8] = $idCardFileDestination;
+        $params[9] = $idCardFileName;
+        $params[11] = $USER_ID;
+        $params[12] = $localDateTime;
+        GetQueryParam("zsp_m_pusatdata", $params);
 
         $response="Success";
         echo $response;

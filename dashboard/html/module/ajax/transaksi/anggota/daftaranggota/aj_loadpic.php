@@ -16,7 +16,7 @@ while ($rowPhoto = $GetPhoto->fetch(PDO::FETCH_ASSOC)) {
     extract($rowPhoto);
     ?>
     <a href="<?= $ANGGOTA_PIC; ?>" target="_blank">
-        <img src="<?= $ANGGOTA_PIC; ?>" alt="Image" style="width: 300px; height: 300px;text-align: center;overflow: hidden;position: relative; object-fit:contain" />
+        <img src="<?= $ANGGOTA_PIC; ?>" alt="Image" type="image/webp" loading="lazy" style="width: 300px; height: 300px;text-align: center;overflow: hidden;position: relative; object-fit:contain" />
     </a>
 
     <?php

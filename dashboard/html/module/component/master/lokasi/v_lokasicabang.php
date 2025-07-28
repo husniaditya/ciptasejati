@@ -1,12 +1,12 @@
 <?php
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 
-$PLOKASI = "Cabang";
-$params = ['GET', $PLOKASI] + array_fill(0, 14, '');
+$PPARAM = "Cabang";
+$params = ['GET', $PPARAM] + array_fill(0, 14, '');
 $getCabang = GetQueryParam("zsp_m_cabang", $params);
 
-$PLOKASI = "Daerah";
-$params = ['GET', $PLOKASI] + array_fill(0, 14, '');
+$PPARAM = "Daerah";
+$params = ['GET', $PPARAM] + array_fill(0, 14, '');
 $getDaerah = GetQueryParam("zsp_m_cabang", $params);
 
 ?>
@@ -304,8 +304,8 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                                     <select name="DAERAH_KEY" id="selectize-dropdown2" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Daerah --</option>
                                         <?php
-                                        foreach ($getDaerah as $rowDaerah) {
-                                            extract($rowDaerah);
+                                        foreach ($getDaerah as $EditDaerah) {
+                                            extract($EditDaerah);
                                             ?>
                                             <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
                                             <?php

@@ -1,61 +1,38 @@
-
-
 // Sertifikat Table
 function callTable() {
   $('#pusatdata-table').DataTable({
-      responsive: true,
-      order: [[1, 'asc']],
-      dom: 'Bfrtlip',
-      // columnDefs: [
-      //     { width: '100px', targets: 0 }, // Set width for column 1
-      //     { width: '150px', targets: 2 }, // Set width for column 2
-      //     { width: '150px', targets: 3 }, // Set width for column 3
-      //     { width: '150px', targets: 4 }, // Set width for column 4
-      //     { width: '400px', targets: 5 }, // Set width for column 5
-      //     { width: '150px', targets: 6 }, // Set width for column 6
-      //     { width: '100px', targets: 7 }, // Set width for column 6
-      //     { width: '250px', targets: 8 }, // Set width for column 6
-      //     { width: '250px', targets: 9 }, // Set width for column 6
-      //     // Add more columnDefs as needed
-      // ],
-      scrollX: true,
-      scrollY: '350px', // Set the desired height here
-      buttons: [
-          'copy', 'csv', 'excel', 'pdf'
-      ]
+    responsive: true,
+    order: [[1, 'asc']],
+    dom: 'Bfrtlip',
+    scrollX: true,
+    scrollY: '350px',
+    buttons: ['copy', 'csv', 'excel', 'pdf']
   });
 }
 
-// Call the function when the document is ready
 $(document).ready(function() {
   callTable();
+  // add Sertifikat
+  handleForm('#AddPusatdata-form', SuccessNotification, FailedNotification, UpdateNotification);
+  // edit Sertifikat
+  handleForm('#EditPusatdata-form', UpdateNotification, FailedNotification, UpdateNotification);
 });
 
 function reloadDataTable() {
-  $.ajax({
-    type: 'POST',
-    url: 'module/ajax/master/pusatdata/aj_tablepusatdata.php',
-    success: function(response) {
-      $('#pusatdata-table').DataTable().destroy();
-      $("#datapusatdata").html(response);
-      callTable(); // Reinitialize Sertifikat Table
-    },
-    error: function(xhr, status, error) {
-      // Handle any errors
-    }
+  $.post('module/ajax/master/pusatdata/aj_tablepusatdata.php', function(response) {
+    $('#pusatdata-table').DataTable().destroy();
+    $("#datapusatdata").html(response);
+    callTable();
   });
 }
-
 
 // ----- Start of Sertifikat Section ----- //
 function handleForm(formId, successNotification, failedNotification, updateNotification) {
   $(formId).submit(function(event) {
     event.preventDefault();
-
-    var formData = new FormData($(this)[0]);
+    var formData = new FormData(this);
     var buttonId = $(event.originalEvent.submitter).attr('id');
     formData.append(buttonId, 'edit');
-
     $.ajax({
       type: 'POST',
       url: 'module/backend/master/pusatdata/t_pusatdata.php',
@@ -63,222 +40,93 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
       processData: false,
       contentType: false,
       success: function(response) {
-        var successMessage = response === 'Success' ? 'Data berhasil tersimpan!' : 'Data berhasil terupdate!';
-
         if (response === 'Success' || response === 'Update') {
-          successNotification(successMessage);
+          successNotification(response === 'Success' ? 'Data berhasil tersimpan!' : 'Data berhasil terupdate!');
           $(formId.replace("-form", "")).modal('hide');
-          
-          // Reload DataTable
           filterPusatDataEvent();
         } else {
           failedNotification(response);
         }
-      },
-      error: function(xhr, status, error) {
-        // Handle any errors
       }
     });
   });
 }
 
-
-
-$(document).ready(function() {
-  // add Sertifikat
-  handleForm('#AddPusatdata-form', SuccessNotification, FailedNotification, UpdateNotification);
-
-  // edit Sertifikat
-  handleForm('#EditPusatdata-form', UpdateNotification, FailedNotification, UpdateNotification);
-});
-
 // Delete Sertifikat
-function deletepusatdata(value1,value2) {
-  // Ask for confirmation
+function deletepusatdata(value1, value2) {
   if (confirm("Apakah anda yakin untuk menghapus data ini?")) {
-    // Create the data object
-    var eventdata = {
+    $.post('module/backend/master/pusatdata/t_pusatdata.php', {
       PUSATDATA_ID: value1,
       EVENT_ACTION: value2
-    };
-
-    // Perform the AJAX request
-    $.ajax({
-      type: 'POST',
-      url: 'module/backend/master/pusatdata/t_pusatdata.php',
-      data: eventdata,
-      success: function(response) {
-        // Check the response from the server
-        if (response === 'Success') {
-          // Display success notification
-          DeleteNotification('Data berhasil dihapus!');
-          
-          // Call the reloadDataTable() function after inserting data to reload the DataTable
-          $.ajax({
-            type: 'POST',
-            url: 'module/ajax/master/pusatdata/aj_tablepusatdata.php',
-            success: function(response) {
-              // Destroy the DataTable before updating
-              $('#pusatdata-table').DataTable().destroy();
-              $("#datapusatdata").html(response);
-              // Reinitialize Sertifikat Table
-              callTable();
-            },
-            error: function(xhr, status, error) {
-              // Handle any errors
-            }
-          });
-
-        } else {
-          // Display error notification
-          FailedNotification(response);
-        }
-      },
-      error: function(xhr, status, error) {
-        console.error('Request failed. Status: ' + xhr.status);
+    }, function(response) {
+      if (response === 'Success') {
+        DeleteNotification('Data berhasil dihapus!');
+        reloadDataTable();
+      } else {
+        FailedNotification(response);
       }
+    }).fail(function(xhr) {
+      console.error('Request failed. Status: ' + xhr.status);
     });
-    // console.log(response);
   }
 }
 
 // View Pusatdata
 $(document).on("click", ".open-ViewPusatdata", function () {
   var id = $(this).data('pusatid');
-  var cabangnama = $(this).data('cabangnama');
-  var kategori = $(this).data('kategori');
-  var judul = $(this).data('judul');
-  var deskripsi = $(this).data('deskripsi');
-  var pusatstatus = $(this).data('pusatstatus');
-  
-  // Set the values in the modal input fields
-  $(".modal-body #viewCABANG_ID").val(cabangnama);
-  $(".modal-body #viewPUSATDATA_KATEGORI").val(kategori);
-  $(".modal-body #viewPUSATDATA_JUDUL").val(judul);
-  $(".modal-body #viewPUSATDATA_DESKRIPSI").val(deskripsi);
-  $(".modal-body #viewDELETION_STATUS").val(pusatstatus);
-
-  $.ajax({
-    type: "POST",
-    url: "module/ajax/master/pusatdata/aj_loadpusatdata.php",
-    data:'EVENT_ID='+id,
-    success: function(data){
-      $("#viewpusatfile").html(data);
-    }
+  $(".modal-body #viewCABANG_ID").val($(this).data('cabangnama'));
+  $(".modal-body #viewPUSATDATA_KATEGORI").val($(this).data('kategori'));
+  $(".modal-body #viewPUSATDATA_JUDUL").val($(this).data('judul'));
+  $(".modal-body #viewPUSATDATA_DESKRIPSI").val($(this).data('deskripsi'));
+  $(".modal-body #viewDELETION_STATUS").val($(this).data('pusatstatus'));
+  $.post("module/ajax/master/pusatdata/aj_loadpusatdata.php", { EVENT_ID: id }, function(data) {
+    $("#viewpusatfile").html(data);
   });
-  
-  // console.log(id);
 });
 
 // Edit Pusatdata
 $(document).on("click", ".open-EditPusatdata", function () {
   var id = $(this).data('pusatid');
   var cabangid = $(this).data('cabangid');
-  var kategori = $(this).data('kategori');
-  var judul = $(this).data('judul');
-  var deskripsi = $(this).data('deskripsi');
-  var status = $(this).data('status');
-  
-  // Set the values in the modal input fields
   $(".modal-body #editPUSATDATA_ID").val(id);
-  $(".modal-body #selectize-dropdown2").val(cabangid); // Set value directly for a regular select element
-  $(".modal-body #editPUSATDATA_KATEGORI").val(kategori);
-  $(".modal-body #editPUSATDATA_JUDUL").val(judul);
-  $(".modal-body #editPUSATDATA_DESKRIPSI").val(deskripsi);
-  $(".modal-body #editDELETION_STATUS").val(status);
-
-  $.ajax({
-    type: "POST",
-    url: "module/ajax/master/pusatdata/aj_loadpusatdata.php",
-    data:'EVENT_ID='+id,
-    success: function(data){
-      $("#editpusatfile").html(data);
-    }
+  $(".modal-body #selectize-dropdown2").val(cabangid);
+  $(".modal-body #editPUSATDATA_KATEGORI").val($(this).data('kategori'));
+  $(".modal-body #editPUSATDATA_JUDUL").val($(this).data('judul'));
+  $(".modal-body #editPUSATDATA_DESKRIPSI").val($(this).data('deskripsi'));
+  $(".modal-body #editDELETION_STATUS").val($(this).data('status'));
+  $.post("module/ajax/master/pusatdata/aj_loadpusatdata.php", { EVENT_ID: id }, function(data) {
+    $("#editpusatfile").html(data);
   });
-
-  // Update the Selectize control
   var selectize = $(".modal-body #selectize-dropdown2")[0].selectize;
   selectize.setValue(cabangid);
-
-  // console.log(pusatid);
 });
 
 // Filtering
-// Attach debounced event handler to form inputs
 $('.filterPusatData select, .filterPusatData input').on('change input', debounce(filterPusatDataEvent, 500));
 function filterPusatDataEvent() {
-  // Your event handling code here
-  const cabang = $('#selectize-select').val();
-  const kategori = $('#selectize-select2').val();
-  const judul = $('#filterPUSATDATA_JUDUL').val();
-  const deskripsi = $('#filterPUSATDATA_DESKRIPSI').val();
-  const status = $('#filterDELETION_STATUS').val();
-
-  // Create a data object to hold the form data
   const formData = {
-    CABANG_KEY: cabang,
-    PUSATDATA_KATEGORI: kategori,
-    PUSATDATA_JUDUL: judul,
-    PUSATDATA_DESKRIPSI: deskripsi,
-    DELETION_STATUS: status
+    CABANG_KEY: $('#selectize-select').val(),
+    PUSATDATA_KATEGORI: $('#selectize-select2').val(),
+    PUSATDATA_JUDUL: $('#filterPUSATDATA_JUDUL').val(),
+    PUSATDATA_DESKRIPSI: $('#filterPUSATDATA_DESKRIPSI').val(),
+    DELETION_STATUS: $('#filterDELETION_STATUS').val()
   };
-
-  $.ajax({
-    type: "POST",
-    url: 'module/ajax/master/pusatdata/aj_tablepusatdata.php',
-    data: formData,
-    success: function(response){
-      // Destroy the DataTable before updating
-      $('#pusatdata-table').DataTable().destroy();
-      $("#datapusatdata").html(response);
-      // Reinitialize Sertifikat Table
-      callTable();
-    }
+  $.post('module/ajax/master/pusatdata/aj_tablepusatdata.php', formData, function(response) {
+    $('#pusatdata-table').DataTable().destroy();
+    $("#datapusatdata").html(response);
+    callTable();
   });
-  // console.log(formData);
 }
 
 // ----- Function to reset form ----- //
 function clearForm() {
-  // Clear the first Selectize dropdown
-  var selectizeInstance = $('#selectize-select')[0];
-  var selectizeInstance2 = $('#selectize-select2')[0].selectize;
-
-  if (selectizeInstance) {
-    var selectizeInstance = selectizeInstance.selectize;
-    if (selectizeInstance) {
-      selectizeInstance.clear();
-    }
-  }
-  // Clear the second Selectize dropdown (corrected ID)
-  if (selectizeInstance2) {
-    var selectizeInstance2 = selectizeInstance2.selectize;
-    if (selectizeInstance2) {
-      selectizeInstance2.clear();
-    }
-  }
-  var selectizeInstance2 = $('#selectize-select2')[0].selectize;
-  if (selectizeInstance2) {
-    selectizeInstance2.clear();
-  }
-
+  // Clear Selectize dropdowns
+  var s1 = $('#selectize-select')[0]?.selectize;
+  var s2 = $('#selectize-select2')[0]?.selectize;
+  if (s1) s1.clear();
+  if (s2) s2.clear();
   document.getElementById("filterPusatData").reset();
-  // Call the reloadDataTable() function after inserting data to reload the DataTable
-  $.ajax({
-    type: 'POST',
-    url: 'module/ajax/master/pusatdata/aj_tablepusatdata.php',
-    success: function(response) {
-      // Destroy the DataTable before updating
-      $('#pusatdata-table').DataTable().destroy();
-      $("#datapusatdata").html(response);
-      // Reinitialize Sertifikat Table
-      callTable();
-    },
-    error: function(xhr, status, error) {
-      // Handle any errors
-    }
-  });
+  reloadDataTable();
 }
-
 
 // ----- End of Pusat Section ----- //

@@ -21,7 +21,7 @@ while ($rowPenguji = $getPenguji->fetch(PDO::FETCH_ASSOC)) {
         <td><?= $ANGGOTA_ID; ?> - <?= $ANGGOTA_NAMA; ?></td>
         <td align="center"><?= $TINGKATAN_NAMA; ?> - <?= $TINGKATAN_SEBUTAN; ?></td>
         <td align="center">
-            <button type="button" id="edithapuspenguji" data-id="<?= $_key; ?>" data-ukt="<?= $UKT_ID; ?>" class="edithapuspenguji btn btn-danger mb5"><span class="ico-trash"></span> </button>
+            <button type="button" id="edithapuspenguji_<?=uniqid();?>" data-id="<?= $_key; ?>" data-ukt="<?= $UKT_ID; ?>" class="edithapuspenguji btn btn-danger mb5"><span class="ico-trash"></span> </button>
         </td>
     </tr>
     <?php

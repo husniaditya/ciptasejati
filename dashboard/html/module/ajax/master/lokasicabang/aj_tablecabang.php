@@ -2,12 +2,11 @@
 require_once ("../../../../module/connection/conn.php");
 
 
-$getCabang = GetQuery("SELECT c.*,d.DAERAH_DESKRIPSI,RIGHT(c.CABANG_ID,3) SHORT_ID FROM m_cabang c
-LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-WHERE c.DELETION_STATUS = 0
-ORDER BY c.CABANG_ID");
+$PLOKASI = "Cabang";
+$params = ['GET', $PLOKASI] + array_fill(0, 14, '');
+$getCabang = GetQueryParam("zsp_m_cabang", $params);
 
-while ($rowCabang = $getCabang->fetch(PDO::FETCH_ASSOC)) {
+foreach ($getCabang as $rowCabang) {
     extract($rowCabang);
     ?>
     <tr>

@@ -67,18 +67,18 @@ $rowN = $getNilai->fetchAll(PDO::FETCH_ASSOC);
                                         ?>
                                         <tr>
                                             <td class="hidden">
-                                                <input type="text" class="form-control" id="_key" name="_key[]" value="<?= $_key; ?>" readonly>
+                                                <input type="text" class="form-control" id="_key_<?=uniqid();?>" name="_key[]" value="<?= $_key; ?>" readonly>
                                             </td>
                                             <td class="hidden">
-                                                <input type="text" class="form-control" id="MATERI_ID" name="MATERI_ID[]" value="<?= $MATERI_ID; ?>" readonly>
+                                                <input type="text" class="form-control" id="MATERI_ID_<?=uniqid();?>" name="MATERI_ID[]" value="<?= $MATERI_ID; ?>" readonly>
                                             </td>
                                             <td class="hidden">
-                                                <input type="text" class="form-control" id="UKT_BOBOT" name="UKT_BOBOT[]" value="<?= $DETAIL_BOBOT; ?>" readonly>
+                                                <input type="text" class="form-control" id="UKT_BOBOT_<?=uniqid();?>" name="UKT_BOBOT[]" value="<?= $DETAIL_BOBOT; ?>" readonly>
                                             </td>
                                             <td align="center"><?= $row_num; ?>.</td>
                                             <td><?= $DETAIL_DESKRIPSI; ?></td>
                                             <td>
-                                                <select id="UKT_DETAIL_NILAI" name="UKT_DETAIL_NILAI[]" class="form-control"  data-parsley-required required>
+                                                <select id="UKT_DETAIL_NILAI_<?=uniqid();?>" name="UKT_DETAIL_NILAI[]" class="form-control"  data-parsley-required required>
                                                     <?php
                                                     foreach ($rowN as $rowNilai) {
                                                         extract($rowNilai);
@@ -88,7 +88,7 @@ $rowN = $getNilai->fetchAll(PDO::FETCH_ASSOC);
                                                 </select>
                                             </td>
                                             <td>
-                                            <input type="text" class="form-control" id="UKT_DETAIL_REMARK" name="UKT_DETAIL_REMARK[]" value="">
+                                            <input type="text" class="form-control" id="UKT_DETAIL_REMARK_<?=uniqid();?>" name="UKT_DETAIL_REMARK[]" value="">
                                             </td>
                                         </tr>
                                         <?php
