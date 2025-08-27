@@ -61,7 +61,7 @@ async function legacyDist() {
 async function generateCheatSheet() {
   const cssPath = path.join(extension(paths.distLessFile, ".css"));
   const css = await fs.readFile(cssPath, "UTF8");
-  const regex = /\.(icon-(?:\w+(?:-)?)+):before\s+{\s*content:\s*"(.+)";\s+}/g;
+  const regex = /\.(icon-(?:\w+(?:-)?)+):before\s*{\s*content:\s*"([^"]+)";\s*}/g;
   const icons = [];
 
   css.match(regex).forEach((item) => {

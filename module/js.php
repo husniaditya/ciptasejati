@@ -12,7 +12,10 @@
 <!-- Theme Initialization Files -->
 <script src="js/theme.init.js"></script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjKL8RTKvyTrbjxwjtGMGcoMZbUP6E70s"></script>
+<!-- fetch API key from ENV -->
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $_ENV['GOOGLE_MAPS_API_KEY']; ?>"></script>
 
 <!-- Theme Custom -->
 <script src="js/custom.js"></script>

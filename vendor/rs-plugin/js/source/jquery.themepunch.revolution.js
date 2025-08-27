@@ -3274,12 +3274,13 @@ var tabBlurringCheck = function() {
 var getUrlVars = function (hashdivider){
 	var vars = [], hash;
 	var hashes = window.location.href.slice(window.location.href.indexOf(hashdivider) + 1).split('_');
-	for(var i = 0; i < hashes.length; i++)
-	{
-		hashes[i] = hashes[i].replace('%3D',"=");
-		hash = hashes[i].split('=');
-		vars.push(hash[0]);
-		vars[hash[0]] = hash[1];
+	for (var i = 0; i < hashes.length; i++) {
+		let hash = hashes[i].split(/=(.+)/);  // split key/value
+		let key = decodeURIComponent(hash[0]);
+		let value = decodeURIComponent(hash[1]);
+
+		vars.push(key);
+		vars[key] = value;
 	}
 	return vars;
 }

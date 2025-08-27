@@ -1107,11 +1107,11 @@ function stripCData(original)
 	
 	var copyLength = copy.length;
 	
-	if (copy.indexOf(right) == copyLength - rightLength)
-	{
+	if (copy.endsWith(right)) {
 		copy = copy.substring(0, copyLength - rightLength);
 		changed = true;
 	}
+
 	
 	return changed ? copy : original;
 };
