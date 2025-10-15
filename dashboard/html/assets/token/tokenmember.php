@@ -5,7 +5,7 @@ if (isset($_GET['id'])) {
     $encodedId = $_GET['id'];
     $decodedId = decodeBase64ToId($encodedId);
 
-    $getData = GetQuery("SELECT a.*, c.CABANG_DESKRIPSI, d.DAERAH_DESKRIPSI, t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN, date_format(a.ANGGOTA_KTA_AKTIF, '%d-%m-%Y') AS KTA_AKTIF, date_format(a.ANGGOTA_KTA_EXP, '%d-%m-%Y') AS KTA_EXP,
+    $getData = GetQuery("SELECT a.*, c.CABANG_DESKRIPSI, d.DAERAH_DESKRIPSI, t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN, date_format(a.ANGGOTA_KTA_AKTIF, '%d %M %Y') AS KTA_AKTIF, date_format(a.ANGGOTA_KTA_EXP, '%d %M %Y') AS KTA_EXP,
     CASE 
         WHEN a.ANGGOTA_STATUS = 0 THEN 'Aktif'
         WHEN a.ANGGOTA_STATUS = 1 THEN 'Non Aktif'
@@ -182,9 +182,9 @@ $getSocial = GetQuery("SELECT * FROM c_mediasosial WHERE DELETION_STATUS = 0");
             <h3>Informasi KTA</h3>
             <hr>
             <label>Tanggal Aktivasi</label>
-            <p><i class="fa-regular fa-calendar-days"></i> <?= $KTA_AKTIF; ?> &nbsp; <i class="fa-regular fa-clock"></i> <?= $TIMENOW; ?></p>
+            <p><i class="fa-regular fa-calendar-days"></i> <?= $KTA_AKTIF; ?></p>
             <label>Berlaku sampai dengan</label>
-            <p><i class="fa-regular fa-calendar-days"></i> <?= $KTA_EXP; ?> &nbsp; <i class="fa-regular fa-clock"></i> <?= $DOKUMEN_TIME; ?></p>
+            <p><i class="fa-regular fa-calendar-days"></i> <?= $KTA_EXP; ?></p>
             <?php
         }
         ?>
