@@ -223,7 +223,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
 
                                         if ($TINGKATAN_LEVEL > 1) {
                                             ?>
-                                            <li><a data-toggle="modal" href="#CardId" class="open-CardId" style="color:darkgoldenrod;" data-key="<?= encodeIdToBase64($ANGGOTA_KEY); ?>" data-id="<?= $ANGGOTA_KEY; ?>" data-id2="<?= $ANGGOTA_ID; ?>" data-nama="<?= htmlspecialchars($ANGGOTA_NAMA, ENT_QUOTES, 'UTF-8'); ?>"><i class="fa-regular fa-id-card"></i> Kartu ID Anggota</a></li>
+                                            <li><a data-toggle="modal" href="#CardId" class="open-CardId" style="color:darkgoldenrod;" data-key="<?= encodeIdToBase64($ANGGOTA_KEY); ?>" data-id="<?= $ANGGOTA_KEY; ?>" data-id2="<?= $ANGGOTA_ID; ?>" data-kta="<?= htmlspecialchars($ANGGOTA_KTA ?? '', ENT_QUOTES, 'UTF-8'); ?>" data-nama="<?= htmlspecialchars($ANGGOTA_NAMA, ENT_QUOTES, 'UTF-8'); ?>"><i class="fa-regular fa-id-card"></i> Kartu ID Anggota</a></li>
                                             <?php
                                         }
                                         if ($_SESSION['DELETE_DaftarAnggota'] == "Y") {
@@ -282,13 +282,19 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                         <div style="font-size:14px; color:#6c757d;">Anda akan membuka Kartu ID untuk:</div>
                         <div style="font-size:16px; font-weight:600; color:#212529;" id="confirmCardNama">-</div>
                         <div style="font-size:13px; color:#6c757d;" id="confirmCardId">ID: -</div>
+                        <div style="margin-top:12px;">
+                            <div id="ktaUnavailable" style="display:none; padding:16px; border:1px dashed #dee2e6; border-radius:6px; color:#6c757d; background:#f8f9fa; text-align:center;">
+                                Belum tersedia
+                            </div>
+                            <iframe id="idcardPreview" title="Pratinjau Kartu ID" src="about:blank" style="width:100%; height:520px; border:0; border-radius:6px; background:#f8f9fa;"></iframe>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Tutup</button>
                 <button type="button" class="btn btn-primary btn-outline mb5 btn-rounded" id="confirmOpenCardBtn">
-                    <i class="fa-solid fa-check"></i> Lanjutkan
+                    <i class="fa-solid fa-check"></i> <span id="confirmOpenCardBtnText">Aktivasi KTA</span>
                 </button>
             </div>
         </div>
@@ -310,13 +316,58 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                     }
                 }
             }
+            function normalizePathToAbsolute(path){
+                var base = (typeof APP_BASE_URL === 'string' ? APP_BASE_URL : '').replace(/\/+$/, '');
+                if (!path) return '';
+                // Trim
+                path = String(path).trim();
+                // If already absolute URL
+                if (/^https?:\/\//i.test(path)) return path;
+                // Strip leading ./
+                path = path.replace(/^\.\//, '');
+                // Ensure it starts from dashboard/html if it points to assets/ or images/
+                if (/^(assets|images)\//i.test(path)) {
+                    return base + '/dashboard/html/' + path.replace(/\/+$/, '');
+                }
+                // If it already looks like /dashboard/html/... keep as absolute from base
+                if (/^\/?dashboard\/html\//i.test(path)) {
+                    return base + '/' + path.replace(/^\//, '');
+                }
+                // Fallback: join to base
+                return base + '/' + path.replace(/^\//, '');
+            }
+
             function openConfirm(linkEl){
                 var nama = linkEl.getAttribute('data-nama') || '-';
                 var id = linkEl.getAttribute('data-id') || '-';
                 var key = linkEl.getAttribute('data-id2') || '-';
+                var kta = linkEl.getAttribute('data-kta') || '';
                 document.getElementById('confirmCardNama').textContent = nama;
                 document.getElementById('confirmCardId').textContent = 'ID: ' + key;
                 pendingTargetLink = linkEl;
+                // Prepare preview using stored ANGGOTA_KTA; show 'Belum tersedia' if empty
+                try {
+                    var iframe = document.getElementById('idcardPreview');
+                    var msg = document.getElementById('ktaUnavailable');
+                    var btnTextEl = document.getElementById('confirmOpenCardBtnText');
+                    if (btnTextEl) btnTextEl.textContent = (kta && kta.length > 0) ? 'Aktivasi Ulang KTA' : 'Generate KTA';
+                    if (kta && kta.length > 0) {
+                        var previewUrl = normalizePathToAbsolute(kta);
+                        if (iframe) {
+                            iframe.style.display = '';
+                            iframe.src = previewUrl;
+                        }
+                        if (msg) msg.style.display = 'none';
+                    } else {
+                        if (iframe) {
+                            iframe.src = 'about:blank';
+                            iframe.style.display = 'none';
+                        }
+                        if (msg) msg.style.display = '';
+                    }
+                } catch (e) {
+                    // no-op; iframe will remain blank
+                }
                 $('#ConfirmOpenCardIDModal').modal('show');
             }
 
@@ -355,21 +406,31 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                 if (!btn) return;
                 btn.addEventListener('click', function(){
                     if (!pendingTargetLink) return;
+                    // Always open generator endpoint (print_idanggota.php) in a new tab
                     var anggotaId = pendingTargetLink.getAttribute('data-id') || '';
                     var encoded = encodeIdToBase64(anggotaId);
                     try {
-                        // Build absolute URL to the print endpoint using APP_BASE_URL
                         var base = (typeof APP_BASE_URL === 'string' ? APP_BASE_URL : '').replace(/\/+$/, '');
                         var url = base + '/dashboard/html/assets/print/transaksi/anggota/print_idanggota.php?id=' + encoded;
                         window.open(url, '_blank');
                     } catch (e) {
-                        // Fallback: attempt same URL even if encoding threw
+                        // Fallback attempt
                         var base = (typeof APP_BASE_URL === 'string' ? APP_BASE_URL : '').replace(/\/+$/, '');
                         var urlFallback = base + '/dashboard/html/assets/print/transaksi/anggota/print_idanggota.php?id=' + encoded;
                         window.open(urlFallback, '_blank');
                     }
                     $('#ConfirmOpenCardIDModal').modal('hide');
                     pendingTargetLink = null;
+                });
+                // Clear iframe on modal hide to free memory
+                $('#ConfirmOpenCardIDModal').on('hidden.bs.modal', function(){
+                    var iframe = document.getElementById('idcardPreview');
+                    if (iframe) {
+                        iframe.src = 'about:blank';
+                        iframe.style.display = '';
+                    }
+                    var msg = document.getElementById('ktaUnavailable');
+                    if (msg) msg.style.display = 'none';
                 });
             });
         })();

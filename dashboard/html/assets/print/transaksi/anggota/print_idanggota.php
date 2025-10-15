@@ -27,7 +27,7 @@ if (isset($_GET['id'])) {
         while ($data = $getData->fetch(PDO::FETCH_ASSOC)) {
             extract($data);
 
-            $getKoor = GetQuery("SELECT ANGGOTA_KEY AS KOORDINATOR_KEY, ANGGOTA_NAMA AS KOORDINATOR_NAMA FROM m_anggota WHERE ANGGOTA_AKSES = 'Koordinator' AND DELETION_STATUS = 0 AND ANGGOTA_STATUS = 0 AND CABANG_KEY = '$CABANG_KEY' LIMIT 1");
+            $getKoor = GetQuery("SELECT ANGGOTA_KEY AS KOORDINATOR_KEY, ANGGOTA_NAMA AS KOORDINATOR_NAMA FROM m_anggota WHERE ANGGOTA_AKSES = 'Ketua' AND DELETION_STATUS = 0 AND ANGGOTA_STATUS = 0 AND CABANG_KEY = '$CABANG_KEY' LIMIT 1");
             // ---------------------------------------------------------
             while ($koorData = $getKoor->fetch(PDO::FETCH_ASSOC)) {
                 extract($koorData);
@@ -206,10 +206,10 @@ if (isset($_GET['id'])) {
             }
 
             $pdf->SetXY($valueX, $alamatY);
-            $pdf->MultiCell($w, $lineH, $alamatDisplay, 0, 'L', false, 1, $valueX, $alamatY, true, 0, false, true);
+            $pdf->MultiCell(27, $lineH, $alamatDisplay, 0, 'L', false, 1, $valueX, $alamatY, true, 0, false, true);
 
-            $pdf->Ln(1);
-            $pdf->SetFont('helvetica', '', 5.5);
+            $pdf->Ln(-2);
+            $pdf->SetFont('helvetica', 'B', 5.5);
             $pdf->Cell(4,5,"",0,0,"L");
             $pdf->Cell(13,5,"Masa Berlaku:",0,0,"L");
             $pdf->Cell(20,5,$ANGGOTA_KTA_EXP,0,0,"L");
@@ -221,9 +221,9 @@ if (isset($_GET['id'])) {
             
             // Place QR code on back page (bottom-right corner)
             $qrUrl = $URL . '/dashboard/html/assets/token/tokenmember.php?id=' . encodeIdToBase64($id);
-            $qrSize = 8; // mm
-            $qrX = $cardWidth - $qrSize - 4; // 4mm padding from right
-            $qrY = 44; // 4mm from top
+            $qrSize = 13; // mm
+            $qrX = $cardWidth - $qrSize - 1; // 4mm padding from right
+            $qrY = 40; // 4mm from top
             $pdf->write2DBarcode($qrUrl, 'QRCODE,L', $qrX, $qrY, $qrSize, $qrSize, $style, 'N');
             
             // (Removed obsolete large-page image placement for $ANGGOTA_PIC)
@@ -247,11 +247,14 @@ if (isset($_GET['id'])) {
             // Use MultiCell for sekretariat to allow wrapping
             $curX = $pdf->GetX();
             $curY = $pdf->GetY();
-            $pdf->MultiCell(76, 0, strtoupper($CABANG_SEKRETARIAT), 0, 'C', false, 0, $curX, $curY, true, 0, false, true);
+            $pdf->MultiCell(76, 0, $CABANG_SEKRETARIAT, 0, 'C', false, 0, $curX, $curY, true, 0, false, true);
             $pdf->Cell(5,5,"",0,0,"L");
-            $pdf->Ln(36);
-            $pdf->SetFont('helvetica', '', 5.5);
+            $pdf->Ln(16);
+            $pdf->SetFont('helvetica', 'B', 5.5);
             $pdf->SetTextColor(0,0,0);
+            $pdf->Cell(56.5,5,"",0,0,"L");
+            $pdf->Cell(20,5,'CABANG ' . strtoupper($CABANG_DESKRIPSI),0,0,"C");
+            $pdf->Ln(20);
             $pdf->Cell(56.5,5,"",0,0,"L");
             $pdf->Cell(20,5,$KOORDINATOR_NAMA,0,0,"C");
             // Place QR code on back page (top-right corner)
@@ -269,8 +272,26 @@ if (isset($_GET['id'])) {
             $safeId = preg_replace('/[^A-Za-z0-9_-]+/', '', (string)$ANGGOTA_ID);
             if ($safeId === '') { $safeId = 'ID'; }
             $fileName = 'Kartu_ID_' . $safeId . '.pdf';
+
+            // Prepare the parameters
+            $file_db = "./assets/idcard/$CABANG_DESKRIPSI/$ANGGOTA_ID $ANGGOTA_NAMA/KTA $ANGGOTA_ID $ANGGOTA_NAMA $TINGKATAN_NAMA.pdf";
+
+            // Define the query with placeholders
+            $query = "UPDATE m_anggota SET ANGGOTA_KTA = ?, ANGGOTA_KTA_AKTIF=NOW(), ANGGOTA_KTA_EXP = DATE_ADD(NOW(), INTERVAL 5 YEAR) WHERE ANGGOTA_KEY = '$ANGGOTA_KEY'";
+            // Execute the query with the parameters
+            GetQuery2($query, [$file_db]);
+
             // Use 'D' to force download so browsers honor the filename; switch to 'I' if you prefer inline preview
-            $pdf->Output($fileName, 'I');
+            $pdfFilePath = '../../../idcard/'.$CABANG_DESKRIPSI.'/'.$ANGGOTA_ID.' '.$ANGGOTA_NAMA;
+
+            // Create directory if not exists
+            if (!file_exists($pdfFilePath)) {
+                mkdir($pdfFilePath, 0777, true);
+            }
+
+            //Close and output PDF document
+            $pdf->Output(__DIR__ .'/'.$pdfFilePath.'/KTA ' . $ANGGOTA_ID . ' ' . $ANGGOTA_NAMA . ' ' . $TINGKATAN_NAMA.'.pdf', 'F');
+            $pdf->Output('KTA ' . $ANGGOTA_ID . ' ' . $ANGGOTA_NAMA . ' ' . $TINGKATAN_NAMA.'.pdf', 'I');
             exit;
         }
     } catch (\Throwable $th) {
