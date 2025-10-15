@@ -12,19 +12,34 @@ if (isset($_POST["saveidsertifikat"])) {
         // Directory to store files
         $directory = "../../../../images/idsertifikat/";
 
-        // Handle ID_CARD files
-        if (!empty($_FILES['ID_CARD']['tmp_name'][0])) {
-            foreach ($_FILES['ID_CARD']['tmp_name'] as $key => $idCardFileTmp) {
-                $idCardFileName = $_FILES['ID_CARD']['name'][$key];
-                $idCardFileDestination = $directory . "/" . $idCardFileName;
-                move_uploaded_file($idCardFileTmp, $idCardFileDestination);
+        // Handle ID_CARD_FRONT files
+        if (!empty($_FILES['ID_CARD_FRONT']['tmp_name'][0])) {
+            foreach ($_FILES['ID_CARD_FRONT']['tmp_name'] as $key => $idCardFileTmp) {
+                $idCardFileName = $_FILES['ID_CARD_FRONT']['name'][$key];
+                $idCardFileDestinationFront = $directory . "/" . $idCardFileName;
+                move_uploaded_file($idCardFileTmp, $idCardFileDestinationFront);
 
                 // Re-initialize the variable for database
-                $idCardFileDestination = "./images/idsertifikat/" . $idCardFileName;
+                $idCardFileDestinationFront = "./images/idsertifikat/" . $idCardFileName;
             }
         }
         else {
-            $idCardFileDestination = "";
+            $idCardFileDestinationFront = "";
+        }
+
+        // Handle ID_CARD_BACK files
+        if (!empty($_FILES['ID_CARD_BACK']['tmp_name'][0])) {
+            foreach ($_FILES['ID_CARD_BACK']['tmp_name'] as $key => $idCardFileTmp) {
+                $idCardFileName = $_FILES['ID_CARD_BACK']['name'][$key];
+                $idCardFileDestinationBack = $directory . "/" . $idCardFileName;
+                move_uploaded_file($idCardFileTmp, $idCardFileDestinationBack);
+
+                // Re-initialize the variable for database
+                $idCardFileDestinationBack = "./images/idsertifikat/" . $idCardFileName;
+            }
+        }
+        else {
+            $idCardFileDestinationBack = "";
         }
 
         // Handle SERTIFIKAT files
@@ -42,7 +57,7 @@ if (isset($_POST["saveidsertifikat"])) {
             $sertifikatFileDestination = "";
         }
 
-        GetQuery("insert into m_idsertifikat select uuid(), '$TINGKATAN_ID', '$IDSERTIFIKAT_DESKRIPSI', '$idCardFileDestination','$idCardFileName','$sertifikatFileDestination','$sertifikatFileName', '0', '$USER_ID', '$localDateTime'");
+        GetQuery("insert into m_idsertifikat select uuid(), '$TINGKATAN_ID', '$IDSERTIFIKAT_DESKRIPSI', '$idCardFileDestinationFront','$idCardFileDestinationBack','$idCardFileName','$sertifikatFileDestination','$sertifikatFileName', '0', '$USER_ID', '$localDateTime'");
 
         $response="Success";
         echo $response;
@@ -66,17 +81,31 @@ if (isset($_POST["editsertifikat"])) {
         // Directory to store files
         $directory = "../../../../images/idsertifikat/";
 
-        // Handle ID_CARD files
-        if (!empty($_FILES['ID_CARD']['tmp_name'][0])) {
-            foreach ($_FILES['ID_CARD']['tmp_name'] as $key => $idCardFileTmp) {
-                $idCardFileName = $_FILES['ID_CARD']['name'][$key];
-                $idCardFileDestination = $directory . "/" . $idCardFileName;
-                move_uploaded_file($idCardFileTmp, $idCardFileDestination);
+        // Handle ID_CARD_FRONT files
+        if (!empty($_FILES['ID_CARD_FRONT']['tmp_name'][0])) {
+            foreach ($_FILES['ID_CARD_FRONT']['tmp_name'] as $key => $idCardFileTmp) {
+                $idCardFileName = $_FILES['ID_CARD_FRONT']['name'][$key];
+                $idCardFileDestinationFront = $directory . "/" . $idCardFileName;
+                move_uploaded_file($idCardFileTmp, $idCardFileDestinationFront);
 
                 // Re-initialize the variable for database
-                $idCardFileDestination = "./images/idsertifikat/" . $idCardFileName;
+                $idCardFileDestinationFront = "./images/idsertifikat/" . $idCardFileName;
 
-                GetQuery("update m_idsertifikat set IDSERTIFIKAT_IDFILE = '$idCardFileDestination' where IDSERTIFIKAT_ID = '$IDSERTIFIKAT_ID'");
+                GetQuery("update m_idsertifikat set IDSERTIFIKAT_IDFILE_FRONT = '$idCardFileDestinationFront' where IDSERTIFIKAT_ID = '$IDSERTIFIKAT_ID'");
+            }
+        }
+
+        // Handle ID_CARD_BACK files
+        if (!empty($_FILES['ID_CARD_BACK']['tmp_name'][0])) {
+            foreach ($_FILES['ID_CARD_BACK']['tmp_name'] as $key => $idCardFileTmp) {
+                $idCardFileName = $_FILES['ID_CARD_BACK']['name'][$key];
+                $idCardFileDestinationBack = $directory . "/" . $idCardFileName;
+                move_uploaded_file($idCardFileTmp, $idCardFileDestinationBack);
+
+                // Re-initialize the variable for database
+                $idCardFileDestinationBack = "./images/idsertifikat/" . $idCardFileName;
+
+                GetQuery("update m_idsertifikat set IDSERTIFIKAT_IDFILE_BACK = '$idCardFileDestinationBack' where IDSERTIFIKAT_ID = '$IDSERTIFIKAT_ID'");
             }
         }
 

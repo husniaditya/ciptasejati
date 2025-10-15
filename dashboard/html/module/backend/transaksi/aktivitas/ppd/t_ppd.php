@@ -182,7 +182,7 @@ if (isset($_POST["approveKoordinator"])) {
         $PPD_ID = $_POST["PPD_ID"];
 
         $incNum = autoIncCert("t_ppd","PPD_FILE_NAME",5);
-        $getSertifikat = GetQuery("SELECT CONCAT('$incNum', '/', LEFT(a.ANGGOTA_ID, 7), '/', t.TINGKATAN_SERTIFIKAT, '/', 'ISBDS-CS/', 
+        $getSertifikat = GetQuery("SELECT CONCAT('$incNum', '/', LEFT(a.ANGGOTA_ID, 5), '/', t.TINGKATAN_SERTIFIKAT, '/', 'ISBDS-CS/', 
         CASE MONTH(p.PPD_TANGGAL)
           WHEN 1 THEN 'I'
           WHEN 2 THEN 'II'

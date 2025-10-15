@@ -30,8 +30,15 @@ while ($rowSertifikat = $getSertifikat->fetch(PDO::FETCH_ASSOC)) {
         <td><?= $IDSERTIFIKAT_DESKRIPSI; ?></td>
         <td align="center">
             <div>
-                <a href="<?= $IDSERTIFIKAT_IDFILE; ?>" target="_blank">
-                <img src="<?= $IDSERTIFIKAT_IDFILE; ?>" alt="Image" width="100" height="75" />
+                <a href="<?= $IDSERTIFIKAT_IDFILE_FRONT; ?>" target="_blank">
+                <img src="<?= $IDSERTIFIKAT_IDFILE_FRONT; ?>" alt="Image" width="100" height="75" />
+                </a>
+            </div>
+        </td>
+        <td align="center">
+            <div>
+                <a href="<?= $IDSERTIFIKAT_IDFILE_BACK; ?>" target="_blank">
+                <img src="<?= $IDSERTIFIKAT_IDFILE_BACK; ?>" alt="Image" width="100" height="75" />
                 </a>
             </div>
         </td>

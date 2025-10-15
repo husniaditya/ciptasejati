@@ -190,11 +190,11 @@ function handleModalHidden() {
 
 
 function validateInput(input) {
-  const inputValue = input.value.replace(/[^0-9]/g, '').slice(0, 3);
+  const inputValue = input.value.replace(/[^0-9]/g, '').slice(0, 5);
 
-  if (inputValue.length !== 3) {
-      document.getElementById('warning-message').innerText = 'Mohon masukkan 3 digit angka!';
-      document.getElementById('warning-message-edit').innerText = 'Mohon masukkan 3 digit angka!';
+  if (inputValue.length !== 5) {
+      document.getElementById('warning-message').innerText = 'Mohon masukkan 5 digit angka!';
+      document.getElementById('warning-message-edit').innerText = 'Mohon masukkan 5 digit angka!';
   } else {
       document.getElementById('warning-message').innerText = '';
       document.getElementById('warning-message-edit').innerText = '';

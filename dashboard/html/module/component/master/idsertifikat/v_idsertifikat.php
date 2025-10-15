@@ -39,7 +39,8 @@ if ($_SESSION["ADD_IDdanSertifikat"] == "Y") {
                         <th class="hidden">ID Sertifikat</th>
                         <th>Tingkatan</th>
                         <th>Deskripsi </th>
-                        <th>File ID Card</th>
+                        <th>File ID Card Depan</th>
+                        <th>File ID Card Belakang</th>
                         <th>File Sertifikat</th>
                         <th>Status </th>
                         <th>Input Oleh </th>
@@ -84,8 +85,15 @@ if ($_SESSION["ADD_IDdanSertifikat"] == "Y") {
                             <td><?= $IDSERTIFIKAT_DESKRIPSI; ?></td>
                             <td align="center">
                                 <div>
-                                    <a href="<?= $IDSERTIFIKAT_IDFILE; ?>" target="_blank">
-                                    <img src="<?= $IDSERTIFIKAT_IDFILE; ?>" alt="Image" width="100" height="75" />
+                                    <a href="<?= $IDSERTIFIKAT_IDFILE_FRONT; ?>" target="_blank">
+                                    <img src="<?= $IDSERTIFIKAT_IDFILE_FRONT; ?>" alt="Image" width="100" height="75" />
+                                    </a>
+                                </div>
+                            </td>
+                            <td align="center">
+                                <div>
+                                    <a href="<?= $IDSERTIFIKAT_IDFILE_BACK; ?>" target="_blank">
+                                    <img src="<?= $IDSERTIFIKAT_IDFILE_BACK; ?>" alt="Image" width="100" height="75" />
                                     </a>
                                 </div>
                             </td>
@@ -149,15 +157,23 @@ if ($_SESSION["ADD_IDdanSertifikat"] == "Y") {
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label for="File">Upload File ID Card </label><br>
+                                <label for="File">Upload File ID Card Depan </label><br>
                                 <div>
-                                    <input type="file" name="ID_CARD[]" id="ID_CARD" accept="image/*" /><br/>
+                                    <input type="file" name="ID_CARD_DEPAN[]" id="ID_CARD_DEPAN" accept="image/*" /><br/>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="File">Upload File ID Card Belakang </label><br>
+                                <div>
+                                    <input type="file" name="ID_CARD_BELAKANG[]" id="ID_CARD_BELAKANG" accept="image/*" /><br/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="File">Upload File Sertifikat </label><br>
                                 <div>
@@ -210,8 +226,14 @@ if ($_SESSION["ADD_IDdanSertifikat"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="File">File ID Card </label><br>
-                                <div class="row" id="loadviewid"></div>
+                                <label for="File">File ID Card Depan</label><br>
+                                <div class="row" id="loadviewidfront"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="File">File ID Card Belakang</label><br>
+                                <div class="row" id="loadviewidback"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -286,15 +308,23 @@ if ($_SESSION["ADD_IDdanSertifikat"] == "Y") {
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label for="File">Upload File ID Card </label><br>
+                                <label for="File">Upload File ID Card Depan </label><br>
                                 <div>
-                                    <input type="file" name="ID_CARD[]" id="editID_CARD" accept="image/*" /><br/>
+                                    <input type="file" name="ID_CARD_FRONT[]" id="editID_CARD_FRONT" accept="image/*" /><br/>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="File">Upload File ID Card Belakang </label><br>
+                                <div>
+                                    <input type="file" name="ID_CARD_BACK[]" id="editID_CARD_BACK" accept="image/*" /><br/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="File">Upload File Sertifikat </label><br>
                                 <div>
@@ -307,8 +337,14 @@ if ($_SESSION["ADD_IDdanSertifikat"] == "Y") {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="File">File ID Card </label><br>
-                                <div class="row" id="loadeditid"></div>
+                                <label for="File">File ID Card Depan </label><br>
+                                <div class="row" id="loadeditidfront"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="File">File ID Card Belakang </label><br>
+                                <div class="row" id="loadeditidback"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
