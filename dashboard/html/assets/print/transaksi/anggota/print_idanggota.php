@@ -213,11 +213,15 @@ if (isset($_GET['id'])) {
             $pdf->SetXY($valueX, $alamatY);
             $pdf->MultiCell(27, $lineH, $alamatDisplay, 0, 'L', false, 1, $valueX, $alamatY, true, 0, false, true);
 
-            $pdf->Ln(-2);
+            // Place 'Masa Berlaku' at bottom-left of the front page
+            $pdf->SetTextColor(0,0,0);
+            $labelX = 4; // mm from left
+            $labelY = $cardHeight - 9.2; // mm from top (approx 6mm above bottom)
+            $pdf->SetXY($labelX, $labelY);
             $pdf->SetFont('helvetica', 'B', 5.5);
-            $pdf->Cell(4,5,"",0,0,"L");
-            $pdf->Cell(14,5,"Masa Berlaku:",0,0,"L");
-            $pdf->Cell(20,5,$ANGGOTA_KTA_EXP,0,0,"L");
+            $pdf->Cell(14, 4.5, 'Masa Berlaku:', 0, 0, 'L');
+            $pdf->SetFont('helvetica', '', 5.5);
+            $pdf->Cell(24, 4.5, $ANGGOTA_KTA_EXP, 0, 0, 'L');
 
             // (We don't rely on $y after this, but if needed we could update it like below)
             $y = max($y, $pdf->GetY());
