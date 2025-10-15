@@ -182,9 +182,9 @@ $getSocial = GetQuery("SELECT * FROM c_mediasosial WHERE DELETION_STATUS = 0");
             <h3>Informasi KTA</h3>
             <hr>
             <label>Tanggal Aktivasi</label>
-            <p><i class="fa-regular fa-calendar-days"></i> <?= $KTA_AKTIF; ?> &nbsp; <i class="fa-regular fa-clock"></i> <?= $TIMENOW; ?></p>
+            <p><i class="fa-regular fa-calendar-days"></i> <?= $KTA_AKTIF; ?></p>
             <label>Berlaku sampai dengan</label>
-            <p><i class="fa-regular fa-calendar-days"></i> <?= $KTA_EXP; ?> &nbsp; <i class="fa-regular fa-clock"></i> <?= $DOKUMEN_TIME; ?></p>
+            <p><i class="fa-regular fa-calendar-days"></i> <?= $KTA_EXP; ?></p>
             <?php
         }
         ?>
