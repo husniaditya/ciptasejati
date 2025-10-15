@@ -5,7 +5,7 @@ if (isset($_GET['id'])) {
     $encodedId = $_GET['id'];
     $decodedId = decodeBase64ToId($encodedId);
 
-    $getData = GetQuery("SELECT a.*, c.CABANG_DESKRIPSI, d.DAERAH_DESKRIPSI, t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN, date_format(a.ANGGOTA_KTA_AKTIF, '%d-%m-%Y') AS KTA_AKTIF, date_format(a.ANGGOTA_KTA_EXP, '%d-%m-%Y') AS KTA_EXP,
+    $getData = GetQuery("SELECT a.*, c.CABANG_DESKRIPSI, d.DAERAH_DESKRIPSI, t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN, date_format(a.ANGGOTA_KTA_AKTIF, '%d %M %Y') AS KTA_AKTIF, date_format(a.ANGGOTA_KTA_EXP, '%d %M %Y') AS KTA_EXP,
     CASE 
         WHEN a.ANGGOTA_STATUS = 0 THEN 'Aktif'
         WHEN a.ANGGOTA_STATUS = 1 THEN 'Non Aktif'
