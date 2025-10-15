@@ -11,6 +11,11 @@ if (isset($_GET['id'])) {
     $ANGGOTA_KEY = decodeBase64ToId($_GET['id']);
     $id = $ANGGOTA_KEY;
 
+    // Define the query with placeholders
+    $query = "UPDATE m_anggota SET ANGGOTA_KTA_AKTIF=NOW(), ANGGOTA_KTA_EXP = DATE_ADD(NOW(), INTERVAL 5 YEAR) WHERE ANGGOTA_KEY = '$ANGGOTA_KEY'";
+    // Execute the query with the parameters
+    GetQuery2($query, []);
+
     $getData = GetQuery("SELECT a.*, c.CABANG_DESKRIPSI, c.CABANG_SEKRETARIAT, d.DAERAH_DESKRIPSI, t.TINGKATAN_NAMA, t.TINGKATAN_SEBUTAN, date_format(a.ANGGOTA_TANGGAL_LAHIR, '%d %M %Y') TGL_LAHIR, date_format(a.ANGGOTA_KTA_EXP, '%d %M %Y') ANGGOTA_KTA_EXP, s.IDSERTIFIKAT_IDFILE_FRONT, s.IDSERTIFIKAT_IDFILE_BACK FROM m_anggota a
     LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
@@ -211,7 +216,7 @@ if (isset($_GET['id'])) {
             $pdf->Ln(-2);
             $pdf->SetFont('helvetica', 'B', 5.5);
             $pdf->Cell(4,5,"",0,0,"L");
-            $pdf->Cell(13,5,"Masa Berlaku:",0,0,"L");
+            $pdf->Cell(14,5,"Masa Berlaku:",0,0,"L");
             $pdf->Cell(20,5,$ANGGOTA_KTA_EXP,0,0,"L");
 
             // (We don't rely on $y after this, but if needed we could update it like below)
@@ -273,14 +278,6 @@ if (isset($_GET['id'])) {
             if ($safeId === '') { $safeId = 'ID'; }
             $fileName = 'Kartu_ID_' . $safeId . '.pdf';
 
-            // Prepare the parameters
-            $file_db = "./assets/idcard/$CABANG_DESKRIPSI/$ANGGOTA_ID $ANGGOTA_NAMA/KTA $ANGGOTA_ID $ANGGOTA_NAMA $TINGKATAN_NAMA.pdf";
-
-            // Define the query with placeholders
-            $query = "UPDATE m_anggota SET ANGGOTA_KTA = ?, ANGGOTA_KTA_AKTIF=NOW(), ANGGOTA_KTA_EXP = DATE_ADD(NOW(), INTERVAL 5 YEAR) WHERE ANGGOTA_KEY = '$ANGGOTA_KEY'";
-            // Execute the query with the parameters
-            GetQuery2($query, [$file_db]);
-
             // Use 'D' to force download so browsers honor the filename; switch to 'I' if you prefer inline preview
             $pdfFilePath = '../../../idcard/'.$CABANG_DESKRIPSI.'/'.$ANGGOTA_ID.' '.$ANGGOTA_NAMA;
 
@@ -288,6 +285,14 @@ if (isset($_GET['id'])) {
             if (!file_exists($pdfFilePath)) {
                 mkdir($pdfFilePath, 0777, true);
             }
+            
+            // Prepare the parameters
+            $file_db = "./assets/idcard/$CABANG_DESKRIPSI/$ANGGOTA_ID $ANGGOTA_NAMA/KTA $ANGGOTA_ID $ANGGOTA_NAMA $TINGKATAN_NAMA.pdf";
+            
+            // Define the query with placeholders
+            $query = "UPDATE m_anggota SET ANGGOTA_KTA = ? WHERE ANGGOTA_KEY = '$ANGGOTA_KEY'";
+            // Execute the query with the parameters
+            GetQuery2($query, [$file_db]);
 
             //Close and output PDF document
             $pdf->Output(__DIR__ .'/'.$pdfFilePath.'/KTA ' . $ANGGOTA_ID . ' ' . $ANGGOTA_NAMA . ' ' . $TINGKATAN_NAMA.'.pdf', 'F');
