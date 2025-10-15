@@ -4,12 +4,12 @@ $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 $USER_CABANG = $_SESSION["LOGINCAB_CS"];
 
 if ($USER_AKSES == "Administrator") {
-    $getAnggotadata = GetQuery("SELECT a.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_GELAR,t.TINGKATAN_SEBUTAN,DATE_FORMAT(a.ANGGOTA_TANGGAL_LAHIR, '%d %M %Y') TGL_LAHIR,DATE_FORMAT(a.ANGGOTA_JOIN, '%d %M %Y') TGL_JOIN,DATE_FORMAT(a.ANGGOTA_RESIGN, '%d %M %Y') TGL_RESIGN,RIGHT(a.ANGGOTA_ID,3) SHORT_ID, CASE WHEN ANGGOTA_STATUS = 0 THEN 'Aktif' WHEN ANGGOTA_STATUS = 1 THEN 'Non Aktif' ELSE 'Mutasi' END STATUS_DES FROM m_anggota a
+    $getAnggotadata = GetQuery("SELECT a.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_GELAR,t.TINGKATAN_SEBUTAN,t.TINGKATAN_LEVEL,DATE_FORMAT(a.ANGGOTA_TANGGAL_LAHIR, '%d %M %Y') TGL_LAHIR,DATE_FORMAT(a.ANGGOTA_JOIN, '%d %M %Y') TGL_JOIN,DATE_FORMAT(a.ANGGOTA_RESIGN, '%d %M %Y') TGL_RESIGN,RIGHT(a.ANGGOTA_ID,3) SHORT_ID, CASE WHEN ANGGOTA_STATUS = 0 THEN 'Aktif' WHEN ANGGOTA_STATUS = 1 THEN 'Non Aktif' ELSE 'Mutasi' END STATUS_DES FROM m_anggota a
     LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID");
 } else {
-    $getAnggotadata = GetQuery("SELECT a.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_GELAR,t.TINGKATAN_SEBUTAN,DATE_FORMAT(a.ANGGOTA_TANGGAL_LAHIR, '%d %M %Y') TGL_LAHIR,DATE_FORMAT(a.ANGGOTA_JOIN, '%d %M %Y') TGL_JOIN,DATE_FORMAT(a.ANGGOTA_RESIGN, '%d %M %Y') TGL_RESIGN,RIGHT(a.ANGGOTA_ID,3) SHORT_ID, CASE WHEN ANGGOTA_STATUS = 0 THEN 'Aktif' WHEN ANGGOTA_STATUS = 1 THEN 'Non Aktif' ELSE 'Mutasi' END STATUS_DES FROM m_anggota a
+    $getAnggotadata = GetQuery("SELECT a.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_GELAR,t.TINGKATAN_SEBUTAN,t.TINGKATAN_LEVEL,DATE_FORMAT(a.ANGGOTA_TANGGAL_LAHIR, '%d %M %Y') TGL_LAHIR,DATE_FORMAT(a.ANGGOTA_JOIN, '%d %M %Y') TGL_JOIN,DATE_FORMAT(a.ANGGOTA_RESIGN, '%d %M %Y') TGL_RESIGN,RIGHT(a.ANGGOTA_ID,3) SHORT_ID, CASE WHEN ANGGOTA_STATUS = 0 THEN 'Aktif' WHEN ANGGOTA_STATUS = 1 THEN 'Non Aktif' ELSE 'Mutasi' END STATUS_DES FROM m_anggota a
     LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
@@ -20,6 +20,10 @@ $getAkses = GetQuery("select * from p_param where KATEGORI = 'USER_AKSES' ORDER 
 $getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0");
 $getCabang = GetQuery("select * from m_cabang where DELETION_STATUS = 0");
 $getTingkatan = GetQuery("select * from m_tingkatan where DELETION_STATUS = 0 order by TINGKATAN_LEVEL");
+$getURL = GetQuery("SELECT * FROM p_param WHERE KATEGORI = 'url'");
+while ($urlData = $getURL->fetch(PDO::FETCH_ASSOC)) {
+    $URL = $urlData["DESK"];
+}
 // Fetch all rows into an array
 $rowd = $getDaerah->fetchAll(PDO::FETCH_ASSOC);
 $rows = $getCabang->fetchAll(PDO::FETCH_ASSOC);
@@ -216,9 +220,12 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                             <li><a data-toggle="modal" href="#EditAnggota" class="open-EditAnggota" style="color:cornflowerblue;" data-key="<?= $ANGGOTA_KEY; ?>" data-id="<?= $ANGGOTA_ID; ?>" data-shortid="<?= $SHORT_ID; ?>" data-daerahkey="<?= $DAERAH_KEY;?>" data-daerahdes="<?= $DAERAH_DESKRIPSI;?>" data-cabangkey="<?= $CABANG_KEY; ?>" data-cabangdes="<?= $CABANG_DESKRIPSI; ?>" data-tingkatanid=<?= $TINGKATAN_ID; ?> data-tingkatannama="<?= $TINGKATAN_NAMA; ?>" data-ktp="<?= $ANGGOTA_KTP; ?>" data-nama="<?= $ANGGOTA_NAMA; ?>" data-alamat="<?= $ANGGOTA_ALAMAT;?>" data-pekerjaan="<?= $ANGGOTA_PEKERJAAN; ?>" data-agama="<?= $ANGGOTA_AGAMA; ?>" data-kelamin="<?= $ANGGOTA_KELAMIN; ?>" data-tempatlahir="<?= $ANGGOTA_TEMPAT_LAHIR; ?>" data-tanggallahir="<?= $ANGGOTA_TANGGAL_LAHIR; ?>" data-hp="<?= $ANGGOTA_HP; ?>" data-email="<?= $ANGGOTA_EMAIL; ?>" data-pic="<?= $ANGGOTA_PIC; ?>" data-join="<?= $ANGGOTA_JOIN; ?>" data-resign="<?= $ANGGOTA_RESIGN; ?>" data-akses="<?= $ANGGOTA_AKSES; ?>" data-status="<?= $ANGGOTA_STATUS; ?>" data-statusdes="<?= $STATUS_DES; ?>" data-ranting="<?= $ANGGOTA_RANTING; ?>"><span class="ico-edit"></span> Ubah</a></li>
                                             <?php
                                         }
-                                        ?>
-                                        <li><a href="assets/print/transaksi/anggota/print_idanggota.php?id=<?= encodeIdToBase64($ANGGOTA_ID); ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-regular fa-id-card"></i> Kartu ID Anggota</a></li>
-                                        <?php
+
+                                        if ($TINGKATAN_LEVEL > 1) {
+                                            ?>
+                                            <li><a data-toggle="modal" href="#CardId" class="open-CardId" style="color:darkgoldenrod;" data-key="<?= encodeIdToBase64($ANGGOTA_KEY); ?>" data-id="<?= $ANGGOTA_KEY; ?>" data-id2="<?= $ANGGOTA_ID; ?>" data-nama="<?= htmlspecialchars($ANGGOTA_NAMA, ENT_QUOTES, 'UTF-8'); ?>"><i class="fa-regular fa-id-card"></i> Kartu ID Anggota</a></li>
+                                            <?php
+                                        }
                                         if ($_SESSION['DELETE_DaftarAnggota'] == "Y") {
                                             ?>
                                             <li class="divider"></li>
@@ -257,6 +264,117 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
 </div>
 <br><br>
 <!--/ END row -->
+
+<!-- Confirmation Modal: Open Card ID -->
+<div id="ConfirmOpenCardIDModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmOpenCardIDTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h3 class="semibold modal-title text-inverse" id="confirmOpenCardIDTitle">Buka Kartu ID</h3>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex align-items-start" style="gap:12px;">
+                    <div style="flex:0 0 auto; width:40px; height:40px; border-radius:10px; background:#e9f2ff; display:flex; align-items:center; justify-content:center; color:#0d6efd;">
+                        <i class="fa-regular fa-id-card"></i>
+                    </div>
+                    <div>
+                        <div style="font-size:14px; color:#6c757d;">Anda akan membuka Kartu ID untuk:</div>
+                        <div style="font-size:16px; font-weight:600; color:#212529;" id="confirmCardNama">-</div>
+                        <div style="font-size:13px; color:#6c757d;" id="confirmCardId">ID: -</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Tutup</button>
+                <button type="button" class="btn btn-primary btn-outline mb5 btn-rounded" id="confirmOpenCardBtn">
+                    <i class="fa-solid fa-check"></i> Lanjutkan
+                </button>
+            </div>
+        </div>
+    </div>
+    <script>
+        (function(){
+            var pendingTargetLink = null;
+            // Inject base URL from PHP into JS
+            var APP_BASE_URL = <?php echo json_encode(rtrim($URL ?? '', '/')); ?>;
+            // Helper: Base64 encode (handles unicode safely)
+            function encodeIdToBase64(val){
+                try {
+                    return window.btoa(String(val));
+                } catch (e) {
+                    try {
+                        return window.btoa(unescape(encodeURIComponent(String(val))));
+                    } catch (e2) {
+                        return '';
+                    }
+                }
+            }
+            function openConfirm(linkEl){
+                var nama = linkEl.getAttribute('data-nama') || '-';
+                var id = linkEl.getAttribute('data-id') || '-';
+                var key = linkEl.getAttribute('data-id2') || '-';
+                document.getElementById('confirmCardNama').textContent = nama;
+                document.getElementById('confirmCardId').textContent = 'ID: ' + key;
+                pendingTargetLink = linkEl;
+                $('#ConfirmOpenCardIDModal').modal('show');
+            }
+
+            // Intercept clicks on the Card ID link
+            document.addEventListener('click', function(e){
+                var t = e.target;
+                // Walk up to the anchor if icon or span clicked
+                while (t && t !== document && !(t.matches && t.matches('a.open-CardId'))){
+                    t = t.parentNode;
+                }
+                if (!t || !t.matches || !t.matches('a.open-CardId')) return;
+
+                // Prevent default first navigation/modal open
+                e.preventDefault();
+
+                // Guard to avoid loop on confirmed navigation
+                if (t.getAttribute('data-confirmed') === '1'){
+                    t.removeAttribute('data-confirmed');
+                    // proceed
+                    var href = t.getAttribute('href');
+                    if (href && href.startsWith('#')) {
+                        // If it targets a modal id, trigger it
+                        $(href).modal('show');
+                    } else if (href) {
+                        window.location.href = href;
+                    }
+                    return;
+                }
+
+                openConfirm(t);
+            }, true);
+
+            // Confirm button handler -> open print in new tab
+            document.addEventListener('DOMContentLoaded', function(){
+                var btn = document.getElementById('confirmOpenCardBtn');
+                if (!btn) return;
+                btn.addEventListener('click', function(){
+                    if (!pendingTargetLink) return;
+                    var anggotaId = pendingTargetLink.getAttribute('data-id') || '';
+                    var encoded = encodeIdToBase64(anggotaId);
+                    try {
+                        // Build absolute URL to the print endpoint using APP_BASE_URL
+                        var base = (typeof APP_BASE_URL === 'string' ? APP_BASE_URL : '').replace(/\/+$/, '');
+                        var url = base + '/dashboard/html/assets/print/transaksi/anggota/print_idanggota.php?id=' + encoded;
+                        window.open(url, '_blank');
+                    } catch (e) {
+                        // Fallback: attempt same URL even if encoding threw
+                        var base = (typeof APP_BASE_URL === 'string' ? APP_BASE_URL : '').replace(/\/+$/, '');
+                        var urlFallback = base + '/dashboard/html/assets/print/transaksi/anggota/print_idanggota.php?id=' + encoded;
+                        window.open(urlFallback, '_blank');
+                    }
+                    $('#ConfirmOpenCardIDModal').modal('hide');
+                    pendingTargetLink = null;
+                });
+            });
+        })();
+    </script>
+</div>
 
 <div id="AddAnggota" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form id="AddAnggota-form" method="post" class="form" data-parsley-validate>
@@ -348,7 +466,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>No Urut Anggota<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" minlength="3" maxlength="3" oninput="validateInput(this)" required id="ANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Inputkan 3 digit nomor urut keanggotaan" data-parsley-required>
+                                    <input type="text" class="form-control" minlength="5" maxlength="5" oninput="validateInput(this)" required id="ANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Inputkan 5 digit nomor urut keanggotaan" data-parsley-required>
                                     <div id="warning-message" style="color: red;"></div>
                                 </div>
                             </div>
@@ -861,7 +979,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>No Urut Anggota<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" minlength="3" maxlength="3" oninput="validateInput(this)" required id="editANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Inputkan 3 digit nomor urut keanggotaan" data-parsley-required readonly>
+                                    <input type="text" class="form-control" minlength="5" maxlength="5" oninput="validateInput(this)" required id="editANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Inputkan 5 digit nomor urut keanggotaan" data-parsley-required readonly>
                                     <div id="warning-message-edit" style="color: red;"></div>
                                 </div>
                             </div>
