@@ -1,17 +1,42 @@
 
 
-// Kas Anggota Table
+// Kas Anggota Table - server side
+let kasDt;
 function callTable() {
-  $('#kasanggota-table').DataTable({
-      responsive: true,
-      order: [[1, 'desc']],
-      dom: 'Bfrtlip',
-      paging: true,
-      scrollX: true,
-      scrollY: '350px', // Set the desired height here
-      buttons: [
-          'copy', 'csv', 'excel', 'pdf'
-      ]
+  if (kasDt) {
+    kasDt.destroy();
+  }
+  kasDt = $('#kasanggota-table').DataTable({
+    processing: true,
+    serverSide: true,
+    responsive: true,
+    order: [[1, 'desc']],
+    dom: 'Bfrtlip',
+    paging: true,
+    scrollX: true,
+    scrollY: '350px',
+    buttons: ['copy', 'csv', 'excel', 'pdf'],
+    ajax: {
+      url: 'module/ajax/transaksi/anggota/kasanggota/aj_tablekasanggota_ssp.php',
+      type: 'POST',
+      data: function (d) {
+        // attach filters
+        d.DAERAH_KEY = $('#selectize-select3').val();
+        d.CABANG_KEY = $('#selectize-select2').val();
+        d.KAS_ID = $('#filterKAS_ID').val();
+        d.KAS_JENIS = $('#filterKAS_JENIS').val();
+        d.ANGGOTA_ID = $('#filterANGGOTA_ID').val();
+        d.ANGGOTA_NAMA = $('#filterANGGOTA_NAMA').val();
+        d.TINGKATAN_ID = $('#selectize-select').val();
+        d.KAS_DK = $('#filterKAS_KATEGORI').val();
+        d.TANGGAL_AWAL = $('#datepicker4').val();
+        d.TANGGAL_AKHIR = $('#datepicker5').val();
+        d._ts = Date.now(); // cache buster
+      }
+    },
+    columnDefs: [
+      { targets: 0, orderable: false, searchable: false } // action column
+    ]
   });
 }
 
@@ -330,17 +355,8 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
           // Close the modal
           $(formId.replace("-form", "")).modal('hide');
 
-          // Call the reloadDataTable() function after inserting data to reload the DataTable
-          $.ajax({
-            type: 'POST',
-            url: 'module/ajax/transaksi/anggota/kasanggota/aj_tablekasanggota.php',
-            success: function (response) {
-              filterKasAnggotaEvent(); // Call the filter function to update the table
-            },
-            error: function (xhr, status, error) {
-              // Handle any errors
-            }
-          });
+          // Reload the DataTable
+          if (kasDt) { kasDt.ajax.reload(null, false); }
 
           // Hide the loading overlay after the initial processing
           hideLoadingOverlay();
@@ -392,7 +408,6 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
   });
 }
 
-
 $(document).ready(function() {
   // Call the function when the document is ready
   callTable();
@@ -409,7 +424,7 @@ $(document).ready(function() {
     var saldoAwal = parseFloat($(saldoAwalElement).val().replace(/[^0-9.-]/g, '')) || 0;
     var jumlah = parseFloat($(jumlahElement).val().replace(/\D/g, '')) || 0;
     var kategori = $(kategoriElement).val() || "";
-  
+
     // Perform the calculation based on the selected dropdown value
     var saldoAkhir;
     if (kategori === "D") {
@@ -417,13 +432,13 @@ $(document).ready(function() {
     } else {
       saldoAkhir = saldoAwal - jumlah; // Subtraction for "Kredit"
     }
-  
+
     // Format the result with parentheses for negative values
     var formattedSaldoAkhir = saldoAkhir < 0 ? '(' + Math.abs(saldoAkhir).toLocaleString() + ')' : saldoAkhir.toLocaleString();
-  
+
     // Update the "Saldo Akhir" input
     $(saldoAkhirElement).val(formattedSaldoAkhir);
-  
+
     // Add red color to the text if negative
     if (saldoAkhir < 0) {
       $(saldoAkhirElement).css("color", "red");
@@ -431,7 +446,7 @@ $(document).ready(function() {
       $(saldoAkhirElement).css("color", ""); // Reset color to default if positive
     }
   }
-  
+
   // Attach an event listener to the "Jumlah" input for the first modal
   $("#KAS_JUMLAH, #KAS_DK, #KAS_JENIS").on("input change", function () {
   updateSaldoAkhir("#KAS_JUMLAH", "#KAS_SALDOAWAL", "#KAS_DK", "#KAS_SALDOAKHIR");
@@ -564,21 +579,7 @@ function eventkas(value1,value2) {
           // Display success notification
           DeleteNotification('Data berhasil dihapus!');
           
-          // Call the reloadDataTable() function after inserting data to reload the DataTable
-          $.ajax({
-            type: 'POST',
-            url: 'module/ajax/transaksi/anggota/kasanggota/aj_tablekasanggota.php',
-            success: function(response) {
-              // Destroy the DataTable before updating
-              $('#kasanggota-table').DataTable().destroy();
-              $("#kasanggotadata").html(response);
-              // Reinitialize Sertifikat Table
-              callTable();
-            },
-            error: function(xhr, status, error) {
-              // Handle any errors
-            }
-          });
+          if (kasDt) { kasDt.ajax.reload(null, false); }
 
         } else {
           // Display error notification
@@ -738,45 +739,8 @@ $(document).on("click", ".open-EditKasAnggota", function () {
 // Attach debounced event handler to form inputs
 $('.filterKasAnggota select, .filterKasAnggota input').on('change input', debounce(filterKasAnggotaEvent, 500));
 function filterKasAnggotaEvent() {
-  // Your event handling code here
-  const daerah = $('#selectize-select3').val();
-  const cabang = $('#selectize-select2').val();
-  const dokumen = $('#filterKAS_ID').val();
-  const jenis = $('#filterKAS_JENIS').val();
-  const id = $('#filterANGGOTA_ID').val();
-  const nama = $('#filterANGGOTA_NAMA').val();
-  const tingkatan = $('#selectize-select').val();
-  const kategori = $('#filterKAS_KATEGORI').val();
-  const awal = $('#datepicker4').val();
-  const akhir = $('#datepicker5').val();
-
-  // Create a data object to hold the form data
-  const formData = {
-    DAERAH_KEY: daerah,
-    CABANG_KEY: cabang,
-    KAS_ID: dokumen,
-    KAS_JENIS: jenis,
-    ANGGOTA_ID: id,
-    ANGGOTA_NAMA: nama,
-    TINGKATAN_ID: tingkatan,
-    KAS_DK: kategori,
-    TANGGAL_AWAL: awal,
-    TANGGAL_AKHIR: akhir
-  };
-
-  $.ajax({
-    type: "POST",
-    url: 'module/ajax/transaksi/anggota/kasanggota/aj_tablekasanggota.php',
-    data: formData,
-    success: function(response){
-      // Destroy the DataTable before updating
-      $('#kasanggota-table').DataTable().destroy();
-      $("#kasanggotadata").html(response);
-      // Reinitialize Sertifikat Table
-      callTable();
-    }
-  });
-  // console.log(formData);
+  // Simply reload DataTable with new filters
+  if (kasDt) { kasDt.ajax.reload(null, true); }
 }
 
 // ----- Function to reset form ----- //
@@ -804,21 +768,7 @@ function clearForm() {
   }
 
   document.getElementById("filterKasAnggota").reset();
-  // Call the reloadDataTable() function after inserting data to reload the DataTable
-  $.ajax({
-    type: 'POST',
-    url: 'module/ajax/transaksi/anggota/kasanggota/aj_tablekasanggota.php',
-    success: function(response) {
-      // Destroy the DataTable before updating
-      $('#kasanggota-table').DataTable().destroy();
-      $("#kasanggotadata").html(response);
-      // Reinitialize Sertifikat Table
-      callTable();
-    },
-    error: function(xhr, status, error) {
-      // Handle any errors
-    }
-  });
+  if (kasDt) { kasDt.ajax.reload(null, true); }
 }
 // ----- End of function to reset form ----- //
 
