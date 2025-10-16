@@ -88,10 +88,10 @@ if (isset($_POST["savedaftaranggota"])) {
             } else {
                 
                 // Prepare the query
-                $query = "INSERT INTO m_anggota SELECT UUID(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, 0, 0, ?, '$localDateTime'";
+                $query = "INSERT INTO m_anggota SELECT UUID(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, 0, 0, ?, '$localDateTime'";
 
                 // Execute the query with parameters
-                GetQuery2($query, [$ANGGOTA_ID, $CABANG_KEY, $ANGGOTA_RANTING, $TINGKATAN_ID, $ANGGOTA_KTP, $ANGGOTA_NAMA, $ANGGOTA_ALAMAT, $ANGGOTA_AGAMA, $ANGGOTA_PEKERJAAN, $ANGGOTA_KELAMIN, $ANGGOTA_TEMPAT_LAHIR, $ANGGOTA_TANGGAL_LAHIR, $ANGGOTA_HP, $ANGGOTA_EMAIL, $idCardFileDestination, $ANGGOTA_JOIN, $ANGGOTA_AKSES, $USER_ID]);
+                GetQuery2($query, [$ANGGOTA_ID, $CABANG_KEY, $ANGGOTA_RANTING, $TINGKATAN_ID, $ANGGOTA_KTP, null, '', '', $ANGGOTA_NAMA, $ANGGOTA_ALAMAT, $ANGGOTA_AGAMA, $ANGGOTA_PEKERJAAN, $ANGGOTA_KELAMIN, $ANGGOTA_TEMPAT_LAHIR, $ANGGOTA_TANGGAL_LAHIR, $ANGGOTA_HP, $ANGGOTA_EMAIL, $idCardFileDestination, $ANGGOTA_JOIN, $ANGGOTA_AKSES, $USER_ID]);
         
                 GetQuery("insert into m_anggota_log select uuid(), ANGGOTA_KEY, ANGGOTA_ID, CABANG_KEY, ANGGOTA_RANTING, TINGKATAN_ID, ANGGOTA_KTP, ANGGOTA_NAMA, ANGGOTA_ALAMAT, ANGGOTA_AGAMA, ANGGOTA_PEKERJAAN, ANGGOTA_KELAMIN, ANGGOTA_TEMPAT_LAHIR, ANGGOTA_TANGGAL_LAHIR, ANGGOTA_HP, ANGGOTA_EMAIL, ANGGOTA_PIC, ANGGOTA_JOIN, ANGGOTA_RESIGN, DELETION_STATUS,'I', '$USER_ID', '$localDateTime' from m_anggota where ANGGOTA_ID = '$result.$year.$ANGGOTA_ID'");
         
