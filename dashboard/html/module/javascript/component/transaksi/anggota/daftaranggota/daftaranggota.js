@@ -222,6 +222,40 @@ $(document).ready(function() {
     fd.set('upload_template_anggota', '1');
     fd.set('mode', mode);
 
+    // Ensure CABANG_KEY is always sent so backend can scope operations correctly
+    (function ensureCabangKey(){
+      try {
+  var cabangKey = null;
+  // 1) Prefer Cabang select inside Upload modal (admin-only): #selectize-dropdown7 (or legacy #selectize-dropdown5)
+  var $c = $('#selectize-dropdown7');
+  if (!$c.length) { $c = $('#selectize-dropdown5'); }
+        if ($c.length) {
+          try {
+            cabangKey = $c[0].selectize ? $c[0].selectize.getValue() : $c.val();
+          } catch (e) {
+            cabangKey = $c.val();
+          }
+        }
+        // 2) Fallback to any hidden/input with name CABANG_KEY (non-admin case)
+        if (!cabangKey) {
+          var $hidden = $('[name="CABANG_KEY"]');
+          if ($hidden.length) { cabangKey = $hidden.val(); }
+        }
+        // 3) Last resort: use current filter cabang from the page (if set)
+        if (!cabangKey) {
+          var $filterCab = $('#selectize-select2');
+          if ($filterCab.length) {
+            try {
+              cabangKey = $filterCab[0].selectize ? $filterCab[0].selectize.getValue() : $filterCab.val();
+            } catch (e2) {
+              cabangKey = $filterCab.val();
+            }
+          }
+        }
+        if (cabangKey) { fd.set('CABANG_KEY', cabangKey); }
+      } catch (e) { /* no-op if not resolvable */ }
+    })();
+
     var $btn = $('#btnUploadAnggota');
     var prev = $btn.html();
     $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Mengupload...');
@@ -282,6 +316,16 @@ $(document).ready(function() {
         try { FailedNotification(msg); } catch(e) { alert(msg); }
       }
     });
+  });
+
+  // Ensure Selectize is initialized for Upload modal selects once the modal is shown
+  $(document).on('shown.bs.modal', '#UploadAnggota', function(){
+    var $daerah = $('#selectize-dropdown');
+    var $cabang = $('#selectize-dropdown7');
+    try {
+      if ($daerah.length && !$daerah[0].selectize) { $daerah.selectize(); }
+      if ($cabang.length && !$cabang[0].selectize) { $cabang.selectize(); }
+    } catch(e) { /* ignore if selectize not available */ }
   });
 });
 
@@ -418,41 +462,28 @@ $(document).ready(function() {
   // edit Anggota
   handleForm('#EditAnggota-form', UpdateNotification, FailedNotification, UpdateNotification);
 
-  // Event listener for the first dropdown change
-  $('#selectize-dropdown').change(function() {
-      // Initialize Selectize on the first dropdown
-    var selectizedropdown = $('#selectize-dropdown').selectize();
-    
-    // Get the Selectize instance
-    var selectizeInstance = selectizedropdown[0].selectize;
-
-    // Event listener for the first dropdown change
-    selectizeInstance.on('change', function (selectedDaerah) {
-        // Make an AJAX request to fetch data for the second dropdown based on the selected value
-        $.ajax({
-            url: 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php',
-            method: 'POST',
-            data: { id: selectedDaerah },
-            dataType: 'json', // Specify the expected data type as JSON
-            success: function (data) {
-                // Clear options in the second dropdown
-                var selectizedropdown3 = $('#selectize-dropdown3').selectize();
-                var selectizeInstance2 = selectizedropdown3[0].selectize;
-                selectizeInstance2.clearOptions();
-
-                // Add new options to the second dropdown
-                selectizeInstance2.addOption(data);
-
-                // Update the value of the second dropdown
-                selectizeInstance2.setValue('');
-
-                // Refresh the Selectize instance to apply changes
-                // selectizeInstance2.refreshOptions();
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching cabang data:', status, error);
-            }
+  // Bind Daerah (Upload modal) -> Cabang linkage; trigger on first change reliably
+  $(document).on('change', '#selectize-dropdown', function() {
+    var selectedDaerah = $(this).val();
+    $.ajax({
+      url: 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php',
+      method: 'POST',
+      data: { id: selectedDaerah },
+      dataType: 'json',
+      success: function (data) {
+        ['#selectize-dropdown7', '#selectize-dropdown5', '#selectize-dropdown3'].forEach(function(sel){
+          if ($(sel).length) {
+            var $sel = $(sel).selectize();
+            var inst = $sel[0].selectize;
+            inst.clearOptions();
+            inst.addOption(data);
+            inst.setValue('');
+          }
         });
+      },
+      error: function(xhr, status, error) {
+        console.error('Error fetching cabang data:', status, error);
+      }
     });
   });
 

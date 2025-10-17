@@ -211,7 +211,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         <th>Jenis </th>
                         <th>Tanggal </th>
                         <th>Kategori </th>
-                        <th>Deskripsi &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                        <th>Deskripsi </th>
                         <th>Jumlah (Rp)</th>
                         <th>Saldo (Rp)</th>
                         <th>Ranting</th>
@@ -221,62 +221,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         <th>Input Tanggal</th>
                     </tr>
                 </thead>
-                <tbody id="kasanggotadata">
-                    <?php
-                    while ($rowKas = $getKas->fetch(PDO::FETCH_ASSOC)) {
-                        extract($rowKas);
-                        $getSaldo = GetQuery("SELECT 
-                            CASE
-                                WHEN SUM(KAS_JUMLAH) < 0 THEN CONCAT('(', FORMAT(ABS(SUM(KAS_JUMLAH)), 0), ')')
-                                ELSE FORMAT(SUM(KAS_JUMLAH), 0)
-                            END AS FKAS_SALDO
-                        FROM 
-                            t_kas
-                        WHERE 
-                            DELETION_STATUS = 0 
-                            AND ANGGOTA_KEY = '$ANGGOTA_KEY' 
-                            AND KAS_ID <= '$KAS_ID' 
-                            AND KAS_JENIS = '$KAS_JENIS';
-                        ");
-
-                        while ($rowSaldo = $getSaldo->fetch(PDO::FETCH_ASSOC)) {
-                            extract($rowSaldo);
-                        }
-                        ?>
-                        <tr>
-                            <td align="center">
-                                <form id="eventoption-form-<?= uniqid(); ?>" method="post" class="form">
-                                    <div class="btn-group" style="margin-bottom:5px;">
-                                        <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewKasAnggota" class="open-ViewKasAnggota" style="color:#222222;" data-id="<?= $KAS_ID; ?>" data-anggota="<?= $ANGGOTA_KEY; ?>" data-jenis="<?= $KAS_JENIS; ?>" data-cabang="<?= $CABANG_KEY; ?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
-                                            <li class="divider"></li>
-                                            <li><a href="assets/print/transaksi/kas/print_kas.php?id=<?= encodeIdToBase64($KAS_ID); ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
-                                        </ul>
-                                    </div>
-                                </form>
-                            </td>
-                            <td><?= $KAS_ID; ?></td>
-                            <td align="center"><?= $ANGGOTA_ID; ?></td>
-                            <td align="center"><?= $ANGGOTA_NAMA; ?></td>
-                            <td align="center"><?= $TINGKATAN_NAMA; ?></td>
-                            <td align="center"><?= $TINGKATAN_SEBUTAN; ?></td>
-                            <td align="center"><?= $KAS_JENIS; ?></td>
-                            <td align="center"><?= $FKAS_TANGGAL; ?></td>
-                            <td align="center"><?= $KAS_DK_DES; ?></td>
-                            <td><?= $KAS_DESKRIPSI; ?></td>
-                            <td align="right" style="<?= $KAS_COLOR; ?>"><?= $FKAS_JUMLAH; ?></td>
-                            <td align="right"><?= $FKAS_SALDO; ?></td>
-                            <td align="center"><?= $ANGGOTA_RANTING; ?></td>
-                            <td align="center"><?= $CABANG_DESKRIPSI; ?></td>
-                            <td align="center"><?= $DAERAH_DESKRIPSI; ?></td>
-                            <td><?= $INPUT_BY; ?></td>
-                            <td><?= $INPUT_DATE; ?></td>
-                        </tr>
-                        <?php
-                    }
-                    ?>
-                </tbody>
+                <tbody id="kasanggotadata"></tbody>
             </table>
         </div>
     </div>

@@ -5,8 +5,8 @@ $USER_CABANG = $_SESSION["LOGINCAB_CS"];
 // Note: Initial full data fetch removed. DataTables now uses server-side AJAX (aj_tableanggota_ssp.php)
 
 $getAkses = GetQuery("select * from p_param where KATEGORI = 'USER_AKSES' ORDER BY TEXT");
-$getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0");
-$getCabang = GetQuery("select * from m_cabang where DELETION_STATUS = 0");
+$getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0 order by DAERAH_DESKRIPSI");
+$getCabang = GetQuery("select * from m_cabang where DELETION_STATUS = 0 order by CABANG_DESKRIPSI");
 $getTingkatan = GetQuery("select * from m_tingkatan where DELETION_STATUS = 0 order by TINGKATAN_LEVEL");
 $getURL = GetQuery("SELECT * FROM p_param WHERE KATEGORI = 'url'");
 while ($urlData = $getURL->fetch(PDO::FETCH_ASSOC)) {
@@ -1125,17 +1125,51 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                     <div class="alert alert-info">
                         Silakan unggah file template berformat Excel (.xlsx). Unduh formatnya melalui tombol "Download Template".
                     </div>
-                    <div class="form-group">
-                        <label for="fileTemplate">File Template Excel (.xlsx)</label>
-                        <input type="file" id="fileTemplate" name="fileTemplate" class="form-control" accept=".xlsx" required>
+                    <div class="row">
+                        <?php if ($USER_AKSES == "Administrator") { ?>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Daerah</label>
+                                <select name="DAERAH_KEY" id="selectize-dropdown" class="form-control" required>
+                                    <option value="">-- Pilih Daerah --</option>
+                                    <?php foreach ($rowd as $rowDaerah) { extract($rowDaerah); ?>
+                                        <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Cabang</label>
+                                <div id="selectize-wrapper7" style="position: relative;">
+                                    <select name="CABANG_KEY" id="selectize-dropdown7" required="" class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Cabang --</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <?php } else { ?>
+                        <input type="hidden" name="CABANG_KEY" id="CABANG_KEY" value="<?= htmlspecialchars($USER_CABANG, ENT_QUOTES, 'UTF-8'); ?>">
+                        <?php } ?>
                     </div>
-                    <div class="form-group">
-                        <label for="importMode">Mode Import</label>
-                        <select id="importMode" name="mode" class="form-control" required>
-                            <option value="insert">Penambahan data</option>
-                            <option value="replace">Hapus semua data lama dan tambah baru</option>
-                            <option value="upsert">Perbarui data jika ID sudah ada</option>
-                        </select>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="fileTemplate">File Template Excel (.xlsx)</label>
+                                <input type="file" id="fileTemplate" name="fileTemplate" class="form-control" accept=".xlsx" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="importMode">Mode Import</label>
+                                <select id="importMode" name="mode" class="form-control" required>
+                                    <option value="insert">Penambahan data</option>
+                                    <option value="replace">Hapus semua data lama dan tambah baru</option>
+                                    <option value="upsert">Perbarui data jika ID sudah ada</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
