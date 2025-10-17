@@ -320,12 +320,21 @@ $(document).ready(function() {
 
   // Ensure Selectize is initialized for Upload modal selects once the modal is shown
   $(document).on('shown.bs.modal', '#UploadAnggota', function(){
-    var $daerah = $('#selectize-dropdown');
+    var $daerah = $('#selectize-dropdown8');
     var $cabang = $('#selectize-dropdown7');
     try {
       if ($daerah.length && !$daerah[0].selectize) { $daerah.selectize(); }
       if ($cabang.length && !$cabang[0].selectize) { $cabang.selectize(); }
     } catch(e) { /* ignore if selectize not available */ }
+
+    // Initialize Parsley on the upload form when modal opens
+    try { $('#UploadAnggota-form').parsley(); } catch(e) { /* ignore if parsley not available */ }
+
+    // If Daerah already has a value, trigger change to populate Cabang
+    try {
+      var currentVal = $daerah.val();
+      if (currentVal) { $daerah.trigger('change'); }
+    } catch(e) { /* ignore */ }
   });
 });
 
@@ -462,8 +471,8 @@ $(document).ready(function() {
   // edit Anggota
   handleForm('#EditAnggota-form', UpdateNotification, FailedNotification, UpdateNotification);
 
-  // Bind Daerah (Upload modal) -> Cabang linkage; trigger on first change reliably
-  $(document).on('change', '#selectize-dropdown', function() {
+  // Bind Daerah (Upload modal) -> Cabang linkage; trigger on change
+  $(document).on('change', '#selectize-dropdown8', function() {
     var selectedDaerah = $(this).val();
     $.ajax({
       url: 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php',

@@ -944,7 +944,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                         <label>Cabang<span class="text-danger">*</span></label>
                                         <div id="selectize-wrapper5" style="position: relative;">
                                             <select name="CABANG_KEY" id="selectize-dropdown5" required="" class="form-control" data-parsley-required>
-                                                <option value="">-- Pilih Cabang --</option>]
+                                                <option value="">-- Pilih Cabang --</option>
                                             </select>
                                         </div>
                                     </div> 
@@ -1114,7 +1114,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
 
 <!-- Upload Anggota (Template) Modal -->
 <div id="UploadAnggota" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="uploadAnggotaLabel" aria-hidden="true">
-    <form id="UploadAnggota-form" method="post" class="form" enctype="multipart/form-data">
+    <form id="UploadAnggota-form" method="post" class="form" enctype="multipart/form-data" data-parsley-validate>
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header text-center">
@@ -1130,12 +1130,14 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Daerah</label>
-                                <select name="DAERAH_KEY" id="selectize-dropdown" class="form-control" required>
-                                    <option value="">-- Pilih Daerah --</option>
-                                    <?php foreach ($rowd as $rowDaerah) { extract($rowDaerah); ?>
-                                        <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
-                                    <?php } ?>
-                                </select>
+                                <div id="selectize-wrapper8" style="position: relative;">
+                                    <select name="DAERAH_KEY" id="selectize-dropdown8" class="form-control" required data-parsley-required>
+                                        <option value="">-- Pilih Daerah --</option>
+                                        <?php foreach ($rowd as $rowDaerah) { extract($rowDaerah); ?>
+                                            <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6">
