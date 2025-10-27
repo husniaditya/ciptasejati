@@ -689,6 +689,9 @@ $(document).on("click", ".open-ViewNotifPPD", function () {
     }),
     contentType: 'application/json', // Set the Content-Type as JSON
     dataType: 'json', // Specify the expected data type as JSON
+    headers: {
+      'X-Api-Key': '$2y$12$NMxDXU77/MPLgD44nkvdB.jPdB.n5kJLWcYGe8lxBoBiGyk/Jeysu'
+    },
     success: function(response) {
       // console.log('response', data);
       
@@ -739,6 +742,9 @@ $(document).on("click", ".open-ApproveNotifPPDKoordinator", function () {
     }),
     contentType: 'application/json', // Set the Content-Type as JSON
     dataType: 'json', // Specify the expected data type as JSON
+    headers: {
+      'X-Api-Key': '$2y$12$NMxDXU77/MPLgD44nkvdB.jPdB.n5kJLWcYGe8lxBoBiGyk/Jeysu'
+    },
     success: function(response) {
       // console.log('response', data);
       

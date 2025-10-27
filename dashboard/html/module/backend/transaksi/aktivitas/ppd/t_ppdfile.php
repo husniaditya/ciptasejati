@@ -13,12 +13,13 @@ if (isset($_POST['id'])) {
     $encodedGuru = encodeIdToBase64('Guru');
 
 
-    $getData = GetQuery("SELECT p.*,a.ANGGOTA_NAMA,a.ANGGOTA_TEMPAT_LAHIR,a.ANGGOTA_TANGGAL_LAHIR,a.ANGGOTA_ALAMAT,a.ANGGOTA_PEKERJAAN,a.ANGGOTA_PIC,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,s.IDSERTIFIKAT_SERTIFIKATFILE,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL, DATE_FORMAT(p.INPUT_DATE, '%d %M %Y') INPUT_DATE, DATE_FORMAT(a.ANGGOTA_TANGGAL_LAHIR, '%d/%m/%Y') ANGGOTA_TANGGAL_LAHIR,REPEAT('_. ', CHAR_LENGTH(a.ANGGOTA_NAMA)) AS ANGGOTA_NAMA_DOT,REPEAT('. ', CHAR_LENGTH(CONCAT(a.ANGGOTA_TEMPAT_LAHIR,', ',DATE_FORMAT(p.PPD_TANGGAL, '%d/%m/%Y')))) AS ANGGOTA_LAHIR_DOT,REPEAT('. ', CHAR_LENGTH(a.ANGGOTA_ALAMAT)) AS ANGGOTA_ALAMAT_DOT,REPEAT('. ', CHAR_LENGTH(a.ANGGOTA_PEKERJAAN)) AS ANGGOTA_PEKERJAAN_DOT,REPEAT('. ', CHAR_LENGTH(p.PPD_DESKRIPSI)) AS PPD_DESKRIPSI_DOT,REPEAT('. ', CHAR_LENGTH(t.TINGKATAN_NAMA)) AS TINGKATAN_NAMA_DOT,REPEAT('. ', CHAR_LENGTH(t.TINGKATAN_SEBUTAN)) AS TINGKATAN_SEBUTAN_DOT,koor.ANGGOTA_ID KOOR_ID,koor.ANGGOTA_NAMA KOOR_NAMA,guru.ANGGOTA_ID GURU_ID,guru.ANGGOTA_NAMA GURU_NAMA,t.TINGKATAN_LEVEL
+    $getData = GetQuery("SELECT p.*,a.ANGGOTA_NAMA,a.ANGGOTA_TEMPAT_LAHIR,a.ANGGOTA_TANGGAL_LAHIR,a.ANGGOTA_ALAMAT,a.ANGGOTA_PEKERJAAN,a.ANGGOTA_PIC,c.CABANG_DESKRIPSI,d.DAERAH_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,s.IDSERTIFIKAT_SERTIFIKATFILE,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL, DATE_FORMAT(p.INPUT_DATE, '%d %M %Y') INPUT_DATE, DATE_FORMAT(a.ANGGOTA_TANGGAL_LAHIR, '%d %M %Y') ANGGOTA_TANGGAL_LAHIR,REPEAT('_. ', CHAR_LENGTH(a.ANGGOTA_NAMA)) AS ANGGOTA_NAMA_DOT,REPEAT('. ', CHAR_LENGTH(CONCAT(a.ANGGOTA_TEMPAT_LAHIR,', ',DATE_FORMAT(p.PPD_TANGGAL, '%d/%m/%Y')))) AS ANGGOTA_LAHIR_DOT,REPEAT('. ', CHAR_LENGTH(a.ANGGOTA_ALAMAT)) AS ANGGOTA_ALAMAT_DOT,REPEAT('. ', CHAR_LENGTH(a.ANGGOTA_PEKERJAAN)) AS ANGGOTA_PEKERJAAN_DOT,REPEAT('. ', CHAR_LENGTH(p.PPD_DESKRIPSI)) AS PPD_DESKRIPSI_DOT,REPEAT('. ', CHAR_LENGTH(t.TINGKATAN_NAMA)) AS TINGKATAN_NAMA_DOT,REPEAT('. ', CHAR_LENGTH(t.TINGKATAN_SEBUTAN)) AS TINGKATAN_SEBUTAN_DOT,koor.ANGGOTA_ID KOOR_ID,koor.ANGGOTA_NAMA KOOR_NAMA,guru.ANGGOTA_ID GURU_ID,guru.ANGGOTA_NAMA GURU_NAMA,t.TINGKATAN_LEVEL
     FROM t_ppd p
     LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY
     LEFT JOIN m_anggota koor on p.PPD_APPROVE_PELATIH_BY = koor.ANGGOTA_ID and p.CABANG_KEY = koor.CABANG_KEY
     LEFT JOIN m_anggota guru on p.PPD_APPROVE_GURU_BY = guru.ANGGOTA_ID
     LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
+    LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_BARU = t.TINGKATAN_ID
     LEFT JOIN m_idsertifikat s ON t.TINGKATAN_ID = s.TINGKATAN_ID
     WHERE p.PPD_ID = '$PPD_ID'");
@@ -53,7 +54,7 @@ if (isset($_POST['id'])) {
 
                 // Page footer
                 public function Footer() {
-                    global $URL, $CABANG_DESKRIPSI, $encodedId, $encodedGuru, $PPD_TANGGAL;
+                    global $URL, $CABANG_DESKRIPSI, $encodedId, $encodedKoor, $encodedGuru, $PPD_TANGGAL;
 
                     $this->SetMargins(40, PDF_MARGIN_TOP, 25);
                     $pageWidth = $this->getPageWidth();
@@ -73,13 +74,19 @@ if (isset($_POST['id'])) {
                     );
                     
                     // Position at 15 mm from bottom
-                    $this->SetY(-63);
+                    $this->SetY(-68);
                     $this->SetFont('times', '', 12); // Set font for body
                     // Draw a horizontal line under the header
-                    $this->Cell($fullWidth,5,$CABANG_DESKRIPSI.', '.$PPD_TANGGAL,0,0,"R");
+                    $this->Cell(5,5,"",0,0,"L");
+                    $this->Cell(85,5,"Ketua Cabang " . $CABANG_DESKRIPSI,0,0,"C");
+                    $this->Cell(47,5,"",0,0,"L");
+                    $this->Cell(65,5,$CABANG_DESKRIPSI.', '.$PPD_TANGGAL,0,0,"C");
                     $this->Ln();
                     // QRCODE,H : QR-CODE Best error correction
-                    $this->write2DBarcode($URL.'/dashboard/html/assets/token/tokenverify.php?id='.$encodedId.'&data='.$encodedGuru, 'QRCODE,H', 230, 162, 27, 27, $style, 'N');
+                    // KETUA
+                    $this->write2DBarcode($URL.'/dashboard/html/assets/token/tokenverify.php?id='.$encodedId.'&data='.$encodedKoor, 'QRCODE,H', 75, 151, 27, 27, $style, 'N');
+                    // GURU
+                    $this->write2DBarcode($URL.'/dashboard/html/assets/token/tokenverify.php?id='.$encodedId.'&data='.$encodedGuru, 'QRCODE,H', 196, 151, 27, 27, $style, 'N');
                     // $this->Ln(-1);
                     // $this->SetFont('times', 'BU', 15); // Set font for body
                     // $this->Cell($fullWidth,5,$GURU_NAMA,0,0,"R");
@@ -139,105 +146,40 @@ if (isset($_POST['id'])) {
             $pdf->setPageMark();
 
             // CONTENT
-            $pdf->SetFont('times', '', 13); // Set font for body
+            $pdf->SetFont('times', '', 17); // Set font for body
 
-            $pdf->Ln(54.5);
+            $pdf->Ln(60.5);
             $pdf->Cell($fullWidth, 5, "Nomor : " . $PPD_FILE_NAME, 0, 0, "C");
-            $pdf->Ln(7);
-            $pdf->SetFont('times', 'U', 13); // Set font for body
-            $pdf->Cell($fullWidth, 5, "Diberikan kepada:", 0, 0, "C");
-            $pdf->SetFont('times', '', 13); // Set font for body
-            $pdf->Ln(5);
-            $pdf->Cell($fullWidth, 5, "Issued to:", 0, 0, "C");
             $pdf->SetFont('times', 'B', 30); // Set font for body
-            $pdf->Ln(10);
+            $pdf->Ln(16);
             $pdf->Cell($fullWidth, 5, $ANGGOTA_NAMA, 0, 0, "C");
-            $pdf->SetFont('times', '', 13); // Set font for body
-            $pdf->Ln(12);
-            $pdf->Cell($fullWidth, 5, "NIA : " . $ANGGOTA_ID, 0, 0, "C");
+            $pdf->SetFont('times', '', 14); // Set font for body
+            $pdf->Ln(16);
+            $pdf->Cell($fullWidth, 5, "Tempat, Tanggal Lahir : " . $ANGGOTA_TEMPAT_LAHIR . ", " . $ANGGOTA_TANGGAL_LAHIR, 0, 0, "C");
+            $pdf->Ln();
+            $pdf->Cell($fullWidth, 5, "Anggota Cabang : " . $CABANG_DESKRIPSI . ", " . $DAERAH_DESKRIPSI, 0, 0, "C");
             $pdf->Ln(10);
 
-            $pdf->SetFont('times', '', 13); // Set font for body
+            $pdf->MultiCell(
+                $fullWidth,
+                5,
+                "Telah mengikuti Ujian Kenaikan Tingkat (UKT) yang diselenggarakan oleh Institut Bela Diri Silat \"CIPTASEJATI\" Cabang " . $CABANG_DESKRIPSI . ", " . $DAERAH_DESKRIPSI . " pada tanggal " . $PPD_TANGGAL . " dinyatakan LULUS sehingga berhak naik tingkat " . $TINGKATAN_NAMA . " dan menyandang " . $TINGKATAN_SEBUTAN,
+                0, // no border
+                'C', // center alignment
+                false, // no fill
+                1 // move to next line after output
+            );
 
-            $pdf->Cell(50, 5, "Tempat / Tanggal Lahir : ", 0, 0, "L");
-            $pdf->Cell(70, 5, $ANGGOTA_TEMPAT_LAHIR . ", " . $ANGGOTA_TANGGAL_LAHIR, 0, 0, "L");
-            $pdf->Cell(20, 5, "Alamat : ", 0, 0, "L");
-
-            $currentX = $pdf->GetX();
-            $currentY = $pdf->GetY();
-            $pdf->SetXY($currentX, $currentY);
-            $pdf->MultiCell(100, 5, $ANGGOTA_ALAMAT . "\n", 0, 'J', 0, 1);
-            $pdf->SetXY($currentX + 100, $currentY); // Adjust X position after MultiCell
-            $pdf->Ln(1); // Adjust the line break to suit your needs
-
-            $pdf->SetXY(40, $pdf->GetY());
-            $pdf->Cell(50, 5, "___________________", 0, 0, "L");
-            $pdf->Cell(70, 5, $ANGGOTA_LAHIR_DOT, 0, 0, "L");
-            $pdf->Cell(20, 5, "______", 0, 0, "L");
-            $currentX = $pdf->GetX();
-            $currentY = $pdf->GetY();
-            $pdf->SetXY($currentX, $currentY);
-            $pdf->MultiCell(100, 5, $ANGGOTA_ALAMAT_DOT . "\n", 0, 'J', 0, 1);
-            $pdf->SetXY($currentX + 100, $currentY); // Adjust X position after MultiCell
-            $pdf->Ln(4.5);
-
-            $pdf->Cell(50,5,"Place / Date of Birth",0,0,"L");
-            $pdf->Cell(70,5,"",0,0,"L");
-            $pdf->Cell(20,5,"Address",0,0,"L");
-            $pdf->Ln(8);
-            $pdf->Cell(25,5,"Pekerjaan   : ",0,0,"L");
-            $pdf->Cell(50, 5, $ANGGOTA_PEKERJAAN, 0, 0, "L");
-            $pdf->Cell(70,5,"Kebangsaan : Indonesia",0,0,"L");
-            $pdf->Cell(25,5,"Keterangan : ",0,0,"L");
-            $pdf->Cell(65, 5, $PPD_DESKRIPSI, 0, 0, "L");
-            $pdf->Ln(1); // Adjust the line break to suit your needs
-            $pdf->Cell(25, 5, "_________", 0, 0, "L");
-            $pdf->Cell(50, 5, $ANGGOTA_PEKERJAAN_DOT, 0, 0, "L");
-            $pdf->Cell(25,5,"__________",0,0,"L");
-            $pdf->Cell(45,5," . . . . . . . .",0,0,"L");
-            $pdf->Cell(25,5,"_________",0,0,"L");
-            $pdf->Cell(65, 5, $PPD_DESKRIPSI_DOT, 0, 0, "L");
-            $pdf->Ln(4.5);
-            $pdf->Cell(75,5,"Occupation",0,0,"L");
-            $pdf->Cell(70,5,"Nationality",0,0,"L");
-            $pdf->Cell(90,5,"Remark",0,0,"L");
-            $pdf->Ln(7);
-            $pdf->Cell($fullWidth,5,"Yang telah mengikuti kegiatan Pembukaan Pusat Daya (PPD) :
-            ",0,0,"C");
+            $pdf->SetFont('times', 'b', 17); // Set font for body
+            $pdf->Ln(42);
+            $pdf->Cell(6, 5,  "", 0, 0, "C");
+            $pdf->Cell(85, 5,  $KOOR_NAMA, 0, 0, "C");
             $pdf->Ln();
-            $pdf->Cell(30,5,"",0,0,"C");
-            if ($TINGKATAN_LEVEL >= 6) {
-                $pdf->Cell(35,5,"Sabuk Tingkatan : ",0,0,"L");
-                $pdf->Cell(55,5,$TINGKATAN_NAMA,0,0,"L");
-                $pdf->Cell(15,5,"Gelar : ",0,0,"L");
-                $pdf->Cell(75,5,$TINGKATAN_SEBUTAN,0,0,"L");
-                $pdf->Cell(30,5,"",0,0,"C");
-                $pdf->Ln(1); // Adjust the line break to suit your needs
-                $pdf->Cell(30,5,"",0,0,"C");
-                $pdf->Cell(35,5,"______________",0,0,"L");
-                $pdf->Cell(55,5,$TINGKATAN_NAMA_DOT,0,0,"L");
-                $pdf->Cell(15,5,"_____",0,0,"L");
-                $pdf->Cell(75,5,$TINGKATAN_SEBUTAN_DOT,0,0,"L");
-            } else {
-                $pdf->Cell(35,5,"Sabuk Tingkatan : ",0,0,"L");
-                $pdf->Cell(55,5,$TINGKATAN_NAMA . " / " . $TINGKATAN_SEBUTAN,0,0,"L");
-                $pdf->Cell(15,5,"Gelar : ",0,0,"L");
-                $pdf->Cell(75,5,"-",0,0,"L");
-                $pdf->Cell(30,5,"",0,0,"C");
-                $pdf->Ln(1); // Adjust the line break to suit your needs
-                $pdf->Cell(30,5,"",0,0,"C");
-                $pdf->Cell(35,5,"______________",0,0,"L");
-                $pdf->Cell(55,5,$TINGKATAN_NAMA_DOT,0,0,"L");
-                $pdf->Cell(15,5,"_____",0,0,"L");
-                $pdf->Cell(75,5,$TINGKATAN_SEBUTAN_DOT,0,0,"L");
-            }
-            $pdf->Ln(4.5);
-            $pdf->Cell(30,5,"",0,0,"C");
-            $pdf->Cell(90,5,"Belt Level",0,0,"L");
-            $pdf->Cell(90,5,"Degree",0,0,"L");
-            $pdf->Cell(30,5,"",0,0,"C");
-            $pdf->Ln();
-            $pdf->Image('../../../../.'.$ANGGOTA_PIC, 70, 155, 30, 40, '', '', 'T', false, 500, '', false, false, 1, false, false, false);
+            $pdf->Cell(6, 5,  "", 0, 0, "C");
+            $pdf->SetFont('times', '', 15); // Set font for body
+            $pdf->Cell(85, 5,  "NIA : " . $KOOR_ID, 0, 0, "C");
+
+            $pdf->Image('../../../../.'.$ANGGOTA_PIC, 139.5, 152, 31, 33.5, '', '', 'T', false, 500, '', false, false, 1, false, false, false);
             
             // Prepare the parameters
             $file_db = "./assets/sertifikat/$CABANG_DESKRIPSI/$ANGGOTA_ID $ANGGOTA_NAMA/$PPD_ID PPD $TINGKATAN_NAMA $ANGGOTA_NAMA $PPD_TANGGAL.pdf";

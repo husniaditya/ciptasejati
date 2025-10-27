@@ -1,16 +1,51 @@
 
 
-// Menu Table
+// Utility: debounce (local fallback)
+if (typeof debounce !== 'function') {
+  function debounce(func, wait, immediate) {
+    var timeout;
+    return function() {
+      var context = this, args = arguments;
+      var later = function() {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) func.apply(context, args);
+    };
+  }
+}
+
+// Menu Table (server-side)
+var menuTable;
 function callTable() {
-  $('#menuakses-table').DataTable({
-      responsive: true,
-      order: [],
-      dom: 'Bfrtlip',
-      scrollX: true,
-      scrollY: '350px', // Set the desired height here
-      buttons: [
-          'copy', 'csv', 'excel', 'pdf'
-      ]
+  if ($.fn.DataTable.isDataTable('#menuakses-table')) { return; }
+  menuTable = $('#menuakses-table').DataTable({
+    processing: true,
+    serverSide: true,
+    responsive: true,
+    order: [],
+    dom: 'Bfrtlip',
+    scrollX: true,
+    scrollY: '350px',
+    buttons: ['copy','csv','excel','pdf'],
+    ajax: {
+      url: 'module/ajax/admin/menu/aj_tablemenu_ssp.php',
+      type: 'POST',
+      data: function (d) {
+        // Attach filter values each draw
+        d.MENU_ID    = $('#filterMENU_ID').val();
+        d.GRUP_ID    = $('#selectize-dropdown3').val();
+        d.MENU_NAMA  = $('#filterMENU_NAMA').val();
+        d.USER_AKSES = $('#filterUSER_AKSES').val();
+      }
+    },
+    columnDefs: [
+      { targets: 0, orderable: false, searchable: false },
+      { targets: [4,5,6,7,8,9], orderable: false, searchable: false } // switches
+    ]
   });
 }
 
@@ -55,17 +90,8 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
           // Close the modal
           $(formId.replace("-form", "")).modal('hide');
 
-          // Call the reloadDataTable() function after inserting data to reload the DataTable
-          $.ajax({
-            type: 'POST',
-            url: 'module/ajax/admin/menu/aj_tablemenu.php',
-            success: function(response) {
-              filterMenuEvent();
-            },
-            error: function(xhr, status, error) {
-              // Handle any errors
-            }
-          });
+          // Reload DataTable server-side
+          if (menuTable) { menuTable.ajax.reload(null, false); }
         } else {
           // Display error notification
           failedNotification(response);
@@ -123,34 +149,7 @@ $(document).on("click", ".open-EditMenu", function () {
 // Attach debounced event handler to form inputs
 $('.filterMenu select, .filterMenu input').on('change input', debounce(filterMenuEvent, 500));
 function filterMenuEvent() {
-  // Your event handling code here
-  const id = $('#filterMENU_ID').val();
-  const grup = $('#selectize-dropdown3').val();
-  const nama = $('#filterMENU_NAMA').val();
-  const akses = $('#filterUSER_AKSES').val();
-
-  // Create a data object to hold the form data
-  const formData = {
-    MENU_ID: id,
-    GRUP_ID: grup,
-    MENU_NAMA: nama,
-    USER_AKSES: akses
-  };
-
-  $.ajax({
-    type: "POST",
-    url: 'module/ajax/admin/menu/aj_tablemenu.php',
-    data: formData,
-    success: function(response){
-      // console.log(response);
-      // Destroy the DataTable before updating
-      $('#menuakses-table').DataTable().destroy();
-      $("#menuaksesdata").html(response);
-      // Reinitialize Sertifikat Table
-      callTable();
-    }
-  });
-  // console.log(formData);
+  if (menuTable) { menuTable.ajax.reload(); }
 }
 
 // ----- Function to reset form ----- //
@@ -161,21 +160,7 @@ function clearForm() {
     selectizeInstance1.clear();
   }
   document.getElementById("filterMenu").reset();
-  // Call the reloadDataTable() function after inserting data to reload the DataTable
-  $.ajax({
-    type: 'POST',
-    url: 'module/ajax/admin/menu/aj_tablemenu.php',
-    success: function(response) {
-      // Destroy the DataTable before updating
-      $('#menuakses-table').DataTable().destroy();
-      $("#menuaksesdata").html(response);
-      // Reinitialize Sertifikat Table
-      callTable();
-    },
-    error: function(xhr, status, error) {
-      // Handle any errors
-    }
-  });
+  if (menuTable) { menuTable.ajax.reload(); }
 }
 // ----- End of function to reset form ----- //
 // ----- End of Menu Section ----- //

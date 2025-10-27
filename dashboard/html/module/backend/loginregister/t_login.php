@@ -1,4 +1,5 @@
 <?php
+require_once (__DIR__ . "/../../connection/conn.php");
 
 
 $USERNAME="";
@@ -11,6 +12,12 @@ if(isset($_POST["login"]))
 {
     $USERNAME = $_POST["username"];
     $PASSWORD = $_POST['password'];
+
+    // Detect AJAX request (jQuery sets X-Requested-With) or explicit ajax flag
+    $isAjax = (
+        (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')
+        || (isset($_POST['ajax']) && $_POST['ajax'] == '1')
+    );
 
     $GetUser = GetQuery("SELECT u.*,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.CABANG_KEY,a.ANGGOTA_AKSES,c.CABANG_DESKRIPSI,a.TINGKATAN_ID,t.TINGKATAN_NAMA,a.ANGGOTA_PIC 
     from m_user u 
@@ -47,12 +54,24 @@ if(isset($_POST["login"]))
             $_SESSION["PRINT_".$MENUUSER] = $PRINT;
         }
 
-        ?><script>document.location.href='dashboard.php';</script><?php
-        die(0);
+        if ($isAjax) {
+            header('Content-Type: application/json');
+            echo json_encode([ 'status' => 'ok', 'redirect' => 'dashboard.php' ]);
+            die(0);
+        } else {
+            ?><script>document.location.href='dashboard.php';</script><?php
+            die(0);
+        }
     } else {
-        ?><script>alert('ID Anggota atau password salah');</script><?php
-        ?><script>document.location.href='index.php';</script><?php
-        die(0);
+        if ($isAjax) {
+            header('Content-Type: application/json');
+            echo json_encode([ 'status' => 'error', 'message' => 'ID Anggota atau password salah' ]);
+            die(0);
+        } else {
+            ?><script>alert('ID Anggota atau password salah');</script><?php
+            ?><script>document.location.href='index.php';</script><?php
+            die(0);
+        }
     }
 
 }

@@ -72,6 +72,11 @@ try {
     
         return $data;
     }
+    
+    // Ensure MySQL returns Indonesian month/day names for DATE_FORMAT(%M, %W, etc.)
+    // This affects the aliases PPD_TANGGAL and ANGGOTA_TANGGAL_LAHIR below.
+    // Runs in the same DB session/connection used by GetQuery.
+    try { GetQuery("SET lc_time_names = 'id_ID'"); } catch (Exception $e) { /* ignore if not supported */ }
 
     function createKode($namaTabel, $namaKolom, $awalan, $jumlahAngka)
     {
@@ -101,11 +106,11 @@ try {
         return substr("00000000" . $angkaAkhir, -1 * $jumlahAngka);
     }
 
-    function autoIncCert($namaTabel, $namaKolom, $jumlahAngka)
+    function autoIncCert($namaTabel, $namaKolom, $jumlahAngka, $month = null, $year = null)
     {
         global $db1;
         $angkaAkhir = 0;
-        $stmt = $db1->query("select max(left($namaKolom,$jumlahAngka)) as akhir from $namaTabel where PPD_APPROVE_PELATIH = 1");
+        $stmt = $db1->query("select max(left($namaKolom,$jumlahAngka)) as akhir from $namaTabel where PPD_APPROVE_PELATIH = 1 AND MONTH(PPD_TANGGAL) = " . ($month ?? date('m')) . " AND YEAR(PPD_TANGGAL) = " . ($year ?? date('Y')));
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             if (isset($row["akhir"])) {
                 $angkaAkhir = intval($row["akhir"]);

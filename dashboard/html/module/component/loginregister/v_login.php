@@ -68,3 +68,6 @@ while ($urlData = $getURL->fetch(PDO::FETCH_ASSOC)) {
     </div>
     <!--/ END row -->
 </section>
+
+<!-- Page script -->
+<script src="module/javascript/component/loginregister/login.js"></script>
