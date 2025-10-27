@@ -1,16 +1,57 @@
 
+var kasTable = null;
 
-// Kas Anggota Table
+// Kas Anggota Table (server-side)
 function callTable() {
-  $('#kasanggota-table').DataTable({
-      responsive: true,
+  var requestCounter = 0;
+  if ($.fn.DataTable.isDataTable('#kasanggota-table')) {
+    $('#kasanggota-table').DataTable().destroy();
+  }
+  kasTable = $('#kasanggota-table').DataTable({
+      processing: true,
+      serverSide: true,
+      searching: true,
       order: [[1, 'asc']],
       dom: 'Bfrtlip',
       paging: true,
       scrollX: true,
       scrollY: '350px', // Set the desired height here
-      buttons: [
-          'copy', 'csv', 'excel', 'pdf'
+      buttons: [ 'copy', 'csv', 'excel', 'pdf' ],
+      ajax: {
+        url: 'module/ajax/laporan/anggota/kasanggota/aj_tablekasanggota_ssp.php',
+        type: 'POST',
+        data: function (d) {
+          d.requestId = 'req-' + (++requestCounter);
+          d.DAERAH_KEY    = $('#selectize-select3').val() || '';
+          d.CABANG_KEY    = $('#selectize-select2').val() || '';
+          d.KAS_ID        = $('#filterKAS_ID').val() || '';
+          d.KAS_JENIS     = $('#filterKAS_JENIS').val() || '';
+          d.ANGGOTA_ID    = $('#filterANGGOTA_ID').val() || '';
+          d.ANGGOTA_NAMA  = $('#filterANGGOTA_NAMA').val() || '';
+          d.TINGKATAN_ID  = $('#selectize-select').val() || '';
+          d.KAS_DK        = $('#filterKAS_KATEGORI').val() || '';
+          d.TANGGAL_AWAL  = $('#datepicker4').val() || '';
+          d.TANGGAL_AKHIR = $('#datepicker5').val() || '';
+        }
+      },
+      columns: [
+        { data: 0, orderable: false }, // action
+        { data: 1 }, // No Dokumen
+        { data: 2 }, // ID Anggota
+        { data: 3 }, // Nama
+        { data: 4 }, // Tingkatan
+        { data: 5 }, // Gelar
+        { data: 6 }, // Jenis
+        { data: 7 }, // Tanggal
+        { data: 8 }, // Kategori
+        { data: 9 }, // Deskripsi
+        { data: 10, className: 'text-right' }, // Jumlah (Rp)
+        { data: 11, className: 'text-right' }, // Saldo (Rp)
+        { data: 12 }, // Ranting
+        { data: 13 }, // Cabang
+        { data: 14 }, // Daerah
+        { data: 15 }, // Input Oleh
+        { data: 16 }, // Input Tanggal
       ]
   });
 }
@@ -287,21 +328,8 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
           // Close the modal
           $(formId.replace("-form", "")).modal('hide');
 
-          // Call the reloadDataTable() function after inserting data to reload the DataTable
-          $.ajax({
-            type: 'POST',
-            url: 'module/ajax/laporan/anggota/kasanggota/aj_tablekasanggota.php',
-            success: function (response) {
-              // Destroy the DataTable before updating
-              $('#kasanggota-table').DataTable().destroy();
-              $("#kasanggotadata").html(response);
-              // Reinitialize Sertifikat Table
-              callTable();
-            },
-            error: function (xhr, status, error) {
-              // Handle any errors
-            }
-          });
+          // Reload server-side DataTable
+          if (kasTable) { kasTable.ajax.reload(null, false); }
 
           // Hide the loading overlay after the initial processing
           hideLoadingOverlay();
@@ -525,21 +553,8 @@ function eventkas(value1,value2) {
           // Display success notification
           DeleteNotification('Data berhasil dihapus!');
           
-          // Call the reloadDataTable() function after inserting data to reload the DataTable
-          $.ajax({
-            type: 'POST',
-            url: 'module/ajax/laporan/anggota/kasanggota/aj_tablekasanggota.php',
-            success: function(response) {
-              // Destroy the DataTable before updating
-              $('#kasanggota-table').DataTable().destroy();
-              $("#kasanggotadata").html(response);
-              // Reinitialize Sertifikat Table
-              callTable();
-            },
-            error: function(xhr, status, error) {
-              // Handle any errors
-            }
-          });
+          // Reload server-side DataTable
+          if (kasTable) { kasTable.ajax.reload(null, false); }
 
         } else {
           // Display error notification
@@ -692,50 +707,14 @@ $(document).on("click", ".open-EditKasAnggota", function () {
   });
 });
 
-// Mutasi Anggota Filtering
-// Attach debounced event handler to form inputs
-$('.filterKasAnggota select, .filterKasAnggota input').on('change input', debounce(filterKasAnggotaEvent, 500));
-function filterKasAnggotaEvent() {
-  // Your event handling code here
-  const daerah = $('#selectize-select3').val();
-  const cabang = $('#selectize-select2').val();
-  const dokumen = $('#filterKAS_ID').val();
-  const jenis = $('#filterKAS_JENIS').val();
-  const id = $('#filterANGGOTA_ID').val();
-  const nama = $('#filterANGGOTA_NAMA').val();
-  const tingkatan = $('#selectize-select').val();
-  const kategori = $('#filterKAS_KATEGORI').val();
-  const awal = $('#datepicker4').val();
-  const akhir = $('#datepicker5').val();
-
-  // Create a data object to hold the form data
-  const formData = {
-    DAERAH_KEY: daerah,
-    CABANG_KEY: cabang,
-    KAS_ID: dokumen,
-    KAS_JENIS: jenis,
-    ANGGOTA_ID: id,
-    ANGGOTA_NAMA: nama,
-    TINGKATAN_ID: tingkatan,
-    KAS_DK: kategori,
-    TANGGAL_AWAL: awal,
-    TANGGAL_AKHIR: akhir
-  };
-
-  $.ajax({
-    type: "POST",
-    url: 'module/ajax/laporan/anggota/kasanggota/aj_tablekasanggota.php',
-    data: formData,
-    success: function(response){
-      // Destroy the DataTable before updating
-      $('#kasanggota-table').DataTable().destroy();
-      $("#kasanggotadata").html(response);
-      // Reinitialize Sertifikat Table
-      callTable();
-    }
-  });
-  // console.log(formData);
-}
+// Mutasi Anggota Filtering -> server-side reload on change
+(function(){
+  function debounce(fn, delay){
+    var t; return function(){ var ctx=this, args=arguments; clearTimeout(t); t=setTimeout(function(){ fn.apply(ctx,args); }, delay); };
+  }
+  var reload = debounce(function(){ if (kasTable) { kasTable.ajax.reload(null, true); } }, 400);
+  $(document).on('change input', '.filterKasAnggota select, .filterKasAnggota input', reload);
+})();
 
 // ----- Function to reset form ----- //
 function clearForm() {
@@ -762,21 +741,8 @@ function clearForm() {
   }
 
   document.getElementById("filterKasAnggota").reset();
-  // Call the reloadDataTable() function after inserting data to reload the DataTable
-  $.ajax({
-    type: 'POST',
-    url: 'module/ajax/laporan/anggota/kasanggota/aj_tablekasanggota.php',
-    success: function(response) {
-      // Destroy the DataTable before updating
-      $('#kasanggota-table').DataTable().destroy();
-      $("#kasanggotadata").html(response);
-      // Reinitialize Sertifikat Table
-      callTable();
-    },
-    error: function(xhr, status, error) {
-      // Handle any errors
-    }
-  });
+  // Reload server-side table
+  if (kasTable) { kasTable.ajax.reload(null, true); }
 }
 // ----- End of function to reset form ----- //
 

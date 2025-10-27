@@ -164,39 +164,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                         <th>Tgl Resign</th>
                     </tr>
                 </thead>
-                <tbody id="anggotadata">
-                    <?php
-                    while ($rowAnggota = $getAnggotadata->fetch(PDO::FETCH_ASSOC)) {
-                        extract($rowAnggota);
-                        ?>
-                        <tr>
-                            <td align="center">
-                                <form id="eventoption-form-<?= uniqid(); ?>" method="post" class="form">
-                                    <div class="btn-group" style="margin-bottom:5px;">
-                                        <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewAnggota" class="open-ViewAnggota" style="color:#222222;" data-key="<?= $ANGGOTA_KEY; ?>" data-id="<?= $ANGGOTA_ID; ?>" data-shortid="<?= $SHORT_ID; ?>" data-daerahkey="<?= $DAERAH_KEY;?>" data-daerahdes="<?= $DAERAH_DESKRIPSI;?>" data-cabangkey="<?= $CABANG_KEY; ?>" data-cabangdes="<?= $CABANG_DESKRIPSI; ?>" data-tingkatanid=<?= $TINGKATAN_ID; ?> data-tingkatannama="<?= $TINGKATAN_NAMA; ?>" data-ktp="<?= $ANGGOTA_KTP; ?>" data-nama="<?= $ANGGOTA_NAMA; ?>" data-alamat="<?= $ANGGOTA_ALAMAT;?>" data-pekerjaan="<?= $ANGGOTA_PEKERJAAN; ?>" data-agama="<?= $ANGGOTA_AGAMA; ?>" data-kelamin="<?= $ANGGOTA_KELAMIN; ?>" data-tempatlahir="<?= $ANGGOTA_TEMPAT_LAHIR; ?>" data-tanggallahir="<?= $ANGGOTA_TANGGAL_LAHIR; ?>" data-hp="<?= $ANGGOTA_HP; ?>" data-email="<?= $ANGGOTA_EMAIL; ?>" data-pic="<?= $ANGGOTA_PIC; ?>" data-join="<?= $ANGGOTA_JOIN; ?>" data-resign="<?= $ANGGOTA_RESIGN; ?>" data-akses="<?= $ANGGOTA_AKSES; ?>" data-status="<?= $ANGGOTA_STATUS; ?>" data-statusdes="<?= $STATUS_DES; ?>" data-ranting="<?= $ANGGOTA_RANTING; ?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
-                                        </ul>
-                                    </div>
-                                </form>
-                            </td>
-                            <td><?= $ANGGOTA_ID; ?></td>
-                            <td><?= $ANGGOTA_NAMA; ?></td>
-                            <td align="center"><?= $ANGGOTA_KELAMIN; ?></td>
-                            <td align="center"><?= $TINGKATAN_NAMA; ?></td>
-                            <td align="center"><?= $TINGKATAN_SEBUTAN; ?></td>
-                            <td align="center"><?= $TINGKATAN_GELAR; ?></td>
-                            <td align="center"><?= $ANGGOTA_RANTING; ?></td>
-                            <td align="center"><?= $CABANG_DESKRIPSI; ?></td>
-                            <td align="center"><?= $DAERAH_DESKRIPSI; ?></td>
-                            <td><?= $TGL_JOIN; ?></td>
-                            <td><?= $STATUS_DES; ?></td>
-                            <td><?= $TGL_RESIGN; ?></td>
-                        </tr>
-                        <?php
-                    }
-                    ?>
-                </tbody>
+                <tbody id="anggotadata"></tbody>
             </table>
         </div>
     </div>

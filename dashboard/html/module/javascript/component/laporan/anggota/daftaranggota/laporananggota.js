@@ -2,19 +2,56 @@
 
 // Anggota Table
 function callTable() {
-  $('#anggota-table').DataTable({
+  var table = $('#anggota-table').DataTable({
       responsive: true,
       order: [[1, 'asc']],
       dom: 'Bfrtlip',
       paging: true,
+      processing: true,
+      serverSide: true,
       scrollX: true,
       scrollY: '350px', // Set the desired height here
       buttons: [
           'copy', 'csv', 'excel', 'pdf'
       ],
-      // processing: true,
-      // serverSide: true
+      ajax: {
+        url: 'module/ajax/laporan/anggota/daftaranggota/aj_tableanggota_ssp.php',
+        type: 'POST',
+        data: function (d) {
+          // attach current filters
+          d.DAERAH_KEY = $('#selectize-select3').val();
+          d.CABANG_KEY = $('#selectize-select2').val();
+          d.ANGGOTA_RANTING = $('#filterANGGOTA_RANTING').val();
+          d.ANGGOTA_ID = $('#filterANGGOTA_ID').val();
+          d.ANGGOTA_NAMA = $('#filterANGGOTA_NAMA').val();
+          d.ANGGOTA_AKSES = $('#filterANGGOTA_AKSES').val();
+          d.TINGKATAN_ID = $('#selectize-select').val();
+          d.ANGGOTA_STATUS = $('#filterANGGOTA_STATUS').val();
+          // cache buster
+          d._ts = Date.now();
+        }
+      },
+      columns: [
+        { data: 0, orderable: false },
+        { data: 1 },
+        { data: 2 },
+        { data: 3 },
+        { data: 4 },
+        { data: 5 },
+        { data: 6 },
+        { data: 7 },
+        { data: 8 },
+        { data: 9 },
+        { data: 10 },
+        { data: 11 },
+        { data: 12 }
+      ]
   });
+
+  // filters reload
+  $('.filterAnggota select, .filterAnggota input').off('change input').on('change input', debounce(function(){
+    table.ajax.reload(null, true);
+  }, 300));
 
   $('#ViewAnggota').on('shown.bs.modal', function () {
     // Destroy DataTable for riwayatmutasi-table if it exists
@@ -240,21 +277,11 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
           // Close the modal
           $(formId.replace("-form", "")).modal('hide');
 
-          // Call the reloadDataTable() function after inserting data to reload the DataTable
-          $.ajax({
-            type: 'POST',
-            url: 'module/ajax/laporan/anggota/daftaranggota/aj_tableanggota.php',
-            success: function(response) {
-              // Destroy the DataTable before updating
-              $('#anggota-table').DataTable().destroy();
-              $("#anggotadata").html(response);
-              // Reinitialize Sertifikat Table
-              callTable();
-            },
-            error: function(xhr, status, error) {
-              // Handle any errors
-            }
-          });
+          // Reload server-side DataTable
+          try {
+            var dt = $('#anggota-table').DataTable();
+            if (dt && dt.ajax) { dt.ajax.reload(null, false); }
+          } catch (e) { /* ignore */ }
         } else {
           // Display error notification
           failedNotification(response);
@@ -404,21 +431,11 @@ function deletedaftaranggota(value1,value2) {
           // Display success notification
           DeleteNotification('Data berhasil dihapus!');
           
-          // Call the reloadDataTable() function after inserting data to reload the DataTable
-          $.ajax({
-            type: 'POST',
-            url: 'module/ajax/laporan/anggota/daftaranggota/aj_tableanggota.php',
-            success: function(response) {
-              // Destroy the DataTable before updating
-              $('#anggota-table').DataTable().destroy();
-              $("#anggotadata").html(response);
-              // Reinitialize Sertifikat Table
-              callTable();
-            },
-            error: function(xhr, status, error) {
-              // Handle any errors
-            }
-          });
+          // Reload server-side DataTable
+          try {
+            var dt = $('#anggota-table').DataTable();
+            if (dt && dt.ajax) { dt.ajax.reload(null, false); }
+          } catch (e) { /* ignore */ }
 
         } else {
           // Display error notification
@@ -591,46 +608,7 @@ $(document).on("click", ".open-EditAnggota", function () {
   }
 });
 
-// Anggota Filtering
-// Attach debounced event handler to form inputs
-$('.filterAnggota select, .filterAnggota input').on('change input', debounce(filterAnggotaEvent, 500));
-function filterAnggotaEvent() {
-  // Your event handling code here
-  const daerah = $('#selectize-select3').val();
-  const cabang = $('#selectize-select2').val();
-  const ranting = $('#filterANGGOTA_RANTING').val();
-  const id = $('#filterANGGOTA_ID').val();
-  const nama = $('#filterANGGOTA_NAMA').val();
-  const akses = $('#filterANGGOTA_AKSES').val();
-  const tingkatan = $('#selectize-select').val();
-  const status = $('#filterANGGOTA_STATUS').val();
-
-  // Create a data object to hold the form data
-  const formData = {
-    DAERAH_KEY: daerah,
-    CABANG_KEY: cabang,
-    ANGGOTA_RANTING: ranting,
-    ANGGOTA_ID: id,
-    ANGGOTA_NAMA: nama,
-    ANGGOTA_AKSES: akses,
-    TINGKATAN_ID: tingkatan,
-    ANGGOTA_STATUS: status
-  };
-
-  $.ajax({
-    type: "POST",
-    url: 'module/ajax/laporan/anggota/daftaranggota/aj_tableanggota.php',
-    data: formData,
-    success: function(response){
-      // Destroy the DataTable before updating
-      $('#anggota-table').DataTable().destroy();
-      $("#anggotadata").html(response);
-      // Reinitialize Sertifikat Table
-      callTable();
-    }
-  });
-  // console.log(formData);
-}
+// Filtering is handled in callTable() by reloading the server-side DataTable
 
 // ----- Function to reset form ----- //
 function clearForm() {
@@ -659,21 +637,10 @@ function clearForm() {
   }
 
   document.getElementById("filterAnggota").reset();
-  // Call the reloadDataTable() function after inserting data to reload the DataTable
-  $.ajax({
-    type: 'POST',
-    url: 'module/ajax/laporan/anggota/daftaranggota/aj_tableanggota.php',
-    success: function(response) {
-      // Destroy the DataTable before updating
-      $('#anggota-table').DataTable().destroy();
-      $("#anggotadata").html(response);
-      // Reinitialize Sertifikat Table
-      callTable();
-    },
-    error: function(xhr, status, error) {
-      // Handle any errors
-    }
-  });
+  try {
+    var dt = $('#anggota-table').DataTable();
+    if (dt && dt.ajax) { dt.ajax.reload(null, true); }
+  } catch (e) { /* ignore */ }
 }
 // ----- End of function to reset form ----- //
 

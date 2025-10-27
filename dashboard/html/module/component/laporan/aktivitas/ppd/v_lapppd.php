@@ -277,61 +277,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                         <th>Input Tanggal</th>
                     </tr>
                 </thead>
-                <tbody id="ppddata">
-                    <?php
-                    while ($rowPPD = $getPPD->fetch(PDO::FETCH_ASSOC)) {
-                        extract($rowPPD);
-                        ?>
-                        <tr>
-                            <td align="center">
-                                <form id="eventoption-form-<?= uniqid(); ?>" method="post" class="form">
-                                    <div class="btn-group" style="margin-bottom:5px;">
-                                        <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li><a data-toggle="modal" href="#ViewPPD" class="open-ViewPPD" style="color:#222222;" data-id="<?= $PPD_ID; ?>" data-cabang="<?= $CABANG_KEY; ?>" ><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
-                                            <li class="divider"></li>
-                                            <li><a href="assets/print/transaksi/aktivitas/ppd/print_ppdreportanggota.php?id=<?= encodeIdToBase64($PPD_ID); ?>" target="_blank" style="color: darkgoldenrod;"><i class="fa-solid fa-print"></i> Cetak</a></li>
-                                        </ul>
-                                    </div>
-                                </form>
-                            </td>
-                            <td>
-                                <?= $PPD_ID; ?><br> 
-                                <span class="<?= $PELATIH_BADGE; ?>"><i class="<?= $PELATIH_CLASS; ?>"></i> Koordinator </span><br> 
-                                <span class="<?= $GURU_BADGE; ?>"><i class="<?= $GURU_CLASS; ?>"></i> Guru Besar </span>
-                            </td>
-                            <td align="center"><?= $ANGGOTA_ID; ?></td>
-                            <td align="center"><?= $ANGGOTA_NAMA; ?></td>
-                            <td align="center"><?= $DAERAH_DESKRIPSI; ?></td>
-                            <td align="center"><?= $CABANG_DESKRIPSI; ?></td>
-                            <td align="center"><?= $ANGGOTA_RANTING; ?></td>
-                            <td align="center"><?= $PPD_JENIS; ?></td>
-                            <td align="center"><?= $TINGKATAN_NAMA; ?> - <?= $TINGKATAN_SEBUTAN; ?></td>
-                            <td align="center"><?= $PPD_TINGKATAN; ?> - <?= $PPD_SEBUTAN; ?></td>
-                            <td align="center"><?= $PPD_CABANG; ?></td>
-                            <td align="center"><?= $PPD_TANGGAL; ?></td>
-                            <td><?= $PPD_DESKRIPSI; ?></td>
-                            <td align="center"><a data-toggle="modal" href="#ViewUKT" class="open-ViewUKT" data-id="<?= $UKT_ID; ?>" > <?= $UKT_ID; ?></a></td>
-                            <td align="center"><?= $UKT_TANGGAL; ?></td>
-                            <td align="center">
-                            <?php
-                            if ($PPD_APPROVE_GURU == 1) {
-                                ?>
-                                <div>
-                                    <a href="<?= $PPD_FILE; ?>" target="_blank"> <i class="fa-regular fa-file-lines"></i> <?= $PPD_FILE_NAME; ?>
-                                    </a>
-                                </div>
-                                <?php
-                            }
-                            ?>
-                            </td>
-                            <td><?= $INPUT_BY; ?></td>
-                            <td><?= $INPUT_DATE; ?></td>
-                        </tr>
-                        <?php
-                    }
-                    ?>
-                </tbody>
+                <tbody id="ppddata"></tbody>
             </table>
         </div>
     </div>

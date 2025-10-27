@@ -1,5 +1,4 @@
 <?php 
-require_once ("./module/connection/conn.php");
 include "module/backend/loginregister/t_login.php";
 
 $getMaintenance = GetQuery("SELECT * FROM p_param WHERE KATEGORI = 'isMaintenance'");

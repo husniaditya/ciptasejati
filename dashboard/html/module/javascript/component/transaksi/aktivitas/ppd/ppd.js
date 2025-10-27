@@ -1,7 +1,51 @@
-// PPD Table
-function callTable() {
-  ['#ppd-table', '#lapppd-table', '#ppdKoor-table'].forEach(id => {
-    if ($(id).length) {
+// PPD DataTable (server-side)
+let ppdDt = null;
+let lapppdDt = null;
+function initPPDTable() {
+  // Only initialize server-side on standard PPD pages (filter form present)
+  if (!$('.filterPPD').length) return;
+  const $tbl = $('#ppd-table');
+  if (!$tbl.length) return;
+  if ($.fn.DataTable.isDataTable($tbl)) {
+    ppdDt = $tbl.DataTable();
+    return;
+  }
+  ppdDt = $tbl.DataTable({
+    processing: true,
+    serverSide: true,
+    responsive: true,
+    order: [],
+    dom: 'Bfrtlip',
+    paging: true,
+    scrollX: true,
+    scrollY: '350px',
+    buttons: ['copy', 'csv', 'excel', 'pdf'],
+    ajax: {
+      url: 'module/ajax/transaksi/aktivitas/ppd/aj_tableppd_ssp.php',
+      type: 'POST',
+      data: function(d) {
+        d.DAERAH_KEY   = $('#selectize-select3').val();
+        d.CABANG_KEY   = $('#selectize-select2').val();
+        d.PPD_LOKASI   = $('#selectize-dropdown').val();
+        d.PPD_ID       = $('#filterPPD_ID').val();
+        d.ANGGOTA_ID   = $('#filterANGGOTA_ID').val();
+        d.ANGGOTA_NAMA = $('#filterANGGOTA_NAMA').val();
+        d.TINGKATAN_ID = $('#selectize-select').val();
+        d.PPD_JENIS    = $('#filterPPD_JENIS').val();
+        d.PPD_TANGGAL  = $('#datepicker42').val();
+        d._ts = Date.now(); // cache buster
+      }
+    },
+    drawCallback: function() {
+      // re-bind any tooltips or dynamic elements if needed
+    }
+  });
+}
+
+// Keep other tables as-is
+function initOtherTables() {
+  ['#ppdKoor-table'].forEach(id => {
+    if ($(id).length && !$.fn.DataTable.isDataTable(id)) {
       $(id).DataTable({
         responsive: true,
         order: [],
@@ -13,7 +57,101 @@ function callTable() {
       });
     }
   });
+}
 
+// Laporan PPD DataTable (server-side)
+function initLapPPDTable() {
+  // Only initialize if laporan filter present
+  if (!$('.filterLapPPD').length) return;
+  const $tbl = $('#lapppd-table');
+  if (!$tbl.length) return;
+  if ($.fn.DataTable.isDataTable($tbl)) {
+    lapppdDt = $tbl.DataTable();
+    return;
+  }
+  let reqCounter = 0;
+  lapppdDt = $tbl.DataTable({
+    processing: true,
+    serverSide: true,
+    responsive: true,
+    order: [],
+    dom: 'Bfrtlip',
+    paging: true,
+    scrollX: true,
+    scrollY: '350px',
+    buttons: ['copy', 'csv', 'excel', 'pdf'],
+    ajax: {
+      url: 'module/ajax/laporan/aktivitas/ppd/aj_tablelapppd_ssp.php',
+      type: 'POST',
+      data: function(d) {
+        d.requestId   = 'req-' + (++reqCounter);
+        d.DAERAH_KEY   = $('#selectize-select3').val();
+        d.CABANG_KEY   = $('#selectize-select2').val();
+        d.PPD_LOKASI   = $('#selectize-dropdown').val();
+        d.PPD_ID       = $('#filterPPD_ID').val();
+        d.ANGGOTA_ID   = $('#filterANGGOTA_ID').val();
+        d.ANGGOTA_NAMA = $('#filterANGGOTA_NAMA').val();
+        d.TINGKATAN_ID = $('#selectize-select').val();
+        d.PPD_JENIS    = $('#filterPPD_JENIS').val();
+        d.PPD_TANGGAL  = $('#datepicker42').val();
+        d._ts = Date.now();
+      }
+    },
+    columns: [
+      { data: 0, orderable: false }, // action
+      { data: 1 }, // No Dokumen + badges
+      { data: 2 }, // ID Anggota
+      { data: 3 }, // Nama
+      { data: 4 }, // Daerah
+      { data: 5 }, // Cabang
+      { data: 6 }, // Ranting
+      { data: 7 }, // Jenis
+      { data: 8 }, // Tingkatan
+      { data: 9 }, // Tingkatan PPD
+      { data: 10 }, // Cabang PPD
+      { data: 11 }, // Tanggal
+      { data: 12 }, // Deskripsi
+      { data: 13 }, // Dokumen UKT
+      { data: 14 }, // Tanggal UKT
+      { data: 15 }, // No Sertifikat
+      { data: 16 }, // Input Oleh
+      { data: 17 }, // Input Tanggal
+    ]
+  });
+}
+
+// Simple initializer for static tables used elsewhere on the page(s)
+function initSimpleTable(selector) {
+  const $t = $(selector);
+  if ($t.length && !$.fn.DataTable.isDataTable($t)) {
+    $t.DataTable({
+      responsive: true,
+      order: [],
+      dom: 'Bfrtlip',
+      paging: true,
+      scrollX: true,
+      scrollY: '350px',
+      buttons: ['copy', 'csv', 'excel', 'pdf']
+    });
+  }
+}
+
+// Fallback HTML reload helper for non-SSP tables (used by Guru/Koordinator pages)
+function reloadTable(tableId, url, htmlId, cb) {
+  $.post(url, response => {
+    if ($.fn.DataTable.isDataTable(tableId)) $(tableId).DataTable().destroy();
+    $(htmlId).html(response);
+    initSimpleTable(tableId);
+    if (cb) cb();
+  });
+}
+
+$(document).ready(function() {
+  initPPDTable();
+  initLapPPDTable();
+  initOtherTables();
+
+  // Initialize detail table when guru modals are shown
   $('#ApprovePPDGuru, #ViewPPDGuru').on('shown.bs.modal', function () {
     if ($.fn.DataTable.isDataTable('#detailppd-table')) {
       $('#detailppd-table').DataTable().destroy();
@@ -28,10 +166,6 @@ function callTable() {
       buttons: ['copy', 'csv', 'excel', 'pdf']
     });
   });
-}
-
-$(document).ready(function() {
-  callTable();
   handleForm('#AddPPD-form', SuccessNotification, FailedNotification, UpdateNotification);
   handleForm('#EditPPD-form', UpdateNotification, FailedNotification, UpdateNotification);
   handleFormApproveKoordinator('#ApprovePPDKoordinator-form', UpdateNotification, FailedNotification, UpdateNotification);
@@ -495,13 +629,10 @@ $(document).ready(function() {
 });
 
 // Utility: reload DataTable and update HTML
-function reloadTable(tableId, url, htmlId, cb) {
-  $.post(url, response => {
-    if ($.fn.DataTable.isDataTable(tableId)) $(tableId).DataTable().destroy();
-    $(htmlId).html(response);
-    callTable();
-    if (cb) cb();
-  });
+function reloadPPDTable(resetPaging=false) {
+  if (ppdDt) {
+    ppdDt.ajax.reload(null, resetPaging);
+  }
 }
 
 // Reset Selectize dropdowns utility
@@ -550,7 +681,7 @@ function handleForm(formId, successNotification, failedNotification) {
         if (successMessage === 'Success') {
           successNotification('Data berhasil tersimpan!');
           $(formId.replace("-form", "")).modal('hide');
-          reloadTable('#ppd-table', 'module/ajax/transaksi/aktivitas/ppd/aj_tableppd.php', '#ppddata');
+          reloadPPDTable(true);
         } else {
           failedNotification(response);
         }
@@ -611,7 +742,7 @@ function handleFormApproveGuru(formId, successNotification, failedNotification) 
         if (successMessage === 'Success') {
           successNotification('Data berhasil tersimpan!');
           $(formId.replace("-form", "")).modal('hide');
-          reloadTable('#ppd-table', 'module/ajax/transaksi/aktivitas/ppd/aj_tableppdGuru.php', '#ppddata');
+          reloadPPDTable(true);
         } else {
           failedNotification(response);
         }
@@ -634,7 +765,7 @@ function eventppd(value1, value2) {
     }, function(response) {
       if (response === 'Success') {
         value2 === 'cancel' ? UpdateNotification('Data berhasil direset!') : DeleteNotification('Data berhasil dihapus!');
-        reloadTable('#ppd-table', 'module/ajax/transaksi/aktivitas/ppd/aj_tableppd.php', '#ppddata');
+        reloadPPDTable(true);
       } else {
         FailedNotification(response);
       }
@@ -946,18 +1077,8 @@ $(document).on("click", ".open-ViewUKT", function () {
 
 // Filtering utilities
 function filterPPDEvent() {
-  const formData = {
-    DAERAH_KEY: $('#selectize-select3').val(),
-    CABANG_KEY: $('#selectize-select2').val(),
-    PPD_LOKASI: $('#selectize-dropdown').val(),
-    PPD_ID: $('#filterPPD_ID').val(),
-    ANGGOTA_ID: $('#filterANGGOTA_ID').val(),
-    ANGGOTA_NAMA: $('#filterANGGOTA_NAMA').val(),
-    TINGKATAN_ID: $('#selectize-select').val(),
-    PPD_JENIS: $('#filterPPD_JENIS').val(),
-    PPD_TANGGAL: $('#datepicker42').val()
-  };
-  reloadTable('#ppd-table', 'module/ajax/transaksi/aktivitas/ppd/aj_tableppd.php', '#ppddata');
+  // server-side reload
+  reloadPPDTable(true);
 }
 
 function filterPPDKoordinatorEvent() {
@@ -990,18 +1111,7 @@ function filterPPDGuruReportEvent() {
 }
 
 function filterLapPPDEvent() {
-  const formData = {
-    DAERAH_KEY: $('#selectize-select3').val(),
-    CABANG_KEY: $('#selectize-select2').val(),
-    PPD_LOKASI: $('#selectize-dropdown').val(),
-    PPD_ID: $('#filterPPD_ID').val(),
-    ANGGOTA_ID: $('#filterANGGOTA_ID').val(),
-    ANGGOTA_NAMA: $('#filterANGGOTA_NAMA').val(),
-    TINGKATAN_ID: $('#selectize-select').val(),
-    PPD_JENIS: $('#filterPPD_JENIS').val(),
-    PPD_TANGGAL: $('#datepicker42').val()
-  };
-  reloadTable('#lapppd-table', 'module/ajax/transaksi/aktivitas/ppd/aj_tablelapppd.php', '#ppddata');
+  if (lapppdDt) { lapppdDt.ajax.reload(null, true); }
 }
 
 // Attach debounced event handlers
@@ -1034,7 +1144,7 @@ function clearFormReportGuru() {
 function clearLapForm() {
   clearSelectize(['#selectize-select3', '#selectize-select2', '#selectize-select', '#selectize-dropdown']);
   document.querySelectorAll('.resettable-form').forEach(form => form.reset());
-  filterLapPPDEvent();
+  if (lapppdDt) { lapppdDt.ajax.reload(null, true); }
 }
 
 // ...existing code for showLoadingOverlay/hideLoadingOverlay and other helpers...

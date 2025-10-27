@@ -32,7 +32,7 @@ $getMedia = GetQuery("SELECT * FROM c_mediasosial");
                                     extract($rowMedia);
                                     ?>
                                     <li class="nav-item pe-2 mx-2">
-                                        <a href="<?= $MEDIA_LINK; ?>" target="_blank" title="Facebook" class="text-color-dark text-color-hover-primary text-2"><i class="<?= $MEDIA_ICON; ?>"></i></a>
+                                        <a href="<?= $MEDIA_LINK; ?>" target="_blank" title="<?= $MEDIA_DESKRIPSI; ?>" class="text-color-dark text-color-hover-primary text-2"><i class="<?= $MEDIA_ICON; ?>"></i></a>
                                     </li>
                                     <?php
                                 }

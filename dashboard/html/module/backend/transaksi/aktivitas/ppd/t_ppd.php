@@ -180,24 +180,13 @@ if (isset($_POST["updateppd"])) {
 if (isset($_POST["approveKoordinator"])) {
     try {
         $PPD_ID = $_POST["PPD_ID"];
+        $getMonthYear = GetQuery("SELECT MONTH(PPD_TANGGAL) AS PPD_MONTH, YEAR(PPD_TANGGAL) AS PPD_YEAR FROM t_ppd WHERE PPD_ID = '$PPD_ID'");
+        while ($rowMonthYear = $getMonthYear->fetch(PDO::FETCH_ASSOC)) {
+            extract($rowMonthYear);
+        }
 
-        $incNum = autoIncCert("t_ppd","PPD_FILE_NAME",5);
-        $getSertifikat = GetQuery("SELECT CONCAT('$incNum', '/', LEFT(a.ANGGOTA_ID, 5), '/', t.TINGKATAN_SERTIFIKAT, '/', 'ISBDS-CS/', 
-        CASE MONTH(p.PPD_TANGGAL)
-          WHEN 1 THEN 'I'
-          WHEN 2 THEN 'II'
-          WHEN 3 THEN 'III'
-          WHEN 4 THEN 'IV'
-          WHEN 5 THEN 'V'
-          WHEN 6 THEN 'VI'
-          WHEN 7 THEN 'VII'
-          WHEN 8 THEN 'VIII'
-          WHEN 9 THEN 'IX'
-          WHEN 10 THEN 'X'
-          WHEN 11 THEN 'XI'
-          WHEN 12 THEN 'XII'
-        END, 
-        '/', DATE_FORMAT(p.PPD_TANGGAL, '%Y')) AS PPD_FILE_NAME,
+        $incNum = autoIncCert("t_ppd","PPD_FILE_NAME",3, $PPD_MONTH, $PPD_YEAR);
+        $getSertifikat = GetQuery("SELECT CONCAT('$incNum', '/', t.TINGKATAN_SERTIFIKAT, '/',  'ISBDS-CS/', RIGHT(c.CABANG_ID, 5), '/', DATE_FORMAT(p.PPD_TANGGAL, '%m'),'/', DATE_FORMAT(p.PPD_TANGGAL, '%Y')) AS PPD_FILE_NAME,
         a.ANGGOTA_ID,
         a.ANGGOTA_NAMA,
         CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan' WHEN p.PPD_JENIS = 1 THEN 'Ulang' END AS PPD_JENIS_DESKRIPSI,
@@ -205,6 +194,7 @@ if (isset($_POST["approveKoordinator"])) {
         FROM t_ppd p
         LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY AND a.ANGGOTA_STATUS = 0
         LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_BARU = t.TINGKATAN_ID
+        LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
         WHERE p.PPD_ID = '$PPD_ID'");
         while ($rowSertifikat = $getSertifikat->fetch(PDO::FETCH_ASSOC)) {
             extract($rowSertifikat);
@@ -322,24 +312,13 @@ if (isset($_POST["rejectKoordinator"])) {
 if (isset($_POST["approveNotifPPDKoordinator"])) {
     try {
         $PPD_ID = $_POST["PPD_ID"];
+        $getMonthYear = GetQuery("SELECT MONTH(PPD_TANGGAL) AS PPD_MONTH, YEAR(PPD_TANGGAL) AS PPD_YEAR FROM t_ppd WHERE PPD_ID = '$PPD_ID'");
+        while ($rowMonthYear = $getMonthYear->fetch(PDO::FETCH_ASSOC)) {
+            extract($rowMonthYear);
+        }
 
-        $incNum = autoIncCert("t_ppd","PPD_FILE_NAME",5);
-        $getSertifikat = GetQuery("SELECT CONCAT('$incNum', '/', LEFT(a.ANGGOTA_ID, 7), '/', t.TINGKATAN_SERTIFIKAT, '/', 'ISBDS-CS/', 
-        CASE MONTH(p.PPD_TANGGAL)
-          WHEN 1 THEN 'I'
-          WHEN 2 THEN 'II'
-          WHEN 3 THEN 'III'
-          WHEN 4 THEN 'IV'
-          WHEN 5 THEN 'V'
-          WHEN 6 THEN 'VI'
-          WHEN 7 THEN 'VII'
-          WHEN 8 THEN 'VIII'
-          WHEN 9 THEN 'IX'
-          WHEN 10 THEN 'X'
-          WHEN 11 THEN 'XI'
-          WHEN 12 THEN 'XII'
-        END, 
-        '/', DATE_FORMAT(p.PPD_TANGGAL, '%Y')) AS PPD_FILE_NAME,
+        $incNum = autoIncCert("t_ppd","PPD_FILE_NAME",3, $PPD_MONTH, $PPD_YEAR);
+        $getSertifikat = GetQuery("SELECT CONCAT('$incNum', '/', t.TINGKATAN_SERTIFIKAT, '/',  'ISBDS-CS/', RIGHT(c.CABANG_ID, 5), '/', DATE_FORMAT(p.PPD_TANGGAL, '%m'),'/', DATE_FORMAT(p.PPD_TANGGAL, '%Y')) AS PPD_FILE_NAME,
         a.ANGGOTA_ID,
         a.ANGGOTA_NAMA,
         CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan' WHEN p.PPD_JENIS = 1 THEN 'Ulang' END AS PPD_JENIS_DESKRIPSI,
@@ -347,6 +326,7 @@ if (isset($_POST["approveNotifPPDKoordinator"])) {
         FROM t_ppd p
         LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY AND a.ANGGOTA_STATUS = 0
         LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_BARU = t.TINGKATAN_ID
+        LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
         WHERE p.PPD_ID = '$PPD_ID'");
         while ($rowSertifikat = $getSertifikat->fetch(PDO::FETCH_ASSOC)) {
             extract($rowSertifikat);

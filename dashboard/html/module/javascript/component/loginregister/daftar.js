@@ -85,24 +85,24 @@ $(document).ready(function () {
         performAjaxCall(value);
     }, 300);
 
-    $('input[name="ANGGOTA_ID"]').on('input', function () {
-        var inputValue = $(this).val().replace(/[^0-9]/g, '');
+  $('input[name="ANGGOTA_ID"]').on('input', function () {
+    var inputValue = $(this).val().replace(/[^0-9]/g, '');
 
-        // Insert a dot after each group of three digits
-        var formattedValue = inputValue.replace(/(\d{3})(\d{0,3})(\d{0,4})(\d{0,3})/, function (match, p1, p2, p3, p4) {
-            var result = p1;
-            if (p2) result += '.' + p2;
-            if (p3) result += '.' + p3;
-            if (p4) result += '.' + p4;
-            return result;
-        });
+    // Format as 11.11.1111.11111 (groups: 2-2-4-5)
+    var digits = inputValue.substring(0, 13); // limit to max 13 digits
+    var parts = [];
+    if (digits.length > 0) parts.push(digits.substring(0, Math.min(2, digits.length)));
+    if (digits.length > 2) parts.push(digits.substring(2, Math.min(4, digits.length)));
+    if (digits.length > 4) parts.push(digits.substring(4, Math.min(8, digits.length)));
+    if (digits.length > 8) parts.push(digits.substring(8, Math.min(13, digits.length)));
+    var formattedValue = parts.join('.');
 
-        // Update the input value with the formatted value
-        $(this).val(formattedValue);
+    // Update the input value with the formatted value
+    $(this).val(formattedValue);
 
-        // Call the debounced AJAX function with the formatted value
-        debouncedAjaxCall(formattedValue);
-    });
+    // Call the debounced AJAX function with the formatted value
+    debouncedAjaxCall(formattedValue);
+  });
 });
 
 function disableButton() {

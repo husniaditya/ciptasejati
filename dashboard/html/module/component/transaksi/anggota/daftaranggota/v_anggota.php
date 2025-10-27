@@ -2,23 +2,11 @@
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 $USER_CABANG = $_SESSION["LOGINCAB_CS"];
-
-if ($USER_AKSES == "Administrator") {
-    $getAnggotadata = GetQuery("SELECT a.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_GELAR,t.TINGKATAN_SEBUTAN,t.TINGKATAN_LEVEL,DATE_FORMAT(a.ANGGOTA_TANGGAL_LAHIR, '%d %M %Y') TGL_LAHIR,DATE_FORMAT(a.ANGGOTA_JOIN, '%d %M %Y') TGL_JOIN,DATE_FORMAT(a.ANGGOTA_RESIGN, '%d %M %Y') TGL_RESIGN,RIGHT(a.ANGGOTA_ID,3) SHORT_ID, CASE WHEN ANGGOTA_STATUS = 0 THEN 'Aktif' WHEN ANGGOTA_STATUS = 1 THEN 'Non Aktif' ELSE 'Mutasi' END STATUS_DES FROM m_anggota a
-    LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
-    LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-    LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID");
-} else {
-    $getAnggotadata = GetQuery("SELECT a.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_GELAR,t.TINGKATAN_SEBUTAN,t.TINGKATAN_LEVEL,DATE_FORMAT(a.ANGGOTA_TANGGAL_LAHIR, '%d %M %Y') TGL_LAHIR,DATE_FORMAT(a.ANGGOTA_JOIN, '%d %M %Y') TGL_JOIN,DATE_FORMAT(a.ANGGOTA_RESIGN, '%d %M %Y') TGL_RESIGN,RIGHT(a.ANGGOTA_ID,3) SHORT_ID, CASE WHEN ANGGOTA_STATUS = 0 THEN 'Aktif' WHEN ANGGOTA_STATUS = 1 THEN 'Non Aktif' ELSE 'Mutasi' END STATUS_DES FROM m_anggota a
-    LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
-    LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-    LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
-    WHERE a.CABANG_KEY = '$USER_CABANG' and a.ANGGOTA_AKSES != 'Administrator'");
-}
+// Note: Initial full data fetch removed. DataTables now uses server-side AJAX (aj_tableanggota_ssp.php)
 
 $getAkses = GetQuery("select * from p_param where KATEGORI = 'USER_AKSES' ORDER BY TEXT");
-$getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0");
-$getCabang = GetQuery("select * from m_cabang where DELETION_STATUS = 0");
+$getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0 order by DAERAH_DESKRIPSI");
+$getCabang = GetQuery("select * from m_cabang where DELETION_STATUS = 0 order by CABANG_DESKRIPSI");
 $getTingkatan = GetQuery("select * from m_tingkatan where DELETION_STATUS = 0 order by TINGKATAN_LEVEL");
 $getURL = GetQuery("SELECT * FROM p_param WHERE KATEGORI = 'url'");
 while ($urlData = $getURL->fetch(PDO::FETCH_ASSOC)) {
@@ -150,6 +138,8 @@ $rowakses = $getAkses->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                 </form>
             </div>
+
+                    
         </div>
     </div>
 </div>
@@ -159,8 +149,16 @@ $rowakses = $getAkses->fetchAll(PDO::FETCH_ASSOC);
 if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
     ?>
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-6 col-md-6 col-sm-12">
             <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddAnggota btn btn-inverse btn-outline mb5 btn-rounded" href="#AddAnggota"><i class="ico-plus2"></i> Tambah Data Anggota</a>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 text-right">
+            <a href="module/backend/transaksi/anggota/daftaranggota/t_download_template_anggota.php" class="btn btn-primary btn-outline mb5 btn-rounded" style="margin-left:8px;">
+                <i class="ico-download3"></i> Download Template
+            </a>
+            <a data-toggle="modal" title="Upload Template" class="btn btn-success btn-outline mb5 btn-rounded" style="margin-left:8px;" href="#UploadAnggota">
+                <i class="ico-upload"></i> Upload Template
+            </a>
         </div>
     </div>
     <br>
@@ -198,66 +196,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                         <th>Tgl Resign</th>
                     </tr>
                 </thead>
-                <tbody id="anggotadata">
-                    <?php
-                    while ($rowAnggota = $getAnggotadata->fetch(PDO::FETCH_ASSOC)) {
-                        extract($rowAnggota);
-                        ?>
-                        <tr>
-                            <td align="center">
-                                <form id="eventoption-form-<?= uniqid(); ?>" method="post" class="form">
-                                    <div class="btn-group" style="margin-bottom:5px;">
-                                        <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
-                                        <ul class="dropdown-menu" role="menu">
-                                        <?php
-                                        if ($_SESSION['VIEW_DaftarAnggota'] == "Y") {
-                                            ?>
-                                            <li><a data-toggle="modal" href="#ViewAnggota" class="open-ViewAnggota" style="color:#222222;" data-key="<?= $ANGGOTA_KEY; ?>" data-id="<?= $ANGGOTA_ID; ?>" data-shortid="<?= $SHORT_ID; ?>" data-daerahkey="<?= $DAERAH_KEY;?>" data-daerahdes="<?= $DAERAH_DESKRIPSI;?>" data-cabangkey="<?= $CABANG_KEY; ?>" data-cabangdes="<?= $CABANG_DESKRIPSI; ?>" data-tingkatanid=<?= $TINGKATAN_ID; ?> data-tingkatannama="<?= $TINGKATAN_NAMA; ?>" data-ktp="<?= $ANGGOTA_KTP; ?>" data-nama="<?= $ANGGOTA_NAMA; ?>" data-alamat="<?= $ANGGOTA_ALAMAT;?>" data-pekerjaan="<?= $ANGGOTA_PEKERJAAN; ?>" data-agama="<?= $ANGGOTA_AGAMA; ?>" data-kelamin="<?= $ANGGOTA_KELAMIN; ?>" data-tempatlahir="<?= $ANGGOTA_TEMPAT_LAHIR; ?>" data-tanggallahir="<?= $ANGGOTA_TANGGAL_LAHIR; ?>" data-hp="<?= $ANGGOTA_HP; ?>" data-email="<?= $ANGGOTA_EMAIL; ?>" data-pic="<?= $ANGGOTA_PIC; ?>" data-join="<?= $ANGGOTA_JOIN; ?>" data-resign="<?= $ANGGOTA_RESIGN; ?>" data-akses="<?= $ANGGOTA_AKSES; ?>" data-status="<?= $ANGGOTA_STATUS; ?>" data-statusdes="<?= $STATUS_DES; ?>" data-ranting="<?= $ANGGOTA_RANTING; ?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
-                                            <?php
-                                        }
-                                        if ($_SESSION['EDIT_DaftarAnggota'] == "Y") {
-                                            ?>
-                                            <li><a data-toggle="modal" href="#EditAnggota" class="open-EditAnggota" style="color:cornflowerblue;" data-key="<?= $ANGGOTA_KEY; ?>" data-id="<?= $ANGGOTA_ID; ?>" data-shortid="<?= $SHORT_ID; ?>" data-daerahkey="<?= $DAERAH_KEY;?>" data-daerahdes="<?= $DAERAH_DESKRIPSI;?>" data-cabangkey="<?= $CABANG_KEY; ?>" data-cabangdes="<?= $CABANG_DESKRIPSI; ?>" data-tingkatanid=<?= $TINGKATAN_ID; ?> data-tingkatannama="<?= $TINGKATAN_NAMA; ?>" data-ktp="<?= $ANGGOTA_KTP; ?>" data-nama="<?= $ANGGOTA_NAMA; ?>" data-alamat="<?= $ANGGOTA_ALAMAT;?>" data-pekerjaan="<?= $ANGGOTA_PEKERJAAN; ?>" data-agama="<?= $ANGGOTA_AGAMA; ?>" data-kelamin="<?= $ANGGOTA_KELAMIN; ?>" data-tempatlahir="<?= $ANGGOTA_TEMPAT_LAHIR; ?>" data-tanggallahir="<?= $ANGGOTA_TANGGAL_LAHIR; ?>" data-hp="<?= $ANGGOTA_HP; ?>" data-email="<?= $ANGGOTA_EMAIL; ?>" data-pic="<?= $ANGGOTA_PIC; ?>" data-join="<?= $ANGGOTA_JOIN; ?>" data-resign="<?= $ANGGOTA_RESIGN; ?>" data-akses="<?= $ANGGOTA_AKSES; ?>" data-status="<?= $ANGGOTA_STATUS; ?>" data-statusdes="<?= $STATUS_DES; ?>" data-ranting="<?= $ANGGOTA_RANTING; ?>"><span class="ico-edit"></span> Ubah</a></li>
-                                            <?php
-                                        }
-
-                                        if ($TINGKATAN_LEVEL > 1) {
-                                            ?>
-                                            <li><a data-toggle="modal" href="#CardId" class="open-CardId" style="color:darkgoldenrod;" data-key="<?= encodeIdToBase64($ANGGOTA_KEY); ?>" data-id="<?= $ANGGOTA_KEY; ?>" data-id2="<?= $ANGGOTA_ID; ?>" data-kta="<?= htmlspecialchars($ANGGOTA_KTA ?? '', ENT_QUOTES, 'UTF-8'); ?>" data-nama="<?= htmlspecialchars($ANGGOTA_NAMA, ENT_QUOTES, 'UTF-8'); ?>"><i class="fa-regular fa-id-card"></i> Kartu ID Anggota</a></li>
-                                            <?php
-                                        }
-                                        if ($_SESSION['DELETE_DaftarAnggota'] == "Y") {
-                                            ?>
-                                            <li class="divider"></li>
-                                            <li><a href="#" onclick="deletedaftaranggota('<?= $ANGGOTA_KEY;?>','deleteevent')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
-                                            <?php
-                                        }
-                                        ?>
-                                        </ul>
-                                    </div>
-                                </form>
-                            </td>
-                            <td><?= $ANGGOTA_ID; ?></td>
-                            <td><?= $ANGGOTA_NAMA; ?></td>
-                            <td><?= $ANGGOTA_TEMPAT_LAHIR; ?> <br> <?= $TGL_LAHIR; ?></td>
-                            <td align="center"><?= $ANGGOTA_KELAMIN; ?></td>
-                            <td align="center"><?= $TINGKATAN_NAMA; ?></td>
-                            <td align="center"><?= $TINGKATAN_SEBUTAN; ?></td>
-                            <td align="center"><?= $TINGKATAN_GELAR; ?></td>
-                            <td align="center"><?= $ANGGOTA_KTP; ?></td>
-                            <td><?= $ANGGOTA_HP; ?></td>
-                            <td><?= $ANGGOTA_EMAIL; ?></td>
-                            <td align="center"><?= $ANGGOTA_RANTING; ?></td>
-                            <td align="center"><?= $CABANG_DESKRIPSI; ?></td>
-                            <td align="center"><?= $DAERAH_DESKRIPSI; ?></td>
-                            <td><?= $TGL_JOIN; ?></td>
-                            <td><?= $STATUS_DES; ?></td>
-                            <td><?= $TGL_RESIGN; ?></td>
-                        </tr>
-                        <?php
-                    }
-                    ?>
-                </tbody>
+                <tbody id="anggotadata"></tbody>
             </table>
         </div>
     </div>
@@ -1005,7 +944,7 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                         <label>Cabang<span class="text-danger">*</span></label>
                                         <div id="selectize-wrapper5" style="position: relative;">
                                             <select name="CABANG_KEY" id="selectize-dropdown5" required="" class="form-control" data-parsley-required>
-                                                <option value="">-- Pilih Cabang --</option>]
+                                                <option value="">-- Pilih Cabang --</option>
                                             </select>
                                         </div>
                                     </div> 
@@ -1167,6 +1106,79 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Tutup</button>
                     <button type="submit" name="submit" id="editdaftaranggota" class="submit btn btn-primary btn-outline mb5 btn-rounded"><span class="ico-save"></span> Simpan</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Upload Anggota (Template) Modal -->
+<div id="UploadAnggota" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="uploadAnggotaLabel" aria-hidden="true">
+    <form id="UploadAnggota-form" method="post" class="form" enctype="multipart/form-data" data-parsley-validate>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h3 class="semibold modal-title text-inverse" id="uploadAnggotaLabel">Upload Template Anggota</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        Silakan unggah file template berformat Excel (.xlsx). Unduh formatnya melalui tombol "Download Template".
+                    </div>
+                    <div class="row">
+                        <?php if ($USER_AKSES == "Administrator") { ?>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Daerah</label>
+                                <div id="selectize-wrapper8" style="position: relative;">
+                                    <select name="DAERAH_KEY" id="selectize-dropdown8" class="form-control" required data-parsley-required>
+                                        <option value="">-- Pilih Daerah --</option>
+                                        <?php foreach ($rowd as $rowDaerah) { extract($rowDaerah); ?>
+                                            <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Cabang</label>
+                                <div id="selectize-wrapper7" style="position: relative;">
+                                    <select name="CABANG_KEY" id="selectize-dropdown7" required="" class="form-control" data-parsley-required>
+                                        <option value="">-- Pilih Cabang --</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <?php } else { ?>
+                        <input type="hidden" name="CABANG_KEY" id="CABANG_KEY" value="<?= htmlspecialchars($USER_CABANG, ENT_QUOTES, 'UTF-8'); ?>">
+                        <?php } ?>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="fileTemplate">File Template Excel (.xlsx)</label>
+                                <input type="file" id="fileTemplate" name="fileTemplate" class="form-control" accept=".xlsx" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="importMode">Mode Import</label>
+                                <select id="importMode" name="mode" class="form-control" required>
+                                    <option value="insert">Penambahan data</option>
+                                    <option value="replace">Hapus semua data lama dan tambah baru</option>
+                                    <option value="upsert">Perbarui data jika ID sudah ada</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal"><span class="ico-cancel"></span> Tutup</button>
+                    <button type="submit" class="btn btn-primary btn-outline mb5 btn-rounded" id="btnUploadAnggota">
+                        <span class="ico-upload"></span> Upload
+                    </button>
                 </div>
             </div>
         </div>
