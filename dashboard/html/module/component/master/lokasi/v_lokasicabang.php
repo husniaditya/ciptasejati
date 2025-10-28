@@ -1,10 +1,6 @@
 <?php
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 
-$PPARAM = "Cabang";
-$params = ['GET', $PPARAM] + array_fill(0, 14, '');
-$getCabang = GetQueryParam("zsp_m_cabang", $params);
-
 $PPARAM = "Daerah";
 $params = ['GET', $PPARAM] + array_fill(0, 14, '');
 $getDaerah = GetQueryParam("zsp_m_cabang", $params);
@@ -47,53 +43,7 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                         <th>Map</th>
                     </tr>
                 </thead>
-                <tbody id="cabangdata">
-                    <?php
-                    foreach ($getCabang as $rowCabang) {
-                        extract($rowCabang);
-                        ?>
-                        <tr>
-                            <td align="center">
-                                <form id="eventoption-form-<?= uniqid(); ?>" method="post" class="form">
-                                    <div class="btn-group" style="margin-bottom:5px;">
-                                        <button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <?php if ($_SESSION["VIEW_LokasiCabang"] == "Y") {
-                                                ?>
-                                                <li><a data-toggle="modal" href="#ViewCabang" class="open-ViewCabang" style="color:#222222;" data-key="<?=$CABANG_KEY;?>" data-daerahid="<?=$DAERAH_KEY;?>" data-daerahdes="<?=$DAERAH_DESKRIPSI;?>" data-cabangid="<?=$CABANG_ID;?>" data-shortid="<?=$SHORT_ID;?>" data-desk="<?=$CABANG_DESKRIPSI;?>" data-pengurus="<?=$CABANG_PENGURUS;?>" data-sekre="<?=$CABANG_SEKRETARIAT;?>" data-map="<?=$CABANG_MAP;?>" data-lat="<?=$CABANG_LAT;?>" data-long="<?=$CABANG_LONG;?>"><i class="fa-solid fa-magnifying-glass"></i> Lihat</a></li>
-                                                <?php
-                                            }
-                                            if ($_SESSION["EDIT_LokasiCabang"] == "Y") {
-                                                ?>
-                                                <li><a data-toggle="modal" href="#EditCabang" class="open-EditCabang" style="color:cornflowerblue;" data-key="<?=$CABANG_KEY;?>" data-daerahid="<?=$DAERAH_KEY;?>" data-daerahdes="<?=$DAERAH_DESKRIPSI;?>" data-cabangid="<?=$CABANG_ID;?>" data-shortid="<?=$SHORT_ID;?>" data-desk="<?=$CABANG_DESKRIPSI;?>" data-pengurus="<?=$CABANG_PENGURUS;?>" data-sekre="<?=$CABANG_SEKRETARIAT;?>" data-map="<?=$CABANG_MAP;?>" data-lat="<?=$CABANG_LAT;?>" data-long="<?=$CABANG_LONG;?>"><span class="ico-edit"></span> Ubah</a></li>
-                                                <?php
-                                            }
-                                            if ($_SESSION["DELETE_LokasiCabang"] == "Y") {
-                                                ?>
-                                                <li class="divider"></li>
-                                                <li><a href="#" onclick="deleteCabang('<?= $CABANG_KEY;?>','deleteevent')" style="color:firebrick;"><i class="fa-regular fa-trash-can"></i> Hapus</a></li>
-                                                <?php
-                                            }
-                                            ?>
-                                        </ul>
-                                    </div>
-                                </form>
-                            </td>
-                            <td><?= $CABANG_ID; ?></td>
-                            <td><?= $DAERAH_DESKRIPSI; ?></td>
-                            <td><?= $CABANG_DESKRIPSI; ?></td>
-                            <td><?= $CABANG_SEKRETARIAT; ?></td>
-                            <td><?= $CABANG_PENGURUS; ?></td>
-                            <td><?= $CABANG_LAT; ?></td>
-                            <td><?= $CABANG_LONG; ?></td>
-                            <td>
-                                <iframe src="<?= $CABANG_MAP; ?>" width="250" height="150" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                            </td>
-                        </tr>
-                        <?php
-                    }
-                    ?>
-                </tbody>
+                <tbody id="cabangdata"></tbody>
             </table>
         </div>
     </div>
@@ -195,6 +145,9 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
         </div>
     </form>
 </div>
+
+            <!-- Page script: Lokasi Cabang (server-side DataTables) -->
+            <script src="module/javascript/component/master/lokasi/lokasicabang.js"></script>
 
 <div id="ViewCabang" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form id="ViewCabang-form" method="post" class="form" data-parsley-validate>

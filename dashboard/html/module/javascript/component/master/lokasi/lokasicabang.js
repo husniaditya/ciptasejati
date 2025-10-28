@@ -1,24 +1,41 @@
 
 
-// Cabang Table
-function callTable() {
-    $('#lokasicabang-table').DataTable({
-      responsive: true,
-      order: [],
-      // dom: 'Bfrtlip',
-      dom: 'Bfrtlip',
-      // "pageLength": 7,
-      scrollX: true,
-      scrollY: '400px', // Set the desired height here
-      buttons: [
-          'copy', 'csv', 'excel', 'pdf'
-      ]
-    });
-  }
+// Cabang Table (server-side DataTables)
+function initCabangTable() {
+  var table = $('#lokasicabang-table').DataTable({
+    responsive: true,
+    order: [],
+    dom: 'Bfrtlip',
+    processing: true,
+    serverSide: true,
+    scrollX: true,
+    scrollY: '400px',
+    buttons: [ 'copy', 'csv', 'excel', 'pdf' ],
+    ajax: {
+      url: 'module/ajax/master/lokasicabang/aj_tablecabang_ssp.php',
+      type: 'POST',
+      data: function(d){ d._ts = Date.now(); }
+    },
+    columns: [
+      { data: 0, orderable: false },
+      { data: 1 },
+      { data: 2 },
+      { data: 3 },
+      { data: 4 },
+      { data: 5 },
+      { data: 6 },
+      { data: 7 },
+      { data: 8, orderable: false }
+    ]
+  });
 
-// Call the function when the document is ready
+  return table;
+}
+
+// Initialize on ready
+var cabangDT;
 $(document).ready(function() {
-  callTable();
+  cabangDT = initCabangTable();
 });
 
 // Load Cabang Maps
@@ -73,21 +90,8 @@ function handleCabangForm(formId, successNotification, failedNotification, updat
           // Close the modal
           $(formId.replace("-form", "")).modal('hide');
 
-          // Call the reloadDataTable() function after inserting data to reload the DataTable
-          $.ajax({
-            type: 'POST',
-            url: 'module/ajax/master/lokasicabang/aj_tablecabang.php',
-            success: function(response) {
-              // Destroy the DataTable before updating
-              $('#lokasicabang-table').DataTable().destroy();
-              $("#cabangdata").html(response);
-              // Reinitialize Daerah Table
-              callTable();
-            },
-            error: function(xhr, status, error) {
-              // Handle any errors
-            }
-          });
+          // Reload server-side DataTable
+          try { if (cabangDT && cabangDT.ajax) cabangDT.ajax.reload(null, true); } catch(e) {}
         } else {
           // Display error notification
           failedNotification(response);
@@ -130,21 +134,8 @@ function deleteCabang(value1,value2) {
           // Display success notification
           DeleteNotification('Data berhasil dihapus!');
           
-          // Call the reloadDataTable() function after inserting data to reload the DataTable
-          $.ajax({
-            type: 'POST',
-            url: 'module/ajax/master/lokasicabang/aj_tablecabang.php',
-            success: function(response) {
-                // Destroy the DataTable before updating
-                $('#lokasicabang-table').DataTable().destroy();
-                $("#cabangdata").html(response);
-                // Reinitialize Table
-                callTable();
-            },
-            error: function(xhr, status, error) {
-              // Handle any errors
-            }
-          });
+          // Reload server-side DataTable
+          try { if (cabangDT && cabangDT.ajax) cabangDT.ajax.reload(null, false); } catch(e) {}
 
         } else {
           // Display error notification

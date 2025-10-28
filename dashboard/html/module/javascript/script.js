@@ -31,15 +31,89 @@ function togglePassword(passwordId) {
 }
 
 function loadAndRefresh() {
-    // Load content initially when the document is ready
-    $('#loadnotif').load('./module/ajax/header/aj_loadnotif.php');
-    $('#listnotif').load('./module/ajax/header/aj_listnotif.php');
+    // Smooth, non-overlapping polling with cache-busting and backoff
+    var notifState = {
+      lastCount: null,
+      timer: null,
+      inFlight: false,
+      errorStreak: 0,
+      baseDelay: 10000, // 10s on success
+      maxDelay: 60000   // cap at 60s on repeated errors
+    };
 
-    // Set up an interval to refresh content every 9 seconds
-    setInterval(function() {
-        $('#loadnotif').load('./module/ajax/header/aj_loadnotif.php');
-        $('#listnotif').load('./module/ajax/header/aj_listnotif.php');
-    }, 7000);
+    function getDelay() {
+      // Exponential backoff on errors, normal delay on success
+      var delay = notifState.baseDelay * Math.pow(2, notifState.errorStreak);
+      return Math.min(delay, notifState.maxDelay);
+    }
+
+    function refreshCount() {
+      // Cache-bust GET and update only if changed
+      return $.get('./module/ajax/header/aj_loadnotif.php', { _: Date.now() })
+        .then(function (html) {
+          var countText = $.trim(html);
+          var changed = (notifState.lastCount !== null && countText !== notifState.lastCount);
+          if (countText !== notifState.lastCount) {
+            $('#loadnotif').html(countText);
+            notifState.lastCount = countText;
+          }
+          return changed; // signal whether list should refresh
+        });
+    }
+
+    function refreshList(force) {
+      // Avoid re-render unless necessary or visible
+      var shouldRefresh = force || $('#listnotif').is(':visible');
+      if (!shouldRefresh) {
+        return $.Deferred().resolve(false).promise();
+      }
+      return $.get('./module/ajax/header/aj_listnotif.php', { _: Date.now() })
+        .then(function (html) {
+          $('#listnotif').html(html);
+          return true;
+        });
+    }
+
+    function scheduleNext() {
+      notifState.timer = setTimeout(poll, getDelay());
+    }
+
+    function poll() {
+      if (notifState.inFlight) {
+        // Skip if previous cycle still running
+        scheduleNext();
+        return;
+      }
+      notifState.inFlight = true;
+
+      $.when(refreshCount())
+        .then(function (changed) {
+          // Refresh list if count changed or the panel is visible
+          return refreshList(changed || $('#listnotif').is(':visible'));
+        })
+        .done(function () {
+          notifState.errorStreak = 0;
+        })
+        .fail(function () {
+          // Increase backoff on failures
+          notifState.errorStreak = Math.min(notifState.errorStreak + 1, 5);
+        })
+        .always(function () {
+          notifState.inFlight = false;
+          scheduleNext();
+        });
+    }
+
+    // Initial load: fetch count, then list once
+    $.when(refreshCount())
+      .then(function () { return refreshList(true); })
+      .always(function () { scheduleNext(); });
+
+    // When the window/tab regains focus, schedule an immediate refresh
+    $(window).on('focus', function () {
+      if (notifState.timer) { clearTimeout(notifState.timer); }
+      scheduleNext();
+    });
 }
 
 function savePPDToDrive(PPD_ID) { // Function Save PDF to Drive
