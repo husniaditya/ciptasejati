@@ -190,14 +190,49 @@ foreach ($dataRows as $idx => $row) {
 	$normDate = function($v){
 		$v = trim((string)($v ?? ''));
 		if ($v === '') return '';
-		try {
-			// Handle Excel serials
-			if (is_numeric($v) && (int)$v > 25569) {
-				$ts = ((int)$v - 25569) * 86400;
+
+		// 1) Numeric handling: Excel serials or timestamps
+		$n = is_numeric($v) ? (float)$v : null;
+		if ($n !== null) {
+			// Prefer PhpSpreadsheet converter if available and value looks like Excel serial
+			if ($n > 25569 && $n < 60000 && class_exists('PhpOffice\\PhpSpreadsheet\\Shared\\Date')) {
+				try {
+					$dt = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($n);
+					return $dt ? $dt->format('Y-m-d') : '';
+				} catch (Throwable $e) { /* fall through */ }
+			}
+			// Generic Excel serial fallback (days since 1970-01-01 = serial - 25569)
+			if ($n > 25569 && $n < 60000) {
+				$ts = (int)round(($n - 25569) * 86400);
 				return gmdate('Y-m-d', $ts);
 			}
-			return (new DateTime($v))->format('Y-m-d');
-		} catch (Throwable $e) { return ''; }
+			// Unix timestamp seconds or milliseconds
+			if ($n > 1000000000) {
+				if ($n > 100000000000) { $n = $n / 1000; }
+				return date('Y-m-d', (int)$n);
+			}
+		}
+
+		// 2) Try common explicit formats after normalizing separators
+		$s = str_replace(['/', '.'], '-', $v);
+		$formats = [
+			'Y-m-d', 'Y-m-d H:i:s',
+			'd-m-Y', 'd-m-Y H:i:s',
+			'd-m-y', 'd-m-y H:i:s',
+		];
+		foreach ($formats as $fmt) {
+			$dt = DateTime::createFromFormat($fmt, $s);
+			if ($dt instanceof DateTime) {
+				return $dt->format('Y-m-d');
+			}
+		}
+
+		// 3) Last resort: strtotime for other lenient cases
+		$ts = strtotime($v);
+		if ($ts !== false) {
+			return date('Y-m-d', $ts);
+		}
+		return '';
 	};
 	$normGender = function($v){
 		$v = trim((string)($v ?? ''));
