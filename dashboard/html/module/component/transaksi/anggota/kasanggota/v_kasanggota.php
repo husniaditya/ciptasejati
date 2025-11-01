@@ -4,54 +4,8 @@ $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 $USER_CABANG = $_SESSION["LOGINCAB_CS"];
 
 if ($USER_AKSES == "Administrator") {
-    $getKas = GetQuery("SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_RANTING,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
-    CASE
-        WHEN k.KAS_JUMLAH < 0 THEN CONCAT('(', FORMAT(ABS(k.KAS_JUMLAH), 0), ')')
-        ELSE FORMAT(k.KAS_JUMLAH, 0)
-    END AS FKAS_JUMLAH,
-    CASE 
-        WHEN k.KAS_DK = 'D' THEN 'Debit'
-        ELSE 'Kredit' 
-    END AS KAS_DK_DES,
-    CASE
-        WHEN k.KAS_DK = 'D' THEN 'color: green;'
-        ELSE 'color: red;' 
-    END AS KAS_COLOR
-    FROM t_kas k
-    LEFT JOIN m_anggota a ON k.ANGGOTA_KEY = a.ANGGOTA_KEY
-    LEFT JOIN m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID
-    LEFT JOIN m_cabang c ON k.CABANG_KEY = c.CABANG_KEY
-    LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-    LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
-    WHERE k.DELETION_STATUS = 0 AND a.DELETION_STATUS=0
-    GROUP BY k.KAS_ID
-    ORDER BY k.KAS_ID");
-    
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0");
 } else {
-    $getKas = GetQuery("SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
-    CASE
-        WHEN k.KAS_JUMLAH < 0 THEN CONCAT('(', FORMAT(ABS(k.KAS_JUMLAH), 0), ')')
-        ELSE FORMAT(k.KAS_JUMLAH, 0)
-    END AS FKAS_JUMLAH,
-    CASE 
-        WHEN k.KAS_DK = 'D' THEN 'Debit'
-        ELSE 'Kredit' 
-    END AS KAS_DK_DES,
-    CASE
-        WHEN k.KAS_DK = 'D' THEN 'color: green;'
-        ELSE 'color: red;' 
-    END AS KAS_COLOR
-    FROM t_kas k
-    LEFT JOIN m_anggota a ON k.ANGGOTA_KEY = a.ANGGOTA_KEY
-    LEFT JOIN m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID
-    LEFT JOIN m_cabang c ON k.CABANG_KEY = c.CABANG_KEY
-    LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
-    LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
-    WHERE k.DELETION_STATUS = 0 AND a.DELETION_STATUS=0 and a.CABANG_KEY = '$USER_CABANG'
-    GROUP BY k.KAS_ID
-    ORDER BY k.KAS_ID");
-
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 AND CABANG_KEY = '$USER_CABANG'");
 }
 
