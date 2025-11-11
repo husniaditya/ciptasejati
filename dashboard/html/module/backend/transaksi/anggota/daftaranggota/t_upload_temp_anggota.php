@@ -194,17 +194,25 @@ foreach ($dataRows as $idx => $row) {
 		// 1) Numeric handling: Excel serials or timestamps
 		$n = is_numeric($v) ? (float)$v : null;
 		if ($n !== null) {
-			// Prefer PhpSpreadsheet converter if available and value looks like Excel serial
-			if ($n > 25569 && $n < 60000 && class_exists('PhpOffice\\PhpSpreadsheet\\Shared\\Date')) {
+			// Excel serial numbers (1900 date system) typically fall in 1..100000+ range
+			// Handle pre-1970 values too (e.g., 22384 => 1961-04-13)
+			if ($n >= 1 && $n < 1000000) {
+				// Prefer PhpSpreadsheet conversion if available (handles leap-year bug correctly)
+				if (class_exists('PhpOffice\\PhpSpreadsheet\\Shared\\Date')) {
+					try {
+						$dt = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($n);
+						if ($dt) { return $dt->format('Y-m-d'); }
+					} catch (Throwable $e) { /* fallback below */ }
+				}
+				// Fallback conversion: base 1899-12-30 + n days (accounts for Excel's 1900 leap bug)
 				try {
-					$dt = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($n);
-					return $dt ? $dt->format('Y-m-d') : '';
-				} catch (Throwable $e) { /* fall through */ }
-			}
-			// Generic Excel serial fallback (days since 1970-01-01 = serial - 25569)
-			if ($n > 25569 && $n < 60000) {
-				$ts = (int)round(($n - 25569) * 86400);
-				return gmdate('Y-m-d', $ts);
+					$days = (int)floor($n);
+					$seconds = (int)round(($n - $days) * 86400);
+					$base = new DateTime('1899-12-30');
+					if ($days > 0) { $base->add(new DateInterval('P'.$days.'D')); }
+					if ($seconds > 0) { $base->add(new DateInterval('PT'.$seconds.'S')); }
+					return $base->format('Y-m-d');
+				} catch (Throwable $e) { /* fall through to other strategies */ }
 			}
 			// Unix timestamp seconds or milliseconds
 			if ($n > 1000000000) {
@@ -216,9 +224,10 @@ foreach ($dataRows as $idx => $row) {
 		// 2) Try common explicit formats after normalizing separators
 		$s = str_replace(['/', '.'], '-', $v);
 		$formats = [
-			'Y-m-d', 'Y-m-d H:i:s',
-			'd-m-Y', 'd-m-Y H:i:s',
-			'd-m-y', 'd-m-y H:i:s',
+			'Y-m-d', 'Y-m-d H:i:s', 'Y/m/d',
+			'd-m-Y', 'd-m-Y H:i:s', 'd/m/Y',
+			'd-m-y', 'd-m-y H:i:s', 'd/m/y',
+			'Ymd', 'dmY'
 		];
 		foreach ($formats as $fmt) {
 			$dt = DateTime::createFromFormat($fmt, $s);
@@ -328,10 +337,10 @@ foreach ($dataRows as $idx => $row) {
 				$ANGGOTA_PEKERJAAN,
 				$ANGGOTA_KELAMIN,
 				$ANGGOTA_TEMPAT_LAHIR,
-				$ANGGOTA_TANGGAL_LAHIR,
+				($ANGGOTA_TANGGAL_LAHIR ?: null),
 				$ANGGOTA_HP,
 				$ANGGOTA_EMAIL,
-				$ANGGOTA_JOIN,
+				($ANGGOTA_JOIN ?: null),
 				($ANGGOTA_RESIGN ?: null),
 				$ANGGOTA_AKSES,
 				$USER_ID,
@@ -357,11 +366,11 @@ foreach ($dataRows as $idx => $row) {
 					$ANGGOTA_PEKERJAAN,
 					$ANGGOTA_KELAMIN,
 					$ANGGOTA_TEMPAT_LAHIR,
-					$ANGGOTA_TANGGAL_LAHIR,
+					($ANGGOTA_TANGGAL_LAHIR ?: null),
 					$ANGGOTA_HP,
 					$ANGGOTA_EMAIL,
 					$idCardFileDestination,
-					$ANGGOTA_JOIN,
+					($ANGGOTA_JOIN ?: null),
 					$ANGGOTA_AKSES,
 					$USER_ID,
 					$localDateTime
@@ -388,11 +397,11 @@ foreach ($dataRows as $idx => $row) {
 				$ANGGOTA_PEKERJAAN,
 				$ANGGOTA_KELAMIN,
 				$ANGGOTA_TEMPAT_LAHIR,
-				$ANGGOTA_TANGGAL_LAHIR,
+				($ANGGOTA_TANGGAL_LAHIR ?: null),
 				$ANGGOTA_HP,
 				$ANGGOTA_EMAIL,
 				$idCardFileDestination,
-				$ANGGOTA_JOIN,
+				($ANGGOTA_JOIN ?: null),
 				$ANGGOTA_AKSES,
 				$USER_ID
 			]);

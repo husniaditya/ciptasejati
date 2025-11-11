@@ -55,6 +55,12 @@ function loadAndRefresh() {
           var changed = (notifState.lastCount !== null && countText !== notifState.lastCount);
           if (countText !== notifState.lastCount) {
             $('#loadnotif').html(countText);
+            // mirror count to footer badge (hide when 0)
+            if (countText && countText !== '0') {
+              $('#markAllBadge').text(countText).show();
+            } else {
+              $('#markAllBadge').text('').hide();
+            }
             notifState.lastCount = countText;
           }
           return changed; // signal whether list should refresh
@@ -572,6 +578,23 @@ $(document).ready(function() {
       }
     });
   });
+
+  // Mark all notifications as read
+  $('#header-dd-notification').on('click', '#markAllNotif', function (e) {
+    e.preventDefault();
+    $.ajax({
+      type: 'POST',
+      url: './module/ajax/header/aj_markallnotif.php',
+      dataType: 'json'
+    }).always(function () {
+      // Optimistic UI update
+      $('#listnotif .media').addClass('read').css('background-color', '');
+      $('#markAllBadge').text('').hide();
+      // Refresh count and list
+      $('#loadnotif').load('./module/ajax/header/aj_loadnotif.php');
+      $('#listnotif').load('./module/ajax/header/aj_listnotif.php');
+    });
+  });
 });
 
 function getNotif(obj) {
@@ -950,6 +973,7 @@ $(document).on("click", ".open-ApproveNotifUKTKoordinator", function () {
       // console.log('response', data);
 
       if (response.result.message === 'OK' && response.data && response.data.length > 0) {
+        var data = response.data[0];
         $("#viewAppNotifUKT_ID").val(data.UKT_ID);
         $("#viewAppNotifDAERAH_KEY").val(data.DAERAH_DESKRIPSI);
         $("#viewAppNotifCABANG_KEY").val(data.CABANG_DESKRIPSI);

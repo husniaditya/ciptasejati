@@ -58,7 +58,7 @@ $globalSearch = trim($_POST['search']['value'] ?? '');
 
 $from = " FROM t_kas k
 LEFT JOIN m_anggota a ON k.ANGGOTA_KEY = a.ANGGOTA_KEY AND a.DELETION_STATUS=0
-LEFT JOIN m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID AND a2.DELETION_STATUS=0
+LEFT JOIN m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID AND a2.DELETION_STATUS = 0 AND a2.ANGGOTA_STATUS = 0
 LEFT JOIN m_cabang c ON k.CABANG_KEY = c.CABANG_KEY
 LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
 LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID ";
@@ -173,7 +173,7 @@ echo json_encode([
   'requestId' => $requestId,
   'recordsTotal' => $recordsTotal,
   'recordsFiltered' => $recordsFiltered,
-  'data' => $data,
+  'data' => $data
 ]);
 exit;
 ?>

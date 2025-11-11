@@ -4,6 +4,27 @@ while ($rowLogo = $getLogo->fetch(PDO::FETCH_ASSOC)) {
     extract($rowLogo);
 }
 ?>
+<style>
+/* Keep the mark-as-read footer fixed while the list scrolls */
+#header-dd-notification .dropdown-body {
+    display: flex;
+    flex-direction: column;
+    /* Set a max height for the dropdown body; adjust as needed */
+    max-height: 420px;
+    overflow: hidden; /* prevent the body from scrolling */
+    padding: 0; /* we'll pad inner areas */
+}
+#header-dd-notification .dropdown-body .media-list {
+    flex: 1 1 auto;            /* take remaining height */
+    overflow-y: auto;          /* scroll only the list */
+    padding: 12px;             /* spacing around list */
+}
+#header-dd-notification .dropdown-footer {
+    background: #fff;
+    border-top: 1px solid #eee;
+    padding: 8px 12px;
+}
+</style>
 <!-- START navbar header -->
 <div class="navbar-header">
     <!-- Brand -->
@@ -72,6 +93,14 @@ while ($rowLogo = $getLogo->fetch(PDO::FETCH_ASSOC)) {
                     
                     <!-- Message list -->
                     <div class="media-list" id="listnotif"></div>
+                    <!-- Footer actions -->
+                    <div class="dropdown-footer" style="border-top: 1px solid #eee; padding: 8px 12px; text-align: right;">
+                        <a href="javascript:void(0);" id="markAllNotif" style="font-size: 12px;">
+                            <i class="fa-solid fa-check-double"></i>
+                            Tandai semua dibaca
+                            <span id="markAllBadge" class="label label-primary" style="margin-left:6px;"></span>
+                        </a>
+                    </div>
                     <!--/ Message list -->
                 </div>
             </div>
