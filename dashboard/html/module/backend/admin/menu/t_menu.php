@@ -3,6 +3,29 @@ require_once ("../../../../module/connection/conn.php");
 
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 
+if (isset($_POST["quicktoggle"])) {
+    try {
+        $MENU_KEY = $_POST["MENU_KEY"];
+        $FIELD = $_POST["FIELD"];
+        $VALUE = $_POST["VALUE"];
+
+        // Validate field name to prevent SQL injection
+        $allowed_fields = ['VIEW', 'ADD', 'EDIT', 'DELETE', 'APPROVE', 'PRINT'];
+        if (!in_array($FIELD, $allowed_fields)) {
+            echo "Invalid field";
+            exit;
+        }
+
+        GetQuery("UPDATE m_menuakses SET `$FIELD` = '$VALUE', `INPUT_BY` = '$USER_ID', `INPUT_DATE` = NOW() WHERE MENU_KEY = '$MENU_KEY'");
+
+        echo "Success";
+
+    } catch (Exception $e) {
+        echo "Caught Exception: " . $e->getMessage();
+    }
+    exit;
+}
+
 if (isset($_POST["updatemenu"])) {
 
     try {

@@ -491,6 +491,31 @@ function callTable() {
           });
       });
     });
+
+    // Auto-load cabang awal dropdown on page load if daerah is pre-selected (Pengurus Daerah)
+    if ($('.filterMutasiAnggota').length) {
+      var selectedDaerahAwal = $('#selectize-select3').val();
+      if (selectedDaerahAwal) {
+        $.ajax({
+          url: 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php',
+          method: 'POST',
+          data: { id: selectedDaerahAwal },
+          dataType: 'json',
+          success: function(data) {
+            var selectizeSelect2 = $('#selectize-select2')[0].selectize;
+            if (selectizeSelect2) {
+              selectizeSelect2.clearOptions();
+              selectizeSelect2.addOption(data);
+              selectizeSelect2.setValue('');
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error('Error auto-loading cabang awal for Mutasi:', status, error);
+          }
+        });
+      }
+    }
+
     // Event listener for the daerah tujuan dropdown change
     $('#selectize-select4').change(function() {
       // Initialize Selectize on the first dropdown
@@ -528,163 +553,168 @@ function callTable() {
           });
       });
     });
-  });
   
-  // View Anggota
-  $(document).on("click", ".open-ViewMutasiAnggota", function () {
+    // View Anggota
+    $(document).on("click", ".open-ViewMutasiAnggota", function () {
+      
+      var key = $(this).data('id');
+      var anggota = $(this).data('anggota');
+      
+      // Make an AJAX request to fetch additional data based on the selected value
+      $.ajax({
+        url: 'module/ajax/transaksi/anggota/mutasianggota/aj_getdetailmutasi.php',
+        method: 'POST',
+        data: { MUTASI_ID: key },
+        success: function(data) {
+          // console.log('response', data);
+          // Assuming data is a JSON object with the required information
+          // Make sure the keys match the fields in your returned JSON object
+          $("#viewDAERAH_AWAL_KEY").val(data.DAERAH_AWAL_KEY);
+          $("#viewDAERAH_AWAL_DES").val(data.DAERAH_AWAL_DES);
+          $("#viewCABANG_AWAL").val(data.CABANG_AWAL);
+          $("#viewCABANG_AWAL_DES").val(data.CABANG_AWAL_DES);
+          $("#viewDAERAH_TUJUAN_KEY").val(data.DAERAH_TUJUAN_KEY);
+          $("#viewDAERAH_TUJUAN_DES").val(data.DAERAH_TUJUAN_DES);
+          $("#viewCABANG_TUJUAN").val(data.CABANG_TUJUAN);
+          $("#viewCABANG_TUJUAN_DES").val(data.CABANG_TUJUAN_DES);
+          $("#viewANGGOTA_KEY").val(data.ANGGOTA_KEY);
+          $("#viewANGGOTA_ID").val(data.ANGGOTA_ID);
+          $("#viewANGGOTA_IDNAMA").val(data.ANGGOTA_IDNAMA);
+          $("#viewANGGOTA_NAMA").val(data.ANGGOTA_NAMA);
+          $("#viewANGGOTA_IDNAMA").val(data.ANGGOTA_IDNAMA);
+          $("#viewTINGKATAN_NAMA").val(data.TINGKATAN_NAMA);
+          $("#viewTINGKATAN_SEBUTAN").val(data.TINGKATAN_SEBUTAN);
+          $("#viewMUTASI_DESKRIPSI").val(data.MUTASI_DESKRIPSI);
+          $("#viewMUTASI_TANGGAL").val(data.MUTASI_TANGGAL);
+          $("#viewTANGGAL_EFEKTIF").val(data.TANGGAL_EFEKTIF);
+          $("#viewINPUT_BY").text(data.INPUT_BY);
+          $("#viewINPUT_DATE").text(data.INPUT_DATE);
+          $("#viewAPPROVE_BY").text(data.APPROVE_BY);
+          $("#viewMUTASI_APP_TANGGAL").text(data.MUTASI_APP_TANGGAL);
+          $("#viewMUTASI_STATUS_DES").html(data.MUTASI_STATUS_DES);
     
-    var key = $(this).data('id');
-    var anggota = $(this).data('anggota');
+          $.ajax({
+            type: "POST",
+            url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+            data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: data.CABANG_AWAL },
+            success: function(data){
+              $("#loadpicview").html(data);
+            }
+          });
     
-    // Make an AJAX request to fetch additional data based on the selected value
-    $.ajax({
-      url: 'module/ajax/transaksi/anggota/mutasianggota/aj_getdetailmutasi.php',
-      method: 'POST',
-      data: { MUTASI_ID: key },
-      success: function(data) {
-        // console.log('response', data);
-        // Assuming data is a JSON object with the required information
-        // Make sure the keys match the fields in your returned JSON object
-        $("#viewDAERAH_AWAL_KEY").val(data.DAERAH_AWAL_KEY);
-        $("#viewDAERAH_AWAL_DES").val(data.DAERAH_AWAL_DES);
-        $("#viewCABANG_AWAL").val(data.CABANG_AWAL);
-        $("#viewCABANG_AWAL_DES").val(data.CABANG_AWAL_DES);
-        $("#viewDAERAH_TUJUAN_KEY").val(data.DAERAH_TUJUAN_KEY);
-        $("#viewDAERAH_TUJUAN_DES").val(data.DAERAH_TUJUAN_DES);
-        $("#viewCABANG_TUJUAN").val(data.CABANG_TUJUAN);
-        $("#viewCABANG_TUJUAN_DES").val(data.CABANG_TUJUAN_DES);
-        $("#viewANGGOTA_KEY").val(data.ANGGOTA_KEY);
-        $("#viewANGGOTA_ID").val(data.ANGGOTA_ID);
-        $("#viewANGGOTA_IDNAMA").val(data.ANGGOTA_IDNAMA);
-        $("#viewANGGOTA_NAMA").val(data.ANGGOTA_NAMA);
-        $("#viewANGGOTA_IDNAMA").val(data.ANGGOTA_IDNAMA);
-        $("#viewTINGKATAN_NAMA").val(data.TINGKATAN_NAMA);
-        $("#viewTINGKATAN_SEBUTAN").val(data.TINGKATAN_SEBUTAN);
-        $("#viewMUTASI_DESKRIPSI").val(data.MUTASI_DESKRIPSI);
-        $("#viewMUTASI_TANGGAL").val(data.MUTASI_TANGGAL);
-        $("#viewTANGGAL_EFEKTIF").val(data.TANGGAL_EFEKTIF);
-        $("#viewINPUT_BY").text(data.INPUT_BY);
-        $("#viewINPUT_DATE").text(data.INPUT_DATE);
-        $("#viewAPPROVE_BY").text(data.APPROVE_BY);
-        $("#viewMUTASI_APP_TANGGAL").text(data.MUTASI_APP_TANGGAL);
-        $("#viewMUTASI_STATUS_DES").html(data.MUTASI_STATUS_DES);
-  
-        $.ajax({
-          type: "POST",
-          url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-          data: { ANGGOTA_KEY: data.ANGGOTA_ID, CABANG_KEY: data.CABANG_AWAL },
-          success: function(data){
-            $("#loadpicview").html(data);
-          }
-        });
-  
-      },
-      error: function(error) {
-        console.error('Error fetching data:', error);
-      }
+        },
+        error: function(error) {
+          console.error('Error fetching data:', error);
+        }
+      });
+      
+      // console.log(id);
     });
     
-    // console.log(id);
+    // Mutasi Anggota Filtering
+    // Attach debounced event handler to form inputs
+    $('.filterMutasiAnggota select, .filterMutasiAnggota input').on('change input', debounce(filterMutasiAnggotaEvent, 500));
+    function filterMutasiAnggotaEvent() {
+      // Your event handling code here
+      const daerahAwal = $('#selectize-select3').val();
+      const cabangAwal = $('#selectize-select2').val();
+      const daerahTujuan = $('#selectize-select4').val();
+      const cabangTujuan = $('#selectize-select5').val();
+      const tingkatan = $('#selectize-select').val();
+      const id = $('#filterANGGOTA_ID').val();
+      const nama = $('#filterANGGOTA_NAMA').val();
+      const status = $('#filterMUTASI_STATUS').val();
+    
+      // Create a data object to hold the form data
+      const formData = {
+        DAERAH_AWAL_KEY: daerahAwal,
+        CABANG_AWAL_KEY: cabangAwal,
+        DAERAH_TUJUAN_KEY: daerahTujuan,
+        CABANG_TUJUAN_KEY: cabangTujuan,
+        TINGKATAN_ID: tingkatan,
+        ANGGOTA_ID: id,
+        ANGGOTA_NAMA: nama,
+        MUTASI_STATUS: status
+      };
+    
+      $.ajax({
+        type: "POST",
+        url: 'module/ajax/laporan/anggota/mutasianggota/aj_tablemutasianggota.php',
+        data: formData,
+        success: function(response){
+          // Destroy the DataTable before updating
+          $('#mutasianggota-table').DataTable().destroy();
+          $("#mutasianggotadata").html(response);
+          // Reinitialize Sertifikat Table
+          callTable();
+        }
+      });
+      // console.log(formData);
+    }
+    
   });
+
+// ----- Function to reset form ----- //
+function clearForm() {
   
-  // Mutasi Anggota Filtering
-  // Attach debounced event handler to form inputs
-  $('.filterMutasiAnggota select, .filterMutasiAnggota input').on('change input', debounce(filterMutasiAnggotaEvent, 500));
-  function filterMutasiAnggotaEvent() {
-    // Your event handling code here
-    const daerahAwal = $('#selectize-select3').val();
-    const cabangAwal = $('#selectize-select2').val();
-    const daerahTujuan = $('#selectize-select4').val();
-    const cabangTujuan = $('#selectize-select5').val();
-    const tingkatan = $('#selectize-select').val();
-    const id = $('#filterANGGOTA_ID').val();
-    const nama = $('#filterANGGOTA_NAMA').val();
-    const status = $('#filterMUTASI_STATUS').val();
-  
-    // Create a data object to hold the form data
-    const formData = {
-      DAERAH_AWAL_KEY: daerahAwal,
-      CABANG_AWAL_KEY: cabangAwal,
-      DAERAH_TUJUAN_KEY: daerahTujuan,
-      CABANG_TUJUAN_KEY: cabangTujuan,
-      TINGKATAN_ID: tingkatan,
-      ANGGOTA_ID: id,
-      ANGGOTA_NAMA: nama,
-      MUTASI_STATUS: status
-    };
-  
-    $.ajax({
-      type: "POST",
-      url: 'module/ajax/laporan/anggota/mutasianggota/aj_tablemutasianggota.php',
-      data: formData,
-      success: function(response){
-        // Destroy the DataTable before updating
-        $('#mutasianggota-table').DataTable().destroy();
-        $("#mutasianggotadata").html(response);
-        // Reinitialize Sertifikat Table
-        callTable();
-      }
-    });
-    // console.log(formData);
-  }
-  
-  // ----- Function to reset form ----- //
-  function clearForm() {
-    
-    // Check if the administrator-specific elements exist
-    var isExist = $('#selectize-select3').length > 0 && $('#selectize-select2').length > 0;
-  
-    if (isExist) {
-      var selectizeInstance1 = $('#selectize-select3')[0].selectize;
-      var selectizeInstance2 = $('#selectize-select2')[0].selectize;
-      var selectizeInstance3 = $('#selectize-select')[0].selectize;
-      var selectizeInstance4 = $('#selectize-select4')[0].selectize;
-      var selectizeInstance5 = $('#selectize-select5')[0].selectize;
-      var selectizeInstance3 = $('#selectize-select')[0].selectize;
-    } else {
-      var selectizeInstance4 = $('#selectize-select4')[0].selectize;
-      var selectizeInstance5 = $('#selectize-select5')[0].selectize;
-  
-    }
-    
-    // Clear the fourth Selectize dropdown
-    if (selectizeInstance4) {
-      selectizeInstance4.clear();
-    }
-    // Clear the fifth Selectize dropdown
-    if (selectizeInstance5) {
-      selectizeInstance5.clear();
-    }
-    // Clear the second Selectize dropdown
-    if (selectizeInstance1) {
-      selectizeInstance1.clear();
-    }
-    // Clear the second Selectize dropdown
-    if (selectizeInstance2) {
-      selectizeInstance2.clear();
-    }
-    // Clear the third Selectize dropdown
+  // Clear all selectize dropdowns
+  // Check and clear daerah awal dropdown (Administrator and Pengurus Daerah only)
+  if ($('#selectize-select3').length > 0) {
+    var selectizeInstance3 = $('#selectize-select3')[0].selectize;
     if (selectizeInstance3) {
       selectizeInstance3.clear();
     }
-  
-    document.getElementById("filterMutasiAnggota").reset();
-    // Call the reloadDataTable() function after inserting data to reload the DataTable
-    $.ajax({
-      type: 'POST',
-      url: 'module/ajax/laporan/anggota/mutasianggota/aj_tablemutasianggota.php',
-      success: function(response) {
-        // Destroy the DataTable before updating
-        $('#mutasianggota-table').DataTable().destroy();
-        $("#mutasianggotadata").html(response);
-        // Reinitialize Sertifikat Table
-        callTable();
-      },
-      error: function(xhr, status, error) {
-        // Handle any errors
-      }
-    });
   }
-  // ----- End of function to reset form ----- //
   
-  // ----- End of Anggota Section ----- //
+  // Check and clear cabang awal dropdown (Administrator and Pengurus Daerah only)
+  if ($('#selectize-select2').length > 0) {
+    var selectizeInstance2 = $('#selectize-select2')[0].selectize;
+    if (selectizeInstance2) {
+      selectizeInstance2.clear();
+    }
+  }
+  
+  // Check and clear tingkatan dropdown (Administrator only)
+  if ($('#selectize-select').length > 0) {
+    var selectizeInstanceTingkat = $('#selectize-select')[0].selectize;
+    if (selectizeInstanceTingkat) {
+      selectizeInstanceTingkat.clear();
+    }
+  }
+  
+  // Check and clear daerah tujuan dropdown (all users)
+  if ($('#selectize-select4').length > 0) {
+    var selectizeInstance4 = $('#selectize-select4')[0].selectize;
+    if (selectizeInstance4) {
+      selectizeInstance4.clear();
+    }
+  }
+  
+  // Check and clear cabang tujuan dropdown (all users)
+  if ($('#selectize-select5').length > 0) {
+    var selectizeInstance5 = $('#selectize-select5')[0].selectize;
+    if (selectizeInstance5) {
+      selectizeInstance5.clear();
+    }
+  }
+
+  document.getElementById("filterMutasiAnggota").reset();
+  // Call the reloadDataTable() function after inserting data to reload the DataTable
+  $.ajax({
+    type: 'POST',
+    url: 'module/ajax/laporan/anggota/mutasianggota/aj_tablemutasianggota.php',
+    success: function(response) {
+      // Destroy the DataTable before updating
+      $('#mutasianggota-table').DataTable().destroy();
+      $("#mutasianggotadata").html(response);
+      // Reinitialize Sertifikat Table
+      callTable();
+    },
+    error: function(xhr, status, error) {
+      // Handle any errors
+    }
+  });
+}
+// ----- End of function to reset form ----- //
+
+// ----- End of Anggota Section ----- //

@@ -444,6 +444,30 @@ $(document).ready(function() {
   });
 
   // DROPDOWN KAS ANGGOTA
+  // Load cabang on page load if daerah is pre-selected (for Pengurus Daerah)
+  if ($('#selectize-select3').length > 0) {
+    var selectizeSelect3 = $('#selectize-select3')[0].selectize;
+    var initialDaerah = selectizeSelect3.getValue();
+    
+    if (initialDaerah) {
+      $.ajax({
+        url: 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php',
+        method: 'POST',
+        data: { id: initialDaerah },
+        dataType: 'json',
+        success: function (data) {
+          var selectizeSelect2 = $('#selectize-select2')[0].selectize;
+          selectizeSelect2.clearOptions();
+          selectizeSelect2.addOption(data);
+          selectizeSelect2.setValue('');
+        },
+        error: function(xhr, status, error) {
+          console.error('Error fetching cabang data on load:', status, error);
+        }
+      });
+    }
+  }
+
   // Event listener for the daerah awal dropdown change
   $('#selectize-select3').change(function() {
     // Initialize Selectize on the first dropdown

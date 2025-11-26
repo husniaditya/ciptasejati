@@ -465,6 +465,30 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
 
 
 $(document).ready(function() {
+  // Auto-load cabang dropdown on page load if daerah is pre-selected (Pengurus Daerah)
+  if ($('.filterAnggota').length) {
+    var selectedDaerah = $('#selectize-select3').val();
+    if (selectedDaerah) {
+      $.ajax({
+        url: 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php',
+        method: 'POST',
+        data: { id: selectedDaerah },
+        dataType: 'json',
+        success: function(data) {
+          var selectizeSelect2 = $('#selectize-select2')[0].selectize;
+          if (selectizeSelect2) {
+            selectizeSelect2.clearOptions();
+            selectizeSelect2.addOption(data);
+            selectizeSelect2.setValue('');
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('Error auto-loading cabang for anggota:', status, error);
+        }
+      });
+    }
+  }
+
   // add Anggota
   handleForm('#AddAnggota-form', SuccessNotification, FailedNotification, UpdateNotification);
 
@@ -481,6 +505,30 @@ $(document).ready(function() {
       dataType: 'json',
       success: function (data) {
         ['#selectize-dropdown7', '#selectize-dropdown5', '#selectize-dropdown3'].forEach(function(sel){
+          if ($(sel).length) {
+            var $sel = $(sel).selectize();
+            var inst = $sel[0].selectize;
+            inst.clearOptions();
+            inst.addOption(data);
+            inst.setValue('');
+          }
+        });
+      },
+      error: function(xhr, status, error) {
+        console.error('Error fetching cabang data:', status, error);
+      }
+    });
+  });
+
+  $(document).on('change', '#selectize-dropdown9', function() {
+    var selectedDaerah = $(this).val();
+    $.ajax({
+      url: 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php',
+      method: 'POST',
+      data: { id: selectedDaerah },
+      dataType: 'json',
+      success: function (data) {
+        ['#selectize-dropdown3'].forEach(function(sel){
           if ($(sel).length) {
             var $sel = $(sel).selectize();
             var inst = $sel[0].selectize;
@@ -765,6 +813,7 @@ $(document).on("click", ".open-EditAnggota", function () {
   $(".modal-body #editANGGOTA_HP").val(hp);
   $(".modal-body #editANGGOTA_EMAIL").val(email);
   $(".modal-body #editANGGOTA_JOIN").val(join);
+  $(".modal-body #datepicker45").val(join);
   $(".modal-body #datepicker47").val(resign);
   $(".modal-body #editANGGOTA_AGAMA").val(agama);
   $(".modal-body #editANGGOTA_AKSES").val(akses);

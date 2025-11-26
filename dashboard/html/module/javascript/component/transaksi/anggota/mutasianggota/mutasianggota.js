@@ -434,6 +434,30 @@ function handleFormPersetujuanMutasi(formId, successNotification, failedNotifica
 
 
 $(document).ready(function() {
+  // Auto-load cabang dropdown on page load if daerah is pre-selected (Pengurus Daerah)
+  if ($('.filterMutasiAnggota').length) {
+    var selectedDaerah = $('#selectize-select3').val();
+    if (selectedDaerah) {
+      $.ajax({
+        url: 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php',
+        method: 'POST',
+        data: { id: selectedDaerah },
+        dataType: 'json',
+        success: function(data) {
+          var selectizeSelect2 = $('#selectize-select2')[0].selectize;
+          if (selectizeSelect2) {
+            selectizeSelect2.clearOptions();
+            selectizeSelect2.addOption(data);
+            selectizeSelect2.setValue('');
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('Error auto-loading cabang for mutasi anggota:', status, error);
+        }
+      });
+    }
+  }
+
   // add Anggota
   handleForm('#AddMutasiAnggota-form', SuccessNotification, FailedNotification, UpdateNotification);
   // edit Anggota

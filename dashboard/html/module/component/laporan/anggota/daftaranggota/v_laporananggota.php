@@ -2,13 +2,21 @@
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 $USER_CABANG = $_SESSION["LOGINCAB_CS"];
+$USER_DAERAH = $_SESSION["LOGINDAR_CS"];
 
 if ($USER_AKSES == "Administrator") {
     $getAnggotadata = GetQuery("SELECT a.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_GELAR,t.TINGKATAN_SEBUTAN,DATE_FORMAT(a.ANGGOTA_TANGGAL_LAHIR, '%d %M %Y') TGL_LAHIR,DATE_FORMAT(a.ANGGOTA_JOIN, '%d %M %Y') TGL_JOIN,DATE_FORMAT(a.ANGGOTA_RESIGN, '%d %M %Y') TGL_RESIGN,RIGHT(a.ANGGOTA_ID,3) SHORT_ID, CASE WHEN ANGGOTA_STATUS = 0 THEN 'Aktif' WHEN ANGGOTA_STATUS = 1 THEN 'Non Aktif' ELSE 'Mutasi' END STATUS_DES FROM m_anggota a
     LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
     LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID");
-} else {
+} else if ($USER_AKSES == "Pengurus Daerah") {
+    $getAnggotadata = GetQuery("SELECT a.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_GELAR,t.TINGKATAN_SEBUTAN,DATE_FORMAT(a.ANGGOTA_TANGGAL_LAHIR, '%d %M %Y') TGL_LAHIR,DATE_FORMAT(a.ANGGOTA_JOIN, '%d %M %Y') TGL_JOIN,DATE_FORMAT(a.ANGGOTA_RESIGN, '%d %M %Y') TGL_RESIGN,RIGHT(a.ANGGOTA_ID,3) SHORT_ID, CASE WHEN ANGGOTA_STATUS = 0 THEN 'Aktif' WHEN ANGGOTA_STATUS = 1 THEN 'Non Aktif' ELSE 'Mutasi' END STATUS_DES FROM m_anggota a
+    LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
+    LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
+    LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
+    WHERE c.DAERAH_KEY = '$USER_DAERAH'");
+}
+else {
     $getAnggotadata = GetQuery("SELECT a.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,t.TINGKATAN_NAMA,t.TINGKATAN_GELAR,t.TINGKATAN_SEBUTAN,DATE_FORMAT(a.ANGGOTA_TANGGAL_LAHIR, '%d %M %Y') TGL_LAHIR,DATE_FORMAT(a.ANGGOTA_JOIN, '%d %M %Y') TGL_JOIN,DATE_FORMAT(a.ANGGOTA_RESIGN, '%d %M %Y') TGL_RESIGN,RIGHT(a.ANGGOTA_ID,3) SHORT_ID, CASE WHEN ANGGOTA_STATUS = 0 THEN 'Aktif' WHEN ANGGOTA_STATUS = 1 THEN 'Non Aktif' ELSE 'Mutasi' END STATUS_DES FROM m_anggota a
     LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
     LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
@@ -39,7 +47,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                 <form method="post" class="form filterAnggota" id="filterAnggota">
                     <div class="row">
                         <?php
-                        if ($USER_AKSES == "Administrator") {
+                        if ($USER_AKSES == "Administrator" || $USER_AKSES == "Pengurus Daerah") {
                             ?>
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -47,11 +55,26 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                     <select name="DAERAH_KEY" id="selectize-select3" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Daerah --</option>
                                         <?php
-                                        foreach ($rowd as $filterDaerah) {
-                                            extract($filterDaerah);
+                                        if ($USER_AKSES == "Pengurus Daerah") {
                                             ?>
-                                            <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                            <option value="<?= $USER_DAERAH; ?>" selected>
+                                                <?php
+                                                foreach ($rowd as $filterDaerah) {
+                                                    extract($filterDaerah);
+                                                    if ($DAERAH_KEY == $USER_DAERAH) {
+                                                        echo $DAERAH_DESKRIPSI;
+                                                    }
+                                                }
+                                                ?>
+                                            </option>
                                             <?php
+                                        } else {
+                                            foreach ($rowd as $filterDaerah) {
+                                                extract($filterDaerah);
+                                                ?>
+                                                <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                                <?php
+                                            }
                                         }
                                         ?>
                                     </select>

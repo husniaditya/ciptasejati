@@ -2,6 +2,7 @@
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 $USER_CABANG = $_SESSION["LOGINCAB_CS"];
+$USER_DAERAH = $_SESSION["LOGINDAR_CS"];
 
 $getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0 order by DAERAH_DESKRIPSI asc");
 $getPPDCabang = GetQuery("SELECT c.*,d.DAERAH_DESKRIPSI FROM m_cabang c
@@ -29,7 +30,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                 <form method="post" class="form filterPPD resettable-form" id="filterPPD">
                     <div class="row">
                         <?php
-                        if ($USER_AKSES == "Administrator") {
+                        if ($USER_AKSES == "Administrator" || $USER_AKSES == "Pengurus Daerah") {
                             ?>
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -37,11 +38,22 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                     <select name="DAERAH_KEY" id="selectize-select3" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Daerah --</option>
                                         <?php
-                                        foreach ($rowd as $filterDaerah) {
-                                            extract($filterDaerah);
-                                            ?>
-                                            <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
-                                            <?php
+                                        if ($USER_AKSES == "Pengurus Daerah") {
+                                            foreach ($rowd as $filterDaerah) {
+                                                extract($filterDaerah);
+                                                if ($DAERAH_KEY == $USER_DAERAH) {
+                                                    ?>
+                                                    <option value="<?= $DAERAH_KEY; ?>" selected><?= $DAERAH_DESKRIPSI; ?></option>
+                                                    <?php
+                                                }
+                                            }
+                                        } else {
+                                            foreach ($rowd as $filterDaerah) {
+                                                extract($filterDaerah);
+                                                ?>
+                                                <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                                <?php
+                                            }
                                         }
                                         ?>
                                     </select>
@@ -142,12 +154,19 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 <hr>
-<!-- START row -->
-<div class="row"> <!-- Add Data Button -->
-    <div class="col-lg-12">
-        <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddPPD btn btn-inverse btn-outline mb5 btn-rounded" href="#AddPPD"><i class="ico-plus2"></i> Tambah Data Pembukaan Pusat Daya</a>
+
+<?php
+if ($_SESSION["ADD_PembukaanPusatDaya"] == "Y") {
+    ?>
+    <!-- START row -->
+    <div class="row"> <!-- Add Data Button -->
+        <div class="col-lg-12">
+            <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddPPD btn btn-inverse btn-outline mb5 btn-rounded" href="#AddPPD"><i class="ico-plus2"></i> Tambah Data Pembukaan Pusat Daya</a>
+        </div>
     </div>
-</div>
+    <?php
+}
+?>
 <br>
 <!--/ END row -->
 

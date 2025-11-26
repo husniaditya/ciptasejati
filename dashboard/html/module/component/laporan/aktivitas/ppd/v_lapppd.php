@@ -2,6 +2,7 @@
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 $USER_CABANG = $_SESSION["LOGINCAB_CS"];
+$USER_DAERAH = $_SESSION["LOGINDAR_CS"];
 
 if ($USER_AKSES == "Administrator") {
     $getPPD = GetQuery("SELECT p.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_KEY,c.CABANG_DESKRIPSI,t2.TINGKATAN_NAMA PPD_TINGKATAN,t2.TINGKATAN_SEBUTAN PPD_SEBUTAN,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,c2.CABANG_DESKRIPSI PPD_CABANG,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL, p.PPD_FILE, u.UKT_ID, DATE_FORMAT(u.UKT_TANGGAL, '%d %M %Y') UKT_TANGGAL,
@@ -37,6 +38,42 @@ if ($USER_AKSES == "Administrator") {
     ORDER BY p.PPD_ID DESC");
 
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0");
+} else if ($USER_AKSES == "Pengurus Daerah") {
+    $getPPD = GetQuery("SELECT p.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_KEY,c.CABANG_DESKRIPSI,t2.TINGKATAN_NAMA PPD_TINGKATAN,t2.TINGKATAN_SEBUTAN PPD_SEBUTAN,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,c2.CABANG_DESKRIPSI PPD_CABANG,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL, p.PPD_FILE, u.UKT_ID, DATE_FORMAT(u.UKT_TANGGAL, '%d %M %Y') UKT_TANGGAL,
+    CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan'
+    ELSE 'Ulang'
+    END PPD_JENIS,
+    CASE WHEN p.PPD_APPROVE_PELATIH = 0 THEN 'fa-solid fa-spinner fa-spin'
+    WHEN p.PPD_APPROVE_PELATIH = 1 THEN 'fa-solid fa-check'
+    ELSE 'fa-solid fa-xmark'
+    END PELATIH_CLASS,
+    CASE WHEN p.PPD_APPROVE_GURU = 0 THEN 'fa-solid fa-spinner fa-spin'
+    WHEN p.PPD_APPROVE_GURU = 1 THEN 'fa-solid fa-check'
+    ELSE 'fa-solid fa-xmark'
+    END GURU_CLASS,
+    CASE WHEN p.PPD_APPROVE_PELATIH = 0 THEN 'badge badge-inverse'
+    WHEN p.PPD_APPROVE_PELATIH = 1 THEN 'badge badge-success' 
+    ELSE 'badge badge-danger' 
+    END AS PELATIH_BADGE,
+    CASE WHEN p.PPD_APPROVE_GURU = 0 THEN 'badge badge-inverse'
+    WHEN p.PPD_APPROVE_GURU = 1 THEN 'badge badge-success' 
+    ELSE 'badge badge-danger' 
+    END AS GURU_BADGE
+    FROM t_ppd p
+    LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0
+    LEFT JOIN m_anggota a2 ON p.INPUT_BY = a2.ANGGOTA_ID AND a2.ANGGOTA_STATUS = 0 AND a2.DELETION_STATUS = 0
+    LEFT JOIN m_cabang c ON p.CABANG_KEY = c.CABANG_KEY
+    LEFT JOIN m_cabang c2 ON p.PPD_LOKASI = c2.CABANG_KEY
+    LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
+    LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_LAMA = t.TINGKATAN_ID
+    LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID_BARU = t2.TINGKATAN_ID
+    LEFT JOIN t_ukt u ON u.TINGKATAN_ID = p.TINGKATAN_ID_BARU AND u.ANGGOTA_ID = p.ANGGOTA_ID AND u.DELETION_STATUS = 0 AND u.UKT_APP_KOOR = 1
+    WHERE p.DELETION_STATUS = 0 AND d.DAERAH_KEY = '$USER_DAERAH'
+    ORDER BY p.PPD_ID DESC");
+
+    $getAnggota = GetQuery("SELECT a.* FROM m_anggota a
+    LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
+    WHERE a.ANGGOTA_AKSES <> 'Administrator' AND a.ANGGOTA_STATUS = 0 AND c.DAERAH_KEY = '$USER_DAERAH'");
 } else if ($USER_AKSES == "Koordinator" || $USER_AKSES == "Pengurus") {
     $getPPD = GetQuery("SELECT p.*,d.DAERAH_KEY,d.DAERAH_DESKRIPSI,c.CABANG_KEY,c.CABANG_DESKRIPSI,t2.TINGKATAN_NAMA PPD_TINGKATAN,t2.TINGKATAN_SEBUTAN PPD_SEBUTAN,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,c2.CABANG_DESKRIPSI PPD_CABANG,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(p.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(p.PPD_TANGGAL, '%d %M %Y') PPD_TANGGAL, p.PPD_FILE, u.UKT_ID, DATE_FORMAT(u.UKT_TANGGAL, '%d %M %Y') UKT_TANGGAL,
     CASE WHEN p.PPD_JENIS = 0 THEN 'Kenaikan'
@@ -133,7 +170,7 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                 <form method="post" class="form filterLapPPD resettable-form" id="filterLapPPD">
                     <div class="row">
                         <?php
-                        if ($USER_AKSES == "Administrator") {
+                        if ($USER_AKSES == "Administrator" || $USER_AKSES == "Pengurus Daerah") {
                             ?>
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -143,8 +180,9 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
                                         <?php
                                         foreach ($rowd as $filterDaerah) {
                                             extract($filterDaerah);
+                                            $selected = ($USER_AKSES == "Pengurus Daerah" && $DAERAH_KEY == $USER_DAERAH) ? 'selected' : '';
                                             ?>
-                                            <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                            <option value="<?= $DAERAH_KEY; ?>" <?= $selected; ?>><?= $DAERAH_DESKRIPSI; ?></option>
                                             <?php
                                         }
                                         ?>

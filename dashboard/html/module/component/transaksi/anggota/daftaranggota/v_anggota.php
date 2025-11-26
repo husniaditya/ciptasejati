@@ -2,9 +2,11 @@
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 $USER_CABANG = $_SESSION["LOGINCAB_CS"];
+$USER_DAERAH = $_SESSION["LOGINDAR_CS"];
+
 // Note: Initial full data fetch removed. DataTables now uses server-side AJAX (aj_tableanggota_ssp.php)
 
-$getAkses = GetQuery("select * from p_param where KATEGORI = 'USER_AKSES' ORDER BY TEXT");
+$getAkses = GetQuery("select * from p_param where KATEGORI = 'USER_AKSES' ORDER BY CODE");
 $getDaerah = GetQuery("select * from m_daerah where DELETION_STATUS = 0 order by DAERAH_DESKRIPSI");
 $getCabang = GetQuery("select * from m_cabang where DELETION_STATUS = 0 order by CABANG_DESKRIPSI");
 $getTingkatan = GetQuery("select * from m_tingkatan where DELETION_STATUS = 0 order by TINGKATAN_LEVEL");
@@ -43,7 +45,7 @@ $rowakses = $getAkses->fetchAll(PDO::FETCH_ASSOC);
                 <form method="post" class="form filterAnggota" id="filterAnggota">
                     <div class="row">
                         <?php
-                        if ($USER_AKSES == "Administrator") {
+                        if ($USER_AKSES == "Administrator" || $USER_AKSES == "Pengurus Daerah") {
                             ?>
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -51,11 +53,26 @@ $rowakses = $getAkses->fetchAll(PDO::FETCH_ASSOC);
                                     <select name="DAERAH_KEY" id="selectize-select3" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Daerah --</option>
                                         <?php
-                                        foreach ($rowd as $filterDaerah) {
-                                            extract($filterDaerah);
+                                        if ($USER_AKSES == "Pengurus Daerah") {
                                             ?>
-                                            <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                            <option value="<?= $USER_DAERAH; ?>" selected>
+                                                <?php
+                                                foreach ($rowd as $filterDaerah) {
+                                                    extract($filterDaerah);
+                                                    if ($DAERAH_KEY == $USER_DAERAH) {
+                                                        echo $DAERAH_DESKRIPSI;
+                                                    }
+                                                }
+                                                ?>
+                                            </option>
                                             <?php
+                                        } else {
+                                            foreach ($rowd as $filterDaerah) {
+                                                extract($filterDaerah);
+                                                ?>
+                                                <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                                <?php
+                                            }
                                         }
                                         ?>
                                     </select>
@@ -146,7 +163,7 @@ $rowakses = $getAkses->fetchAll(PDO::FETCH_ASSOC);
 <hr>
 <!-- START row -->
 <?php
-if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
+if (isset($_SESSION["ADD_DaftarAnggota"]) && $_SESSION["ADD_DaftarAnggota"] == "Y") {
     ?>
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12">
@@ -411,8 +428,8 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                                 <div class="short-div">
                                     <div class="form-group">
                                         <label>Daerah<span class="text-danger">*</span></label>
-                                        <div id="selectize-wrapper" style="position: relative;">
-                                            <select name="DAERAH_KEY" id="selectize-dropdown" required="" class="form-control" data-parsley-required>
+                                        <div id="selectize-wrapper9" style="position: relative;">
+                                            <select name="DAERAH_KEY" id="selectize-dropdown9" required="" class="form-control" data-parsley-required>
                                                 <option value="">-- Pilih Daerah --</option>
                                                 <?php
                                                 foreach ($rowd as $rowDaerah) {
@@ -979,8 +996,19 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                             <div class="short-div">
                                 <div class="form-group">
                                     <label>No Urut Anggota<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" minlength="5" maxlength="5" oninput="validateInput(this)" required id="editANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Inputkan 5 digit nomor urut keanggotaan" data-parsley-required readonly>
-                                    <div id="warning-message-edit" style="color: red;"></div>
+                                    <?php
+                                    if ($USER_AKSES == "Administrator") {
+                                        ?>
+                                        <input type="text" class="form-control" minlength="5" maxlength="5" oninput="validateInput(this)" required id="editANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Inputkan 5 digit nomor urut keanggotaan" data-parsley-required>
+                                        <div id="warning-message-edit" style="color: red;"></div>
+                                        <?php
+                                    } else {
+                                        ?>
+                                        <input type="text" class="form-control" minlength="5" maxlength="5" oninput="validateInput(this)" required id="editANGGOTA_ID" name="ANGGOTA_ID" value="" placeholder="Inputkan 5 digit nomor urut keanggotaan" data-parsley-required readonly>
+                                        <div id="warning-message-edit" style="color: red;"></div>
+                                        <?php
+                                    }
+                                    ?>
                                 </div>
                             </div>
                         </div>
@@ -990,7 +1018,17 @@ if ($_SESSION["ADD_DaftarAnggota"] == "Y") {
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Tanggal Bergabung</label><span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="editANGGOTA_JOIN" name="ANGGOTA_JOIN" value="" data-parsley-required readonly>
+                                <?php
+                                if ($USER_AKSES == "Administrator") {
+                                    ?>
+                                    <input type="text" class="form-control" id="datepicker45" name="ANGGOTA_JOIN" placeholder="Pilih tanggal" readonly required data-parsley-required/>
+                                    <?php
+                                } else {
+                                    ?>
+                                    <input type="text" class="form-control" id="editANGGOTA_JOIN" name="ANGGOTA_JOIN" value="" data-parsley-required readonly>
+                                    <?php
+                                }
+                                ?>
                             </div> 
                         </div>
                         <div class="col-md-6">

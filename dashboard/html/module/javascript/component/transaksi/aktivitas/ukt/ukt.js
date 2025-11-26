@@ -112,6 +112,30 @@ $(function () {
     }, 'json');
   });
 
+  // Auto-load cabang dropdown on page load if daerah is pre-selected (Pengurus Daerah)
+  if ($('.filterUKT').length) {
+    var selectedDaerah = $('#selectize-select3').val();
+    if (selectedDaerah) {
+      $.ajax({
+        url: 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php',
+        method: 'POST',
+        data: { id: selectedDaerah },
+        dataType: 'json',
+        success: function(data) {
+          var selectizeSelect2 = $('#selectize-select2')[0].selectize;
+          if (selectizeSelect2) {
+            selectizeSelect2.clearOptions();
+            selectizeSelect2.addOption(data);
+            selectizeSelect2.setValue('');
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('Error auto-loading cabang for UKT:', status, error);
+        }
+      });
+    }
+  }
+
   // Check if the administrator-cabang elements exist
   var isValid = $('#selectize-dropdown10').length > 0;
 
@@ -1018,184 +1042,10 @@ $(function () {
   // UKT Filtering
   // UKT FILTERING TRANSACTION
   $('.filterUKT select, .filterUKT input').on('change input', debounce(filterUKTEvent, 500));
-  function filterUKTEvent() {
-    // Your event handling code here
-    const daerah = $('#selectize-select3').val();
-    const cabang = $('#selectize-select2').val();
-    const cabangUKT = $('#selectize-dropdown').val();
-    const ukt = $('#filterUKT_ID').val();
-    const id = $('#filterANGGOTA_ID').val();
-    const nama = $('#filterANGGOTA_NAMA').val();
-    const tingkatan = $('#selectize-select').val();
-    const tanggal = $('#datepicker43').val();
-
-    // Create a data object to hold the form data
-    const formData = {
-      DAERAH_KEY: daerah,
-      CABANG_KEY: cabang,
-      UKT_LOKASI: cabangUKT,
-      UKT_ID: ukt,
-      ANGGOTA_ID: id,
-      ANGGOTA_NAMA: nama,
-      TINGKATAN_ID: tingkatan,
-      UKT_TANGGAL: tanggal
-    };
-    
-    if ($.fn.DataTable.isDataTable('#ukt-table')) {
-      $.ajax({
-        type: "POST",
-        url: 'module/ajax/transaksi/aktivitas/ukt/aj_tableukt.php',
-        data: formData,
-        success: function(response){
-          // Destroy the DataTable before updating
-          $('#ukt-table').DataTable().destroy();
-          $("#uktdata").html(response);
-          // Reinitialize Sertifikat Table
-          callTable();
-        }
-      });
-    }
-
-    if ($.fn.DataTable.isDataTable('#lapukt-table')) {
-      $.ajax({
-        type: "POST",
-        url: 'module/ajax/transaksi/aktivitas/ukt/aj_tablelapukt.php',
-        data: formData,
-        success: function(response){
-          // Destroy the DataTable before updating
-          $('#lapukt-table').DataTable().destroy();
-          $("#uktdata").html(response);
-          // Reinitialize Sertifikat Table
-          callTable();
-        }
-      });
-    }
-    // console.log(formData);
-  }
   // UKT FILTERING KOORDINATOR
   $('.filterUKTKoordinator select, .filterUKTKoordinator input').on('change input', debounce(filterUKTKoordinatorEvent, 500));
-  function filterUKTKoordinatorEvent() {
-    // Your event handling code here
-    const daerah = $('#selectize-select3').val();
-    const cabang = $('#selectize-select2').val();
-    const cabangUKT = $('#selectize-dropdown').val();
-    const ukt = $('#filterUKT_ID').val();
-    const id = $('#filterANGGOTA_ID').val();
-    const nama = $('#filterANGGOTA_NAMA').val();
-    const tingkatan = $('#selectize-select').val();
-    const tanggal = $('#datepicker43').val();
-
-    // Create a data object to hold the form data
-    const formData = {
-      DAERAH_KEY: daerah,
-      CABANG_KEY: cabang,
-      UKT_LOKASI: cabangUKT,
-      UKT_ID: ukt,
-      ANGGOTA_ID: id,
-      ANGGOTA_NAMA: nama,
-      TINGKATAN_ID: tingkatan,
-      UKT_TANGGAL: tanggal
-    };
-
-    $.ajax({
-      type: "POST",
-      url: 'module/ajax/transaksi/aktivitas/ukt/aj_tableuktkoor.php',
-      data: formData,
-      success: function(response){
-        // Destroy the DataTable before updating
-        $('#uktkoor-table').DataTable().destroy();
-        $("#uktdatakoor").html(response);
-        // Reinitialize Sertifikat Table
-        callTable();
-      }
-    });
-    // console.log(formData);
-  }
   // UKT FILTERING GURU
   $('.filterUKTGuru select, .filterUKTGuru input').on('change input', debounce(filterUKTGuruEvent, 500));
-  function filterUKTGuruEvent() {
-    // Your event handling code here
-    const daerah = $('#selectize-select3').val();
-    const cabang = $('#selectize-select2').val();
-    const cabangUKT = $('#selectize-dropdown').val();
-    const ukt = $('#filterUKT_ID').val();
-    const id = $('#filterANGGOTA_ID').val();
-    const nama = $('#filterANGGOTA_NAMA').val();
-    const tingkatan = $('#selectize-select').val();
-    const tanggal = $('#datepicker43').val();
-
-    // Create a data object to hold the form data
-    const formData = {
-      DAERAH_KEY: daerah,
-      CABANG_KEY: cabang,
-      UKT_LOKASI: cabangUKT,
-      UKT_ID: ukt,
-      ANGGOTA_ID: id,
-      ANGGOTA_NAMA: nama,
-      TINGKATAN_ID: tingkatan,
-      UKT_TANGGAL: tanggal
-    };
-
-    $.ajax({
-      type: "POST",
-      url: 'module/ajax/transaksi/aktivitas/ukt/aj_tableuktguru.php',
-      data: formData,
-      success: function(response){
-        // Destroy the DataTable before updating
-        $('#ukt-table').DataTable().destroy();
-        $("#uktdataguru").html(response);
-        // Reinitialize Sertifikat Table
-        callTable();
-      }
-    });
-    // console.log(formData);
-  }
-
-  // ----- Function to reset form ----- //
-  function clearForm() {
-  
-    // Check if the administrator-specific elements exist
-    var isExist = $('#selectize-select3').length > 0 && $('#selectize-select2').length > 0;
-
-    if (isExist) {
-      var selectizeInstance1 = $('#selectize-select3')[0].selectize;
-      var selectizeInstance2 = $('#selectize-select2')[0].selectize;
-      var selectizeInstance3 = $('#selectize-select')[0].selectize;
-      var selectizeInstance5 = $('#selectize-dropdown')[0].selectize;
-    } else {
-      var selectizeInstance3 = $('#selectize-select')[0].selectize;
-      var selectizeInstance5 = $('#selectize-dropdown')[0].selectize;
-
-    }
-    
-    // Clear the fifth Selectize dropdown
-    if (selectizeInstance5) {
-      selectizeInstance5.clear();
-    }
-    // Clear the second Selectize dropdown
-    if (selectizeInstance1) {
-      selectizeInstance1.clear();
-    }
-    // Clear the second Selectize dropdown
-    if (selectizeInstance2) {
-      selectizeInstance2.clear();
-    }
-    // Clear the third Selectize dropdown
-    if (selectizeInstance3) {
-      selectizeInstance3.clear();
-    }
-    
-    // JavaScript to reset all forms with the class "resettable-form"
-    document.querySelectorAll('.resettable-form').forEach(form => form.reset());
-    if ($.fn.DataTable.isDataTable('#ukt-table, #lapukt-table')) {
-      filterUKTEvent();
-    }
-    if ($.fn.DataTable.isDataTable('#uktkoor-table')) {
-    filterUKTKoordinatorEvent();
-    }
-  }
-  
-  // ----- End of function to reset form ----- //
 
   // ----- End of UKT Section ----- //
 
@@ -1217,3 +1067,182 @@ $(function () {
     }
   });
 });
+
+// ----- Function to reset form (Global scope) ----- //
+function clearForm() {
+  
+  // Check if the administrator-specific elements exist
+  var isExist = $('#selectize-select3').length > 0 && $('#selectize-select2').length > 0;
+
+  if (isExist) {
+    var selectizeInstance1 = $('#selectize-select3')[0].selectize;
+    var selectizeInstance2 = $('#selectize-select2')[0].selectize;
+    var selectizeInstance3 = $('#selectize-select')[0].selectize;
+    var selectizeInstance5 = $('#selectize-dropdown')[0].selectize;
+  } else {
+    var selectizeInstance3 = $('#selectize-select')[0].selectize;
+    var selectizeInstance5 = $('#selectize-dropdown')[0].selectize;
+
+  }
+  
+  // Clear the fifth Selectize dropdown
+  if (selectizeInstance5) {
+    selectizeInstance5.clear();
+  }
+  // Clear the second Selectize dropdown
+  if (selectizeInstance1) {
+    selectizeInstance1.clear();
+  }
+  // Clear the second Selectize dropdown
+  if (selectizeInstance2) {
+    selectizeInstance2.clear();
+  }
+  // Clear the third Selectize dropdown
+  if (selectizeInstance3) {
+    selectizeInstance3.clear();
+  }
+  
+  // JavaScript to reset all forms with the class "resettable-form"
+  document.querySelectorAll('.resettable-form').forEach(form => form.reset());
+  if ($.fn.DataTable.isDataTable('#ukt-table, #lapukt-table')) {
+    filterUKTEvent();
+  }
+  if ($.fn.DataTable.isDataTable('#uktkoor-table')) {
+    filterUKTKoordinatorEvent();
+  }
+}
+// ----- End of function to reset form ----- //
+
+// UKT Filter Event Functions (Global scope)
+function filterUKTEvent() {
+  // Your event handling code here
+  const daerah = $('#selectize-select3').val();
+  const cabang = $('#selectize-select2').val();
+  const cabangUKT = $('#selectize-dropdown').val();
+  const ukt = $('#filterUKT_ID').val();
+  const id = $('#filterANGGOTA_ID').val();
+  const nama = $('#filterANGGOTA_NAMA').val();
+  const tingkatan = $('#selectize-select').val();
+  const tanggal = $('#datepicker43').val();
+
+  // Create a data object to hold the form data
+  const formData = {
+    DAERAH_KEY: daerah,
+    CABANG_KEY: cabang,
+    UKT_LOKASI: cabangUKT,
+    UKT_ID: ukt,
+    ANGGOTA_ID: id,
+    ANGGOTA_NAMA: nama,
+    TINGKATAN_ID: tingkatan,
+    UKT_TANGGAL: tanggal
+  };
+  
+  if ($.fn.DataTable.isDataTable('#ukt-table')) {
+    $.ajax({
+      type: "POST",
+      url: 'module/ajax/transaksi/aktivitas/ukt/aj_tableukt.php',
+      data: formData,
+      success: function(response){
+        // Destroy the DataTable before updating
+        $('#ukt-table').DataTable().destroy();
+        $("#uktdata").html(response);
+        // Reinitialize Sertifikat Table
+        callTable();
+      }
+    });
+  }
+
+  if ($.fn.DataTable.isDataTable('#lapukt-table')) {
+    $.ajax({
+      type: "POST",
+      url: 'module/ajax/transaksi/aktivitas/ukt/aj_tablelapukt.php',
+      data: formData,
+      success: function(response){
+        // Destroy the DataTable before updating
+        $('#lapukt-table').DataTable().destroy();
+        $("#uktdata").html(response);
+        // Reinitialize Sertifikat Table
+        callTable();
+      }
+    });
+  }
+  // console.log(formData);
+}
+
+function filterUKTKoordinatorEvent() {
+  // Your event handling code here
+  const daerah = $('#selectize-select3').val();
+  const cabang = $('#selectize-select2').val();
+  const cabangUKT = $('#selectize-dropdown').val();
+  const ukt = $('#filterUKT_ID').val();
+  const id = $('#filterANGGOTA_ID').val();
+  const nama = $('#filterANGGOTA_NAMA').val();
+  const tingkatan = $('#selectize-select').val();
+  const tanggal = $('#datepicker43').val();
+
+  // Create a data object to hold the form data
+  const formData = {
+    DAERAH_KEY: daerah,
+    CABANG_KEY: cabang,
+    UKT_LOKASI: cabangUKT,
+    UKT_ID: ukt,
+    ANGGOTA_ID: id,
+    ANGGOTA_NAMA: nama,
+    TINGKATAN_ID: tingkatan,
+    UKT_TANGGAL: tanggal
+  };
+
+  $.ajax({
+    type: "POST",
+    url: 'module/ajax/transaksi/aktivitas/ukt/aj_tableuktkoor.php',
+    data: formData,
+    success: function(response){
+      // Destroy the DataTable before updating
+      $('#uktkoor-table').DataTable().destroy();
+      $("#uktdatakoor").html(response);
+      // Reinitialize Sertifikat Table
+      callTable();
+    }
+  });
+  // console.log(formData);
+}
+
+function filterUKTGuruEvent() {
+  // Your event handling code here
+  const daerah = $('#selectize-select3').val();
+  const cabang = $('#selectize-select2').val();
+  const cabangUKT = $('#selectize-dropdown').val();
+  const ukt = $('#filterUKT_ID').val();
+  const id = $('#filterANGGOTA_ID').val();
+  const nama = $('#filterANGGOTA_NAMA').val();
+  const tingkatan = $('#selectize-select').val();
+  const tanggal = $('#datepicker43').val();
+
+  // Create a data object to hold the form data
+  const formData = {
+    DAERAH_KEY: daerah,
+    CABANG_KEY: cabang,
+    UKT_LOKASI: cabangUKT,
+    UKT_ID: ukt,
+    ANGGOTA_ID: id,
+    ANGGOTA_NAMA: nama,
+    TINGKATAN_ID: tingkatan,
+    UKT_TANGGAL: tanggal
+  };
+
+  $.ajax({
+    type: "POST",
+    url: 'module/ajax/transaksi/aktivitas/ukt/aj_tableuktguru.php',
+    data: formData,
+    success: function(response){
+      // Destroy the DataTable before updating
+      $('#ukt-table').DataTable().destroy();
+      $("#uktdataguru").html(response);
+      // Reinitialize Sertifikat Table
+      callTable();
+    }
+  });
+  // console.log(formData);
+}
+
+// Modal event handlers moved inside document ready above

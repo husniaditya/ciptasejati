@@ -7,6 +7,7 @@ if (!function_exists('h')) {
 
 $USER_AKSES  = $_SESSION['LOGINAKS_CS'] ?? '';
 $USER_CABANG = $_SESSION['LOGINCAB_CS'] ?? '';
+$USER_DAERAH = $_SESSION['LOGINDAR_CS'] ?? '';
 
 // DataTables params
 $draw   = isset($_POST['draw']) ? (int)$_POST['draw'] : 1;
@@ -65,11 +66,13 @@ LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID_BARU = t2.TINGKATAN_ID
 LEFT JOIN t_ukt u ON u.TINGKATAN_ID = p.TINGKATAN_ID_BARU AND u.ANGGOTA_ID = p.ANGGOTA_ID AND u.DELETION_STATUS = 0 AND u.UKT_APP_KOOR = 1 ";
 
 $where = ["p.DELETION_STATUS = 0"]; // base
-if ($USER_AKSES !== 'Administrator') {
+if ($USER_AKSES === 'Pengurus Daerah') {
+    $where[] = "d.DAERAH_KEY = '" . str_replace("'","''", $USER_DAERAH) . "'";
+} elseif ($USER_AKSES !== 'Administrator') {
     $where[] = "p.CABANG_KEY = '" . str_replace("'","''", $USER_CABANG) . "'";
 }
-// Apply filters (admin can filter daerah/cabang)
-if ($USER_AKSES === 'Administrator') {
+// Apply filters (admin and pengurus daerah can filter daerah/cabang)
+if ($USER_AKSES === 'Administrator' || $USER_AKSES === 'Pengurus Daerah') {
     if ($DAERAH_KEY !== '') { $where[] = "d.DAERAH_KEY LIKE CONCAT('%','" . str_replace("'","''",$DAERAH_KEY) . "','%')"; }
     if ($CABANG_KEY !== '') { $where[] = "p.CABANG_KEY LIKE CONCAT('%','" . str_replace("'","''",$CABANG_KEY) . "','%')"; }
 }
@@ -91,7 +94,11 @@ $whereSql = empty($where) ? '' : (' WHERE ' . implode(' AND ', $where));
 
 // Counts
 $whereTotal = ["p.DELETION_STATUS = 0"];
-if ($USER_AKSES !== 'Administrator') { $whereTotal[] = "p.CABANG_KEY = '" . str_replace("'","''", $USER_CABANG) . "'"; }
+if ($USER_AKSES === 'Pengurus Daerah') {
+    $whereTotal[] = "d.DAERAH_KEY = '" . str_replace("'","''", $USER_DAERAH) . "'";
+} elseif ($USER_AKSES !== 'Administrator') {
+    $whereTotal[] = "p.CABANG_KEY = '" . str_replace("'","''", $USER_CABANG) . "'";
+}
 $sqlTotal = "SELECT COUNT(*) AS cnt $fromJoin " . (empty($whereTotal) ? '' : (' WHERE ' . implode(' AND ', $whereTotal)));
 $totalRes = GetQuery($sqlTotal);
 $recordsTotal = (int)($totalRes ? ($totalRes->fetch(PDO::FETCH_ASSOC)['cnt'] ?? 0) : 0);

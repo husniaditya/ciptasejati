@@ -16,28 +16,28 @@ $MENU_NAMA  = $_POST['MENU_NAMA']  ?? '';
 $USER_AKSES = $_POST['USER_AKSES'] ?? '';
 $LEN_GRUP_ID = strlen($GRUP_ID);
 
-// Column mapping for ordering (skip Action column index 0)
+// Column mapping for ordering
 $columns = [
-	'u.MENU_ID',       // 1
-	'u.MENU_NAMA',     // 2
-	'm.USER_AKSES',    // 3
-	'm.VIEW',          // 4
-	'm.ADD',           // 5
-	'm.EDIT',          // 6
-	'm.DELETE',        // 7
-	'm.APPROVE',       // 8
-	'm.PRINT',         // 9
-	'a.ANGGOTA_NAMA',  // 10 (INPUT_BY)
-	'm.INPUT_DATE'     // 11
+	'u.MENU_ID',       // 0
+	'u.MENU_NAMA',     // 1
+	'm.USER_AKSES',    // 2
+	'm.VIEW',          // 3
+	'm.ADD',           // 4
+	'm.EDIT',          // 5
+	'm.DELETE',        // 6
+	'm.APPROVE',       // 7
+	'm.PRINT',         // 8
+	'a.ANGGOTA_NAMA',  // 9 (INPUT_BY)
+	'm.INPUT_DATE'     // 10
 ];
 
-$orderColIdx = isset($_POST['order'][0]['column']) ? (int)$_POST['order'][0]['column'] : 1;
+$orderColIdx = isset($_POST['order'][0]['column']) ? (int)$_POST['order'][0]['column'] : 0;
 $orderDir = isset($_POST['order'][0]['dir']) && strtolower($_POST['order'][0]['dir']) === 'desc' ? 'DESC' : 'ASC';
-if ($orderColIdx < 1 || $orderColIdx > count($columns)) { $orderColIdx = 1; }
-$orderBy = $columns[$orderColIdx - 1] . ' ' . $orderDir; // adjust since mapping starts at first data col
+if ($orderColIdx < 0 || $orderColIdx >= count($columns)) { $orderColIdx = 0; }
+$orderBy = $columns[$orderColIdx] . ' ' . $orderDir;
 
 // Base FROM/JOIN
-$fromJoin = " FROM m_menuakses m\nLEFT JOIN m_menu u ON m.MENU_ID = u.MENU_ID\nLEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID ";
+$fromJoin = " FROM m_menuakses m\nLEFT JOIN m_menu u ON m.MENU_ID = u.MENU_ID\nLEFT JOIN m_anggota a ON m.INPUT_BY = a.ANGGOTA_ID AND a.DELETION_STATUS = 0 AND a.ANGGOTA_STATUS = 0";
 
 // WHERE clause
 $where = [];
@@ -84,40 +84,27 @@ try {
 
 $data = [];
 while ($r = $rowsRes->fetch(PDO::FETCH_ASSOC)) {
-	// Action dropdown (Edit only)
-	ob_start();
-	?>
-	<form id="eventoption-form-<?= htmlspecialchars($r['MENU_KEY']) ?>" method="post" class="form">
-		<div class="btn-group" style="margin-bottom:5px;">
-			<button type="button" class="btn btn-primary btn-outline btn-rounded mb5 dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
-			<ul class="dropdown-menu" role="menu">
-				<li><a data-toggle="modal" href="#EditMenu" class="open-EditMenu" data-id="<?= htmlspecialchars($r['MENU_KEY']) ?>" style="color:cornflowerblue;"><span class="ico-edit"></span> Ubah Akses</a></li>
-			</ul>
-		</div>
-	</form>
-	<?php
-	$actionHtml = ob_get_clean();
-
-	// Helper to render read-only switch based on 'Y' or 'N'
-	$switch = function($val) {
+	// Helper to render clickable switch based on 'Y' or 'N'
+	$switch = function($val, $field, $menuKey) {
 		$checked = ($val === 'Y') ? 'checked' : '';
 		return '<label class="switch switch-primary">'
-			 . '<input type="checkbox" ' . $checked . ' disabled>'
-			 . '<span class="switch" disabled></span>'
+			 . '<input type="checkbox" class="quick-toggle" ' . $checked . ' '
+			 . 'data-menu-key="' . htmlspecialchars($menuKey) . '" '
+			 . 'data-field="' . $field . '">'
+			 . '<span class="switch"></span>'
 			 . '</label>';
 	};
 
 	$row = [
-		$actionHtml,
 		htmlspecialchars($r['MENU_ID'] ?? ''),
 		htmlspecialchars($r['MENU_NAMA'] ?? ''),
 		htmlspecialchars($r['USER_AKSES'] ?? ''),
-		$switch($r['VIEW'] ?? 'N'),
-		$switch($r['ADD'] ?? 'N'),
-		$switch($r['EDIT'] ?? 'N'),
-		$switch($r['DELETE'] ?? 'N'),
-		$switch($r['APPROVE'] ?? 'N'),
-		$switch($r['PRINT'] ?? 'N'),
+		$switch($r['VIEW'] ?? 'N', 'VIEW', $r['MENU_KEY']),
+		$switch($r['ADD'] ?? 'N', 'ADD', $r['MENU_KEY']),
+		$switch($r['EDIT'] ?? 'N', 'EDIT', $r['MENU_KEY']),
+		$switch($r['DELETE'] ?? 'N', 'DELETE', $r['MENU_KEY']),
+		$switch($r['APPROVE'] ?? 'N', 'APPROVE', $r['MENU_KEY']),
+		$switch($r['PRINT'] ?? 'N', 'PRINT', $r['MENU_KEY']),
 		htmlspecialchars($r['INPUT_BY'] ?? ''),
 		htmlspecialchars($r['INPUT_DATE'] ?? '')
 	];
