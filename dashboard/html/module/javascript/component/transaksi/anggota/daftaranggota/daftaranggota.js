@@ -774,70 +774,65 @@ $(document).on("click", ".open-EditAnggota", function () {
   previewContainer.style.display = 'none';
   
   var key = $(this).data('key');
-  var id = $(this).data('id');
-  var anggotaid = $(this).data('shortid');
-  var daerahkey = $(this).data('daerahkey');
-  var daerahdes = $(this).data('daerahdes');
-  var cabangkey = $(this).data('cabangkey');
-  var cabangdes = $(this).data('cabangdes');
-  var ranting = $(this).data('ranting');
-  var tingkatanid = $(this).data('tingkatanid');
-  var tingkatannama = $(this).data('tingkatannama');
-  var ktp = $(this).data('ktp');
-  var nama = $(this).data('nama');
-  var alamat = $(this).data('alamat');
-  var pekerjaan = $(this).data('pekerjaan');
-  var kelamin = $(this).data('kelamin');
-  var tempatlahir = $(this).data('tempatlahir');
-  var tanggallahir = $(this).data('tanggallahir');
-  var hp = $(this).data('hp');
-  var email = $(this).data('email');
-  var join = $(this).data('join');
-  var resign = $(this).data('resign');
-  var agama = $(this).data('agama');
-  var akses = $(this).data('akses');
-  var status = $(this).data('status');
   
-  // Set the values in the modal input fields
-  $(".modal-body #editANGGOTA_KEY").val(key);
-  $(".modal-body #editANGGOTA_ID").val(anggotaid);
-  $(".modal-body #selectize-dropdown6")[0].selectize.setValue(tingkatanid);
-  $(".modal-body #editANGGOTA_RANTING").val(ranting);
-  $(".modal-body #editANGGOTA_KTP").val(ktp);
-  $(".modal-body #editANGGOTA_NAMA").val(nama);
-  $(".modal-body #editANGGOTA_ALAMAT").val(alamat);
-  $(".modal-body #editANGGOTA_PEKERJAAN").val(pekerjaan);
-  $(".modal-body #editANGGOTA_KELAMIN").val(kelamin);
-  $(".modal-body #editANGGOTA_TEMPAT_LAHIR").val(tempatlahir);
-  $(".modal-body #datepicker46").val(tanggallahir);
-  $(".modal-body #editANGGOTA_HP").val(hp);
-  $(".modal-body #editANGGOTA_EMAIL").val(email);
-  $(".modal-body #editANGGOTA_JOIN").val(join);
-  $(".modal-body #datepicker45").val(join);
-  $(".modal-body #datepicker47").val(resign);
-  $(".modal-body #editANGGOTA_AGAMA").val(agama);
-  $(".modal-body #editANGGOTA_AKSES").val(akses);
-  $(".modal-body #editANGGOTA_STATUS").val(status);
-
+  // Fetch data via AJAX
   $.ajax({
     type: "POST",
-    url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-    data: { ANGGOTA_KEY: id, CABANG_KEY: cabangkey },
-    success: function(data){
-      $("#loadpicedit").html(data);
+    url: "module/ajax/transaksi/anggota/daftaranggota/aj_getdataanggota.php",
+    data: { ANGGOTA_KEY: key },
+    dataType: 'json',
+    success: function(response) {
+      if (response.success && response.data) {
+        var data = response.data;
+        
+        // Set the values in the modal input fields
+        $(".modal-body #editANGGOTA_KEY").val(data.ANGGOTA_KEY);
+        $(".modal-body #editANGGOTA_ID").val(data.SHORT_ID);
+        $(".modal-body #selectize-dropdown6")[0].selectize.setValue(data.TINGKATAN_ID);
+        $(".modal-body #editANGGOTA_RANTING").val(data.ANGGOTA_RANTING);
+        $(".modal-body #editANGGOTA_KTP").val(data.ANGGOTA_KTP);
+        $(".modal-body #editANGGOTA_NAMA").val(data.ANGGOTA_NAMA);
+        $(".modal-body #editANGGOTA_ALAMAT").val(data.ANGGOTA_ALAMAT);
+        $(".modal-body #editANGGOTA_PEKERJAAN").val(data.ANGGOTA_PEKERJAAN);
+        $(".modal-body #editANGGOTA_KELAMIN").val(data.ANGGOTA_KELAMIN);
+        $(".modal-body #editANGGOTA_TEMPAT_LAHIR").val(data.ANGGOTA_TEMPAT_LAHIR);
+        $(".modal-body #datepicker46").val(data.ANGGOTA_TANGGAL_LAHIR);
+        $(".modal-body #editANGGOTA_HP").val(data.ANGGOTA_HP);
+        $(".modal-body #editANGGOTA_EMAIL").val(data.ANGGOTA_EMAIL);
+        $(".modal-body #editANGGOTA_JOIN").val(data.ANGGOTA_JOIN);
+        $(".modal-body #datepicker45").val(data.ANGGOTA_JOIN);
+        $(".modal-body #datepicker47").val(data.ANGGOTA_RESIGN);
+        $(".modal-body #editANGGOTA_AGAMA").val(data.ANGGOTA_AGAMA);
+        $(".modal-body #editANGGOTA_AKSES").val(data.ANGGOTA_AKSES);
+        $(".modal-body #editANGGOTA_STATUS").val(data.ANGGOTA_STATUS);
+
+        // Load picture
+        $.ajax({
+          type: "POST",
+          url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+          data: { ANGGOTA_KEY: data.ANGGOTA_KEY, CABANG_KEY: data.CABANG_KEY },
+          success: function(picData) {
+            $("#loadpicedit").html(picData);
+          }
+        });
+
+        // Handle daerah/cabang dropdowns for Administrator
+        var isExist = $('#selectize-dropdown4').length > 0 && $('#selectize-dropdown5').length > 0;
+        if (isExist) {
+          $(".modal-body #selectize-dropdown4")[0].selectize.setValue(data.DAERAH_KEY);
+          // Wait for the options in the second dropdown to be populated before setting its value
+          setTimeout(function () {
+            $(".modal-body #selectize-dropdown5")[0].selectize.setValue(data.CABANG_KEY);
+          }, 200); // You may need to adjust the delay based on your application's behavior
+        }
+      } else {
+        alert('Gagal memuat data: ' + (response.message || 'Unknown error'));
+      }
+    },
+    error: function(xhr, status, error) {
+      alert('Error saat memuat data: ' + error);
     }
   });
-
-  
-  var isExist = $('#selectize-dropdown4').length > 0 && $('#selectize-dropdown5').length > 0;
-
-  if (isExist) {
-    $(".modal-body #selectize-dropdown4")[0].selectize.setValue(daerahkey);
-    // Wait for the options in the second dropdown to be populated before setting its value
-    setTimeout(function () {
-        $(".modal-body #selectize-dropdown5")[0].selectize.setValue(cabangkey);
-    }, 200); // You may need to adjust the delay based on your application's behavior
-  }
 });
 
 // Anggota Filtering
