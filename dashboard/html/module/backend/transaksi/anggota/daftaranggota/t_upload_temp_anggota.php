@@ -155,6 +155,20 @@ $logInsertIds = [];
 // In replace mode, accumulate rows for batch insert to speed up
 $batchRowsReplace = [];
 
+// Parse duplicate choices from user if provided
+$duplicateChoices = [];
+if (isset($_POST['duplicate_choices'])) {
+    $choicesJson = $_POST['duplicate_choices'];
+    $choices = json_decode($choicesJson, true);
+    if (is_array($choices)) {
+        foreach ($choices as $choice) {
+            if (isset($choice['anggota_id']) && isset($choice['action'])) {
+                $duplicateChoices[$choice['anggota_id']] = $choice['action'];
+            }
+        }
+    }
+}
+
 // If replace mode, delete all existing data for this cabang before processing
 if ($mode === 'replace') {
 	try {
@@ -304,10 +318,42 @@ foreach ($dataRows as $idx => $row) {
 	// Check duplicate (skip in replace mode; data already cleared)
 	$existing = null; $existingKey = null;
 	if ($mode !== 'replace') {
-		$check = GetQuery("select ANGGOTA_KEY, ANGGOTA_ID, ANGGOTA_NAMA from m_anggota where ANGGOTA_ID = '$ANGGOTA_ID_FULL' and CABANG_KEY = '$CABANG_KEY' limit 1");
+		$check = GetQuery("select ANGGOTA_KEY, ANGGOTA_ID, ANGGOTA_NAMA, ANGGOTA_KTP, ANGGOTA_HP, ANGGOTA_EMAIL, ANGGOTA_JOIN, ANGGOTA_TANGGAL_LAHIR from m_anggota where ANGGOTA_ID = '$ANGGOTA_ID_FULL' and CABANG_KEY = '$CABANG_KEY' limit 1");
 		$existing = $check->fetch(PDO::FETCH_ASSOC) ?: null;
 		$existingKey = $existing['ANGGOTA_KEY'] ?? null;
-		if ($existingKey && !$isUpsert) {
+		
+		// If record exists, check if all key fields are identical
+		if ($existingKey) {
+			$existingNama = trim((string)($existing['ANGGOTA_NAMA'] ?? ''));
+			$existingKtp = trim((string)($existing['ANGGOTA_KTP'] ?? ''));
+			$existingHp = trim((string)($existing['ANGGOTA_HP'] ?? ''));
+			$existingEmail = trim((string)($existing['ANGGOTA_EMAIL'] ?? ''));
+			$existingJoin = trim((string)($existing['ANGGOTA_JOIN'] ?? ''));
+			$existingTglLahir = trim((string)($existing['ANGGOTA_TANGGAL_LAHIR'] ?? ''));
+			
+			// Skip if all key fields are identical (case-insensitive comparison for text fields)
+			if (strcasecmp($existingNama, $ANGGOTA_NAMA) === 0 &&
+				strcasecmp($existingKtp, $ANGGOTA_KTP) === 0 &&
+				strcasecmp($existingHp, $ANGGOTA_HP) === 0 &&
+				strcasecmp($existingEmail, $ANGGOTA_EMAIL) === 0 &&
+				$existingJoin === $ANGGOTA_JOIN &&
+				$existingTglLahir === $ANGGOTA_TANGGAL_LAHIR) {
+				// Data is identical, skip this row silently
+				continue;
+			}
+		}
+		
+		// If user made a choice about this duplicate
+		if ($existingKey && isset($duplicateChoices[$ANGGOTA_ID_FULL])) {
+			$userChoice = $duplicateChoices[$ANGGOTA_ID_FULL];
+			if ($userChoice === 'existing') {
+				// Skip this row - keep existing data
+				continue;
+			}
+			// If 'new', treat as update - set flag to update existing record
+			$isUpsert = true;
+		} else if ($existingKey && !$isUpsert) {
+			// No user choice and not in upsert mode - fail
 			$existId = $existing['ANGGOTA_ID'] ?? $ANGGOTA_ID_FULL;
 			$existNama = $existing['ANGGOTA_NAMA'] ?? '-';
 			$failed++;

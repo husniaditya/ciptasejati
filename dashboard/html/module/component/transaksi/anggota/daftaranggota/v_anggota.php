@@ -21,16 +21,6 @@ $rowt = $getTingkatan->fetchAll(PDO::FETCH_ASSOC);
 $rowakses = $getAkses->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<style>
-    .dataTables_wrapper {
-        width: 100%;
-        overflow: auto;
-    }
-    table.dataTable {
-        width: 100% !important;
-    }
-</style>
-
 <div class="panel-group" id="accordion1">
     <div class="panel panel-default">
         <a data-toggle="collapse" data-parent="#accordion1" href="#collapseOne" class="collapsed">
@@ -1221,4 +1211,40 @@ if (isset($_SESSION["ADD_DaftarAnggota"]) && $_SESSION["ADD_DaftarAnggota"] == "
             </div>
         </div>
     </form>
+</div>
+
+<!-- Duplicate Resolution Modal -->
+<div id="DuplicateResolutionModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="duplicateResolutionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h3 class="semibold modal-title text-inverse" id="duplicateResolutionLabel">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Data Duplikat Ditemukan
+                </h3>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info">
+                    <strong>Perhatian!</strong> Beberapa ID Anggota dalam file template sudah terdaftar di sistem. Silakan pilih data mana yang ingin Anda gunakan untuk setiap duplikat.
+                </div>
+                <div id="duplicateList">
+                    <!-- Duplicate rows will be inserted here dynamically -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-teal btn-outline mb5 btn-rounded" id="btnSelectAllExisting">
+                    <i class="fa-solid fa-database"></i> Pilih Semua Data Lama
+                </button>
+                <button type="button" class="btn btn-inverse btn-outline mb5 btn-rounded" id="btnSelectAllNew">
+                    <i class="fa-solid fa-file-import"></i> Pilih Semua Data Baru
+                </button>
+                <button type="button" class="btn btn-danger btn-outline mb5 btn-rounded" data-dismiss="modal">
+                    <span class="ico-cancel"></span> Batal
+                </button>
+                <button type="button" class="btn btn-success btn-outline mb5 btn-rounded" id="btnProceedWithSelection">
+                    <i class="fa-solid fa-check"></i> Lanjutkan Upload
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
