@@ -53,6 +53,7 @@
 
 <!-- Theme stylesheet -->
 <link rel="stylesheet" href="../../css/custom.css">
+<link rel="stylesheet" href="../stylesheet/custom.css">
 <!--/ Theme stylesheet -->
 
 

@@ -16,6 +16,7 @@ if (!function_exists('h')) {
 }
 
 $USER_CABANG = $_SESSION['LOGINCAB_CS'] ?? '';
+$USER_DAERAH = $_SESSION['LOGINDAR_CS'] ?? '';
 $USER_AKSES = $_SESSION['LOGINAKS_CS'] ?? '';
 
 // DataTables params
@@ -71,15 +72,26 @@ LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
 LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
 LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID ";
 
-// Base WHERE
+// Base WHERE with three-tier access control
 $where = [];
-if ($USER_AKSES !== 'Administrator') {
+if ($USER_AKSES === 'Administrator') {
+    // Administrator: full access, no restrictions
+} else if ($USER_AKSES === 'Pengurus Daerah') {
+    // Pengurus Daerah: restricted to their daerah
+    $where[] = "d.DAERAH_KEY = '" . str_replace("'", "''", $USER_DAERAH) . "'";
+    $where[] = "a.ANGGOTA_AKSES != 'Administrator'";
+} else {
+    // Others: restricted to their cabang
     $where[] = "a.CABANG_KEY = '" . str_replace("'", "''", $USER_CABANG) . "'";
     $where[] = "a.ANGGOTA_AKSES != 'Administrator'";
 }
-// Apply filters (LIKE for flexible matching)
-if ($DAERAH_KEY !== '') { $where[] = "d.DAERAH_KEY LIKE CONCAT('%','" . str_replace("'","''",$DAERAH_KEY) . "','%')"; }
-if ($CABANG_KEY !== '') { $where[] = "a.CABANG_KEY LIKE CONCAT('%','" . str_replace("'","''",$CABANG_KEY) . "','%')"; }
+
+// Filter by daerah/cabang: Admin and Pengurus Daerah can filter
+if ($USER_AKSES === 'Administrator' || $USER_AKSES === 'Pengurus Daerah') {
+    if ($DAERAH_KEY !== '') { $where[] = "d.DAERAH_KEY LIKE CONCAT('%','" . str_replace("'","''",$DAERAH_KEY) . "','%')"; }
+    if ($CABANG_KEY !== '') { $where[] = "a.CABANG_KEY LIKE CONCAT('%','" . str_replace("'","''",$CABANG_KEY) . "','%')"; }
+}
+// Common filters
 if ($TINGKATAN_ID !== '') { $where[] = "a.TINGKATAN_ID LIKE CONCAT('%','" . str_replace("'","''",$TINGKATAN_ID) . "','%')"; }
 if ($ANGGOTA_ID !== '') { $where[] = "a.ANGGOTA_ID LIKE CONCAT('%','" . str_replace("'","''",$ANGGOTA_ID) . "','%')"; }
 if ($ANGGOTA_RANTING !== '') { $where[] = "a.ANGGOTA_RANTING LIKE CONCAT('%','" . str_replace("'","''",$ANGGOTA_RANTING) . "','%')"; }
@@ -97,7 +109,12 @@ $whereSql = empty($where) ? '' : (' WHERE ' . implode(' AND ', $where));
 
 // recordsTotal (before filters, but respecting role scope)
 $whereTotal = [];
-if ($USER_AKSES !== 'Administrator') {
+if ($USER_AKSES === 'Administrator') {
+    // No additional restriction
+} else if ($USER_AKSES === 'Pengurus Daerah') {
+    $whereTotal[] = "d.DAERAH_KEY = '" . str_replace("'", "''", $USER_DAERAH) . "'";
+    $whereTotal[] = "a.ANGGOTA_AKSES != 'Administrator'";
+} else {
     $whereTotal[] = "a.CABANG_KEY = '" . str_replace("'", "''", $USER_CABANG) . "'";
     $whereTotal[] = "a.ANGGOTA_AKSES != 'Administrator'";
 }
@@ -178,32 +195,8 @@ while ($r = $rowsRes->fetch(PDO::FETCH_ASSOC)) {
                 <?php if ($_SESSION['EDIT_DaftarAnggota'] == "Y") { ?>
                 <li><a data-toggle="modal" href="#EditAnggota" class="open-EditAnggota" style="color:cornflowerblue;"
                     data-key="<?= h($r['ANGGOTA_KEY']); ?>"
-                    data-id="<?= h($r['ANGGOTA_ID']); ?>"
-                    data-shortid="<?= h($r['SHORT_ID']); ?>"
-                    data-daerahkey="<?= h($r['DAERAH_KEY']); ?>"
-                    data-daerahdes="<?= h($r['DAERAH_DESKRIPSI']); ?>"
-                    data-cabangkey="<?= h($r['CABANG_KEY']); ?>"
-                    data-cabangdes="<?= h($r['CABANG_DESKRIPSI']); ?>"
-                    data-tingkatanid="<?= h($r['TINGKATAN_ID']); ?>"
-                    data-tingkatannama="<?= h($r['TINGKATAN_NAMA']); ?>"
-                    data-ktp="<?= h($r['ANGGOTA_KTP']); ?>"
-                    data-nama="<?= h($r['ANGGOTA_NAMA']); ?>"
-                    data-alamat="<?= h($r['ANGGOTA_ALAMAT']); ?>"
-                    data-pekerjaan="<?= h($r['ANGGOTA_PEKERJAAN']); ?>"
-                    data-agama="<?= h($r['ANGGOTA_AGAMA']); ?>"
-                    data-kelamin="<?= h($r['ANGGOTA_KELAMIN']); ?>"
-                    data-tempatlahir="<?= h($r['ANGGOTA_TEMPAT_LAHIR']); ?>"
-                    data-tanggallahir="<?= h($r['ANGGOTA_TANGGAL_LAHIR']); ?>"
-                    data-hp="<?= h($r['ANGGOTA_HP']); ?>"
-                    data-email="<?= h($r['ANGGOTA_EMAIL']); ?>"
-                    data-join="<?= h($r['ANGGOTA_JOIN']); ?>"
-                    data-resign="<?= h($r['ANGGOTA_RESIGN']); ?>"
-                    data-akses="<?= h($r['ANGGOTA_AKSES']); ?>"
-                    data-status="<?= h($r['ANGGOTA_STATUS']); ?>"
-                    data-statusdes="<?= h($r['STATUS_DES']); ?>"
-                    data-ranting="<?= h($r['ANGGOTA_RANTING']); ?>"
                 ><span class="ico-edit"></span> Ubah</a></li>
-                <?php } ?>
+                
                 <?php if (!empty($r['TINGKATAN_LEVEL']) && (int)$r['TINGKATAN_LEVEL'] > 1) { ?>
                 <li><a data-toggle="modal" href="#CardId" class="open-CardId" style="color:darkgoldenrod;"
                     data-key="<?= h(encodeIdToBase64($r['ANGGOTA_KEY'])); ?>"
@@ -212,6 +205,7 @@ while ($r = $rowsRes->fetch(PDO::FETCH_ASSOC)) {
                     data-kta="<?= h($r['ANGGOTA_KTA'] ?? ''); ?>"
                     data-nama="<?= h($r['ANGGOTA_NAMA']); ?>"
                 ><i class="fa-regular fa-id-card"></i> Kartu ID Anggota</a></li>
+                <?php } ?>
                 <?php } ?>
                 <?php if ($_SESSION['DELETE_DaftarAnggota'] == "Y") { ?>
                 <li class="divider"></li>

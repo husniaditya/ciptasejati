@@ -1114,6 +1114,57 @@ function filterLapPPDEvent() {
   if (lapppdDt) { lapppdDt.ajax.reload(null, true); }
 }
 
+// Auto-load cabang dropdown on page load for PPD if daerah is pre-selected (Pengurus Daerah)
+$(document).ready(function() {
+  // Auto-load for standard PPD filter
+  if ($('.filterPPD').length) {
+    var selectedDaerah = $('#selectize-select3').val();
+    if (selectedDaerah) {
+      $.ajax({
+        url: 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php',
+        method: 'POST',
+        data: { id: selectedDaerah },
+        dataType: 'json',
+        success: function(data) {
+          var selectizeSelect2 = $('#selectize-select2')[0].selectize;
+          if (selectizeSelect2) {
+            selectizeSelect2.clearOptions();
+            selectizeSelect2.addOption(data);
+            selectizeSelect2.setValue('');
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('Error auto-loading cabang for PPD:', status, error);
+        }
+      });
+    }
+  }
+  
+  // Auto-load for laporan PPD filter
+  if ($('.filterLapPPD').length) {
+    var selectedDaerah = $('#selectize-select3').val();
+    if (selectedDaerah) {
+      $.ajax({
+        url: 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php',
+        method: 'POST',
+        data: { id: selectedDaerah },
+        dataType: 'json',
+        success: function(data) {
+          var selectizeSelect2 = $('#selectize-select2')[0].selectize;
+          if (selectizeSelect2) {
+            selectizeSelect2.clearOptions();
+            selectizeSelect2.addOption(data);
+            selectizeSelect2.setValue('');
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('Error auto-loading cabang for laporan PPD:', status, error);
+        }
+      });
+    }
+  }
+});
+
 // Attach debounced event handlers
 $('.filterPPD select, .filterPPD input').on('change input', debounce(filterPPDEvent, 500));
 $('.filterPPDKoordinator select, .filterPPDKoordinator input').on('change input', debounce(filterPPDKoordinatorEvent, 500));

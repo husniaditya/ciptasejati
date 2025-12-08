@@ -43,8 +43,7 @@ function callTable() {
       }
     },
     columnDefs: [
-      { targets: 0, orderable: false, searchable: false },
-      { targets: [4,5,6,7,8,9], orderable: false, searchable: false } // switches
+      { targets: [3,4,5,6,7,8], orderable: false, searchable: false } // switches
     ]
   });
 }
@@ -109,6 +108,47 @@ $(document).ready(function() {
   callTable();
   // edit Profil
   handleForm('#EditMenu-form', UpdateNotification, FailedNotification, UpdateNotification);
+  
+  // Quick toggle handler
+  $(document).on('change', '.quick-toggle', function() {
+    var checkbox = $(this);
+    var menuKey = checkbox.data('menu-key');
+    var field = checkbox.data('field');
+    var value = checkbox.is(':checked') ? 'Y' : 'N';
+    
+    // Disable checkbox during request
+    checkbox.prop('disabled', true);
+    
+    $.ajax({
+      type: 'POST',
+      url: 'module/backend/admin/menu/t_menu.php',
+      data: {
+        quicktoggle: 'true',
+        MENU_KEY: menuKey,
+        FIELD: field,
+        VALUE: value
+      },
+      success: function(response) {
+        if (response === 'Success') {
+          UpdateNotification('Akses berhasil diubah!');
+          checkbox.prop('disabled', false);
+          // Reload table to update INPUT_BY and INPUT_DATE
+          if (menuTable) { menuTable.ajax.reload(null, false); }
+        } else {
+          FailedNotification(response);
+          // Revert checkbox state on error
+          checkbox.prop('checked', !checkbox.is(':checked'));
+          checkbox.prop('disabled', false);
+        }
+      },
+      error: function(xhr, status, error) {
+        FailedNotification('Terjadi kesalahan saat mengubah akses');
+        // Revert checkbox state on error
+        checkbox.prop('checked', !checkbox.is(':checked'));
+        checkbox.prop('disabled', false);
+      }
+    });
+  });
 });
 
 // Edit Profil

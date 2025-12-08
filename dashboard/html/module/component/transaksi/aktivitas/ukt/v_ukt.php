@@ -2,6 +2,7 @@
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 $USER_CABANG = $_SESSION["LOGINCAB_CS"];
+$USER_DAERAH = $_SESSION["LOGINDAR_CS"];
 
 if ($USER_AKSES == "Administrator") {
     $getUKT = GetQuery("SELECT u.*,d.DAERAH_DESKRIPSI,d2.DAERAH_DESKRIPSI UKT_DAERAH,c.CABANG_DESKRIPSI,c2.CABANG_DESKRIPSI UKT_CABANG,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.ANGGOTA_RANTING,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(u.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,DATE_FORMAT(u.UKT_TANGGAL, '%d %M %Y') UKT_TANGGAL,
@@ -130,7 +131,7 @@ $rowp = $getPenguji->fetchAll(PDO::FETCH_ASSOC);
                 <form method="post" class="form filterUKT resettable-form" id="filterUKT">
                     <div class="row">
                         <?php
-                        if ($USER_AKSES == "Administrator") {
+                        if ($USER_AKSES == "Administrator" || $USER_AKSES == "Pengurus Daerah") {
                             ?>
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -138,11 +139,22 @@ $rowp = $getPenguji->fetchAll(PDO::FETCH_ASSOC);
                                     <select name="DAERAH_KEY" id="selectize-select3" required="" class="form-control" data-parsley-required>
                                         <option value="">-- Pilih Daerah --</option>
                                         <?php
-                                        foreach ($rowd as $filterDaerah) {
-                                            extract($filterDaerah);
-                                            ?>
-                                            <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
-                                            <?php
+                                        if ($USER_AKSES == "Pengurus Daerah") {
+                                            foreach ($rowd as $filterDaerah) {
+                                                extract($filterDaerah);
+                                                if ($DAERAH_KEY == $USER_DAERAH) {
+                                                    ?>
+                                                    <option value="<?= $DAERAH_KEY; ?>" selected><?= $DAERAH_DESKRIPSI; ?></option>
+                                                    <?php
+                                                }
+                                            }
+                                        } else {
+                                            foreach ($rowd as $filterDaerah) {
+                                                extract($filterDaerah);
+                                                ?>
+                                                <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                                <?php
+                                            }
                                         }
                                         ?>
                                     </select>

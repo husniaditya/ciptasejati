@@ -19,7 +19,7 @@ if(isset($_POST["login"]))
         || (isset($_POST['ajax']) && $_POST['ajax'] == '1')
     );
 
-    $GetUser = GetQuery("SELECT u.*,a.ANGGOTA_ID,a.ANGGOTA_NAMA,a.CABANG_KEY,a.ANGGOTA_AKSES,c.CABANG_DESKRIPSI,a.TINGKATAN_ID,t.TINGKATAN_NAMA,a.ANGGOTA_PIC 
+    $GetUser = GetQuery("SELECT u.*,a.ANGGOTA_ID,a.ANGGOTA_NAMA,c.DAERAH_KEY,a.CABANG_KEY,a.ANGGOTA_AKSES,c.CABANG_DESKRIPSI,a.TINGKATAN_ID,t.TINGKATAN_NAMA,a.ANGGOTA_PIC 
     from m_user u 
     left join m_anggota a on u.ANGGOTA_ID = a.ANGGOTA_ID AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0
     LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
@@ -34,6 +34,7 @@ if(isset($_POST["login"]))
         $_SESSION["LOGINIDUS_CS"] = $ANGGOTA_ID;
         $_SESSION["LOGINNAME_CS"] = $ANGGOTA_NAMA;
         $_SESSION["LOGINCAB_CS"] = $CABANG_KEY;
+        $_SESSION["LOGINDAR_CS"] = $DAERAH_KEY;
         $_SESSION["LOGINPP_CS"] = $ANGGOTA_PIC;
         $_SESSION["LOGINAKS_CS"] = $ANGGOTA_AKSES;
         $_SESSION["LOGINTING_CS"] = $TINGKATAN_ID;

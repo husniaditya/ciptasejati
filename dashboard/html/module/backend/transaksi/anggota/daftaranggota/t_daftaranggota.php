@@ -78,26 +78,25 @@ if (isset($_POST["savedaftaranggota"])) {
 
         $ANGGOTA_ID = $result . '.' .$year. '.' .$ANGGOTA_ID;
         
-        $checkID = GetQuery("select count(ANGGOTA_ID) COUNT_ID from m_anggota where ANGGOTA_ID = '$ANGGOTA_ID' and CABANG_KEY = '$CABANG_KEY'");
-        while ($rowCheckID = $checkID->fetch(PDO::FETCH_ASSOC)) {
-            extract($rowCheckID);
-
-            if ($COUNT_ID > 0) {
-                $response = "ID Anggota sudah terdaftar";
-                echo $response;
-            } else {
-                
-                // Prepare the query
-                $query = "INSERT INTO m_anggota SELECT UUID(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, 0, 0, ?, '$localDateTime'";
-
-                // Execute the query with parameters
-                GetQuery2($query, [$ANGGOTA_ID, $CABANG_KEY, $ANGGOTA_RANTING, $TINGKATAN_ID, $ANGGOTA_KTP, null, '', '', $ANGGOTA_NAMA, $ANGGOTA_ALAMAT, $ANGGOTA_AGAMA, $ANGGOTA_PEKERJAAN, $ANGGOTA_KELAMIN, $ANGGOTA_TEMPAT_LAHIR, $ANGGOTA_TANGGAL_LAHIR, $ANGGOTA_HP, $ANGGOTA_EMAIL, $idCardFileDestination, $ANGGOTA_JOIN, $ANGGOTA_AKSES, $USER_ID]);
+        // Check if ANGGOTA_ID already exists in any cabang
+        $checkID = GetQuery("select ANGGOTA_ID, ANGGOTA_NAMA from m_anggota where ANGGOTA_ID = '$ANGGOTA_ID'");
+        $rowCheckID = $checkID->fetch(PDO::FETCH_ASSOC);
         
-                GetQuery("insert into m_anggota_log select uuid(), ANGGOTA_KEY, ANGGOTA_ID, CABANG_KEY, ANGGOTA_RANTING, TINGKATAN_ID, ANGGOTA_KTP, ANGGOTA_NAMA, ANGGOTA_ALAMAT, ANGGOTA_AGAMA, ANGGOTA_PEKERJAAN, ANGGOTA_KELAMIN, ANGGOTA_TEMPAT_LAHIR, ANGGOTA_TANGGAL_LAHIR, ANGGOTA_HP, ANGGOTA_EMAIL, ANGGOTA_PIC, ANGGOTA_JOIN, ANGGOTA_RESIGN, DELETION_STATUS,'I', '$USER_ID', '$localDateTime' from m_anggota where ANGGOTA_ID = '$result.$year.$ANGGOTA_ID'");
-        
-                $response="Success";
-                echo $response;
-            }
+        if ($rowCheckID) {
+            $response = "ID Anggota sudah terdaftar atas nama: " . $rowCheckID['ANGGOTA_NAMA'];
+            echo $response;
+        } else {
+            
+            // Prepare the query
+            $query = "INSERT INTO m_anggota SELECT UUID(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, 0, 0, ?, '$localDateTime'";
+
+            // Execute the query with parameters
+            GetQuery2($query, [$ANGGOTA_ID, $CABANG_KEY, $ANGGOTA_RANTING, $TINGKATAN_ID, $ANGGOTA_KTP, null, null, null, $ANGGOTA_NAMA, $ANGGOTA_ALAMAT, $ANGGOTA_AGAMA, $ANGGOTA_PEKERJAAN, $ANGGOTA_KELAMIN, $ANGGOTA_TEMPAT_LAHIR, $ANGGOTA_TANGGAL_LAHIR, $ANGGOTA_HP, $ANGGOTA_EMAIL, $idCardFileDestination, $ANGGOTA_JOIN, $ANGGOTA_AKSES, $USER_ID]);
+    
+            GetQuery("insert into m_anggota_log select uuid(), ANGGOTA_KEY, ANGGOTA_ID, CABANG_KEY, ANGGOTA_RANTING, TINGKATAN_ID, ANGGOTA_KTP, ANGGOTA_NAMA, ANGGOTA_ALAMAT, ANGGOTA_AGAMA, ANGGOTA_PEKERJAAN, ANGGOTA_KELAMIN, ANGGOTA_TEMPAT_LAHIR, ANGGOTA_TANGGAL_LAHIR, ANGGOTA_HP, ANGGOTA_EMAIL, ANGGOTA_PIC, ANGGOTA_JOIN, ANGGOTA_RESIGN, DELETION_STATUS,'I', '$USER_ID', '$localDateTime' from m_anggota where ANGGOTA_ID = '$result.$year.$ANGGOTA_ID'");
+    
+            $response="Success";
+            echo $response;
         }
 
     } catch (Exception $e) {
@@ -184,25 +183,36 @@ if (isset($_POST["editdaftaranggota"])) {
             }
         }
 
-        if ($ANGGOTA_STATUS == 0) {
-            // Prepare the query
-            $query = "UPDATE m_anggota set CABANG_KEY = ?, ANGGOTA_RANTING = ?, TINGKATAN_ID = ?, ANGGOTA_KTP = ?, ANGGOTA_NAMA = ?, ANGGOTA_ALAMAT = ?, ANGGOTA_AGAMA = ?, ANGGOTA_PEKERJAAN = ?, ANGGOTA_KELAMIN = ?, ANGGOTA_TEMPAT_LAHIR = ?, ANGGOTA_TANGGAL_LAHIR = ?, ANGGOTA_HP = ?, ANGGOTA_EMAIL = ?, ANGGOTA_JOIN = ?, ANGGOTA_STATUS = ?, ANGGOTA_RESIGN = null, ANGGOTA_AKSES = ?, INPUT_BY = ?, INPUT_DATE = '$localDateTime' where ANGGOTA_KEY = ?";
+        $ANGGOTA_ID = $result . '.' .$year. '.' .$ANGGOTA_ID;
 
-            // Execute the query with parameters
-            GetQuery2($query, [$CABANG_KEY, $ANGGOTA_RANTING, $TINGKATAN_ID, $ANGGOTA_KTP, $ANGGOTA_NAMA, $ANGGOTA_ALAMAT, $ANGGOTA_AGAMA, $ANGGOTA_PEKERJAAN, $ANGGOTA_KELAMIN, $ANGGOTA_TEMPAT_LAHIR, $ANGGOTA_TANGGAL_LAHIR, $ANGGOTA_HP, $ANGGOTA_EMAIL, $ANGGOTA_JOIN, $ANGGOTA_STATUS, $ANGGOTA_AKSES, $USER_ID, $ANGGOTA_KEY]);
+        // Check if ANGGOTA_ID already exists in another record (excluding current record)
+        $checkID = GetQuery("select ANGGOTA_ID, ANGGOTA_NAMA from m_anggota where ANGGOTA_ID = '$ANGGOTA_ID' AND ANGGOTA_KEY != '$ANGGOTA_KEY'");
+        $rowCheckID = $checkID->fetch(PDO::FETCH_ASSOC);
+        
+        if ($rowCheckID) {
+            $response = "ID Anggota sudah terdaftar pada anggota lain atas nama: " . $rowCheckID['ANGGOTA_NAMA'];
+            echo $response;
         } else {
-            // Prepare the query
-            $query = "UPDATE m_anggota set CABANG_KEY = ?, ANGGOTA_RANTING = ?, TINGKATAN_ID = ?, ANGGOTA_KTP = ?, ANGGOTA_NAMA = ?, ANGGOTA_ALAMAT = ?, ANGGOTA_AGAMA = ?, ANGGOTA_PEKERJAAN = ?, ANGGOTA_KELAMIN = ?, ANGGOTA_TEMPAT_LAHIR = ?, ANGGOTA_TANGGAL_LAHIR = ?, ANGGOTA_HP = ?, ANGGOTA_EMAIL = ?, ANGGOTA_JOIN = ?, ANGGOTA_AKSES = ?, ANGGOTA_STATUS = ?, ANGGOTA_RESIGN = '$localDateTime', INPUT_BY = ?, INPUT_DATE = '$localDateTime' where ANGGOTA_KEY = ?";
+            if ($ANGGOTA_STATUS == 0) {
+                // Prepare the query
+                $query = "UPDATE m_anggota set ANGGOTA_ID = ?, CABANG_KEY = ?, ANGGOTA_RANTING = ?, TINGKATAN_ID = ?, ANGGOTA_KTP = ?, ANGGOTA_NAMA = ?, ANGGOTA_ALAMAT = ?, ANGGOTA_AGAMA = ?, ANGGOTA_PEKERJAAN = ?, ANGGOTA_KELAMIN = ?, ANGGOTA_TEMPAT_LAHIR = ?, ANGGOTA_TANGGAL_LAHIR = ?, ANGGOTA_HP = ?, ANGGOTA_EMAIL = ?, ANGGOTA_JOIN = ?, ANGGOTA_STATUS = ?, ANGGOTA_RESIGN = null, ANGGOTA_AKSES = ?, INPUT_BY = ?, INPUT_DATE = '$localDateTime' where ANGGOTA_KEY = ?";
 
-            // Execute the query with parameters
-            GetQuery2($query, [$CABANG_KEY, $ANGGOTA_RANTING, $TINGKATAN_ID, $ANGGOTA_KTP, $ANGGOTA_NAMA, $ANGGOTA_ALAMAT, $ANGGOTA_AGAMA, $ANGGOTA_PEKERJAAN, $ANGGOTA_KELAMIN, $ANGGOTA_TEMPAT_LAHIR, $ANGGOTA_TANGGAL_LAHIR, $ANGGOTA_HP, $ANGGOTA_EMAIL, $ANGGOTA_JOIN, $ANGGOTA_AKSES, $ANGGOTA_STATUS, $USER_ID, $ANGGOTA_KEY]);
+                // Execute the query with parameters
+                GetQuery2($query, [$ANGGOTA_ID, $CABANG_KEY, $ANGGOTA_RANTING, $TINGKATAN_ID, $ANGGOTA_KTP, $ANGGOTA_NAMA, $ANGGOTA_ALAMAT, $ANGGOTA_AGAMA, $ANGGOTA_PEKERJAAN, $ANGGOTA_KELAMIN, $ANGGOTA_TEMPAT_LAHIR, $ANGGOTA_TANGGAL_LAHIR, $ANGGOTA_HP, $ANGGOTA_EMAIL, $ANGGOTA_JOIN, $ANGGOTA_STATUS, $ANGGOTA_AKSES, $USER_ID, $ANGGOTA_KEY]);
+            } else {
+                // Prepare the query
+                $query = "UPDATE m_anggota set ANGGOTA_ID = ?, CABANG_KEY = ?, ANGGOTA_RANTING = ?, TINGKATAN_ID = ?, ANGGOTA_KTP = ?, ANGGOTA_NAMA = ?, ANGGOTA_ALAMAT = ?, ANGGOTA_AGAMA = ?, ANGGOTA_PEKERJAAN = ?, ANGGOTA_KELAMIN = ?, ANGGOTA_TEMPAT_LAHIR = ?, ANGGOTA_TANGGAL_LAHIR = ?, ANGGOTA_HP = ?, ANGGOTA_EMAIL = ?, ANGGOTA_JOIN = ?, ANGGOTA_AKSES = ?, ANGGOTA_STATUS = ?, ANGGOTA_RESIGN = '$localDateTime', INPUT_BY = ?, INPUT_DATE = '$localDateTime' where ANGGOTA_KEY = ?";
+
+                // Execute the query with parameters
+                GetQuery2($query, [$ANGGOTA_ID, $CABANG_KEY, $ANGGOTA_RANTING, $TINGKATAN_ID, $ANGGOTA_KTP, $ANGGOTA_NAMA, $ANGGOTA_ALAMAT, $ANGGOTA_AGAMA, $ANGGOTA_PEKERJAAN, $ANGGOTA_KELAMIN, $ANGGOTA_TEMPAT_LAHIR, $ANGGOTA_TANGGAL_LAHIR, $ANGGOTA_HP, $ANGGOTA_EMAIL, $ANGGOTA_JOIN, $ANGGOTA_AKSES, $ANGGOTA_STATUS, $USER_ID, $ANGGOTA_KEY]);
+            }
+
+            GetQuery("insert into m_anggota_log select uuid(), ANGGOTA_KEY, ANGGOTA_ID, CABANG_KEY, ANGGOTA_RANTING, TINGKATAN_ID, ANGGOTA_KTP, ANGGOTA_NAMA, ANGGOTA_ALAMAT, ANGGOTA_AGAMA, ANGGOTA_PEKERJAAN, ANGGOTA_KELAMIN, ANGGOTA_TEMPAT_LAHIR, ANGGOTA_TANGGAL_LAHIR, ANGGOTA_HP, ANGGOTA_EMAIL, ANGGOTA_PIC, ANGGOTA_JOIN, ANGGOTA_RESIGN, DELETION_STATUS,'U', '$USER_ID', '$localDateTime' from m_anggota where ANGGOTA_KEY = '$ANGGOTA_KEY'");
+
+
+            $response="Success";
+            echo $response;
         }
-
-        GetQuery("insert into m_anggota_log select uuid(), ANGGOTA_KEY, ANGGOTA_ID, CABANG_KEY, ANGGOTA_RANTING, TINGKATAN_ID, ANGGOTA_KTP, ANGGOTA_NAMA, ANGGOTA_ALAMAT, ANGGOTA_AGAMA, ANGGOTA_PEKERJAAN, ANGGOTA_KELAMIN, ANGGOTA_TEMPAT_LAHIR, ANGGOTA_TANGGAL_LAHIR, ANGGOTA_HP, ANGGOTA_EMAIL, ANGGOTA_PIC, ANGGOTA_JOIN, ANGGOTA_RESIGN, DELETION_STATUS,'U', '$USER_ID', '$localDateTime' from m_anggota where ANGGOTA_KEY = '$ANGGOTA_KEY'");
-
-
-        $response="Success";
-        echo $response;
 
     } catch (Exception $e) {
         // Generic exception handling

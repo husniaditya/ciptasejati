@@ -213,48 +213,298 @@ $(document).ready(function() {
     e.preventDefault();
     var $form = $(this);
     var mode = ($('#importMode').val() || 'insert').toLowerCase();
+    
+    // Skip duplicate check if mode is 'replace' (will delete all first)
     if (mode === 'replace') {
       if (!confirm('Mode Hapus semua data lama dan tambah baru\n\nIni akan menghapus seluruh data anggota pada Cabang aktif sebelum mengimpor yang baru. Lanjutkan?')) {
         return;
       }
+      proceedWithUpload($form, mode);
+      return;
     }
-    var fd = new FormData(this);
+    
+    // For 'insert' and 'upsert' modes, check for duplicates first
+    checkDuplicatesBeforeUpload($form, mode);
+  });
+
+  // Function to check duplicates before upload
+  function checkDuplicatesBeforeUpload($form, mode) {
+    var fd = new FormData($form[0]);
+    fd.set('check_duplicates', '1');
+    fd.set('mode', mode);
+    
+    // Ensure CABANG_KEY
+    ensureCabangKey(fd);
+
+    var $btn = $('#btnUploadAnggota');
+    var prev = $btn.html();
+    $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Memeriksa...');
+
+    $.ajax({
+      url: 'module/backend/transaksi/anggota/daftaranggota/t_check_duplicates.php',
+      type: 'POST',
+      data: fd,
+      processData: false,
+      contentType: false,
+      dataType: 'json',
+      success: function(resp){
+        $btn.prop('disabled', false).html(prev);
+        
+        if (resp.success) {
+          if (resp.duplicates && resp.duplicates.length > 0) {
+            // Show duplicate resolution modal
+            showDuplicateResolutionModal(resp.duplicates, $form, mode);
+          } else {
+            // No duplicates, proceed with upload
+            proceedWithUpload($form, mode);
+          }
+        } else {
+          try { FailedNotification(resp.message || 'Gagal memeriksa duplikat'); } 
+          catch(e) { alert(resp.message || 'Gagal memeriksa duplikat'); }
+        }
+      },
+      error: function(xhr){
+        $btn.prop('disabled', false).html(prev);
+        var msg = 'Terjadi kesalahan saat memeriksa duplikat';
+        try { FailedNotification(msg); } catch(e) { alert(msg); }
+      }
+    });
+  }
+
+  // Helper function to convert Excel serial date to JavaScript Date
+  function excelDateToJSDate(serial) {
+    // Excel date system starts from 1900-01-01 (serial 1)
+    // But Excel incorrectly treats 1900 as a leap year, so we need to adjust
+    var utc_days = Math.floor(serial - 25569);
+    var utc_value = utc_days * 86400; 
+    var date_info = new Date(utc_value * 1000);
+    return date_info;
+  }
+
+  // Helper function to format date
+  function formatDateIndonesian(dateStr) {
+    if (!dateStr || dateStr === '-') return '-';
+    try {
+      var date;
+      
+      // Check if it's an Excel serial number (numeric value > 1000)
+      if (typeof dateStr === 'number' && dateStr > 1000) {
+        date = excelDateToJSDate(dateStr);
+      } else if (!isNaN(dateStr) && parseFloat(dateStr) > 1000) {
+        // Handle string numbers like "40358"
+        date = excelDateToJSDate(parseFloat(dateStr));
+      } else {
+        // Try parsing as regular date string
+        date = new Date(dateStr);
+      }
+      
+      if (isNaN(date.getTime())) return dateStr;
+      
+      var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+      var day = date.getDate();
+      var month = months[date.getMonth()];
+      var year = date.getFullYear();
+      return day + ' ' + month + ' ' + year;
+    } catch (e) {
+      return dateStr;
+    }
+  }
+
+  // Helper function to check if values are different
+  function isDifferent(val1, val2) {
+    var v1 = String(val1 || '').trim().toLowerCase();
+    var v2 = String(val2 || '').trim().toLowerCase();
+    if (v1 === '-' || v2 === '-' || v1 === '' || v2 === '') return false;
+    return v1 !== v2;
+  }
+
+  // Function to show duplicate resolution modal
+  function showDuplicateResolutionModal(duplicates, $form, mode) {
+    var $list = $('#duplicateList');
+    $list.empty();
+    
+    duplicates.forEach(function(dup, idx) {
+      // Use backend diff flags if available, fallback to client check
+      var ktpDiff = (dup.diff && dup.diff.ktp !== undefined) ? dup.diff.ktp : isDifferent(dup.existing.ktp, dup.new.ktp);
+      var hpDiff = (dup.diff && dup.diff.hp !== undefined) ? dup.diff.hp : isDifferent(dup.existing.hp, dup.new.hp);
+      var emailDiff = (dup.diff && dup.diff.email !== undefined) ? dup.diff.email : isDifferent(dup.existing.email, dup.new.email);
+      var namaDiff = (dup.diff && dup.diff.nama !== undefined) ? dup.diff.nama : isDifferent(dup.existing.nama, dup.new.nama);
+      var joinDiff = (dup.diff && dup.diff.join !== undefined) ? dup.diff.join : isDifferent(dup.existing.join, dup.new.join);
+      var tglLahirDiff = (dup.diff && dup.diff.tgl_lahir !== undefined) ? dup.diff.tgl_lahir : isDifferent(dup.existing.tgl_lahir, dup.new.tgl_lahir);
+      var hasDiff = ktpDiff || hpDiff || emailDiff || namaDiff || joinDiff || tglLahirDiff;
+      
+      // Format dates
+      var existingJoinFormatted = formatDateIndonesian(dup.existing.join);
+      var newJoinFormatted = formatDateIndonesian(dup.new.join);
+      var existingTglLahirFormatted = formatDateIndonesian(dup.existing.tgl_lahir);
+      var newTglLahirFormatted = formatDateIndonesian(dup.new.tgl_lahir);
+      
+      // Helper to wrap with highlight (danger style for differences)
+      function highlightIfDiff(value, isDiff) {
+        if (isDiff) {
+          return '<span class="data-highlight text-danger"><strong>' + value + '</strong></span>';
+        }
+        return '<span>' + value + '</span>';
+      }
+      
+      var html = '<div class="panel panel-default duplicate-item" data-index="' + idx + '">' +
+        '<div class="panel-heading">' +
+          '<strong>ID Anggota: ' + (dup.anggota_id || '-') + '</strong>' +
+          (hasDiff ? ' <span class="label label-warning"><i class="fa fa-exclamation-triangle"></i> Data Berbeda</span>' : '') +
+        '</div>' +
+        '<div class="panel-body">' +
+          '<div class="row">' +
+            '<div class="col-md-6">' +
+              '<div class="data-box data-box-existing selected" data-index="' + idx + '" data-choice="existing">' +
+                '<input type="radio" name="choice_' + idx + '" value="existing" checked>' +
+                '<div class="select-badge"><i class="fa fa-check"></i></div>' +
+                '<div class="data-box-header">' +
+                  '<strong><i class="fa fa-database"></i> Data Lama (Database)</strong>' +
+                '</div>' +
+                '<div class="data-details">' +
+                  '<div><strong>Nama:</strong> ' + highlightIfDiff((dup.existing.nama || '-'), namaDiff) + '</div>' +
+                  '<div><strong>KTP:</strong> ' + highlightIfDiff((dup.existing.ktp || '-'), ktpDiff) + '</div>' +
+                  '<div><strong>HP:</strong> ' + highlightIfDiff((dup.existing.hp || '-'), hpDiff) + '</div>' +
+                  '<div><strong>Email:</strong> ' + highlightIfDiff((dup.existing.email || '-'), emailDiff) + '</div>' +
+                  '<div><strong>Tgl Lahir:</strong> ' + highlightIfDiff(existingTglLahirFormatted, tglLahirDiff) + '</div>' +
+                  '<div><strong>Bergabung:</strong> ' + highlightIfDiff(existingJoinFormatted, joinDiff) + '</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="col-md-6">' +
+              '<div class="data-box data-box-new" data-index="' + idx + '" data-choice="new">' +
+                '<input type="radio" name="choice_' + idx + '" value="new">' +
+                '<div class="select-badge"><i class="fa fa-check"></i></div>' +
+                '<div class="data-box-header">' +
+                  '<strong><i class="fa fa-file-import"></i> Data Baru (File)</strong>' +
+                '</div>' +
+                '<div class="data-details">' +
+                  '<div><strong>Nama:</strong> ' + highlightIfDiff((dup.new.nama || '-'), namaDiff) + '</div>' +
+                  '<div><strong>KTP:</strong> ' + highlightIfDiff((dup.new.ktp || '-'), ktpDiff) + '</div>' +
+                  '<div><strong>HP:</strong> ' + highlightIfDiff((dup.new.hp || '-'), hpDiff) + '</div>' +
+                  '<div><strong>Email:</strong> ' + highlightIfDiff((dup.new.email || '-'), emailDiff) + '</div>' +
+                  '<div><strong>Tgl Lahir:</strong> ' + highlightIfDiff(newTglLahirFormatted, tglLahirDiff) + '</div>' +
+                  '<div><strong>Bergabung:</strong> ' + highlightIfDiff(newJoinFormatted, joinDiff) + '</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+      $list.append(html);
+    });
+    
+    // Add click handlers for card selection
+    $('.data-box').off('click').on('click', function() {
+      var $this = $(this);
+      var idx = $this.data('index');
+      var choice = $this.data('choice');
+      
+      // Unselect siblings
+      $this.closest('.row').find('.data-box').removeClass('selected');
+      
+      // Select this card
+      $this.addClass('selected');
+      
+      // Update radio button
+      $('input[name="choice_' + idx + '"][value="' + choice + '"]').prop('checked', true);
+    });
+    
+    // Store form and mode for later use
+    $('#DuplicateResolutionModal').data('uploadForm', $form).data('uploadMode', mode).data('duplicates', duplicates);
+    
+    // Show modal
+    $('#DuplicateResolutionModal').modal('show');
+  }
+
+  // Handle bulk selection buttons
+  $(document).on('click', '#btnSelectAllExisting', function() {
+    $('.data-box-existing').each(function() {
+      var $this = $(this);
+      var idx = $this.data('index');
+      $this.closest('.row').find('.data-box').removeClass('selected');
+      $this.addClass('selected');
+      $('input[name="choice_' + idx + '"][value="existing"]').prop('checked', true);
+    });
+  });
+  
+  $(document).on('click', '#btnSelectAllNew', function() {
+    $('.data-box-new').each(function() {
+      var $this = $(this);
+      var idx = $this.data('index');
+      $this.closest('.row').find('.data-box').removeClass('selected');
+      $this.addClass('selected');
+      $('input[name="choice_' + idx + '"][value="new"]').prop('checked', true);
+    });
+  });
+
+  // Handle proceed button with selection
+  $(document).on('click', '#btnProceedWithSelection', function() {
+    var $modal = $('#DuplicateResolutionModal');
+    var $form = $modal.data('uploadForm');
+    var mode = $modal.data('uploadMode');
+    var duplicates = $modal.data('duplicates');
+    
+    // Collect user choices
+    var choices = [];
+    duplicates.forEach(function(dup, idx) {
+      var choice = $('input[name="choice_' + idx + '"]:checked').val();
+      choices.push({
+        anggota_id: dup.anggota_id,
+        action: choice // 'existing' or 'new'
+      });
+    });
+    
+    // Close duplicate modal
+    $modal.modal('hide');
+    
+    // Proceed with upload with choices
+    proceedWithUpload($form, mode, choices);
+  });
+
+  // Function to ensure CABANG_KEY in FormData
+  function ensureCabangKey(fd) {
+    try {
+      var cabangKey = null;
+      var $c = $('#selectize-dropdown7');
+      if (!$c.length) { $c = $('#selectize-dropdown5'); }
+      if ($c.length) {
+        try {
+          cabangKey = $c[0].selectize ? $c[0].selectize.getValue() : $c.val();
+        } catch (e) {
+          cabangKey = $c.val();
+        }
+      }
+      if (!cabangKey) {
+        var $hidden = $('[name="CABANG_KEY"]');
+        if ($hidden.length) { cabangKey = $hidden.val(); }
+      }
+      if (!cabangKey) {
+        var $filterCab = $('#selectize-select2');
+        if ($filterCab.length) {
+          try {
+            cabangKey = $filterCab[0].selectize ? $filterCab[0].selectize.getValue() : $filterCab.val();
+          } catch (e2) {
+            cabangKey = $filterCab.val();
+          }
+        }
+      }
+      if (cabangKey) { fd.set('CABANG_KEY', cabangKey); }
+    } catch (e) { /* no-op */ }
+  }
+
+  // Function to proceed with actual upload
+  function proceedWithUpload($form, mode, choices) {
+    var fd = new FormData($form[0]);
     fd.set('upload_template_anggota', '1');
     fd.set('mode', mode);
-
-    // Ensure CABANG_KEY is always sent so backend can scope operations correctly
-    (function ensureCabangKey(){
-      try {
-  var cabangKey = null;
-  // 1) Prefer Cabang select inside Upload modal (admin-only): #selectize-dropdown7 (or legacy #selectize-dropdown5)
-  var $c = $('#selectize-dropdown7');
-  if (!$c.length) { $c = $('#selectize-dropdown5'); }
-        if ($c.length) {
-          try {
-            cabangKey = $c[0].selectize ? $c[0].selectize.getValue() : $c.val();
-          } catch (e) {
-            cabangKey = $c.val();
-          }
-        }
-        // 2) Fallback to any hidden/input with name CABANG_KEY (non-admin case)
-        if (!cabangKey) {
-          var $hidden = $('[name="CABANG_KEY"]');
-          if ($hidden.length) { cabangKey = $hidden.val(); }
-        }
-        // 3) Last resort: use current filter cabang from the page (if set)
-        if (!cabangKey) {
-          var $filterCab = $('#selectize-select2');
-          if ($filterCab.length) {
-            try {
-              cabangKey = $filterCab[0].selectize ? $filterCab[0].selectize.getValue() : $filterCab.val();
-            } catch (e2) {
-              cabangKey = $filterCab.val();
-            }
-          }
-        }
-        if (cabangKey) { fd.set('CABANG_KEY', cabangKey); }
-      } catch (e) { /* no-op if not resolvable */ }
-    })();
+    
+    // Add user choices if provided
+    if (choices && choices.length > 0) {
+      fd.set('duplicate_choices', JSON.stringify(choices));
+    }
+    
+    ensureCabangKey(fd);
 
     var $btn = $('#btnUploadAnggota');
     var prev = $btn.html();
@@ -316,7 +566,7 @@ $(document).ready(function() {
         try { FailedNotification(msg); } catch(e) { alert(msg); }
       }
     });
-  });
+  }
 
   // Ensure Selectize is initialized for Upload modal selects once the modal is shown
   $(document).on('shown.bs.modal', '#UploadAnggota', function(){
@@ -465,6 +715,30 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
 
 
 $(document).ready(function() {
+  // Auto-load cabang dropdown on page load if daerah is pre-selected (Pengurus Daerah)
+  if ($('.filterAnggota').length) {
+    var selectedDaerah = $('#selectize-select3').val();
+    if (selectedDaerah) {
+      $.ajax({
+        url: 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php',
+        method: 'POST',
+        data: { id: selectedDaerah },
+        dataType: 'json',
+        success: function(data) {
+          var selectizeSelect2 = $('#selectize-select2')[0].selectize;
+          if (selectizeSelect2) {
+            selectizeSelect2.clearOptions();
+            selectizeSelect2.addOption(data);
+            selectizeSelect2.setValue('');
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('Error auto-loading cabang for anggota:', status, error);
+        }
+      });
+    }
+  }
+
   // add Anggota
   handleForm('#AddAnggota-form', SuccessNotification, FailedNotification, UpdateNotification);
 
@@ -481,6 +755,30 @@ $(document).ready(function() {
       dataType: 'json',
       success: function (data) {
         ['#selectize-dropdown7', '#selectize-dropdown5', '#selectize-dropdown3'].forEach(function(sel){
+          if ($(sel).length) {
+            var $sel = $(sel).selectize();
+            var inst = $sel[0].selectize;
+            inst.clearOptions();
+            inst.addOption(data);
+            inst.setValue('');
+          }
+        });
+      },
+      error: function(xhr, status, error) {
+        console.error('Error fetching cabang data:', status, error);
+      }
+    });
+  });
+
+  $(document).on('change', '#selectize-dropdown9', function() {
+    var selectedDaerah = $(this).val();
+    $.ajax({
+      url: 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php',
+      method: 'POST',
+      data: { id: selectedDaerah },
+      dataType: 'json',
+      success: function (data) {
+        ['#selectize-dropdown3'].forEach(function(sel){
           if ($(sel).length) {
             var $sel = $(sel).selectize();
             var inst = $sel[0].selectize;
@@ -726,69 +1024,65 @@ $(document).on("click", ".open-EditAnggota", function () {
   previewContainer.style.display = 'none';
   
   var key = $(this).data('key');
-  var id = $(this).data('id');
-  var anggotaid = $(this).data('shortid');
-  var daerahkey = $(this).data('daerahkey');
-  var daerahdes = $(this).data('daerahdes');
-  var cabangkey = $(this).data('cabangkey');
-  var cabangdes = $(this).data('cabangdes');
-  var ranting = $(this).data('ranting');
-  var tingkatanid = $(this).data('tingkatanid');
-  var tingkatannama = $(this).data('tingkatannama');
-  var ktp = $(this).data('ktp');
-  var nama = $(this).data('nama');
-  var alamat = $(this).data('alamat');
-  var pekerjaan = $(this).data('pekerjaan');
-  var kelamin = $(this).data('kelamin');
-  var tempatlahir = $(this).data('tempatlahir');
-  var tanggallahir = $(this).data('tanggallahir');
-  var hp = $(this).data('hp');
-  var email = $(this).data('email');
-  var join = $(this).data('join');
-  var resign = $(this).data('resign');
-  var agama = $(this).data('agama');
-  var akses = $(this).data('akses');
-  var status = $(this).data('status');
   
-  // Set the values in the modal input fields
-  $(".modal-body #editANGGOTA_KEY").val(key);
-  $(".modal-body #editANGGOTA_ID").val(anggotaid);
-  $(".modal-body #selectize-dropdown6")[0].selectize.setValue(tingkatanid);
-  $(".modal-body #editANGGOTA_RANTING").val(ranting);
-  $(".modal-body #editANGGOTA_KTP").val(ktp);
-  $(".modal-body #editANGGOTA_NAMA").val(nama);
-  $(".modal-body #editANGGOTA_ALAMAT").val(alamat);
-  $(".modal-body #editANGGOTA_PEKERJAAN").val(pekerjaan);
-  $(".modal-body #editANGGOTA_KELAMIN").val(kelamin);
-  $(".modal-body #editANGGOTA_TEMPAT_LAHIR").val(tempatlahir);
-  $(".modal-body #datepicker46").val(tanggallahir);
-  $(".modal-body #editANGGOTA_HP").val(hp);
-  $(".modal-body #editANGGOTA_EMAIL").val(email);
-  $(".modal-body #editANGGOTA_JOIN").val(join);
-  $(".modal-body #datepicker47").val(resign);
-  $(".modal-body #editANGGOTA_AGAMA").val(agama);
-  $(".modal-body #editANGGOTA_AKSES").val(akses);
-  $(".modal-body #editANGGOTA_STATUS").val(status);
-
+  // Fetch data via AJAX
   $.ajax({
     type: "POST",
-    url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
-    data: { ANGGOTA_KEY: id, CABANG_KEY: cabangkey },
-    success: function(data){
-      $("#loadpicedit").html(data);
+    url: "module/ajax/transaksi/anggota/daftaranggota/aj_getdataanggota.php",
+    data: { ANGGOTA_KEY: key },
+    dataType: 'json',
+    success: function(response) {
+      if (response.success && response.data) {
+        var data = response.data;
+        
+        // Set the values in the modal input fields
+        $(".modal-body #editANGGOTA_KEY").val(data.ANGGOTA_KEY);
+        $(".modal-body #editANGGOTA_ID").val(data.SHORT_ID);
+        $(".modal-body #selectize-dropdown6")[0].selectize.setValue(data.TINGKATAN_ID);
+        $(".modal-body #editANGGOTA_RANTING").val(data.ANGGOTA_RANTING);
+        $(".modal-body #editANGGOTA_KTP").val(data.ANGGOTA_KTP);
+        $(".modal-body #editANGGOTA_NAMA").val(data.ANGGOTA_NAMA);
+        $(".modal-body #editANGGOTA_ALAMAT").val(data.ANGGOTA_ALAMAT);
+        $(".modal-body #editANGGOTA_PEKERJAAN").val(data.ANGGOTA_PEKERJAAN);
+        $(".modal-body #editANGGOTA_KELAMIN").val(data.ANGGOTA_KELAMIN);
+        $(".modal-body #editANGGOTA_TEMPAT_LAHIR").val(data.ANGGOTA_TEMPAT_LAHIR);
+        $(".modal-body #datepicker46").val(data.ANGGOTA_TANGGAL_LAHIR);
+        $(".modal-body #editANGGOTA_HP").val(data.ANGGOTA_HP);
+        $(".modal-body #editANGGOTA_EMAIL").val(data.ANGGOTA_EMAIL);
+        $(".modal-body #editANGGOTA_JOIN").val(data.ANGGOTA_JOIN);
+        $(".modal-body #datepicker45").val(data.ANGGOTA_JOIN);
+        $(".modal-body #datepicker47").val(data.ANGGOTA_RESIGN);
+        $(".modal-body #editANGGOTA_AGAMA").val(data.ANGGOTA_AGAMA);
+        $(".modal-body #editANGGOTA_AKSES").val(data.ANGGOTA_AKSES);
+        $(".modal-body #editANGGOTA_STATUS").val(data.ANGGOTA_STATUS);
+
+        // Load picture
+        $.ajax({
+          type: "POST",
+          url: "module/ajax/transaksi/anggota/daftaranggota/aj_loadpic.php",
+          data: { ANGGOTA_KEY: data.ANGGOTA_KEY, CABANG_KEY: data.CABANG_KEY },
+          success: function(picData) {
+            $("#loadpicedit").html(picData);
+          }
+        });
+
+        // Handle daerah/cabang dropdowns for Administrator
+        var isExist = $('#selectize-dropdown4').length > 0 && $('#selectize-dropdown5').length > 0;
+        if (isExist) {
+          $(".modal-body #selectize-dropdown4")[0].selectize.setValue(data.DAERAH_KEY);
+          // Wait for the options in the second dropdown to be populated before setting its value
+          setTimeout(function () {
+            $(".modal-body #selectize-dropdown5")[0].selectize.setValue(data.CABANG_KEY);
+          }, 200); // You may need to adjust the delay based on your application's behavior
+        }
+      } else {
+        alert('Gagal memuat data: ' + (response.message || 'Unknown error'));
+      }
+    },
+    error: function(xhr, status, error) {
+      alert('Error saat memuat data: ' + error);
     }
   });
-
-  
-  var isExist = $('#selectize-dropdown4').length > 0 && $('#selectize-dropdown5').length > 0;
-
-  if (isExist) {
-    $(".modal-body #selectize-dropdown4")[0].selectize.setValue(daerahkey);
-    // Wait for the options in the second dropdown to be populated before setting its value
-    setTimeout(function () {
-        $(".modal-body #selectize-dropdown5")[0].selectize.setValue(cabangkey);
-    }, 200); // You may need to adjust the delay based on your application's behavior
-  }
 });
 
 // Anggota Filtering

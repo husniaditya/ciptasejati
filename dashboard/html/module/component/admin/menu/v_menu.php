@@ -110,7 +110,6 @@ $rowakses = $getAkses->fetchAll(PDO::FETCH_ASSOC);
             <table class="table table-striped table-bordered" id="menuakses-table">
                 <thead>
                     <tr>
-                        <th></th>
                         <th>ID Menu</th>
                         <th>Nama Menu </th>
                         <th>Akses User </th>

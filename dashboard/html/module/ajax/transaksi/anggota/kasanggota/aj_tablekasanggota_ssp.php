@@ -14,6 +14,7 @@ if (!function_exists('h')) {
 }
 
 $USER_CABANG = $_SESSION['LOGINCAB_CS'] ?? '';
+$USER_DAERAH = $_SESSION['LOGINDAR_CS'] ?? '';
 $USER_AKSES  = $_SESSION['LOGINAKS_CS'] ?? '';
 
 // DataTables params
@@ -70,14 +71,19 @@ LEFT JOIN m_cabang c ON k.CABANG_KEY = c.CABANG_KEY
 LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
 LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID ";
 
-// Base WHERE
+// Base WHERE - three-tier access control
 $where = ["k.DELETION_STATUS = 0", "a.DELETION_STATUS = 0"];
-if ($USER_AKSES !== 'Administrator') {
+if ($USER_AKSES === 'Administrator') {
+    // Administrator: no restrictions
+} elseif ($USER_AKSES === 'Pengurus Daerah') {
+    $where[] = "d.DAERAH_KEY = '" . str_replace("'", "''", $USER_DAERAH) . "'";
+} else {
+    // Others: cabang-scoped
     $where[] = "a.CABANG_KEY = '" . str_replace("'", "''", $USER_CABANG) . "'";
 }
 
-// Apply filters
-if ($USER_AKSES === 'Administrator') {
+// Apply filters - Administrator and Pengurus Daerah can filter
+if ($USER_AKSES === 'Administrator' || $USER_AKSES === 'Pengurus Daerah') {
     if ($DAERAH_KEY !== '') { $where[] = "d.DAERAH_KEY LIKE CONCAT('%','" . str_replace("'","''",$DAERAH_KEY) . "','%')"; }
     if ($CABANG_KEY !== '') { $where[] = "c.CABANG_KEY LIKE CONCAT('%','" . str_replace("'","''",$CABANG_KEY) . "','%')"; }
 }
@@ -105,9 +111,14 @@ if ($searchValue !== '') {
 
 $whereSql = empty($where) ? '' : (' WHERE ' . implode(' AND ', $where));
 
-// recordsTotal
+// recordsTotal - three-tier access control
 $whereTotal = ["k.DELETION_STATUS = 0", "a.DELETION_STATUS = 0"];
-if ($USER_AKSES !== 'Administrator') {
+if ($USER_AKSES === 'Administrator') {
+    // Administrator: no restrictions
+} elseif ($USER_AKSES === 'Pengurus Daerah') {
+    $whereTotal[] = "d.DAERAH_KEY = '" . str_replace("'", "''", $USER_DAERAH) . "'";
+} else {
+    // Others: cabang-scoped
     $whereTotal[] = "a.CABANG_KEY = '" . str_replace("'", "''", $USER_CABANG) . "'";
 }
 $whereTotalSql = empty($whereTotal) ? '' : (' WHERE ' . implode(' AND ', $whereTotal));

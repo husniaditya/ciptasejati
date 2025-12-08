@@ -2,9 +2,12 @@
 $USER_ID = $_SESSION["LOGINIDUS_CS"];
 $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 $USER_CABANG = $_SESSION["LOGINCAB_CS"];
+$USER_DAERAH = $_SESSION["LOGINDAR_CS"];
 
 if ($USER_AKSES == "Administrator") {
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0");
+} elseif ($USER_AKSES == "Pengurus Daerah") {
+    $getAnggota = GetQuery("SELECT a.* FROM m_anggota a LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY WHERE a.ANGGOTA_AKSES <> 'Administrator' AND a.ANGGOTA_STATUS = 0 AND c.DAERAH_KEY = '$USER_DAERAH'");
 } else {
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 AND CABANG_KEY = '$USER_CABANG'");
 }
@@ -33,7 +36,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                 <form method="post" class="form filterKasAnggota" id="filterKasAnggota">
                     <div class="row">
                         <?php
-                        if ($USER_AKSES == "Administrator") {
+                        if ($USER_AKSES == "Administrator" || $USER_AKSES == "Pengurus Daerah") {
                             ?>
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -41,11 +44,26 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                     <select name="DAERAH_KEY" id="selectize-select3" class="form-control">
                                         <option value="">-- Pilih Daerah --</option>
                                         <?php
-                                        foreach ($rowd as $filterDaerah) {
-                                            extract($filterDaerah);
+                                        if ($USER_AKSES == "Pengurus Daerah") {
                                             ?>
-                                            <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                            <option value="<?= $USER_DAERAH; ?>" selected>
+                                                <?php
+                                                foreach ($rowd as $filterDaerah) {
+                                                    extract($filterDaerah);
+                                                    if ($DAERAH_KEY == $USER_DAERAH) {
+                                                        echo $DAERAH_DESKRIPSI;
+                                                    }
+                                                }
+                                                ?>
+                                            </option>
                                             <?php
+                                        } else {
+                                            foreach ($rowd as $filterDaerah) {
+                                                extract($filterDaerah);
+                                                ?>
+                                                <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                                <?php
+                                            }
                                         }
                                         ?>
                                     </select>
@@ -144,12 +162,19 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 <hr>
-<!-- START row -->
-<div class="row"> <!-- Add Data Button -->
-    <div class="col-lg-12">
-        <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddKasAnggota btn btn-inverse btn-outline mb5 btn-rounded" href="#AddKasAnggota"><i class="ico-plus2"></i> Tambah Data Kas Anggota</a>
+
+<?php
+if ($_SESSION["ADD_KasAnggota"] == "Y") {
+    ?>
+    <!-- START row -->
+    <div class="row"> <!-- Add Data Button -->
+        <div class="col-lg-12">
+            <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-AddKasAnggota btn btn-inverse btn-outline mb5 btn-rounded" href="#AddKasAnggota"><i class="ico-plus2"></i> Tambah Data Kas Anggota</a>
+        </div>
     </div>
-</div>
+    <?php
+}
+?>
 <br>
 <!--/ END row -->
 
@@ -208,7 +233,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                             <?php
-                            if ($USER_AKSES == "Administrator") {
+                            if ($USER_AKSES == "Administrator" || $USER_AKSES == "Pengurus Daerah") {
                                 ?>
                                 <div class="short-div">
                                     <div class="form-group">
@@ -217,11 +242,22 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                             <select name="DAERAH_KEY" id="selectize-dropdown9" required="" class="form-control" data-parsley-required>
                                                 <option value="">-- Pilih Daerah --</option>
                                                 <?php
-                                                foreach ($rowd as $rowDaerah) {
-                                                    extract($rowDaerah);
-                                                    ?>
-                                                    <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
-                                                    <?php
+                                                if ($USER_AKSES == "Pengurus Daerah") {
+                                                    foreach ($rowd as $rowDaerah) {
+                                                        extract($rowDaerah);
+                                                        if ($DAERAH_KEY == $USER_DAERAH) {
+                                                            ?>
+                                                            <option value="<?= $DAERAH_KEY; ?>" selected><?= $DAERAH_DESKRIPSI; ?></option>
+                                                            <?php
+                                                        }
+                                                    }
+                                                } else {
+                                                    foreach ($rowd as $rowDaerah) {
+                                                        extract($rowDaerah);
+                                                        ?>
+                                                        <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                                        <?php
+                                                    }
                                                 }
                                                 ?>
                                             </select>
@@ -534,7 +570,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                             <?php
-                            if ($USER_AKSES == "Administrator") {
+                            if ($USER_AKSES == "Administrator" || $USER_AKSES == "Pengurus Daerah") {
                                 ?>
                                 <div class="short-div">
                                     <div class="form-group">
@@ -543,11 +579,22 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                             <select name="DAERAH_KEY" id="selectize-dropdown11" required="" class="form-control" data-parsley-required>
                                                 <option value="">-- Pilih Daerah --</option>
                                                 <?php
-                                                foreach ($rowd as $rowDaerah) {
-                                                    extract($rowDaerah);
-                                                    ?>
-                                                    <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
-                                                    <?php
+                                                if ($USER_AKSES == "Pengurus Daerah") {
+                                                    foreach ($rowd as $rowDaerah) {
+                                                        extract($rowDaerah);
+                                                        if ($DAERAH_KEY == $USER_DAERAH) {
+                                                            ?>
+                                                            <option value="<?= $DAERAH_KEY; ?>" selected><?= $DAERAH_DESKRIPSI; ?></option>
+                                                            <?php
+                                                        }
+                                                    }
+                                                } else {
+                                                    foreach ($rowd as $rowDaerah) {
+                                                        extract($rowDaerah);
+                                                        ?>
+                                                        <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                                        <?php
+                                                    }
                                                 }
                                                 ?>
                                             </select>

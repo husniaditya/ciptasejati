@@ -3,6 +3,7 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
 $USER_AKSES = $_SESSION["LOGINAKS_CS"];
 $USER_CABANG = $_SESSION["LOGINCAB_CS"];
 $USER_KEY = $_SESSION["LOGINKEY_CS"];
+$USER_DAERAH = $_SESSION["LOGINDAR_CS"];
 
 if ($USER_AKSES == "Administrator") {
     $getKas = GetQuery("SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_RANTING,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
@@ -28,6 +29,30 @@ if ($USER_AKSES == "Administrator") {
     ORDER BY k.KAS_ID");
     
     $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0");
+} else if ($USER_AKSES == "Pengurus Daerah") {
+    $getKas = GetQuery("SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_RANTING,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
+    CASE
+        WHEN k.KAS_JUMLAH < 0 THEN CONCAT('(', FORMAT(ABS(k.KAS_JUMLAH), 0), ')')
+        ELSE FORMAT(k.KAS_JUMLAH, 0)
+    END AS FKAS_JUMLAH,
+    CASE 
+        WHEN k.KAS_DK = 'D' THEN 'Debit'
+        ELSE 'Kredit' 
+    END AS KAS_DK_DES,
+    CASE
+        WHEN k.KAS_DK = 'D' THEN 'color: green;'
+        ELSE 'color: red;' 
+    END AS KAS_COLOR
+    FROM t_kas k
+    LEFT JOIN m_anggota a ON k.ANGGOTA_ID = a.ANGGOTA_ID AND a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0
+    LEFT JOIN m_anggota a2 ON k.INPUT_BY = a2.ANGGOTA_ID AND a2.ANGGOTA_STATUS = 0 AND a2.DELETION_STATUS = 0
+    LEFT JOIN m_cabang c ON k.CABANG_KEY = c.CABANG_KEY
+    LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
+    LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
+    WHERE k.DELETION_STATUS = 0 AND a.DELETION_STATUS=0 AND c.DAERAH_KEY = '$USER_DAERAH'
+    ORDER BY k.KAS_ID");
+    
+    $getAnggota = GetQuery("SELECT * FROM m_anggota WHERE ANGGOTA_AKSES <> 'Administrator' AND ANGGOTA_STATUS = 0 AND CABANG_KEY IN (SELECT CABANG_KEY FROM m_cabang WHERE DAERAH_KEY = '$USER_DAERAH')");
 } else {
     $getKas = GetQuery("SELECT k.*,d.DAERAH_DESKRIPSI,c.CABANG_DESKRIPSI,a.ANGGOTA_ID,a.ANGGOTA_NAMA,t.TINGKATAN_NAMA,t.TINGKATAN_SEBUTAN,a2.ANGGOTA_NAMA INPUT_BY,DATE_FORMAT(k.KAS_TANGGAL, '%d %M %Y') FKAS_TANGGAL, DATE_FORMAT(k.INPUT_DATE, '%d %M %Y %H:%i') INPUT_DATE,
     CASE
@@ -77,7 +102,7 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
             <div class="panel-body">
                 <form method="post" class="form filterKasAnggota" id="filterKasAnggota">
                     <?php
-                    if ($USER_AKSES == "Administrator") {
+                    if ($USER_AKSES == "Administrator" || $USER_AKSES == "Pengurus Daerah") {
                         ?>
                         <div class="row">
                             <div class="col-md-3">
@@ -86,11 +111,26 @@ $rowa = $getAnggota->fetchAll(PDO::FETCH_ASSOC);
                                     <select name="DAERAH_KEY" id="selectize-select3" class="form-control">
                                         <option value="">-- Pilih Daerah --</option>
                                         <?php
-                                        foreach ($rowd as $filterDaerah) {
-                                            extract($filterDaerah);
+                                        if ($USER_AKSES == "Pengurus Daerah") {
                                             ?>
-                                            <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                            <option value="<?= $USER_DAERAH; ?>" selected>
+                                                <?php
+                                                foreach ($rowd as $filterDaerah) {
+                                                    extract($filterDaerah);
+                                                    if ($DAERAH_KEY == $USER_DAERAH) {
+                                                        echo $DAERAH_DESKRIPSI;
+                                                    }
+                                                }
+                                                ?>
+                                            </option>
                                             <?php
+                                        } else {
+                                            foreach ($rowd as $filterDaerah) {
+                                                extract($filterDaerah);
+                                                ?>
+                                                <option value="<?= $DAERAH_KEY; ?>"><?= $DAERAH_DESKRIPSI; ?></option>
+                                                <?php
+                                            }
                                         }
                                         ?>
                                     </select>

@@ -12,6 +12,7 @@ header('Content-Type: application/json');
 
 $USER_AKSES  = $_SESSION['LOGINAKS_CS'] ?? '';
 $USER_CABANG = $_SESSION['LOGINCAB_CS'] ?? '';
+$USER_DAERAH = $_SESSION['LOGINDAR_CS'] ?? '';
 $USER_ID     = $_SESSION['LOGINIDUS_CS'] ?? '';
 
 // DataTables params
@@ -71,17 +72,23 @@ LEFT JOIN t_ukt u ON u.TINGKATAN_ID = p.TINGKATAN_ID_BARU AND u.ANGGOTA_ID = p.A
 
 $where = ["p.DELETION_STATUS = 0"]; // base
 
-// Role scoping mirrors v_lapppd.php
+// Three-tier role scoping
 if ($USER_AKSES === 'Administrator') {
-  // no additional scope
-} else if ($USER_AKSES === 'Koordinator' || $USER_AKSES === 'Pengurus') {
-  $where[] = "p.CABANG_KEY = '" . str_replace("'","''", $USER_CABANG) . "'";
+  // Administrator: no additional scope, can see all
+} else if ($USER_AKSES === 'Pengurus Daerah') {
+  // Pengurus Daerah: restricted to their daerah
+  $where[] = "d.DAERAH_KEY = '" . str_replace("'","''", $USER_DAERAH) . "'";
 } else {
-  $where[] = "p.ANGGOTA_ID = '" . str_replace("'","''", $USER_ID) . "'";
+  // Koordinator/Pengurus/User: restricted to their cabang or specific user
+  if ($USER_AKSES === 'Koordinator' || $USER_AKSES === 'Pengurus') {
+    $where[] = "p.CABANG_KEY = '" . str_replace("'","''", $USER_CABANG) . "'";
+  } else {
+    $where[] = "p.ANGGOTA_ID = '" . str_replace("'","''", $USER_ID) . "'";
+  }
 }
 
-// Admin can filter daerah/cabang
-if ($USER_AKSES === 'Administrator') {
+// Filter by daerah/cabang: Admin and Pengurus Daerah can filter
+if ($USER_AKSES === 'Administrator' || $USER_AKSES === 'Pengurus Daerah') {
   if ($DAERAH_KEY !== '') { $where[] = "d.DAERAH_KEY LIKE CONCAT('%','".str_replace("'","''",$DAERAH_KEY)."','%')"; }
   if ($CABANG_KEY !== '') { $where[] = "p.CABANG_KEY LIKE CONCAT('%','".str_replace("'","''",$CABANG_KEY)."','%')"; }
 }
@@ -104,8 +111,17 @@ $whereSql = empty($where) ? '' : (' WHERE ' . implode(' AND ', $where));
 
 // Counts
 $whereTotal = ["p.DELETION_STATUS = 0"];
-if ($USER_AKSES === 'Koordinator' || $USER_AKSES === 'Pengurus') { $whereTotal[] = "p.CABANG_KEY = '" . str_replace("'","''", $USER_CABANG) . "'"; }
-if (!($USER_AKSES === 'Administrator' || $USER_AKSES === 'Koordinator' || $USER_AKSES === 'Pengurus')) { $whereTotal[] = "p.ANGGOTA_ID = '" . str_replace("'","''", $USER_ID) . "'"; }
+if ($USER_AKSES === 'Administrator') {
+  // No additional restriction
+} else if ($USER_AKSES === 'Pengurus Daerah') {
+  $whereTotal[] = "d.DAERAH_KEY = '" . str_replace("'","''", $USER_DAERAH) . "'";
+} else {
+  if ($USER_AKSES === 'Koordinator' || $USER_AKSES === 'Pengurus') {
+    $whereTotal[] = "p.CABANG_KEY = '" . str_replace("'","''", $USER_CABANG) . "'";
+  } else {
+    $whereTotal[] = "p.ANGGOTA_ID = '" . str_replace("'","''", $USER_ID) . "'";
+  }
+}
 $sqlTotal = "SELECT COUNT(*) AS cnt $fromJoin " . (empty($whereTotal) ? '' : (' WHERE ' . implode(' AND ', $whereTotal)));
 $totalRes = GetQuery($sqlTotal);
 $recordsTotal = (int)($totalRes ? ($totalRes->fetch(PDO::FETCH_ASSOC)['cnt'] ?? 0) : 0);

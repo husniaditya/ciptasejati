@@ -6,6 +6,7 @@ header('Content-Type: application/json');
 $USER_CABANG = $_SESSION['LOGINCAB_CS'] ?? '';
 $USER_AKSES  = $_SESSION['LOGINAKS_CS'] ?? '';
 $USER_KEY    = $_SESSION['LOGINKEY_CS'] ?? '';
+$USER_DAERAH = $_SESSION['LOGINDAR_CS'] ?? '';
 
 function esc_html($v){
     $v = $v === null ? '' : (string)$v;
@@ -65,12 +66,20 @@ LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID ";
 
 $where = ["k.DELETION_STATUS = 0"]; // base condition
 
-if ($USER_AKSES !== 'Administrator') {
+// Scope by access level
+if ($USER_AKSES === 'Administrator') {
+  // Admin can filter by any daerah/cabang
+  if ($DAERAH_KEY !== '')   $where[] = "d.DAERAH_KEY LIKE CONCAT('%','".str_replace("'","''",$DAERAH_KEY)."','%')";
+  if ($CABANG_KEY !== '')   $where[] = "c.CABANG_KEY LIKE CONCAT('%','".str_replace("'","''",$CABANG_KEY)."','%')";
+} else if ($USER_AKSES === 'Pengurus Daerah') {
+  // Pengurus Daerah can only see their daerah but can filter by cabang within it
+  $where[] = "c.DAERAH_KEY = '".str_replace("'","''",$USER_DAERAH)."'";
+  if ($CABANG_KEY !== '')   $where[] = "c.CABANG_KEY LIKE CONCAT('%','".str_replace("'","''",$CABANG_KEY)."','%')";
+} else {
+  // Other users can only see their specific cabang and their own data
   $where[] = "a.CABANG_KEY = '".str_replace("'","''",$USER_CABANG)."'";
   $where[] = "a.ANGGOTA_KEY = '".str_replace("'","''",$USER_KEY)."'";
 }
-if ($DAERAH_KEY !== '')   $where[] = "d.DAERAH_KEY LIKE CONCAT('%','".str_replace("'","''",$DAERAH_KEY)."','%')";
-if ($CABANG_KEY !== '')   $where[] = "c.CABANG_KEY LIKE CONCAT('%','".str_replace("'","''",$CABANG_KEY)."','%')";
 if ($KAS_ID !== '')       $where[] = "k.KAS_ID LIKE CONCAT('%','".str_replace("'","''",$KAS_ID)."','%')";
 if ($KAS_JENIS !== '')    $where[] = "k.KAS_JENIS LIKE CONCAT('%','".str_replace("'","''",$KAS_JENIS)."','%')";
 if ($ANGGOTA_ID !== '')   $where[] = "a.ANGGOTA_ID LIKE CONCAT('%','".str_replace("'","''",$ANGGOTA_ID)."','%')";
@@ -93,7 +102,12 @@ if ($globalSearch !== '') {
 $whereSql = empty($where) ? '' : (' WHERE '.implode(' AND ',$where));
 
 // counts
-$sqlTotal = "SELECT COUNT(*) cnt $from" . ($USER_AKSES !== 'Administrator' ? " WHERE k.DELETION_STATUS=0 AND a.CABANG_KEY = '".str_replace("'","''",$USER_CABANG)."' AND a.ANGGOTA_KEY = '".str_replace("'","''",$USER_KEY)."'" : " WHERE k.DELETION_STATUS=0");
+$sqlTotal = "SELECT COUNT(*) cnt $from WHERE k.DELETION_STATUS=0";
+if ($USER_AKSES === 'Pengurus Daerah') {
+  $sqlTotal .= " AND c.DAERAH_KEY = '".str_replace("'","''",$USER_DAERAH)."'";
+} else if ($USER_AKSES !== 'Administrator') {
+  $sqlTotal .= " AND a.CABANG_KEY = '".str_replace("'","''",$USER_CABANG)."' AND a.ANGGOTA_KEY = '".str_replace("'","''",$USER_KEY)."'";
+}
 $resT = GetQuery($sqlTotal); $recordsTotal = (int)($resT->fetch(PDO::FETCH_ASSOC)['cnt'] ?? 0);
 
 $sqlFilt = "SELECT COUNT(*) cnt $from $whereSql";

@@ -411,6 +411,7 @@ function handleForm(formId, successNotification, failedNotification, updateNotif
 $(document).ready(function() {
   // Call the function when the document is ready
   callTable();
+  
   // add Anggota
   handleForm('#AddKasAnggota-form', SuccessNotification, FailedNotification, UpdateNotification);
   // edit Anggota
@@ -469,8 +470,9 @@ $(document).ready(function() {
     $("#editKAS_JUMLAH, #editKAS_DK").trigger("input");
   });
 
-  // DROPDOWN KAS ANGGOTA
-  // Event listener for the daerah awal dropdown change
+  // DROPDOWN KAS ANGGOTA - FILTER SECTION
+  // Event listener for the daerah filter dropdown change (selectize-select3)
+  // Event listener for the daerah filter dropdown change (selectize-select3)
   $('#selectize-select3').change(function() {
     // Initialize Selectize on the first dropdown
     var selectizeSelect3 = $('#selectize-select3').selectize();
@@ -507,6 +509,30 @@ $(document).ready(function() {
         });
     });
   });
+  
+  // Load cabang on page load if daerah is pre-selected (for Pengurus Daerah)
+  if ($('#selectize-select3').length > 0) {
+    var selectizeSelect3 = $('#selectize-select3')[0].selectize;
+    var initialDaerah = selectizeSelect3.getValue();
+    
+    if (initialDaerah) {
+      $.ajax({
+        url: 'module/ajax/transaksi/anggota/daftaranggota/aj_getlistcabang.php',
+        method: 'POST',
+        data: { id: initialDaerah },
+        dataType: 'json',
+        success: function (data) {
+          var selectizeSelect2 = $('#selectize-select2')[0].selectize;
+          selectizeSelect2.clearOptions();
+          selectizeSelect2.addOption(data);
+          selectizeSelect2.setValue('');
+        },
+        error: function(xhr, status, error) {
+          console.error('Error fetching cabang data on load:', status, error);
+        }
+      });
+    }
+  }
   // Event listener for the first dropdown change
   function initializeDropdownChange(param, mainDropdownId, dependentDropdownId) {
     // Initialize Selectize on the main dropdown
@@ -555,6 +581,52 @@ $(document).ready(function() {
     initializeDropdownChange('daerah', 'selectize-dropdown11', 'selectize-dropdown12');
     initializeDropdownChange('cabang', 'selectize-dropdown12', 'selectize-dropdown4');
     // Add more calls if you have additional dropdowns
+  }
+});
+
+// Auto-load cabang when Add modal opens (for Pengurus Daerah)
+$('#AddKasAnggota').on('shown.bs.modal', function () {
+  if ($('#selectize-dropdown9').length > 0 && $('#selectize-dropdown10').length > 0) {
+    var preSelectedDaerah = $('#selectize-dropdown9').val();
+    if (preSelectedDaerah) {
+      $.ajax({
+        url: 'module/ajax/component/aj_getlistcabang.php',
+        type: 'POST',
+        data: { DAERAH_KEY: preSelectedDaerah },
+        success: function(data) {
+          var selectizeCabang = $('#selectize-dropdown10')[0].selectize;
+          selectizeCabang.clearOptions();
+          selectizeCabang.addOption({ value: '', text: 'Pilih Cabang...' });
+          $.each(data, function(index, item) {
+            selectizeCabang.addOption({ value: item.CABANG_KEY, text: item.CABANG_DESKRIPSI });
+          });
+          selectizeCabang.refreshOptions(false);
+        }
+      });
+    }
+  }
+});
+
+// Auto-load cabang when Edit modal opens (for Pengurus Daerah)
+$('#EditKasAnggota').on('shown.bs.modal', function () {
+  if ($('#selectize-dropdown11').length > 0 && $('#selectize-dropdown12').length > 0) {
+    var preSelectedDaerah = $('#selectize-dropdown11').val();
+    if (preSelectedDaerah) {
+      $.ajax({
+        url: 'module/ajax/component/aj_getlistcabang.php',
+        type: 'POST',
+        data: { DAERAH_KEY: preSelectedDaerah },
+        success: function(data) {
+          var selectizeCabang = $('#selectize-dropdown12')[0].selectize;
+          selectizeCabang.clearOptions();
+          selectizeCabang.addOption({ value: '', text: 'Pilih Cabang...' });
+          $.each(data, function(index, item) {
+            selectizeCabang.addOption({ value: item.CABANG_KEY, text: item.CABANG_DESKRIPSI });
+          });
+          selectizeCabang.refreshOptions(false);
+        }
+      });
+    }
   }
 });
 
