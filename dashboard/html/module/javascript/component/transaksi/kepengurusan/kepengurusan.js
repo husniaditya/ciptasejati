@@ -140,12 +140,23 @@
         var nodes = [];
         var links = [];
 
-    // HIERARCHY REQUESTED:
-    // 1. Ketua
-    // 2. Koordinator (group node)
-    // 3.x Pengurus_# (each pengurus member enumerated)
-    // Assumption: all pengurus belong to the single koordinator chain.
+    // HIERARCHY: 1) Koordinator (group) -> 2) Ketua -> 3) Pengurus (enumerated)
+        
+        // Level 1: Koordinator group (top level)
+        var koordinatorList = Array.isArray(payload.koordinator) ? payload.koordinator : [];
+        var koordinatorGroupId = 'KOORDINATOR_GROUP';
+        nodes.push({
+            id: koordinatorGroupId,
+            title: 'Koordinator',
+            name: koordinatorList.length === 1 ? koordinatorList[0].ANGGOTA_NAMA : (koordinatorList.length + ' Koordinator'),
+            image: (koordinatorList.length === 1 ? nonEmpty(koordinatorList[0].ANGGOTA_PIC, './assets/images/daftaranggota/default/avatar.png') : undefined),
+            anggotaId: (koordinatorList.length === 1 ? koordinatorList[0].ANGGOTA_ID : '—'),
+            tingkatanSebutan: (koordinatorList.length === 1 ? nonEmpty(koordinatorList[0].TINGKATAN_SEBUTAN, 'Koordinator') : 'Koordinator'),
+            tingkatanNama: (koordinatorList.length === 1 ? nonEmpty(koordinatorList[0].TINGKATAN_NAMA, 'Koordinator') : 'Koordinator'),
+            column: 0
+        });
 
+        // Level 2: Ketua (under Koordinator)
         var ketua = payload.ketua || null;
         var ketuaId;
         if (ketua) {
@@ -157,26 +168,13 @@
                 image: nonEmpty(ketua.ANGGOTA_PIC, './assets/images/daftaranggota/default/avatar.png'),
                 anggotaId: ketua.ANGGOTA_ID,
                 tingkatanSebutan: nonEmpty(ketua.TINGKATAN_SEBUTAN, ''),
-                tingkatanNama: nonEmpty(ketua.TINGKATAN_NAMA, '')
+                tingkatanNama: nonEmpty(ketua.TINGKATAN_NAMA, ''),
+                column: 1
             });
+            links.push([koordinatorGroupId, ketuaId]);
         }
 
-        // NEW HIERARCHY: 1) Ketua -> 2) Koordinator (group node) -> 3) Pengurus (enumerated)
-        var koordinatorList = Array.isArray(payload.koordinator) ? payload.koordinator : [];
-        var koordinatorGroupId = 'KOORDINATOR_GROUP';
-        nodes.push({
-            id: koordinatorGroupId,
-            title: 'Koordinator',
-            name: koordinatorList.length === 1 ? koordinatorList[0].ANGGOTA_NAMA : (koordinatorList.length + ' Koordinator'),
-            image: (koordinatorList.length === 1 ? nonEmpty(koordinatorList[0].ANGGOTA_PIC, './assets/images/daftaranggota/default/avatar.png') : undefined),
-            anggotaId: (koordinatorList.length === 1 ? koordinatorList[0].ANGGOTA_ID : '—'),
-            tingkatanSebutan: (koordinatorList.length === 1 ? nonEmpty(koordinatorList[0].TINGKATAN_SEBUTAN, 'Koordinator') : 'Koordinator'),
-            tingkatanNama: (koordinatorList.length === 1 ? nonEmpty(koordinatorList[0].TINGKATAN_NAMA, 'Koordinator') : 'Koordinator'),
-            column: 1
-        });
-        if (ketuaId) { links.push([ketuaId, koordinatorGroupId]); }
-
-        // Enumerated Pengurus under Koordinator group
+        // Level 3: Pengurus (under Ketua)
         var pengurusList = Array.isArray(payload.pengurus) ? payload.pengurus : [];
         pengurusList.forEach(function (p, idx) {
             var pid = nid('PENGURUS', p.ANGGOTA_ID);
@@ -190,7 +188,12 @@
                 tingkatanNama: nonEmpty(p.TINGKATAN_NAMA, ''),
                 column: 2
             });
-            links.push([koordinatorGroupId, pid]);
+            if (ketuaId) {
+                links.push([ketuaId, pid]);
+            } else {
+                // If no Ketua, link Pengurus directly to Koordinator
+                links.push([koordinatorGroupId, pid]);
+            }
         });
 
         // Fallback when no data at all
@@ -231,18 +234,19 @@
                 keys: ['from', 'to'],
                 data: series.links,
                 levels: [{
-                    level: 0, // Ketua
-                    color: 'silver',
-                    dataLabels: { color: 'black' },
-                    height: 100
-                }, {
-                    level: 1, // Koordinator group
+                    level: 0, // Koordinator group (top)
                     color: '#007ad0',
                     dataLabels: { color: 'white' },
                     height: 100
                 }, {
-                    level: 2, // Pengurus (enumerated)
+                    level: 1, // Ketua (middle)
+                    color: 'silver',
+                    dataLabels: { color: 'black' },
+                    height: 100
+                }, {
+                    level: 2, // Pengurus (bottom)
                     color: '#359154',
+                    dataLabels: { color: 'white' },
                     height: 85
                 }],
                 nodes: series.nodes,
