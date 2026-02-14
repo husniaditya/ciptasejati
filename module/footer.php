@@ -60,3 +60,6 @@ $getMedia = GetQuery("SELECT * FROM c_mediasosial");
         </div>
     </div>
 </div>
+
+<!-- Aktivasi Cabang Modal -->
+<?php include('module/component/v_aktivasicabang.php'); ?>

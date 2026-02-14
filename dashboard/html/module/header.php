@@ -5,24 +5,31 @@ while ($rowLogo = $getLogo->fetch(PDO::FETCH_ASSOC)) {
 }
 ?>
 <style>
-/* Keep the mark-as-read footer fixed while the list scrolls */
+/* Modern Notification Dropdown Layout */
 #header-dd-notification .dropdown-body {
     display: flex;
     flex-direction: column;
-    /* Set a max height for the dropdown body; adjust as needed */
-    max-height: 420px;
-    overflow: hidden; /* prevent the body from scrolling */
-    padding: 0; /* we'll pad inner areas */
+    max-height: 450px;
+    overflow: hidden;
+    padding: 0;
 }
+
 #header-dd-notification .dropdown-body .media-list {
-    flex: 1 1 auto;            /* take remaining height */
-    overflow-y: auto;          /* scroll only the list */
-    padding: 12px;             /* spacing around list */
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 8px;
+    scroll-behavior: smooth;
 }
+
 #header-dd-notification .dropdown-footer {
-    background: #fff;
-    border-top: 1px solid #eee;
-    padding: 8px 12px;
+    flex-shrink: 0;
+}
+
+/* Clear floats in notification items */
+#header-dd-notification .media-list .media .media-body::after {
+    content: '';
+    display: table;
+    clear: both;
 }
 </style>
 <!-- START navbar header -->
@@ -95,10 +102,10 @@ while ($rowLogo = $getLogo->fetch(PDO::FETCH_ASSOC)) {
                     <div class="media-list" id="listnotif"></div>
                     <!-- Footer actions -->
                     <div class="dropdown-footer" style="border-top: 1px solid #eee; padding: 8px 12px; text-align: right;">
-                        <a href="javascript:void(0);" id="markAllNotif" style="font-size: 12px;">
+                        <a href="javascript:void(0);" id="markAllNotif" style="font-size: 12px; display: inline-flex; align-items: center; gap: 6px;">
                             <i class="fa-solid fa-check-double"></i>
                             Tandai semua dibaca
-                            <span id="markAllBadge" class="label label-primary" style="margin-left:6px;"></span>
+                            <span id="markAllBadge" class="label label-primary"></span>
                         </a>
                     </div>
                     <!--/ Message list -->
@@ -127,8 +134,7 @@ while ($rowLogo = $getLogo->fetch(PDO::FETCH_ASSOC)) {
                         Log Perubahan Versi
                     </a>
                 </li>
-
-
+                <li><a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-Payment" href="#Payment"><span class="icon"><i class="fa-solid fa-sack-dollar"></i></span> Pembayaran Sewa</a></li>
                 <li class="divider"></li>
                 <li><a href="logout.php"><span class="icon"><i class="ico-exit"></i></span> Sign Out</a></li>
             </ul>
@@ -144,4 +150,5 @@ while ($rowLogo = $getLogo->fetch(PDO::FETCH_ASSOC)) {
 include 'module/component/header/v_changepassword.php'; 
 include 'module/component/header/v_changelog.php'; 
 include 'module/component/header/v_notif.php';
+include 'module/component/header/v_payment.php';
 ?>

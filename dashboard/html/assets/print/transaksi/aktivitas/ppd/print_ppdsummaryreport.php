@@ -25,8 +25,8 @@ if ($_GET["tgl"] && $_GET["cbg"]) {
             c2.CABANG_DESKRIPSI AS LOKASI_CABANG,
             koor.ANGGOTA_NAMA AS PPD_KOORDINATOR,
             guru.ANGGOTA_NAMA AS PPD_GURU,
-            DATE_FORMAT(p.PPD_APPROVE_GURU_TGL, '%d %M %Y') AS PPD_GURU_TGL,
-            DATE_FORMAT(p.PPD_APPROVE_PELATIH_TGL, '%d %M %Y') AS PPD_PELATIH_TGL,
+            p.PPD_APPROVE_GURU_TGL AS PPD_GURU_TGL,
+            p.PPD_APPROVE_PELATIH_TGL AS PPD_PELATIH_TGL,
             (SELECT COUNT(p1.ANGGOTA_ID) 
              FROM t_ppd p1 
              WHERE p1.PPD_TANGGAL = '$PPD_TANGGAL' AND p1.PPD_LOKASI = '$PPD_LOKASI' AND p1.PPD_APPROVE_PELATIH = 1) AS TOTAL_PPD
@@ -45,24 +45,24 @@ if ($_GET["tgl"] && $_GET["cbg"]) {
         if ($getData->rowCount() > 0) {
             $data = $getData->fetch(PDO::FETCH_ASSOC);
 
-            $LOKASI_CABANG = $data['LOKASI_CABANG'];
-            $DAERAH_DESKRIPSI = $data['DAERAH_DESKRIPSI'];
-            $CABANG_DESKRIPSI = $data['CABANG_DESKRIPSI'];
-            $CABANG_SEKRETARIAT = $data['CABANG_SEKRETARIAT'];
-            $TOTAL_PPD = $data['TOTAL_PPD'];
-            $PPD_PELATIH_TGL = $data['PPD_PELATIH_TGL'];
-            $PPD_GURU_TGL = $data['PPD_GURU_TGL'];
-            $PPD_APPROVE_GURU = $data['PPD_APPROVE_GURU'];
-            $PPD_APPROVE_PELATIH_BY = $data['PPD_APPROVE_PELATIH_BY'];
-            $PPD_APPROVE_GURU_BY = $data['PPD_APPROVE_GURU_BY'];
-            $PPD_KOORDINATOR = $data['PPD_KOORDINATOR'];
-            $PPD_GURU = $data['PPD_GURU'];
-            $PPD_TANGGAL_DESKRIPSI = $data['PPD_TANGGAL_DESKRIPSI'];
+            $LOKASI_CABANG = $data['LOKASI_CABANG'] ?? '';
+            $DAERAH_DESKRIPSI = $data['DAERAH_DESKRIPSI'] ?? '';
+            $CABANG_DESKRIPSI = $data['CABANG_DESKRIPSI'] ?? '';
+            $CABANG_SEKRETARIAT = $data['CABANG_SEKRETARIAT'] ?? '';
+            $TOTAL_PPD = $data['TOTAL_PPD'] ?? 0;
+            $PPD_PELATIH_TGL = $data['PPD_PELATIH_TGL'] ?? null;
+            $PPD_GURU_TGL = $data['PPD_GURU_TGL'] ?? null;
+            $PPD_APPROVE_GURU = $data['PPD_APPROVE_GURU'] ?? 0;
+            $PPD_APPROVE_PELATIH_BY = $data['PPD_APPROVE_PELATIH_BY'] ?? '';
+            $PPD_APPROVE_GURU_BY = $data['PPD_APPROVE_GURU_BY'] ?? '';
+            $PPD_KOORDINATOR = $data['PPD_KOORDINATOR'] ?? '';
+            $PPD_GURU = $data['PPD_GURU'] ?? '';
+            $PPD_TANGGAL_DESKRIPSI = $data['PPD_TANGGAL_DESKRIPSI'] ?? '';
 
-            // Create a DateTime object from the date string
+            // Create DateTime objects and format dates with locale
             $dateTime1 = new DateTime($PPD_TANGGAL_DESKRIPSI);
-            $dateTime2 = new DateTime($PPD_PELATIH_TGL);
-            $dateTime3 = new DateTime($PPD_GURU_TGL);
+            $dateTime2 = !empty($PPD_PELATIH_TGL) ? new DateTime($PPD_PELATIH_TGL) : null;
+            $dateTime3 = !empty($PPD_GURU_TGL) ? new DateTime($PPD_GURU_TGL) : null;
 
             // Create an instance of IntlDateFormatter
             $formatter = new IntlDateFormatter('id_ID', IntlDateFormatter::FULL, IntlDateFormatter::NONE);
@@ -74,8 +74,8 @@ if ($_GET["tgl"] && $_GET["cbg"]) {
 
             // Format the date using the formatter
             $PPD_TANGGAL_DESKRIPSI = $formatter->format($dateTime1);
-            $PPD_PELATIH_TGL = $formatter2->format($dateTime2);
-            $PPD_GURU_TGL = $formatter2->format($dateTime3);
+            $PPD_PELATIH_TGL = $dateTime2 ? $formatter2->format($dateTime2) : '';
+            $PPD_GURU_TGL = $dateTime3 ? $formatter2->format($dateTime3) : '';
 
             // Extend the TCPDF class to create custom Header and Footer
             class MYPDF extends TCPDF {
@@ -192,9 +192,11 @@ if ($_GET["tgl"] && $_GET["cbg"]) {
                                         GROUP BY p.TINGKATAN_ID_BARU");
 
                 while ($row = $getAnggota->fetch(PDO::FETCH_ASSOC)) {
-                    $pdf->Cell(25, 5, $row['TINGKATAN_ANGGOTA'], 0, 0, "L");
+                    $TINGKATAN_ANGGOTA = $row['TINGKATAN_ANGGOTA'] ?? '';
+                    $COUNT_ANGGOTA = $row['COUNT_ANGGOTA'] ?? 0;
+                    $pdf->Cell(25, 5, $TINGKATAN_ANGGOTA, 0, 0, "L");
                     $pdf->Cell(5, 5, " : ", 0, 0, "L");
-                    $pdf->Cell(25, 5, $row['COUNT_ANGGOTA'] . ' Orang', 0, 0, "L");
+                    $pdf->Cell(25, 5, $COUNT_ANGGOTA . ' Orang', 0, 0, "L");
                     $pdf->Ln();
                 }
             }
@@ -218,7 +220,11 @@ if ($_GET["tgl"] && $_GET["cbg"]) {
             ORDER BY t.TINGKATAN_LEVEL");
 
             while ($dataTingkatan = $getTingkatan->fetch(PDO::FETCH_ASSOC)) {
-                extract($dataTingkatan);
+                // Handle null values
+                $TINGKATAN_ID = $dataTingkatan['TINGKATAN_ID'] ?? '';
+                $TINGKATAN_NAMA = $dataTingkatan['TINGKATAN_NAMA'] ?? '';
+                $TINGKATAN_SEBUTAN = $dataTingkatan['TINGKATAN_SEBUTAN'] ?? '';
+                $COUNT_TINGKATAN = $dataTingkatan['COUNT_TINGKATAN'] ?? 0;
                 
                 $pdf->SetFont('times', 'B', 11);
                 $pdf->Cell(30, 5, "Sabuk / Tingkatan", 0, 0, "L");
@@ -244,21 +250,96 @@ if ($_GET["tgl"] && $_GET["cbg"]) {
                 ELSE 'Ulang'
                 END PPD_JENIS
                 FROM t_ppd p
-                LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY
+                LEFT JOIN m_anggota a ON p.ANGGOTA_ID = a.ANGGOTA_ID AND p.CABANG_KEY = a.CABANG_KEY AND a.ANGGOTA_STATUS = 0
                 LEFT JOIN m_tingkatan t ON p.TINGKATAN_ID_LAMA = t.TINGKATAN_ID
                 LEFT JOIN m_tingkatan t2 ON p.TINGKATAN_ID_BARU = t2.TINGKATAN_ID
                 WHERE p.PPD_TANGGAL = '$PPD_TANGGAL' AND p.PPD_LOKASI = '$PPD_LOKASI' AND p.TINGKATAN_ID_BARU = '$TINGKATAN_ID' AND p.PPD_APPROVE_PELATIH = 1 AND p.DELETION_STATUS = 0");
 
+                $row_count = 0;
                 while ($dataAnggota = $getAnggotaTingkatan->fetch(PDO::FETCH_ASSOC)) {
                     extract($dataAnggota);
-                    $pdf->Cell(7, 5, $row_num . '.', 1, 0, "C");
-                    $pdf->Cell(42, 5, $ANGGOTA_NAMA, 1, 0, "L");
-                    $pdf->Cell(30, 5, $ANGGOTA_ID, 1, 0, "C");
-                    $pdf->Cell(30, 5, $KEANGGOTAAN, 1, 0, "C");
-                    $pdf->Cell(30, 5, $TINGKATAN_LAMA, 1, 0, "C");
-                    $pdf->Cell(30, 5, $TINGKATAN_BARU, 1, 0, "C");
-                    $pdf->Cell(20, 5, $PPD_JENIS, 1, 0, "C");
-                    $pdf->Ln();
+                    
+                    // Handle null values
+                    $ANGGOTA_NAMA = $ANGGOTA_NAMA ?? '';
+                    $ANGGOTA_ID = $ANGGOTA_ID ?? '';
+                    $KEANGGOTAAN = $KEANGGOTAAN ?? '';
+                    $TINGKATAN_LAMA = $TINGKATAN_LAMA ?? '';
+                    $TINGKATAN_BARU = $TINGKATAN_BARU ?? '';
+                    $PPD_JENIS = $PPD_JENIS ?? '';
+                    
+                    // Calculate height needed for wrapped text
+                    $nameHeight = $pdf->getStringHeight(42, $ANGGOTA_NAMA);
+                    $keanggotaanHeight = $pdf->getStringHeight(30, $KEANGGOTAAN);
+                    $rowHeight = max($nameHeight, $keanggotaanHeight, 5);
+                    
+                    // Check if we need a new page (with margin for footer)
+                    $currentY = $pdf->GetY();
+                    $pageHeight = $pdf->getPageHeight();
+                    $footerHeight = 90;
+                    $minSpaceNeeded = $rowHeight + 5;
+                    
+                    if ($currentY + $minSpaceNeeded > $pageHeight - $footerHeight) {
+                        // Add new page and re-draw headers
+                        $pdf->AddPage();
+                        $pdf->SetMargins(10, PDF_MARGIN_TOP, 10);
+                        
+                        // Re-draw section header
+                        $pdf->SetFont('times', 'B', 11);
+                        $pdf->Cell(30, 5, "Sabuk / Tingkatan", 0, 0, "L");
+                        $pdf->Cell(5, 5, " : ", 0, 0, "L");
+                        $pdf->Cell(70, 5, $TINGKATAN_NAMA . ' / ' . $TINGKATAN_SEBUTAN, 0, 0, "L");
+                        $pdf->Ln();
+                        
+                        // Re-draw column headers
+                        $pdf->Cell(7, 5, "No.", 1, 0, "C");
+                        $pdf->Cell(42, 5, "Nama Anggota", 1, 0, "C");
+                        $pdf->Cell(30, 5, "ID Anggota", 1, 0, "C");
+                        $pdf->Cell(30, 5, "Keanggotaan", 1, 0, "C");
+                        $pdf->Cell(30, 5, "Tingkatan Lama", 1, 0, "C");
+                        $pdf->Cell(30, 5, "Tingkatan Baru", 1, 0, "C");
+                        $pdf->Cell(20, 5, "Status PPD", 1, 0, "C");
+                        $pdf->Ln();
+                        $pdf->SetFont('times', '', 10);
+                    }
+                    
+                    $yStart = $pdf->GetY();
+                    $xStart = $pdf->GetX();
+                    
+                    // No. column
+                    $pdf->Cell(7, $rowHeight, $row_count + 1 . '.', 1, 0, "C");
+                    
+                    // Nama Anggota column (with MultiCell for wrapping, no border)
+                    $pdf->SetXY($xStart + 7, $yStart);
+                    $pdf->MultiCell(42, 5, $ANGGOTA_NAMA, 0, "L");
+                    
+                    // ID Anggota column
+                    $pdf->SetXY($xStart + 49, $yStart);
+                    $pdf->Cell(30, $rowHeight, $ANGGOTA_ID, 1, 0, "C");
+                    
+                    // Keanggotaan column (with MultiCell for wrapping, no border)
+                    $pdf->SetXY($xStart + 79, $yStart);
+                    $pdf->MultiCell(30, 5, $KEANGGOTAAN, 0, "C");
+                    
+                    // Tingkatan Lama column
+                    $pdf->SetXY($xStart + 109, $yStart);
+                    $pdf->Cell(30, $rowHeight, $TINGKATAN_LAMA, 1, 0, "C");
+                    
+                    // Tingkatan Baru column
+                    $pdf->SetXY($xStart + 139, $yStart);
+                    $pdf->Cell(30, $rowHeight, $TINGKATAN_BARU, 1, 0, "C");
+                    
+                    // Status PPD column
+                    $pdf->SetXY($xStart + 169, $yStart);
+                    $pdf->Cell(20, $rowHeight, $PPD_JENIS, 1, 0, "C");
+                    
+                    // Draw borders manually for MultiCell columns to avoid divided borders
+                    $pdf->Rect($xStart + 7, $yStart, 42, $rowHeight);
+                    $pdf->Rect($xStart + 79, $yStart, 30, $rowHeight);
+                    
+                    // Move to next row
+                    $pdf->SetXY($xStart, $yStart + $rowHeight);
+                    $pdf->Ln(0);
+                    $row_count++;
                 }
                 
                 $pdf->Ln(7);

@@ -154,6 +154,8 @@ function fetchDataAndPopulateForm(value1, value2, value3) {
             // Set the values of the Member form fields
             $("#ANGGOTA_ID").val(data.ANGGOTA_ID);
             $("#TINGKATAN").val(data.TINGKATAN);
+            $("#TINGKATAN_NAMA").text(data.TINGKATAN_NAMA);
+            $("#TINGKATAN_SEBUTAN").text(data.TINGKATAN_SEBUTAN);
             $("#ANGGOTA_RANTING").val(data.ANGGOTA_RANTING);
             $("#CABANG_DESKRIPSI").val(data.CABANG_DESKRIPSI);
             $("#DAERAH_DESKRIPSI").val(data.DAERAH_DESKRIPSI);

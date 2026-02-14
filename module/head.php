@@ -47,6 +47,9 @@
 <!-- Skin CSS -->
 <link id="skinCSS" rel="stylesheet" href="css/skins/skin-renewable-energy.css">
 
+<!-- Select2 CSS -->
+<link rel="stylesheet" href="dashboard/plugins/select2/css/select2.css">
+
 <!-- Theme Custom CSS -->
 <link rel="stylesheet" href="css/custom.css">
 

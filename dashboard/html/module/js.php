@@ -24,6 +24,7 @@
 <script type="text/javascript" src="../javascript/backend/forms/element.js"></script>
 <script type="text/javascript" src="../plugins/select2/js/select2.js"></script>
 <script type="text/javascript" src="../plugins/touchspin/js/jquery.bootstrap-touchspin.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!--/ Plugins and page level script : optional -->
 
 <!-- Datatable -->
@@ -48,6 +49,10 @@
 <script type="text/javascript" src="../javascript/backend/highcharts/modules/export-data.js"></script>
 <script type="text/javascript" src="../javascript/backend/highcharts/modules/accessibility.js"></script>
 <!-- / Highcharts -->
+
+<!-- Payment Gateway -->
+<script type="text/javascript" src="module/javascript/component/payment/payment.js"></script>
+<!-- / Payment Gateway -->
 
 
 <!--/ END JAVASCRIPT SECTION -->

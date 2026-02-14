@@ -10,11 +10,11 @@ CASE
     ELSE FORMAT(SUM(k.KAS_JUMLAH), 0)
 END AS KAS_ANGGOTA
 FROM m_anggota a
-LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY
+LEFT JOIN m_cabang c ON a.CABANG_KEY = c.CABANG_KEY and a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0
 LEFT JOIN m_daerah d ON c.DAERAH_KEY = d.DAERAH_KEY
 LEFT JOIN m_tingkatan t ON a.TINGKATAN_ID = t.TINGKATAN_ID
 LEFT JOIN t_kas k ON a.ANGGOTA_KEY = k.ANGGOTA_KEY
-WHERE a.ANGGOTA_STATUS = 0 AND a.DELETION_STATUS = 0 AND a.ANGGOTA_ID = '$ANGGOTA_ID' AND a.CABANG_KEY = '$CABANG_KEY'");
+WHERE a.ANGGOTA_ID = '$ANGGOTA_ID' AND a.CABANG_KEY = '$CABANG_KEY'");
 
 $data = array();
 
@@ -44,6 +44,8 @@ while ($detail = $GetDetail->fetch(PDO::FETCH_ASSOC)) {
     $data['ANGGOTA_JOIN'] = $detail["ANGGOTA_JOIN"];
     $data['ANGGOTA_RESIGN'] = $detail["ANGGOTA_RESIGN"];
     $data['TINGKATAN'] = $detail["TINGKATAN_NAMA"] . " - " . $detail["TINGKATAN_SEBUTAN"];
+    $data['TINGKATAN_NAMA'] = $detail["TINGKATAN_NAMA"];
+    $data['TINGKATAN_SEBUTAN'] = $detail["TINGKATAN_SEBUTAN"];
     $data['ANGGOTA_RANTING'] = $detail["ANGGOTA_RANTING"];
     $data['CABANG_DESKRIPSI'] = $detail["CABANG_DESKRIPSI"];
     $data['DAERAH_DESKRIPSI'] = $detail["DAERAH_DESKRIPSI"];
