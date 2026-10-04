@@ -3,6 +3,8 @@ $getLogo = GetQuery("SELECT PROFIL_LOGO FROM c_profil");
 while ($rowLogo = $getLogo->fetch(PDO::FETCH_ASSOC)) {
     extract($rowLogo);
 }
+$paymentAccessRoles = ['Ketua', 'Pengurus', 'Koordinator', 'Administrator'];
+$canAccessRentalPayment = in_array(trim((string)($_SESSION['LOGINAKS_CS'] ?? '')), $paymentAccessRoles, true);
 ?>
 <style>
 /* Modern Notification Dropdown Layout */
@@ -134,7 +136,9 @@ while ($rowLogo = $getLogo->fetch(PDO::FETCH_ASSOC)) {
                         Log Perubahan Versi
                     </a>
                 </li>
-                <li><a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-Payment" href="#Payment"><span class="icon"><i class="fa-solid fa-sack-dollar"></i></span> Pembayaran Sewa</a></li>
+                <?php if ($canAccessRentalPayment) { ?>
+                    <li><a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-Payment" href="#Payment"><span class="icon"><i class="fa-solid fa-sack-dollar"></i></span> Pembayaran Sewa</a></li>
+                <?php } ?>
                 <li class="divider"></li>
                 <li><a href="logout.php"><span class="icon"><i class="ico-exit"></i></span> Sign Out</a></li>
             </ul>
