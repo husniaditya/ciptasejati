@@ -1,9 +1,41 @@
 <?php
 $USER_AKSES = $_SESSION["LOGINAKS_CS"];
+$USER_CABANG = $_SESSION["LOGINCAB_CS"] ?? '';
+
+$isCabangExpired = false;
+if ($USER_CABANG !== '') {
+    $expiryStmt = $db1->prepare(
+        "SELECT EXPIRY_DATE
+         FROM m_cabang
+         WHERE CONVERT(CABANG_KEY USING utf8mb4) COLLATE utf8mb4_general_ci
+             = CONVERT(:cabang_key USING utf8mb4) COLLATE utf8mb4_general_ci
+         LIMIT 1"
+    );
+    $expiryStmt->execute([':cabang_key' => $USER_CABANG]);
+    $cabangExpiry = $expiryStmt->fetch(PDO::FETCH_ASSOC);
+
+    $isCabangExpired = !$cabangExpiry
+        || empty($cabangExpiry['EXPIRY_DATE'])
+        || strtotime($cabangExpiry['EXPIRY_DATE']) < strtotime(date('Y-m-d'));
+}
 ?>
 
 <!-- START Sidebar Content -->
 <section class="content slimscroll">
+    <?php if ($isCabangExpired) { ?>
+        <ul class="topmenu topmenu-responsive" data-toggle="menu">
+            <li class="level1 active">
+                <a href="expired.php">
+                    <span class="figure"><i class="fa fa-exclamation-triangle"></i></span>
+                    <span class="text">Expired</span>
+                </a>
+            </li>
+        </ul>
+        <?php if (basename($_SERVER['SCRIPT_NAME'] ?? '') !== 'expired.php') { ?>
+            <script>window.location.replace('expired.php');</script>
+        <?php } ?>
+        <?php return; ?>
+    <?php } ?>
     <!-- START Template Navigation/Menu -->
     <ul class="topmenu topmenu-responsive" data-toggle="menu">
         <?php

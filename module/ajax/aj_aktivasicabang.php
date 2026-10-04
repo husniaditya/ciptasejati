@@ -8,6 +8,8 @@
 ob_start();
 
 require_once("../../dashboard/html/module/connection/conn.php");
+require_once("../../dashboard/html/module/backend/payment/midtrans.php");
+require_once("../../dashboard/html/module/backend/payment/t_payment.php");
 
 // Clear any output that might have been generated
 ob_end_clean();
@@ -200,6 +202,11 @@ function getPaymentMethods($db) {
                 'name' => 'QRIS',
                 'icon' => 'fa-qrcode',
                 'methods' => []
+            ],
+            'gateway' => [
+                'name' => 'Midtrans',
+                'icon' => 'fa-credit-card',
+                'methods' => []
             ]
         ];
 
@@ -256,7 +263,7 @@ function createActivation($db) {
 
     // Validate payment category if subscription (whitelist)
     if ($packageType === 'subscription') {
-        $allowedCategories = ['transfer_bank', 'virtual_account', 'ewallet', 'qris'];
+        $allowedCategories = ['gateway', 'transfer_bank', 'virtual_account', 'ewallet', 'qris'];
         if (!in_array($paymentCategory, $allowedCategories)) {
             $response['message'] = 'Kategori pembayaran tidak valid';
             return $response;
@@ -396,13 +403,55 @@ function processSubscriptionActivation($db, $cabangId, $cabangNama, $paymentMeth
         }
         $totalAmount = $amount + $feeAmount;
 
-        // Calculate expiry time
-        $expiryHours = intval($paymentInfo['expiry_hours'] ?? 24);
+        // The local expiry mirrors the expiry configured for the Snap payment.
+        $expiryMinutes = max(1, intval($_ENV['MIDTRANS_PAYMENT_EXPIRY_MINUTES'] ?? 15));
         $createdAt = date('Y-m-d H:i:s');
-        $expiredAt = date('Y-m-d H:i:s', strtotime("+{$expiryHours} hours"));
+        $expiredAt = date('Y-m-d H:i:s', strtotime("+{$expiryMinutes} minutes"));
 
-        // Generate payment data based on category (pass payment info from DB)
-        $paymentData = generatePaymentData($paymentMethod, $paymentCategory, $amount, $orderId, $paymentInfo);
+        try {
+            $snapResponse = MidtransClient::createSnapToken([
+                'transaction_details' => [
+                    'order_id' => $orderId,
+                    'gross_amount' => (int) round($totalAmount)
+                ],
+                'item_details' => [
+                    [
+                        'id' => 'subscription',
+                        'price' => (int) round($amount),
+                        'quantity' => 1,
+                        'name' => 'Berlangganan cabang 1 tahun'
+                    ],
+                    ...($feeAmount > 0 ? [[
+                        'id' => 'payment_fee',
+                        'price' => (int) round($feeAmount),
+                        'quantity' => 1,
+                        'name' => 'Biaya administrasi'
+                    ]] : [])
+                ],
+                'customer_details' => [
+                    'first_name' => $cabangNama
+                ],
+                'custom_expiry' => [
+                    'expiry_duration' => $expiryMinutes,
+                    'unit' => 'minute'
+                ]
+            ]);
+        } catch (RuntimeException $e) {
+            $response['message'] = 'Gagal membuat pembayaran Midtrans: ' . $e->getMessage();
+            return $response;
+        }
+
+        $paymentData = [
+            'snap_token' => $snapResponse['token'] ?? null,
+            'redirect_url' => $snapResponse['redirect_url'] ?? null,
+            'payment_method' => $paymentMethod,
+            'payment_category' => $paymentCategory
+        ];
+
+        if (empty($paymentData['snap_token'])) {
+            $response['message'] = 'Midtrans tidak mengembalikan Snap token';
+            return $response;
+        }
 
         // Insert transaction
         $sql = "INSERT INTO t_payment (
@@ -623,7 +672,9 @@ function checkPaymentStatus($db) {
                     pm.payment_code,
                     pm.payment_category
                 FROM t_payment p
-                LEFT JOIN m_cabang c ON p.cabang_key = c.CABANG_KEY
+                 LEFT JOIN m_cabang c
+                    ON CONVERT(p.cabang_key USING utf8mb4) COLLATE utf8mb4_general_ci
+                     = CONVERT(c.CABANG_KEY USING utf8mb4) COLLATE utf8mb4_general_ci
                 LEFT JOIN m_payment pm ON p.payment_id = pm.id
                 WHERE p.order_id = :order_id
                 LIMIT 1";
@@ -635,6 +686,18 @@ function checkPaymentStatus($db) {
         if (!$payment) {
             $response['message'] = 'Transaksi tidak ditemukan';
             return $response;
+        }
+
+        if ($payment['status'] === 'pending') {
+            try {
+                $gatewayStatus = MidtransClient::getTransactionStatus($payment['order_id']);
+                (new PaymentTransaction())->processGatewayStatus($gatewayStatus);
+
+                $stmt->execute([':order_id' => $orderId]);
+                $payment = $stmt->fetch(PDO::FETCH_ASSOC);
+            } catch (RuntimeException $e) {
+                error_log('Failed to synchronize Midtrans status: ' . $e->getMessage());
+            }
         }
 
         // Determine status text

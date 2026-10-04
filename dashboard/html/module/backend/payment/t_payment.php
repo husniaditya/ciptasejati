@@ -9,6 +9,7 @@
 
 // Include database connection
 require_once __DIR__ . '/../../connection/conn.php';
+require_once __DIR__ . '/midtrans.php';
 
 class PaymentTransaction {
 
@@ -230,15 +231,34 @@ class PaymentTransaction {
      */
     public function insertSuccessfulTransaction($transactionId, $callbackData = []) {
         try {
-            // Get current transaction
-            $transaction = $this->getTransaction($transactionId);
+            $this->db->beginTransaction();
+
+            // Lock the row so repeated Midtrans notifications cannot renew twice.
+            $stmtTransaction = $this->db->prepare(
+                "SELECT * FROM {$this->table} WHERE transaction_id = :transaction_id FOR UPDATE"
+            );
+            $stmtTransaction->execute([':transaction_id' => $transactionId]);
+            $transaction = $stmtTransaction->fetch(PDO::FETCH_ASSOC);
             
             if (!$transaction) {
+                $this->db->rollBack();
                 return ['success' => false, 'message' => 'Transaction not found'];
             }
 
             $oldStatus = $transaction['status'];
             $newStatus = 'success';
+
+            // Midtrans may retry the same notification. The first successful
+            // transition is the only event allowed to extend the branch.
+            if (in_array(strtolower($oldStatus), ['success', 'settlement', 'capture'], true)) {
+                $this->db->commit();
+                return [
+                    'success' => true,
+                    'message' => 'Transaction was already processed',
+                    'transaction_id' => $transactionId,
+                    'status' => $newStatus
+                ];
+            }
 
             // Update transaction status
             $sql = "UPDATE {$this->table} SET
@@ -256,11 +276,17 @@ class PaymentTransaction {
             $stmt->execute([
                 ':status' => $newStatus,
                 ':callback_data' => json_encode($callbackData),
-                ':gateway_transaction_id' => $callbackData['gateway_transaction_id'] ?? null,
+                ':gateway_transaction_id' => $callbackData['transaction_id']
+                    ?? $callbackData['gateway_transaction_id']
+                    ?? null,
                 ':gateway_reference' => $callbackData['gateway_reference'] ?? null,
                 ':updated_by' => $transaction['user_id'],
                 ':transaction_id' => $transactionId
             ]);
+
+            $this->extendCabangExpiry($transaction['cabang_key']);
+
+            $this->db->commit();
 
             // Log the status change
             $this->logAction($transaction['id'], $transactionId, 'status_change', $oldStatus, $newStatus, $callbackData);
@@ -276,11 +302,111 @@ class PaymentTransaction {
             ];
 
         } catch (PDOException $e) {
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
             return [
                 'success' => false,
                 'message' => 'Failed to update transaction: ' . $e->getMessage()
             ];
         }
+    }
+
+    /**
+     * Process a verified Midtrans notification or a trusted status response.
+     */
+    public function processGatewayStatus(array $callbackData) {
+        $orderId = trim((string)($callbackData['order_id'] ?? ''));
+        if ($orderId === '') {
+            return ['success' => false, 'message' => 'Missing Midtrans order ID'];
+        }
+
+        $stmt = $this->db->prepare(
+            "SELECT transaction_id, status, total_amount FROM {$this->table} WHERE order_id = :order_id LIMIT 1"
+        );
+        $stmt->execute([':order_id' => $orderId]);
+        $transaction = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$transaction) {
+            return ['success' => false, 'message' => 'Transaction not found'];
+        }
+
+        if (isset($callbackData['gross_amount'])
+            && abs((float)$transaction['total_amount'] - (float)$callbackData['gross_amount']) > 0.01) {
+            return ['success' => false, 'message' => 'Payment amount mismatch'];
+        }
+
+        $gatewayStatus = strtolower((string)($callbackData['transaction_status'] ?? ''));
+        $fraudStatus = strtolower((string)($callbackData['fraud_status'] ?? ''));
+
+        if ($gatewayStatus === 'capture' && $fraudStatus === 'challenge') {
+            $gatewayStatus = 'pending';
+        }
+
+        if ($gatewayStatus === 'success'
+            || $gatewayStatus === 'settlement'
+            || ($gatewayStatus === 'capture' && $fraudStatus !== 'deny')) {
+            return $this->insertSuccessfulTransaction($transaction['transaction_id'], $callbackData);
+        }
+
+        if (in_array($gatewayStatus, ['deny', 'cancel', 'expire', 'failure'], true)) {
+            $failedStatus = $gatewayStatus === 'expire'
+                ? 'expired'
+                : ($gatewayStatus === 'cancel' ? 'cancel' : ($gatewayStatus === 'deny' ? 'deny' : 'failed'));
+            return $this->updateGatewayStatus(
+                $transaction['transaction_id'],
+                $failedStatus,
+                $callbackData
+            );
+        }
+
+        return $this->updateGatewayStatus(
+            $transaction['transaction_id'],
+            'pending',
+            $callbackData
+        );
+    }
+
+    private function updateGatewayStatus($transactionId, $status, array $callbackData) {
+        try {
+            $sql = "UPDATE {$this->table}
+                    SET status = CASE WHEN status IN ('success', 'settlement', 'capture') THEN status ELSE :status END,
+                        callback_data = :callback_data,
+                        gateway_transaction_id = :gateway_transaction_id,
+                        updated_at = NOW()
+                    WHERE transaction_id = :transaction_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([
+                ':status' => $status,
+                ':callback_data' => json_encode($callbackData),
+                ':gateway_transaction_id' => $callbackData['transaction_id']
+                    ?? $callbackData['gateway_transaction_id']
+                    ?? null,
+                ':transaction_id' => $transactionId
+            ]);
+
+            return ['success' => true, 'message' => 'Gateway status processed', 'status' => $status];
+        } catch (PDOException $e) {
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
+    }
+
+    private function extendCabangExpiry($cabangKey) {
+        if ($cabangKey === null || $cabangKey === '') {
+            return;
+        }
+
+        $sql = "UPDATE m_cabang
+                SET EXPIRY_DATE = DATE_ADD(
+                    CASE
+                        WHEN EXPIRY_DATE IS NULL OR EXPIRY_DATE < NOW() THEN NOW()
+                        ELSE EXPIRY_DATE
+                    END,
+                    INTERVAL 1 YEAR
+                )
+                WHERE CABANG_KEY = :cabang_key";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':cabang_key' => $cabangKey]);
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../../dashboard/html/module/backend/payment/midtrans.php';
 // Get subscription price from p_param
 $subsPrice = 499999; // Default value
 $subsQuery = GetQuery("SELECT TEXT FROM p_param WHERE KATEGORI = 'SUBS_PRICE' LIMIT 1");
@@ -16,6 +17,7 @@ if (empty($_SESSION['csrf_token'])) {
 }
 $csrfToken = $_SESSION['csrf_token'];
 ?>
+<script type="text/javascript" src="<?= htmlspecialchars(MidtransClient::snapScriptUrl(), ENT_QUOTES, 'UTF-8') ?>" data-client-key="<?= htmlspecialchars(MidtransClient::clientKey(), ENT_QUOTES, 'UTF-8') ?>"></script>
 <!-- Aktivasi Cabang Modal -->
 <div class="modal fade" id="aktivasiCabangModal" aria-labelledby="aktivasiCabangModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">

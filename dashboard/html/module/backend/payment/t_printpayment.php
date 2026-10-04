@@ -1,4 +1,6 @@
 <?php
+// TCPDF must be the first response body so its PDF headers are not corrupted.
+ob_start();
 require_once __DIR__ . '/../../connection/conn.php';
 
 $DATENOW = date("d-m-Y H:i:s");
@@ -6,12 +8,13 @@ $USER_NAMA = $_SESSION["LOGINNAME_CS"] ?? 'Guest';
 $USER_CABANG = $_SESSION["LOGINCAB_CS"] ?? '';
 
 // Include the main TCPDF library
-require_once('../../../assets/tcpdf/tcpdf.php');
+require_once __DIR__ . '/../../../assets/tcpdf/tcpdf.php';
 
 // Get transaction ID from request
 $transactionId = isset($_GET['trx_id']) ? trim($_GET['trx_id']) : '';
 
 if (empty($transactionId)) {
+    http_response_code(400);
     die('Transaction ID is required');
 }
 
@@ -19,17 +22,31 @@ if (empty($transactionId)) {
 $sql = "SELECT t.*, m.payment_code, m.payment_name, m.payment_category, m.account_number, m.account_name,
                c.CABANG_DESKRIPSI, c.CABANG_SEKRETARIAT
         FROM t_payment t
-        INNER JOIN m_payment m ON t.payment_id = m.id
-        LEFT JOIN m_cabang c ON t.cabang_key = c.CABANG_KEY
-        WHERE t.transaction_id = :transaction_id";
+        LEFT JOIN m_payment m ON t.payment_id = m.id
+        LEFT JOIN m_cabang c
+            ON CONVERT(t.cabang_key USING utf8mb4) COLLATE utf8mb4_general_ci
+             = CONVERT(c.CABANG_KEY USING utf8mb4) COLLATE utf8mb4_general_ci
+        WHERE CONVERT(t.transaction_id USING utf8mb4) COLLATE utf8mb4_general_ci
+            = CONVERT(:transaction_id USING utf8mb4) COLLATE utf8mb4_general_ci";
 
+$params = [':transaction_id' => $transactionId];
+if ($USER_CABANG !== '') {
+    $sql .= ' AND CONVERT(t.cabang_key USING utf8mb4) COLLATE utf8mb4_general_ci'
+          . ' = CONVERT(:cabang_key USING utf8mb4) COLLATE utf8mb4_general_ci';
+    $params[':cabang_key'] = $USER_CABANG;
+}
 $stmt = $db1->prepare($sql);
-$stmt->execute([':transaction_id' => $transactionId]);
+$stmt->execute($params);
 $transaction = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$transaction) {
+    http_response_code(404);
     die('Transaction not found');
 }
+
+$transaction['payment_code'] = $transaction['payment_code'] ?? 'midtrans';
+$transaction['payment_name'] = $transaction['payment_name'] ?? 'Midtrans';
+$transaction['payment_category'] = $transaction['payment_category'] ?? 'gateway';
 
 // Format currency function
 function formatRupiah($amount) {
@@ -43,7 +60,9 @@ $statusLabels = [
     'settlement' => 'Lunas',
     'failed' => 'Gagal',
     'expired' => 'Kadaluarsa',
-    'cancel' => 'Dibatalkan'
+    'cancel' => 'Dibatalkan',
+    'deny' => 'Ditolak',
+    'failure' => 'Gagal'
 ];
 
 $statusLabel = $statusLabels[$transaction['status']] ?? 'Unknown';
@@ -319,5 +338,10 @@ $pdf->Cell(0, 5, 'Dicetak pada: ' . $DATENOW . ' oleh ' . $USER_NAMA, 0, 1, 'C')
 // Output the PDF
 $downloadMode = isset($_GET['download']) && $_GET['download'] == '1';
 $outputMode = $downloadMode ? 'D' : 'I'; // D = Download, I = Inline (browser)
+
+// Remove connection/session output before TCPDF sends its headers.
+while (ob_get_level() > 0) {
+    ob_end_clean();
+}
 $pdf->Output('Invoice_' . $transactionId . '.pdf', $outputMode);
 ?>

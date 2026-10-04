@@ -40,6 +40,7 @@ if ($_SESSION["ADD_LokasiCabang"] == "Y") {
                         <th>Kepengurusan</th>
                         <th>Latitude</th>
                         <th>Longitude</th>
+                        <th>Expiry Date</th>
                         <th>Map</th>
                     </tr>
                 </thead>

@@ -39,13 +39,6 @@ var PaymentGateway = (function() {
      * Bind event handlers
      */
     function bindEvents() {
-        // Payment method selection
-        $(document).on('click', '#Payment .payment-option', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            selectPaymentMethod($(this));
-        });
-
         // Copy button click handler (for account number and VA number)
         $(document).on('click', '.bank-info-card .account-number, .va-info-card .va-number', function(e) {
             e.preventDefault();
@@ -77,6 +70,8 @@ var PaymentGateway = (function() {
             if (!state.orderId || !state.amount) {
                 // Set default for testing or show info
                 console.log('Payment modal opened without order data');
+            } else {
+                $('#btn-process-payment').show();
             }
             
             // Check if Payment History tab is active and load data
@@ -111,23 +106,26 @@ var PaymentGateway = (function() {
 
         // Open Payment link from menu - initialize with order data
         $(document).on('click', '.open-Payment', function() {
-            // You can set order data here if needed
-            // For now, let's set a sample order for testing
             var testOrderId = 'ORD-' + Date.now();
-            var testAmount = 100000; // Sample amount Rp 100.000
+            var configuredAmount = getConfiguredPaymentAmount();
             
             state.orderId = testOrderId;
-            state.amount = testAmount;
+            state.amount = configuredAmount;
             
             $('#payment_order_id').val(testOrderId);
-            $('#payment_amount').val(testAmount);
-            $('#display_payment_amount').text(formatCurrency(testAmount));
+            $('#payment_amount').val(configuredAmount);
+            $('#display_payment_amount').text(formatCurrency(configuredAmount));
             
             // Reset selection when opening
             $('.payment-option').removeClass('selected');
-            $('#payment-instructions').hide();
+            $('#midtrans-payment-option').addClass('selected');
+            $('#midtrans-payment-option').show();
+            $('#midtrans-payment-message').show();
+            $('#payment-accordion').hide();
+            showQrisInstructions();
+            $('#payment-instructions').show();
             $('#qr-code-container').hide();
-            $('#btn-process-payment').hide();
+            $('#btn-process-payment').toggle(configuredAmount > 0);
         });
     }
 
@@ -138,19 +136,43 @@ var PaymentGateway = (function() {
      */
     function openPaymentModal(orderId, amount) {
         state.orderId = orderId;
-        state.amount = amount;
+        state.amount = getConfiguredPaymentAmount();
 
         $('#payment_order_id').val(orderId);
-        $('#payment_amount').val(amount);
-        $('#display_payment_amount').text(formatCurrency(amount));
+        $('#payment_amount').val(state.amount);
+        $('#display_payment_amount').text(formatCurrency(state.amount));
 
         // Reset selection
         $('.payment-option').removeClass('selected');
-        $('#payment-instructions').hide();
+        $('#midtrans-payment-option').addClass('selected');
+        $('#midtrans-payment-option').show();
+        $('#midtrans-payment-message').show();
+        $('#payment-accordion').hide();
+        showQrisInstructions();
+        $('#payment-instructions').show();
         $('#qr-code-container').hide();
-        $('#btn-process-payment').hide();
+        $('#btn-process-payment').toggle(state.amount > 0);
 
         $('#Payment').modal('show');
+    }
+
+    function getConfiguredPaymentAmount() {
+        return (typeof PAYMENT_AMOUNT !== 'undefined' && Number(PAYMENT_AMOUNT) > 0)
+            ? Number(PAYMENT_AMOUNT)
+            : 0;
+    }
+
+    function showQrisInstructions() {
+        $('#payment-instructions h5').html('<i class="fa fa-qrcode"></i> Instruksi Pembayaran QRIS');
+        $('#payment-instruction-content').html(
+            '<ol>' +
+                '<li>Klik <strong>Bayar dengan Midtrans</strong>.</li>' +
+                '<li>Pilih metode <strong>QRIS</strong> di halaman Midtrans.</li>' +
+                '<li>Buka aplikasi e-wallet atau mobile banking yang mendukung QRIS.</li>' +
+                '<li>Scan QRIS yang ditampilkan dan pastikan nominal pembayaran sesuai.</li>' +
+                '<li>Konfirmasi pembayaran, lalu tunggu status berhasil.</li>' +
+            '</ol>'
+        );
     }
 
     /**
@@ -160,6 +182,7 @@ var PaymentGateway = (function() {
     function selectPaymentMethod(element) {
         // Remove previous selection
         $('.payment-option').removeClass('selected');
+        $('#midtrans-payment-option').addClass('selected');
         
         // Add selection to current
         element.addClass('selected');
@@ -296,8 +319,8 @@ var PaymentGateway = (function() {
      * Process payment
      */
     function processPayment() {
-        if (!state.selectedMethod) {
-            showNotification('error', 'Silakan pilih metode pembayaran terlebih dahulu');
+        if (!state.orderId || !state.amount) {
+            showNotification('error', 'Data pembayaran belum tersedia');
             return;
         }
 
@@ -309,8 +332,8 @@ var PaymentGateway = (function() {
             action: 'create_transaction',
             order_id: state.orderId,
             amount: state.amount,
-            payment_method: state.selectedMethod,
-            payment_category: state.selectedCategory
+            payment_method: 'midtrans',
+            payment_category: 'gateway'
         };
 
         // Send request
@@ -342,6 +365,11 @@ var PaymentGateway = (function() {
      * @param {object} data - Response data
      */
     function handlePaymentResponse(data) {
+        if (data.snap_token) {
+            showMidtransPayment(data);
+            return;
+        }
+
         // Show success toast for transaction creation
         showSuccess('Transaksi berhasil dibuat! ID: ' + data.transaction_id, 'Transaksi Dibuat');
 
@@ -367,6 +395,83 @@ var PaymentGateway = (function() {
                 startPaymentPolling();
                 break;
         }
+    }
+
+    /**
+     * Open the shared Midtrans Snap checkout and keep polling the server.
+     */
+    function showMidtransPayment(data) {
+        var html = '<div class="payment-result-container">' +
+            '<div class="payment-status-header pending">' +
+                '<div class="status-icon"><i class="fa fa-credit-card"></i></div>' +
+                '<div class="status-text"><h4>Menunggu Pembayaran</h4>' +
+                '<p class="transaction-id">' + data.transaction_id + '</p></div>' +
+            '</div>' +
+            '<div class="payment-detail-row"><span class="label">Total Bayar</span><span class="value">' + formatCurrency(data.total_amount) + '</span></div>' +
+            '<p class="text-center text-muted">Selesaikan pembayaran melalui Midtrans di bawah ini.</p>' +
+            '</div>';
+
+        $('#payment-instruction-content').html(html);
+        $('#payment-instructions h5').html('<i class="fa fa-credit-card"></i> Status Pembayaran');
+        $('#payment-instructions').show();
+        $('#midtrans-payment-message').hide();
+        $('#midtrans-payment-option').hide();
+        $('#payment-accordion').hide();
+        $('#midtrans-snap-container').empty().show();
+        $('#btn-process-payment').hide();
+        startPaymentPolling();
+
+        if (typeof snap === 'undefined' || typeof snap.embed !== 'function') {
+            showNotification('error', 'Komponen pembayaran Midtrans belum tersedia. Silakan muat ulang halaman.');
+            return;
+        }
+
+        snap.embed(data.snap_token, {
+            embedId: 'midtrans-snap-container',
+            onSuccess: function() {
+                showPaymentProcessing(data);
+                checkPaymentStatus();
+            },
+            onPending: function() {
+                showPaymentProcessing(data);
+            },
+            onError: function() {
+                stopPaymentPolling();
+                showPaymentFailed(data);
+            },
+            onClose: function() {
+                showPaymentProcessing(data);
+            }
+        });
+    }
+
+    function retryPayment() {
+        state.orderId = 'ORD-' + Date.now();
+        state.transactionId = null;
+        $('#payment_order_id').val(state.orderId);
+        $('#payment_amount').val(state.amount);
+        processPayment();
+    }
+
+    function hideMidtransSnap() {
+        $('#midtrans-snap-container').empty().hide();
+        $('#midtrans-payment-message').hide();
+        $('#midtrans-payment-option').hide();
+    }
+
+    function showPaymentProcessing(data) {
+        hideMidtransSnap();
+        $('#payment-instructions h5').html('<i class="fa fa-spinner fa-spin"></i> Pembayaran Sedang Diproses');
+        $('#payment-instruction-content').html(
+            '<div class="payment-processing-state text-center" style="padding: 35px 15px;">' +
+                '<i class="fa fa-spinner fa-spin fa-3x text-primary"></i>' +
+                '<h4>Menunggu Konfirmasi Pembayaran</h4>' +
+                '<p>Pembayaran Anda sedang diverifikasi oleh Midtrans. Jangan menutup halaman ini.</p>' +
+                '<p class="text-muted">ID Transaksi: <strong>' + (data.transaction_id || state.transactionId) + '</strong></p>' +
+            '</div>'
+        );
+        $('#payment-instructions').show();
+        $('#btn-process-payment').hide();
     }
 
     /**
@@ -671,6 +776,7 @@ var PaymentGateway = (function() {
             case 'capture':
                 console.log('Payment SUCCESS detected, calling showPaymentSuccess');
                 stopPaymentPolling();
+                hideMidtransSnap();
                 showPaymentSuccess(data);
                 break;
             case 'pending':
@@ -683,6 +789,7 @@ var PaymentGateway = (function() {
             case 'failure':
                 console.log('Payment FAILED/EXPIRED detected, calling showPaymentFailed');
                 stopPaymentPolling();
+                hideMidtransSnap();
                 showPaymentFailed(data);
                 break;
         }
@@ -692,6 +799,8 @@ var PaymentGateway = (function() {
      * Show payment success
      */
     function showPaymentSuccess(data) {
+        hideMidtransSnap();
+
         // Stop countdown timer immediately
         if (state.countdownTimer) {
             clearInterval(state.countdownTimer);
@@ -850,6 +959,8 @@ var PaymentGateway = (function() {
      * Show payment failed
      */
     function showPaymentFailed(data) {
+        hideMidtransSnap();
+
         // Stop countdown timer immediately
         if (state.countdownTimer) {
             clearInterval(state.countdownTimer);
@@ -894,7 +1005,7 @@ var PaymentGateway = (function() {
                     '</div>' +
                 '</div>' +
                 '<div class="failed-card-footer">' +
-                    '<button type="button" class="btn-failed-action btn-retry" onclick="$(\'#btn-process-payment\').click()">' +
+                    '<button type="button" class="btn-failed-action btn-retry" onclick="PaymentGateway.retryPayment()">' +
                         '<i class="fa fa-refresh"></i> Coba Lagi' +
                     '</button>' +
                     '<button type="button" class="btn-failed-action btn-contact" onclick="window.open(\'https://wa.me/6281234567890\', \'_blank\')">' +
@@ -1247,7 +1358,13 @@ var PaymentGateway = (function() {
 
         // Reset UI
         $('.payment-option').removeClass('selected');
-        $('#payment-instructions').hide();
+        $('#midtrans-payment-option').addClass('selected');
+        $('#midtrans-payment-option').show();
+        showQrisInstructions();
+        $('#payment-instructions').show();
+        $('#midtrans-payment-message').show();
+        $('#payment-accordion').hide();
+        $('#midtrans-snap-container').empty().hide();
         $('#qr-code-container').hide();
         $('#btn-process-payment').hide();
     }
@@ -1695,7 +1812,7 @@ var PaymentGateway = (function() {
             return;
         }
         
-        var printUrl = 'module/backend/payment/t_printpayment.php?trx_id=' + encodeURIComponent(transactionId);
+        var printUrl = getInvoiceUrl(transactionId, false);
         var printWindow = window.open(printUrl, '_blank');
         
         // Auto-trigger print dialog when PDF loads
@@ -1720,15 +1837,27 @@ var PaymentGateway = (function() {
             return;
         }
         
-        var downloadUrl = 'module/backend/payment/t_printpayment.php?trx_id=' + encodeURIComponent(transactionId) + '&download=1';
+        var downloadUrl = getInvoiceUrl(transactionId, true);
         
         // Create a temporary link and trigger download
         var link = document.createElement('a');
         link.href = downloadUrl;
-        link.target = '_blank';
+        link.download = 'Invoice_' + transactionId + '.pdf';
+        link.style.display = 'none';
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
         
         showSuccess('Mengunduh invoice PDF...', 'Download');
+    }
+
+    function getInvoiceUrl(transactionId, download) {
+        var url = new URL('module/backend/payment/t_printpayment.php', window.location.href);
+        url.searchParams.set('trx_id', transactionId);
+        if (download) {
+            url.searchParams.set('download', '1');
+        }
+        return url.toString();
     }
 
     // Initialize on document ready
@@ -1745,6 +1874,7 @@ var PaymentGateway = (function() {
         viewDetail: viewDetail,
         copyToClipboard: copyToClipboard,
         checkPaymentStatus: checkPaymentStatus,
+        retryPayment: retryPayment,
         printInvoice: printInvoice,
         downloadInvoice: downloadInvoice,
         // Notification helpers

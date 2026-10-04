@@ -556,6 +556,11 @@ var AktivasiCabang = (function() {
      * Show payment result modal
      */
     function showPaymentResult(data) {
+        if (data.snap_token) {
+            showMidtransPaymentResult(data);
+            return;
+        }
+
         var html = '';
 
         // Transaction info
@@ -642,6 +647,50 @@ var AktivasiCabang = (function() {
         $('#paymentResultContent').html(html);
         $('#aktivasiCabangModal').modal('hide');
         $('#paymentResultModal').modal('show');
+    }
+
+    /**
+     * Render and open the Midtrans Snap checkout.
+     */
+    function showMidtransPaymentResult(data) {
+        var html = '<div class="payment-result-section">' +
+            '<div class="result-icon success"><i class="fas fa-credit-card"></i></div>' +
+            '<h5 class="result-title">Pembayaran Midtrans</h5>' +
+            '<p class="result-transaction-id">' + data.transaction_id + '</p>' +
+            '</div>' +
+            '<div class="payment-amount-card">' +
+            '<div class="amount-row"><span>Subtotal</span><span>' + formatCurrency(data.amount) + '</span></div>' +
+            (data.fee_amount > 0 ? '<div class="amount-row"><span>Biaya Admin</span><span>' + formatCurrency(data.fee_amount) + '</span></div>' : '') +
+            '<div class="amount-row total"><span>Total</span><span>' + formatCurrency(data.total_amount) + '</span></div>' +
+            '</div>' +
+            '<div class="payment-expiry-info"><i class="fas fa-clock"></i> Selesaikan pembayaran sebelum <strong>' + data.expired_at + '</strong></div>' +
+            '<p class="text-center text-muted"><i class="fas fa-spinner fa-spin"></i> Menunggu hasil pembayaran...</p>';
+
+        state.currentOrderId = data.order_id;
+        $('#paymentResultContent').html(html);
+        $('#aktivasiCabangModal').modal('hide');
+        $('#paymentResultModal').modal('show');
+        startStatusPolling(data.order_id);
+
+        if (typeof snap === 'undefined' || typeof snap.pay !== 'function') {
+            showNotification('error', 'Komponen pembayaran Midtrans belum tersedia. Silakan muat ulang halaman.');
+            return;
+        }
+
+        snap.pay(data.snap_token, {
+            onSuccess: function() {
+                checkPaymentStatusSilent(data.order_id);
+            },
+            onPending: function() {
+                showNotification('info', 'Pembayaran masih menunggu konfirmasi.');
+            },
+            onError: function() {
+                showNotification('error', 'Pembayaran Midtrans gagal diproses.');
+            },
+            onClose: function() {
+                showNotification('info', 'Jendela pembayaran ditutup. Anda dapat melanjutkan pembayaran nanti.');
+            }
+        });
     }
 
     /**

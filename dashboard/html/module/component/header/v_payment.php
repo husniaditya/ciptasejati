@@ -1,11 +1,44 @@
+<?php
+require_once __DIR__ . '/../../backend/payment/midtrans.php';
 
+$paymentAmount = 0;
+$paymentParam = GetQuery("SELECT CODE FROM p_param WHERE KATEGORI = 'PAYMENT' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+if ($paymentParam && is_numeric($paymentParam['CODE'])) {
+    $paymentAmount = (float) $paymentParam['CODE'];
+}
+$paymentAmountDisplay = 'Rp ' . number_format($paymentAmount, 0, ',', '.');
+?>
+<script type="text/javascript" src="<?= htmlspecialchars(MidtransClient::snapScriptUrl(), ENT_QUOTES, 'UTF-8') ?>" data-client-key="<?= htmlspecialchars(MidtransClient::clientKey(), ENT_QUOTES, 'UTF-8') ?>"></script>
+<script type="text/javascript">var PAYMENT_AMOUNT = <?= json_encode($paymentAmount) ?>;</script>
+<style>
+    #Payment .modal-dialog {
+        width: 96%;
+        max-width: 1200px;
+    }
+
+    #Payment #midtrans-snap-container {
+        width: 100%;
+        min-height: 680px;
+        padding: 0;
+        overflow: hidden;
+        background: #fff;
+    }
+
+    #Payment #midtrans-snap-container iframe {
+        display: block;
+        width: 100% !important;
+        min-height: 680px !important;
+        height: 680px !important;
+        border: 0;
+    }
+</style>
 <div id="Payment" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form id="Payment-form" class="form form-horizontal form-striped" action="" data-parsley-validate>
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3 class="semibold modal-title text-inverse">Detail Pembayaran Sewa</h3>
+                    <h3 class="semibold modal-title text-inverse">Pembayaran Sewa</h3>
                 </div>
                 <div class="modal-body">
                     <!-- Tab Navigation -->
@@ -27,178 +60,40 @@
                         <!-- Payment Method Tab -->
                         <div role="tabpanel" class="tab-pane fade in active" id="tab-payment-method">
                             <input type="hidden" id="payment_order_id" name="order_id" value="">
-                            <input type="hidden" id="payment_amount" name="amount" value="">
+                            <input type="hidden" id="payment_amount" name="amount" value="<?= htmlspecialchars((string) $paymentAmount, ENT_QUOTES, 'UTF-8') ?>">
                             
                             <!-- Payment Amount Display -->
                             <div class="alert alert-info text-center">
-                                <h4>Total Pembayaran: <strong id="display_payment_amount">Rp 0</strong></h4>
+                                <h4>Total Pembayaran: <strong id="display_payment_amount"><?= htmlspecialchars($paymentAmountDisplay, ENT_QUOTES, 'UTF-8') ?></strong></h4>
                             </div>
 
-                            <!-- Payment Categories Accordion -->
-                            <div class="panel-group" id="payment-accordion">
-                                <!-- Transfer Bank -->
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#payment-accordion" href="#collapse-transfer-bank">
-                                                <i class="fa fa-university"></i> Transfer Bank
-                                            </a>
-                                        </h4>
-                                    </div>
-                                    <div id="collapse-transfer-bank" class="panel-collapse collapse in">
-                                        <div class="panel-body">
-                                            <div class="row">
-                                            <div class="col-md-4 col-sm-6 mb-3">
-                                                <div class="payment-option" data-method="bank_bca" data-category="transfer_bank">
-                                                    <img src="assets/payment/bca.svg" alt="BCA" class="img-responsive">
-                                                    <span>Bank BCA</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-6 mb-3">
-                                                <div class="payment-option" data-method="bank_bni" data-category="transfer_bank">
-                                                    <img src="assets/payment/bni.svg" alt="BNI" class="img-responsive">
-                                                    <span>Bank BNI</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-6 mb-3">
-                                                <div class="payment-option" data-method="bank_bri" data-category="transfer_bank">
-                                                    <img src="assets/payment/bri.svg" alt="BRI" class="img-responsive">
-                                                    <span>Bank BRI</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-6 mb-3">
-                                                <div class="payment-option" data-method="bank_mandiri" data-category="transfer_bank">
-                                                    <img src="assets/payment/mandiri.svg" alt="Mandiri" class="img-responsive">
-                                                    <span>Bank Mandiri</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <!-- Midtrans Snap is embedded here after a token is created. -->
+                            <div id="midtrans-snap-container" class="well" style="display: none; min-height: 420px; margin-bottom: 20px;"></div>
+
+                            <div id="midtrans-payment-message" class="alert alert-info text-center">
+                                <i class="fa fa-lock"></i>
+                                Pembayaran diproses dengan aman melalui Midtrans.
+                                Saat ini hanya Midtrans yang tersedia. Metode pembayaran lainnya akan ditambahkan segera.
                             </div>
 
-                            <!-- Virtual Account -->
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#payment-accordion" href="#collapse-virtual-account">
-                                            <i class="fa fa-barcode"></i> Virtual Account
-                                        </a>
-                                    </h4>
-                                </div>
-                                <div id="collapse-virtual-account" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        <div class="row">
-                                            <div class="col-md-4 col-sm-6 mb-3">
-                                                <div class="payment-option" data-method="va_bca" data-category="virtual_account">
-                                                    <img src="assets/payment/bca.svg" alt="VA BCA" class="img-responsive">
-                                                    <span>VA BCA</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-6 mb-3">
-                                                <div class="payment-option" data-method="va_bni" data-category="virtual_account">
-                                                    <img src="assets/payment/bni.svg" alt="VA BNI" class="img-responsive">
-                                                    <span>VA BNI</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-6 mb-3">
-                                                <div class="payment-option" data-method="va_bri" data-category="virtual_account">
-                                                    <img src="assets/payment/bri.svg" alt="VA BRI" class="img-responsive">
-                                                    <span>VA BRI</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-6 mb-3">
-                                                <div class="payment-option" data-method="va_mandiri" data-category="virtual_account">
-                                                    <img src="assets/payment/mandiri.svg" alt="VA Mandiri" class="img-responsive">
-                                                    <span>VA Mandiri</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-6 mb-3">
-                                                <div class="payment-option" data-method="va_permata" data-category="virtual_account">
-                                                    <img src="assets/payment/permata.svg" alt="VA Permata" class="img-responsive">
-                                                    <span>VA Permata</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="payment-option selected" id="midtrans-payment-option" data-method="midtrans" data-category="gateway" style="max-width: 280px; margin: 0 auto 20px;">
+                                <i class="fa fa-credit-card" style="font-size: 42px; color: #667eea; margin-bottom: 10px;"></i>
+                                <span>Midtrans</span>
+                                <small style="margin-top: 6px; color: #64748b;">Bayar <?= htmlspecialchars($paymentAmountDisplay, ENT_QUOTES, 'UTF-8') ?></small>
                             </div>
-
-                            <!-- E-Wallet -->
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#payment-accordion" href="#collapse-ewallet">
-                                            <i class="fa fa-mobile"></i> E-Wallet
-                                        </a>
-                                    </h4>
-                                </div>
-                                <div id="collapse-ewallet" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        <div class="row">
-                                            <div class="col-md-4 col-sm-6 mb-3">
-                                                <div class="payment-option" data-method="gopay" data-category="ewallet">
-                                                    <img src="assets/payment/gopay.svg" alt="GoPay" class="img-responsive">
-                                                    <span>GoPay</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-6 mb-3">
-                                                <div class="payment-option" data-method="ovo" data-category="ewallet">
-                                                    <img src="assets/payment/ovo.svg" alt="OVO" class="img-responsive">
-                                                    <span>OVO</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-6 mb-3">
-                                                <div class="payment-option" data-method="dana" data-category="ewallet">
-                                                    <img src="assets/payment/dana.svg" alt="DANA" class="img-responsive">
-                                                    <span>DANA</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-6 mb-3">
-                                                <div class="payment-option" data-method="shopeepay" data-category="ewallet">
-                                                    <img src="assets/payment/shopeepay.svg" alt="ShopeePay" class="img-responsive">
-                                                    <span>ShopeePay</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-6 mb-3">
-                                                <div class="payment-option" data-method="linkaja" data-category="ewallet">
-                                                    <img src="assets/payment/linkaja.svg" alt="LinkAja" class="img-responsive">
-                                                    <span>LinkAja</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- QRIS -->
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#payment-accordion" href="#collapse-qris">
-                                            <i class="fa fa-qrcode"></i> QRIS
-                                        </a>
-                                    </h4>
-                                </div>
-                                <div id="collapse-qris" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        <div class="row">
-                                            <div class="col-md-4 col-sm-6 mb-3">
-                                                <div class="payment-option" data-method="qris" data-category="qris">
-                                                    <img src="assets/payment/qris.svg" alt="QRIS" class="img-responsive">
-                                                    <span>QRIS</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            </div><!-- End payment-accordion -->
 
                             <!-- Payment Instructions -->
-                            <div id="payment-instructions" class="alert alert-warning" style="display: none;">
-                                <h5><i class="fa fa-info-circle"></i> Instruksi Pembayaran</h5>
-                                <div id="payment-instruction-content"></div>
+                            <div id="payment-instructions" class="alert alert-warning">
+                                <h5><i class="fa fa-qrcode"></i> Instruksi Pembayaran QRIS</h5>
+                                <div id="payment-instruction-content">
+                                    <ol>
+                                        <li>Klik <strong>Bayar dengan Midtrans</strong>.</li>
+                                        <li>Pilih metode <strong>QRIS</strong> di halaman Midtrans.</li>
+                                        <li>Buka aplikasi e-wallet atau mobile banking yang mendukung QRIS.</li>
+                                        <li>Scan QRIS yang ditampilkan dan pastikan nominal pembayaran sesuai.</li>
+                                        <li>Konfirmasi pembayaran, lalu tunggu status berhasil.</li>
+                                    </ol>
+                                </div>
                             </div>
 
                             <!-- QR Code Display -->
@@ -241,7 +136,7 @@
                         <span class="ico-cancel"></span> Tutup
                     </button>
                     <button type="button" id="btn-process-payment" class="btn btn-primary mb5 btn-rounded" style="display: none;">
-                        <span class="fa fa-check"></span> Proses Pembayaran
+                        <span class="fa fa-credit-card"></span> Klik untuk bayar
                     </button>
                 </div>
             </div>

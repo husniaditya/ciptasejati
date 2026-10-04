@@ -7,6 +7,25 @@ if(!isset($_SESSION["LOGINIDUS_CS"]))
     ?><script>document.location.href='index.php';</script><?php
     die(0);
 }
+
+// Expired branches may only access the renewal page.
+$dashboardCabang = $_SESSION['LOGINCAB_CS'] ?? '';
+if ($dashboardCabang !== '') {
+    $expiryStmt = $db1->prepare(
+        "SELECT EXPIRY_DATE
+         FROM m_cabang
+         WHERE CONVERT(CABANG_KEY USING utf8mb4) COLLATE utf8mb4_general_ci
+             = CONVERT(:cabang_key USING utf8mb4) COLLATE utf8mb4_general_ci
+         LIMIT 1"
+    );
+    $expiryStmt->execute([':cabang_key' => $dashboardCabang]);
+    $dashboardExpiry = $expiryStmt->fetch(PDO::FETCH_ASSOC);
+    if (!$dashboardExpiry || empty($dashboardExpiry['EXPIRY_DATE']) || strtotime($dashboardExpiry['EXPIRY_DATE']) < strtotime(date('Y-m-d'))) {
+        header('Location: expired.php');
+        exit;
+    }
+}
+
 $getMaintenance = GetQuery("SELECT * FROM p_param WHERE KATEGORI = 'isMaintenance'");
 while ($mt = $getMaintenance->fetch(PDO::FETCH_ASSOC)) {
     extract($mt);

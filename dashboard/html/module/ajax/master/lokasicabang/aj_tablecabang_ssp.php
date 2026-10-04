@@ -25,7 +25,8 @@ $columns = [
     'c.CABANG_PENGURUS',    // 5
     'c.CABANG_LAT',         // 6
     'c.CABANG_LONG',        // 7
-    'c.CABANG_MAP'          // 8 (map iframe)
+    'c.EXPIRY_DATE',        // 8
+    'c.CABANG_MAP'          // 9 (map iframe)
 ];
 
 $orderColIdx = isset($_POST['order'][0]['column']) ? (int)$_POST['order'][0]['column'] : 1;
@@ -132,6 +133,9 @@ while ($r = $rowsRes->fetch(PDO::FETCH_ASSOC)) {
 
     // Map iframe cell
     $mapHtml = '<iframe src="'.h($r['CABANG_MAP']).'" width="250" height="150" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>';
+    $expiryDate = !empty($r['EXPIRY_DATE'])
+        ? date('d/m/Y', strtotime($r['EXPIRY_DATE']))
+        : '-';
 
     $row = [
         $actionHtml,
@@ -142,6 +146,7 @@ while ($r = $rowsRes->fetch(PDO::FETCH_ASSOC)) {
         h($r['CABANG_PENGURUS']),
         h($r['CABANG_LAT']),
         h($r['CABANG_LONG']),
+        h($expiryDate),
         $mapHtml
     ];
     $data[] = $row;

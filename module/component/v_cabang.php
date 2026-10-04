@@ -105,8 +105,9 @@ ORDER BY cabang_count
                                 $getCabang = GetQuery("SELECT * FROM m_cabang WHERE DELETION_STATUS = 0 AND DAERAH_KEY = '$DAERAH_KEY' ORDER BY CABANG_DESKRIPSI");
                                 foreach ($getCabang as $cabang) {
                                     extract($cabang);
+                                    $expiryDate = !empty($EXPIRY_DATE) ? date('d/m/Y', strtotime($EXPIRY_DATE)) : '-';
                                     ?>
-                                    <li><?= $CABANG_DESKRIPSI; ?></li>
+                                    <li><?= htmlspecialchars($CABANG_DESKRIPSI, ENT_QUOTES, 'UTF-8'); ?> <small>(Berlaku sampai: <?= htmlspecialchars($expiryDate, ENT_QUOTES, 'UTF-8'); ?>)</small></li>
                                     <?php
                                 }
                                 ?>

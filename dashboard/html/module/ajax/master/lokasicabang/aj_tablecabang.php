@@ -30,6 +30,7 @@ foreach ($getCabang as $rowCabang) {
         <td><?= $CABANG_PENGURUS; ?></td>
         <td><?= $CABANG_LAT; ?></td>
         <td><?= $CABANG_LONG; ?></td>
+        <td><?= !empty($EXPIRY_DATE) ? date('d/m/Y', strtotime($EXPIRY_DATE)) : '-'; ?></td>
         <td>
             <iframe src="<?= $CABANG_MAP; ?>" width="250" height="150" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </td>

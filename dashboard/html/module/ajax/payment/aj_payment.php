@@ -5,6 +5,8 @@
  */
 
 require_once ("../../connection/conn.php");
+require_once ("../../backend/payment/t_payment.php");
+require_once ("../../backend/payment/midtrans.php");
 
 $USER_CABANG = $_SESSION["LOGINCAB_CS"];
 $USER_AKSES = $_SESSION["LOGINAKS_CS"];
@@ -15,7 +17,7 @@ $USER_ID = $_SESSION["LOGINIDUS_CS"];
 // Set JSON response header
 header('Content-Type: application/json');
 
-// Get action from request
+    // Get action from request
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 
 // Response array
@@ -75,10 +77,17 @@ function createTransaction($db) {
     // Validate required fields
     $orderId = isset($_POST['order_id']) ? trim($_POST['order_id']) : '';
     $amount = isset($_POST['amount']) ? floatval($_POST['amount']) : 0;
-    $paymentMethod = isset($_POST['payment_method']) ? trim($_POST['payment_method']) : '';
-    $paymentCategory = isset($_POST['payment_category']) ? trim($_POST['payment_category']) : '';
+    // The customer selects the actual payment method inside Midtrans Snap.
+    $paymentMethod = 'midtrans';
+    $paymentCategory = 'gateway';
 
-    if (empty($orderId) || $amount <= 0 || empty($paymentMethod)) {
+    $paymentParamStmt = $db->query("SELECT CODE FROM p_param WHERE KATEGORI = 'PAYMENT' LIMIT 1");
+    $paymentParam = $paymentParamStmt->fetch(PDO::FETCH_ASSOC);
+    $amount = ($paymentParam && is_numeric($paymentParam['CODE']))
+        ? (float) $paymentParam['CODE']
+        : 0;
+
+    if (empty($orderId) || $amount <= 0) {
         $response['message'] = 'Data tidak lengkap';
         return $response;
     }
@@ -86,31 +95,9 @@ function createTransaction($db) {
     // Generate unique transaction ID
     $transactionId = 'TRX' . date('YmdHis') . rand(1000, 9999);
 
-    // Prepare payment data based on category
-    $paymentData = [];
-
-    switch ($paymentCategory) {
-        case 'transfer_bank':
-            $paymentData = generateBankTransferData($paymentMethod, $amount);
-            break;
-
-        case 'virtual_account':
-            $paymentData = generateVirtualAccountData($paymentMethod, $amount, $orderId, $userId ?? '');
-            break;
-
-        case 'ewallet':
-            $paymentData = generateEwalletData($paymentMethod, $amount, $orderId);
-            break;
-
-        case 'qris':
-            $paymentData = generateQrisData($amount, $orderId);
-            break;
-    }
-
-    // Get payment_id from m_payment table
-    $sqlPayment = "SELECT id, fee_type, fee_value, expiry_hours FROM m_payment WHERE payment_code = :payment_code AND is_active = 1";
+    // t_payment keeps a payment_id for reporting; Midtrans is the only gateway.
+    $sqlPayment = "SELECT id FROM m_payment WHERE payment_code = 'midtrans' AND is_active = 1 LIMIT 1";
     $stmtPayment = $db->prepare($sqlPayment);
-    $stmtPayment->bindParam(':payment_code', $paymentMethod);
     $stmtPayment->execute();
     $paymentInfo = $stmtPayment->fetch(PDO::FETCH_ASSOC);
 
@@ -122,22 +109,60 @@ function createTransaction($db) {
     $paymentId = $paymentInfo['id'];
     
     // Calculate fee
+    // Midtrans calculates and displays its own available payment options.
     $feeAmount = 0;
-    if ($paymentInfo['fee_type'] === 'fixed') {
-        $feeAmount = floatval($paymentInfo['fee_value']);
-    } else if ($paymentInfo['fee_type'] === 'percentage') {
-        $feeAmount = $amount * floatval($paymentInfo['fee_value']) / 100;
-    }
     $totalAmount = $amount + $feeAmount;
 
-    // Calculate expiry time from master table - use MySQL directly to avoid timezone issues
-    $expiryHours = intval($paymentInfo['expiry_hours'] ?? 24);
-    $stmtExpiry = $db->query("SELECT NOW() as created_at, DATE_ADD(NOW(), INTERVAL {$expiryHours} HOUR) as expired_at");
+    // Keep the local pending expiry aligned with the Midtrans expiry.
+    $expiryMinutes = max(1, intval($_ENV['MIDTRANS_PAYMENT_EXPIRY_MINUTES'] ?? 15));
+    $stmtExpiry = $db->query("SELECT NOW() as created_at, DATE_ADD(NOW(), INTERVAL {$expiryMinutes} MINUTE) as expired_at");
     $times = $stmtExpiry->fetch(PDO::FETCH_ASSOC);
     $createdAt = $times['created_at'];
     $expiredAt = $times['expired_at'];
 
-    // Prepare JSON data
+    try {
+        $snapResponse = MidtransClient::createSnapToken([
+            'transaction_details' => [
+                'order_id' => $orderId,
+                'gross_amount' => (int) round($totalAmount)
+            ],
+            'item_details' => [
+                [
+                    'id' => $paymentMethod,
+                    'price' => (int) round($amount),
+                    'quantity' => 1,
+                    'name' => 'Pembayaran ' . $paymentMethod
+                ],
+                ...($feeAmount > 0 ? [[
+                    'id' => 'payment_fee',
+                    'price' => (int) round($feeAmount),
+                    'quantity' => 1,
+                    'name' => 'Biaya administrasi'
+                ]] : [])
+            ],
+            'custom_expiry' => [
+                'expiry_duration' => $expiryMinutes,
+                'unit' => 'minute'
+            ]
+        ]);
+    } catch (RuntimeException $e) {
+        $response['message'] = 'Gagal membuat pembayaran Midtrans: ' . $e->getMessage();
+        return $response;
+    }
+
+    // Store only gateway response data needed by the client and audit trail.
+    $paymentData = [
+        'snap_token' => $snapResponse['token'] ?? null,
+        'redirect_url' => $snapResponse['redirect_url'] ?? null,
+        'payment_method' => $paymentMethod,
+        'payment_category' => $paymentCategory
+    ];
+
+    if (empty($paymentData['snap_token'])) {
+        $response['message'] = 'Midtrans tidak mengembalikan Snap token';
+        return $response;
+    }
+
     $paymentDataJson = json_encode($paymentData);
 
     // Insert transaction to database
@@ -459,6 +484,20 @@ function checkTransactionStatus($db) {
     $transaction = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($transaction) {
+        // Poll Midtrans from the server as a fallback when the notification URL
+        // is not reachable during local development.
+        if ($transaction['status'] === 'pending') {
+            try {
+                $gatewayStatus = MidtransClient::getTransactionStatus($transaction['order_id']);
+                (new PaymentTransaction())->processGatewayStatus($gatewayStatus);
+
+                $stmt->execute();
+                $transaction = $stmt->fetch(PDO::FETCH_ASSOC);
+            } catch (RuntimeException $e) {
+                error_log('Failed to synchronize Midtrans status: ' . $e->getMessage());
+            }
+        }
+
         // Check if transaction has expired
         if ($transaction['status'] === 'pending' && strtotime($transaction['expired_at']) < time()) {
             // Update status to expired
@@ -641,39 +680,26 @@ function handleCallback($db) {
         $callbackData = $_POST;
     }
 
-    $transactionId = isset($callbackData['transaction_id']) ? $callbackData['transaction_id'] : '';
-    $status = isset($callbackData['status']) ? $callbackData['status'] : '';
-
-    if (empty($transactionId) || empty($status)) {
-        $response['message'] = 'Invalid callback data';
+    if (empty($callbackData['order_id']) || empty($callbackData['transaction_status'])) {
+        $response['message'] = 'Invalid Midtrans callback data';
         return $response;
     }
 
-    // Update transaction status
-    $callbackDataJson = json_encode($callbackData);
-    $sql = "UPDATE t_payment 
-            SET status = :status, 
-                callback_data = :callback_data,
-                paid_at = CASE WHEN :status2 IN ('success', 'settlement', 'capture') THEN NOW() ELSE paid_at END,
-                updated_at = NOW() 
-            WHERE transaction_id = :transaction_id";
+    if (!MidtransClient::verifySignature($callbackData)) {
+        http_response_code(403);
+        $response['message'] = 'Invalid Midtrans signature';
+        return $response;
+    }
 
-    $stmt = $db->prepare($sql);
-    $stmt->bindParam(':status', $status);
-    $stmt->bindParam(':status2', $status);
-    $stmt->bindParam(':callback_data', $callbackDataJson);
-    $stmt->bindParam(':transaction_id', $transactionId);
+    $payment = new PaymentTransaction();
+    $result = $payment->processGatewayStatus($callbackData);
 
-    if ($stmt->execute()) {
-        // If payment successful, update the related order
-        if (in_array($status, ['success', 'settlement', 'capture'])) {
-            updateOrderPaymentStatus($db, $transactionId);
-        }
-
+    if ($result['success']) {
         $response['success'] = true;
         $response['message'] = 'Callback processed successfully';
+        $response['data'] = $result;
     } else {
-        $response['message'] = 'Failed to process callback';
+        $response['message'] = $result['message'] ?? 'Failed to process callback';
     }
 
     return $response;
