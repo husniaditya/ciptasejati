@@ -19,3 +19,9 @@
 
 <!-- Theme Custom -->
 <script src="js/custom.js"></script>
+
+<!-- Select2 -->
+<script src="dashboard/plugins/select2/js/select2.min.js"></script>
+
+<!-- Aktivasi Cabang Module -->
+<script src="module/js/aktivasicabang.js"></script>

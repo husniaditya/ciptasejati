@@ -81,6 +81,9 @@ $getMedia = GetQuery("SELECT * FROM c_mediasosial");
                                                 <li class="dropdown-submenu">
                                                     <a class="nav-link" href="koordinatorcabang.php">Koordinator Cabang</a>
                                                 </li>
+                                                <li class="dropdown-submenu">
+                                                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#aktivasiCabangModal">Aktivasi Cabang</a>
+                                                </li>
                                             </ul>
                                         </li>
                                         <li>

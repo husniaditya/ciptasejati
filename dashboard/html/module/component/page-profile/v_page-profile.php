@@ -25,8 +25,8 @@
                     <br>
                     <div style="max-width:200px;" class="mt10">
                         <p class="text-muted clearfix nm">
-                            <span class="pull-left">Biru</span>
-                            <span class="pull-right">Dasar-II</span>
+                            <span class="pull-left" id="TINGKATAN_NAMA"></span>
+                            <span class="pull-right" id="TINGKATAN_SEBUTAN"></span>
                         </p>
                     </div>
                 </li>

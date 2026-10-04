@@ -54,11 +54,12 @@ function loadAndRefresh() {
           var countText = $.trim(html);
           var changed = (notifState.lastCount !== null && countText !== notifState.lastCount);
           if (countText !== notifState.lastCount) {
-            $('#loadnotif').html(countText);
-            // mirror count to footer badge (hide when 0)
-            if (countText && countText !== '0') {
+            // Show/hide notification badge based on count
+            if (countText && countText !== '0' && countText !== '') {
+              $('#loadnotif').html(countText).show();
               $('#markAllBadge').text(countText).show();
             } else {
+              $('#loadnotif').html('').hide();
               $('#markAllBadge').text('').hide();
             }
             notifState.lastCount = countText;
