@@ -128,7 +128,7 @@ $canAccessRentalPayment = in_array(trim((string)($_SESSION['LOGINAKS_CS'] ?? '')
             <ul class="dropdown-menu" role="menu">
                 <li><a href="page-profile.php"><span class="icon"><i class="fa-solid fa-user-check"></i></span> Akun Saya</a></li>
                 <li><a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-ChangePassword" href="#ChangePassword"><span class="icon"><i class="fa-solid fa-key"></i></span> Ubah Password</a></li>
-                <li><a href="assets/dataterpusat/panduan/Panduan Aplikasi Cipta Sejati.pdf" target="_blank"><span class="icon"><i class="ico-book2"></i></span> Buku Panduan</a></li>
+                <li><a data-toggle="modal" class="open-UserManual" href="#UserManual" title="Buku Panduan"><span class="icon"><i class="ico-book2"></i></span> Buku Panduan</a></li>
                 <li style="position: relative;">
                     <a data-toggle="modal" data-toggle="modal" title="Add this item" class="open-ChangeLog" href="#ChangeLog">
                         <span class="icon"><i class="fa-solid fa-list-check"></i></span> 
@@ -155,4 +155,5 @@ include 'module/component/header/v_changepassword.php';
 include 'module/component/header/v_changelog.php'; 
 include 'module/component/header/v_notif.php';
 include 'module/component/header/v_payment.php';
+include 'module/component/header/v_usermanual.php';
 ?>
