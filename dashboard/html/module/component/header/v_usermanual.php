@@ -1,5 +1,5 @@
 <?php
-$gitbookUrl = $_ENV['GITBOOK_URL'] ?? 'https://own-org.gitbook.io';
+$gitbookUrl = $_ENV['GITBOOK_URL'] ?? 'https://own-org.gitbook.io/ciptasejatiindonesia';
 ?>
 <!-- Modal Panduan / GitBook User Manual -->
 <div id="UserManual" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="UserManualLabel" aria-hidden="true">

@@ -6,7 +6,7 @@ site:
     - type: space
       key: panduan-pengguna
       title: Panduan Pengguna
-      path: docs
+      path: ciptasejatiindonesia
       default: true
       content:
         directory: ./docs
